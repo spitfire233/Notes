@@ -13,6 +13,7 @@
 \usepackage{adjustbox}
 \usepackage{amsmath}
 \usepackage{mathtools}
+\usepackage{biblatex}
 \lstset{
   language=Python,
   numbers=left,
@@ -124,7 +125,7 @@ Ricapitolando, quindi, elenchiamo \textbf{le caratteristiche che ogni sistema di
     \item \textbf{Gestione dell'esecuzione}:
           \begin{itemize}
               \item \textbf{Ogni componente è autonoma}, l'esecuzione di un'applicazione avviene quindi in \textbf{maniera concorrente}
-              \item Il coordiamento delle attività diventa quindi \textbf{fondamentale} per definire il comportamento \textbf{dell'intera applicazione} e del sistema
+              \item Il coordinamento delle attività diventa quindi \textbf{fondamentale} per definire il comportamento \textbf{dell'intera applicazione} e del sistema
           \end{itemize}
     \item \textbf{Gestione del tempo}:
           \begin{itemize}
@@ -143,7 +144,7 @@ Una architettura software \textbf{definisce la struttura del sistema, le interfa
     \item \textbf{Modello base: Architettura stratificata (layered)}
           \begin{itemize}
               \item Sistemi operativi
-              \item Middelware
+              \item Middleware
           \end{itemize}
     \item \textbf{Architettura a livelli (tier)}
           \begin{itemize}
@@ -153,7 +154,7 @@ Una architettura software \textbf{definisce la struttura del sistema, le interfa
           \begin{itemize}
               \item Java-Remote Method Invocation (RMI)
           \end{itemize}
-    \item \textbf{Architettue centrare sui dati}
+    \item \textbf{Architetture centrare sui dati}
           \begin{itemize}
               \item Il \textbf{Web come File System (FS) condiviso}
           \end{itemize}
@@ -173,7 +174,7 @@ L'idea alla base di un'architettura a strati è semplice: le componenti sono org
 \begin{center}
     \includegraphics[width = 0.35\textwidth]{Images/3.PNG}
 \end{center}
-\textbf{Pure layered organisation}:
+\textbf{Pure layered organization}:
 \begin{center}
     \includegraphics[width = 0.20\textwidth]{Images/4.PNG}
 \end{center}
@@ -181,7 +182,7 @@ Un esempio di questa architettura è \textbf{lo stack ISO/OSI}:
 \begin{center}
     \includegraphics[width = 0.25\textwidth]{Images/5.PNG}
 \end{center}
-\textbf{Mixed Layer Organisation}:
+\textbf{Mixed Layer Organization}:
 \begin{center}
     \includegraphics[width = 0.25\textwidth]{Images/6.PNG}
 \end{center}
@@ -201,7 +202,7 @@ In questa architettura è possibile \textbf{effettuare callbacks e upcalls}. Un 
 \begin{center}
     \includegraphics[width = 0.80\textwidth]{Images/10.PNG}
 \end{center}
-Un \textbf{DOS} (Distributed Operating System) è un sistema operativo \textbf{distribuito} che connette più macchine \textbf{omogenee} attraverso \textbf{un singolo canale di comuncazione}. Il sistema è \textbf{tightly-coupled}, cioè le varie componenti del sistema sono \textbf{interdipendenti}. Ogni nodo del sistema deve essere \textbf{omogeneo rispetto agli altri nodi}.
+Un \textbf{DOS} (Distributed Operating System) è un sistema operativo \textbf{distribuito} che connette più macchine \textbf{omogenee} attraverso \textbf{un singolo canale di comunicazione}. Il sistema è \textbf{tightly-coupled}, cioè le varie componenti del sistema sono \textbf{interdipendenti}. Ogni nodo del sistema deve essere \textbf{omogeneo rispetto agli altri nodi}.
 \begin{center}
     \includegraphics[width = 0.55\textwidth]{Images/11.PNG}
 \end{center}
@@ -218,13 +219,13 @@ In un DOS, \textbf{l'utente non è consapevole della molteplicità delle macchin
     \item \textbf{Migrazione dei processi}: Viene eseguito un intero processo, o parti di esso, \textbf{su differenti nodi}:
           \begin{itemize}
               \item \textbf{Bilanciamento del carico}: Distribuisce i processi \textbf{su tutta la rete} per distribuire equamente il carico
-              \item \textbf{Accellerazione della computazione}: I sottoprocessi \textbf{possono essere eseguiti concorrentemente su diversi nodi}
+              \item \textbf{Accelerazione della computazione}: I sottoprocessi \textbf{possono essere eseguiti in maniera concorrente su diversi nodi}
               \item \textbf{Preferenze Hardware}: Certe computazione potrebbero richiedere \textbf{hardware specifico}
               \item \textbf{Preferenze Software}: I software richiesti potrebbero \textbf{essere disponibili su un solo nodo}
               \item \textbf{Accesso ai dati}: Si eseguono i processi \textbf{remotamente}, piuttosto che trasferire tutti i dati nel contesto locale
           \end{itemize}
 \end{itemize}
-Un \textbf{NOS} (Network Operating System) è un sistema operativo \textbf{che mette a disposizione servizi per la comuncazione tra computer all'interno della stessa rete}.
+Un \textbf{NOS} (Network Operating System) è un sistema operativo \textbf{che mette a disposizione servizi per la comunicazione tra computer all'interno della stessa rete}.
 \begin{center}
     \includegraphics[width = 0.55\textwidth]{Images/12.PNG}
 \end{center}
@@ -240,7 +241,7 @@ Accesso a risorse remote presenti sulle varie macchine del sistema è effettuato
     \item \textbf{Desktop remoto} (Windows)
     \item \textbf{Trasferimento dati da una macchina all'altra} tramite protocollo FTP (File Transfer Protocol)
 \end{itemize}
-Per assistere lo sviluppo delle applicazioni distribuite, i sistemi distribuiti sono spesso organizzati in modo da avere \textbf{un layer di software separato} che è \textbf{logicamente "posto sopra"} ai rispetti S.O. dei computer che fanno parte del sistema. Questo layer è chiamato \textbf{middelware}. In un DOS:
+Per assistere lo sviluppo delle applicazioni distribuite, i sistemi distribuiti sono spesso organizzati in modo da avere \textbf{un layer di software separato} che è \textbf{logicamente "posto sopra"} ai rispetti S.O. dei computer che fanno parte del sistema. Questo layer è chiamato \textbf{middleware}. In un DOS:
 \begin{center}
     \includegraphics[width = 0.65\textwidth]{Images/13.PNG}
 \end{center}
@@ -253,23 +254,23 @@ Il middleware si occupa \textbf{implementare dei servizi} e di renderli \textbf{
     \item \textbf{Nomenclatura}
           \begin{itemize}
               \item Nomi simbolici vengono usati per identificare \textbf{entità del sistema distribuito}
-              \item I nomi possono essere usati dai \textbf{registri} per comunicare \textbf{gli indirizzi reali} o possono essere usati \textbf{implicitamente dal middelware}
+              \item I nomi possono essere usati dai \textbf{registri} per comunicare \textbf{gli indirizzi reali} o possono essere usati \textbf{implicitamente dal middleware}
           \end{itemize}
     \item \textbf{Trasparenza all'accesso}
           \begin{itemize}
-              \item Il middelware definisce e offre un \textbf{modello di comunicazione} che nasconde i dettagli \textbf{dello scambio di messaggi}
+              \item Il middleware definisce e offre un \textbf{modello di comunicazione} che nasconde i dettagli \textbf{dello scambio di messaggi}
           \end{itemize}
     \item \textbf{Persistenza}:
           \begin{itemize}
-              \item Il middelware definisce un \textbf{servizio automatico di immagazzinamento dati} (su File System o Database)
+              \item Il middleware definisce un \textbf{servizio automatico di immagazzinamento dati} (su File System o Database)
           \end{itemize}
     \item \textbf{Transazioni distribuite}
           \begin{itemize}
-              \item Il middelware definisce un \textbf{modello persistente} per assicurarsi automaticamente della \textbf{consistenza} delle operazioni di lettura/scrittura
+              \item Il middleware definisce un \textbf{modello persistente} per assicurarsi automaticamente della \textbf{consistenza} delle operazioni di lettura/scrittura
           \end{itemize}
     \item \textbf{Sicurezza}
           \begin{itemize}
-              \item Il middeware definisce un \textbf{modello} per prevenire accessi non autorizzati (con diversi livelli di permesso) alle risorse, ai servizi e per \textbf{assicurarsi dell'integrità della computazione}
+              \item Il middleware definisce un \textbf{modello} per prevenire accessi non autorizzati (con diversi livelli di permesso) alle risorse, ai servizi e per \textbf{assicurarsi dell'integrità della computazione}
           \end{itemize}
 \end{itemize}
 Ricapitolando, quindi:
@@ -277,11 +278,11 @@ Ricapitolando, quindi:
     \includegraphics[width = 1\textwidth]{Images/15.PNG}
 \end{center}
 \subsection{Modello Client-Server}
-Il modello \textbf{Client-Server} è un modello di comunicazionte che coinvolge un nodo \textbf{richiedente} (Client) e un nodo che \textbf{soddisfa la sua richiesta} (Server). Possiamo quindi vedere il modello base in questo modo:
+Il modello \textbf{Client-Server} è un modello di comunicazione che coinvolge un nodo \textbf{richiedente} (Client) e un nodo che \textbf{soddisfa la sua richiesta} (Server). Possiamo quindi vedere il modello base in questo modo:
 \begin{center}
     \includegraphics[width = 0.60\textwidth]{Images/16.PNG}
 \end{center}
-L'architettura di base di questo modello prevede che un \textbf{client} acceda ad un \textbf{server} con una \textbf{richiesta} e che il server \textbf{rispionda con un risultato}.
+L'architettura di base di questo modello prevede che un \textbf{client} acceda ad un \textbf{server} con una \textbf{richiesta} e che il server \textbf{risponda con un risultato}.
 \begin{center}
     \includegraphics[width = 0.70\textwidth]{Images/17.PNG}
 \end{center}
@@ -303,7 +304,7 @@ In generale, ogni sistema distribuito deve affrontare \textbf{4 problemi fondame
           \end{itemize}
     \item \textbf{Accede alla controparte}
           \begin{itemize}
-              \item Come posso raggiungere \textbf{un processo o una risora remota}?
+              \item Come posso raggiungere \textbf{un processo o una risorsa remota}?
               \item Abbiamo bisogno di un \textbf{riferimento}! (\textbf{Access point (AP)})
           \end{itemize}
     \item \textbf{Comunicazione}:
@@ -330,7 +331,7 @@ La trasparenza può essere implementato su più "livelli":
           \begin{itemize}
               \item Nasconde \textbf{dove una certa risorsa risiede nella rete}
           \end{itemize}
-    \item \textbf{Trasparenza della riallocazione e della moblilità}
+    \item \textbf{Trasparenza della riallocazione e della mobilità}
           \begin{itemize}
               \item Nasconde \textbf{che una certa risorsa può essere trasferita in un altro nodo mentre è in uso}
           \end{itemize}
@@ -368,7 +369,7 @@ Ambire alla massima trasparenza in un sistema distribuito potrebbe essere \textb
     \item Una trasparenza completa \textbf{impatta le performance}, per esempio, richiede del tempo aggiuntivo:
           \begin{itemize}
               \item Tenere le repliche dei dati \textbf{aggiornate con il nodo principale}
-              \item Effettuare il flush delle operazioni di scrittura sul disco per permettere la \textbf{tolleranza ai guasti} (fault tollerance)
+              \item Effettuare il flush delle operazioni di scrittura sul disco per permettere la \textbf{tolleranza ai guasti} (fault tolerance)
           \end{itemize}
     \item Esporre la "distribuzione" del sistema potrebbe essere una scelta corretta:
           \begin{itemize}
@@ -387,15 +388,15 @@ Il \textbf{quale}:
 \end{itemize}
 Il \textbf{come}:
 \begin{itemize}
-    \item È implementato con uno \textbf{strumento} (framework, middelware, ecc...) che è \textbf{adatto} per quel problema o all'ambiente in cui il sistema deve operare
-    \item Dovrebbe essere implementato con \textbf{algoritmi e tecnologie} efficaci ed efficenti.
+    \item È implementato con uno \textbf{strumento} (framework, middleware, ecc...) che è \textbf{adatto} per quel problema o all'ambiente in cui il sistema deve operare
+    \item Dovrebbe essere implementato con \textbf{algoritmi e tecnologie} efficaci ed efficienti.
 \end{itemize}
-Le \textbf{interfaccie} dovrebbero:
+Le \textbf{interfacce} dovrebbero:
 \begin{itemize}
     \item Progettate in base a \textbf{principi comuni} (es. protocolli di comunicazione)
     \item \textbf{complete} (offrire \textbf{tutto il necessario})
     \item \textbf{neutrali} (dovrebbero essere indipendenti dalle altre implementazioni)
-    \item \textbf{supportare} \textbf{l'interoperabilità, la portabilità e l'estendibilità}
+    \item \textbf{supportare} \textbf{l'interoperabilità, la portabilità e l'estensibilità}
 \end{itemize}
 \subsection{Politiche e meccanismi}
 Un sistema distribuito dovrebbe essere composto da \textbf{componenti indipendenti}:
@@ -408,7 +409,7 @@ Tutto ciò può essere facilitato tramite una corretta distinzione tra \textbf{p
     \item \textbf{Meccanismo}: Capacità offerte dai componenti (\textbf{come})
     \item \textbf{Politica}: Come le capacità possono essere sfruttate per \textbf{definire un comportamento} (\textbf{quando})
 \end{itemize}
-Nelle applicazioni reali, \textbf{questa separazione è difficile da ottenere}. Un esempio di meccansimo può essere il \textbf{context switch} per i processi; mentre un esempio di politica può essere \textbf{Round Robin} per lo scheduling dei processi. \newline
+Nelle applicazioni reali, \textbf{questa separazione è difficile da ottenere}. Un esempio di meccanismo può essere il \textbf{context switch} per i processi; mentre un esempio di politica può essere \textbf{Round Robin} per lo scheduling dei processi. \newline
 C'e però un'osservazione però da compiere: più netta è la separazione tra politica e meccanismo, più ci dobbiamo assicurare che vi siano \textbf{meccanismi adeguati a supporto di queste politiche}. Dobbiamo quindi \textbf{trovare un equilibrio}: Effettuare "\textbf{l'hard-coding}" delle politiche spesso \textbf{semplifica la gestione} e diminuisce le complessità, al costo della \textbf{flessibilità del programma}. Ovviamente, \textbf{non esiste una risposta univoca}.
 \subsection{Il concetto di protocollo}
 Per formulare le richieste e comprendere i messaggi, i processi in un sistema distribuito devono \textbf{concordare un protocollo}. I protocolli definiscono:
@@ -456,22 +457,22 @@ Diamo inoltre altre definizioni fondamentali:
 \subsection{Processi e programmi}
 Un programma \textbf{viene eseguito da un processo} ed esso \textbf{è una serie di istruzioni ordinate eseguibili da una "macchina"}. I processi sono invece \textbf{entità gestite dal Sistema Operativo} ed essi sono formati da:
 \begin{itemize}
-    \item Un'area di \textbf{memoria RAM} dedicata alla memorizazione dei dati e all'esecuzione delle operazioni
+    \item Un'area di \textbf{memoria RAM} dedicata alla memorizzazione dei dati e all'esecuzione delle operazioni
     \item \textbf{Un registro}, che ricorda la prossima istruzione da eseguire (PC)
     \item \textbf{I canali di comunicazione} del processo
 \end{itemize}
 In particolare, \textbf{ogni processo comunica attraverso dei canali}:
 \begin{itemize}
-    \item Un canale gestisce \textbf{flussi di dati in ingresso e in uscita} (in fomrato \textbf{binario} o testuale)
+    \item Un canale gestisce \textbf{flussi di dati in ingresso e in uscita} (in formato \textbf{binario} o testuale)
     \item Schermo e tastiera \textbf{sono esempi di canali}
     \item Dall'esterno, ogni canale è identificato da un \textbf{numero intero} detto \textbf{porta}
 \end{itemize}
-Le \textbf{socket} sono particolari tipi di canali per la comunicazione tra \textbf{processi} che \textbf{non condividono memoria}. Per potersi connettere o inviare dati ad un processo A, il processo B deve \textbf{conoscere la macchina} (host) che esegue A e la \textbf{porta a cui A è connesso}. Essa può essere una portra arbitraria o una \textbf{porta nota per convenzione} (well-known port).
+Le \textbf{socket} sono particolari tipi di canali per la comunicazione tra \textbf{processi} che \textbf{non condividono memoria}. Per potersi connettere o inviare dati ad un processo A, il processo B deve \textbf{conoscere la macchina} (host) che esegue A e la \textbf{porta a cui A è connesso}. Essa può essere una porta arbitraria o una \textbf{porta nota per convenzione} (well-known port).
 \subsection{Servizi di trasporto internet: TCP e UDP}
 Facciamo un riassunto dei servizi di due protocolli di trasporto: \textbf{TCP} e \textbf{UDP}. \newline
 Iniziamo da \textbf{TCP} (Transmission Control Protocol):
 \begin{itemize}
-    \item \textbf{Orientato alla connesione}: Il client invia al server \textbf{una richiesta di connessione}
+    \item \textbf{Orientato alla connessione}: Il client invia al server \textbf{una richiesta di connessione}
     \item \textbf{Trasporto affidabile}(reliable transfer): Il trasporto e la ricezione tra mittente e destinatario è \textbf{garantito}.
     \item \textbf{Controllo di flusso}(flow control): Il mittente \textbf{rallenta per non sommergere il ricevente}
     \item \textbf{Controllo della congestione}(congestion control): Il mittente \textbf{rallenta quando la rete è sovraccarica}
@@ -481,7 +482,7 @@ Iniziamo da \textbf{TCP} (Transmission Control Protocol):
 Passando invece ad \textbf{UDP} (User Datagram Protocol):
 \begin{itemize}
     \item Trasporto \textbf{non affidabile} tra processi mittente e ricevente
-    \item Non offre \textbf{connesione, affidabilità, controllo di flusso o di congestione e garanzie di banda o di ritardo}
+    \item Non offre \textbf{connessione, affidabilità, controllo di flusso o di congestione e garanzie di banda o di ritardo}
     \item Perché esiste UDP? A volte può essere \textbf{conveniente}: per esempio nelle applicazioni che \textbf{tollerano una perdita parziale di dati} come le applicazioni di streaming video o audio.
     \item Protocollo \textbf{Best-Effort}
 \end{itemize}
@@ -536,7 +537,7 @@ Vi sono diversi aspetti critici da risolvere quando si progetta un sistema distr
           \end{itemize}
 \end{itemize}
 \subsubsection{Identificazione del server}
-Come fa il client a conoscsere l'indirizzo del server? Ci sono varie alternative:
+Come fa il client a conoscere l'indirizzo del server? Ci sono varie alternative:
 \begin{itemize}
     \item Inserire nel codice del client l'indirizzo del server espresso come \textbf{costante}
     \item \textbf{Chiedere all'utente l'indirizzo}
@@ -574,10 +575,10 @@ Diverse chiamate sono offerte per accedere a TCP e UDP, riportiamo le più impor
     \includegraphics[width = 0.65\textwidth]{Images/25.png}
 \end{center}
 \subsection{Processi e Socket}
-Il server crea una \textbf{Socket collegata ad una well-known port} (che identifica il servizio fornito) dedicata a \textbf{ricevere richieste di connesione}. Con la chiamata di sistema \textbf{accept()}, il server crea \textbf{una nuova Socket}, cioè \textbf{un nuovo canale}, dedicato alla comunicazione del client. \newline
+Il server crea una \textbf{Socket collegata ad una well-known port} (che identifica il servizio fornito) dedicata a \textbf{ricevere richieste di connessione}. Con la chiamata di sistema \textbf{accept()}, il server crea \textbf{una nuova Socket}, cioè \textbf{un nuovo canale}, dedicato alla comunicazione del client. \newline
 Vediamo la progressione della comunicazione:
 \newline
-\textbf{1: Il server crea una Socket per accettare le connesioni} e gli assegna un indirizzo IP tramite \textbf{bind()}
+\textbf{1: Il server crea una Socket per accettare le connessioni} e gli assegna un indirizzo IP tramite \textbf{bind()}
 \begin{center}
     \includegraphics[width = 0.75\textwidth]{Images/26.png}
 \end{center}
@@ -585,15 +586,15 @@ Vediamo la progressione della comunicazione:
 \begin{center}
     \includegraphics[width = 0.75\textwidth]{Images/27.PNG}
 \end{center}
-\textbf{3: Il client si fa una richiesta di connesione al server}
+\textbf{3: Il client si fa una richiesta di connessione al server}
 \begin{center}
     \includegraphics[width = 0.75\textwidth]{Images/28.PNG}
 \end{center}
-\textbf{4: Il server accetta la connesione} e assegna una nuovo canale al Client. Ciò avviene per due ragioni: \textbf{lasciare la socket iniziale libera per accettare nuove connesioni} e \textbf{dedicare un canale apposito alla comunicazione interprocesso} adibito ai messaggi applicativi.
+\textbf{4: Il server accetta la connessione} e assegna una nuovo canale al Client. Ciò avviene per due ragioni: \textbf{lasciare la socket iniziale libera per accettare nuove connessioni} e \textbf{dedicare un canale apposito alla comunicazione interprocesso} adibito ai messaggi applicativi.
 \begin{center}
     \includegraphics[width = 0.75\textwidth]{Images/29.PNG}
 \end{center}
-\textbf{5: La connesione viene stabilita} e vengono iniziate le operazioni di lettura/scrittura
+\textbf{5: La connessione viene stabilita} e vengono iniziate le operazioni di lettura/scrittura
 \begin{center}
     \includegraphics[width = 0.75\textwidth]{Images/30.PNG}
 \end{center}
@@ -632,7 +633,7 @@ Questa classe implementa \textbf{socket client} (anche semplicemente chiamate so
     \includegraphics[width = 1.15\textwidth]{Images/32.PNG}
 \end{center}
 \subsubsection{java.net.ServerSocket}
-Questa classe implementa \textbf{server Sockets}. Una server socket \textbf{aspetta che una richiest giunga dalla rete}, effettua qualche operazione quando riceve la richiesta e \textbf{possibilmente ritorna qualcosa al richiedente}. Il lavoro della ServerSocket è in verità effettuato da un'istanza della classe \textbf{SocketImpl}. Un'applicazione, modificando il modo in cui vengono costruite le implementazione delle Socket, può configurarsi per creare Socket \textbf{appropriate al firewall locale}.
+Questa classe implementa \textbf{server Sockets}. Una server socket \textbf{aspetta che una richiesta giunga dalla rete}, effettua qualche operazione quando riceve la richiesta e \textbf{possibilmente ritorna qualcosa al richiedente}. Il lavoro della ServerSocket è in verità effettuato da un'istanza della classe \textbf{SocketImpl}. Un'applicazione, modificando il modo in cui vengono costruite le implementazione delle Socket, può configurarsi per creare Socket \textbf{appropriate al firewall locale}.
 \begin{center}
     \includegraphics[width = 1.15\textwidth]{Images/33.PNG}
 \end{center}
@@ -654,9 +655,9 @@ Prendiamo in analisi i due attori del modello client-server:
               \item Venga creata una Socket \textbf{con una porta nota} per accettare le richieste di connessione
               \item Entri un ciclo infinito dove alternare:
                     \begin{enumerate}
-                        \item \textbf{attesa/accettazione} di una richiesta di connesione da un client
+                        \item \textbf{attesa/accettazione} di una richiesta di connessione da un client
                         \item \textbf{ciclo di lettura-esecuzione}, invio della riposta al termine della conversazione (stabilita spesso dal client)
-                        \item \textbf{chiusura della connesione}
+                        \item \textbf{chiusura della connessione}
                     \end{enumerate}
           \end{itemize}
 \end{itemize}
@@ -665,7 +666,7 @@ Vi sono però delle \textbf{problematiche connesse a questo modello}:
     \item L'affidabilità del server è \textbf{strettamente collegata all'affidabilità della comunicazione tra esso e il client}
     \item La modalità connection-oriented determina:
           \begin{itemize}
-              \item \textbf{L'impossibilità di rilevare interruzioni sulla connesione} (il client monitora il server)
+              \item \textbf{L'impossibilità di rilevare interruzioni sulla connessione} (il client monitora il server)
               \item \textbf{la necessità di una socket per ogni comunicazione}
               \item \textbf{problemi di sicurezza per la condivisione dei dati} e il \textbf{controllo del client}
           \end{itemize}
@@ -679,7 +680,7 @@ I server possono essere di diversi tipi:
     \item \textbf{Concorrenti multi-thread}: creano thread dedicati
 \end{itemize}
 \subsection{Progettazione di un server iterativo}
-Al momento della connessione del client, il server \textbf{crea un socket} temporanea per stabile la connessione diretta. Le eventuali nuove richieste verranno \textbf{accodate alla porta principale} per poi essere soddisfatte più tardi. Il vantaggio di questa architettura è \textbf{la facilità della progettazione}, tuttavia essa è capace solo di \textbf{rispondere ad un solo client alla volta} e un client \textbf{può impedire l'evoluzione degli altir client}. Inoltre, l'architettura \textbf{non è scalabile}.
+Al momento della connessione del client, il server \textbf{crea un socket} temporanea per stabile la connessione diretta. Le eventuali nuove richieste verranno \textbf{accodate alla porta principale} per poi essere soddisfatte più tardi. Il vantaggio di questa architettura è \textbf{la facilità della progettazione}, tuttavia essa è capace solo di \textbf{rispondere ad un solo client alla volta} e un client \textbf{può impedire l'evoluzione degli altri client}. Inoltre, l'architettura \textbf{non è scalabile}.
 \begin{center}
     \includegraphics[width = 0.80\textwidth]{Images/35.PNG}
 \end{center}
@@ -736,10 +737,10 @@ Tuttavia \textbf{solo i canali Socket possono essere usati in maniera bloccante 
     \item Permettono gestire più canali in multiplex
 \end{itemize}
 \subsubsection{java.nio.channels}
-Un \textbf{channel} è rappresenta una connesione aperta ad un'entità come una componente hardware, un file, una socket di rete o ad una componente di un programma capace di effettuare diverse operazioni di I/O. L'interfaccia channel \textbf{è estesa da diverse altre interfacce}. In particolare:
+Un \textbf{channel} è rappresenta una connessione aperta ad un'entità come una componente hardware, un file, una socket di rete o ad una componente di un programma capace di effettuare diverse operazioni di I/O. L'interfaccia channel \textbf{è estesa da diverse altre interfacce}. In particolare:
 \begin{itemize}
     \item \textbf{ServerSocketChannel}: Un canale \textbf{selezionabile} per socket d'ascolto \textbf{stream-oriented}
-    \item \textbf{SocketChannel}: Un canale \textbf{selezionabile} per socket di connesione \textbf{stream-oriented}
+    \item \textbf{SocketChannel}: Un canale \textbf{selezionabile} per socket di connessione \textbf{stream-oriented}
     \item \textbf{DatagramChannel}:  Un canale \textbf{selezionabile} per socket datagram-oriented
 \end{itemize}
 \subsubsection{Selector in Java}
@@ -754,7 +755,7 @@ I canali da monitorare con la select devono:
 \end{enumerate}
 
 \begin{center}
-    \textbf{channe.configureBlocking(false);}\newline
+    \textbf{channel.configureBlocking(false);}\newline
     \textbf{SelectionKey key = channel.register(selector, SelectionKey.OP\textunderscore READ);}
 \end{center}
 Ogni canale può essere impostato per monitorare \textbf{quattro tipi diversi di eventi} definiti attraverso delle costanti della classe \textbf{SelectionKey}
@@ -778,7 +779,7 @@ Un server concorrente (in C) che crea nuovi processi slave lo fa attraverso la c
 Il codice deve quindi prevedere che:
 \begin{itemize}
     \item Il padre \textbf{chiuda la socket per la conversazione con il client}
-    \item Il figlio \textbf{chiuda la socket per l'accettazione di nuove connesioni}
+    \item Il figlio \textbf{chiuda la socket per l'accettazione di nuove connessioni}
 \end{itemize}
 La struttura di questo tipo di server è \textbf{analoga alla forma iterativa}, poiché \textbf{ogni nuovo sottoprocesso gestisce solo un client}.
 \begin{center}
@@ -803,7 +804,7 @@ Un esempio:
 \subsection{Confronto tra modelli}
 Quali caratteristiche hanno quindi i vari modelli presentati? Quando conviene usare uno oppure l'altro?
 \begin{itemize}
-    \item \textbf{Mono processo (iterativo e concorremente)}
+    \item \textbf{Mono processo (iterativo e concorrente)}
           \begin{itemize}
               \item Gli utenti condividono lo stesso spazio di lavoro
               \item Adatto ad applicazioni \textbf{cooperative} che prevedono la \textbf{modifica dello stato del server} (R/W)
@@ -821,7 +822,7 @@ La \textbf{concorrenza} è la contemporaneità di esecuzione di parti diverse di
     \item \textbf{Contemporaneità} di esecuzione su una \textbf{stessa macchina} (con una sola o molte CPU/Core). Gli agenti possono condividere le \textbf{risorse} del S.O.
     \item \textbf{Il programma è in esecuzione su macchine distinte}: le macchine sono collegate tramite una \textbf{rete di comunicazione}. In questo caso, si parla di \textbf{programmazione distribuita}.
 \end{itemize}
-Gli approcci possibli a questo "modello" di programmazione possono essere:
+Gli approcci possibili a questo "modello" di programmazione possono essere:
 \begin{itemize}
     \item \textbf{Funzionalità d'ambiente}: \textbf{Meccanismi} che permettono \textbf{l'esecuzione} e la \textbf{comunicazione} tra gli agenti. Sopratutto forniti dal S.O.
     \item \textbf{Funzionalità dei linguaggi di programmazione}: Costrutti di un linguaggio che espandono la programmazione dal \textbf{paradigma sequenziale} a quello \textbf{concorrente/distribuito}
@@ -840,11 +841,11 @@ Il \textbf{parallelismo dei dati} è l'attività di diversi \textbf{core} che es
 \begin{center}
     \includegraphics[width = 0.60\textwidth]{Images/47.PNG}
 \end{center}
-Il \textbf{parallelismo delle attività} invece è quando \textbf{diversi core} svolgonono \textbf{attività diverse} in parallelo, operando su \textbf{dati comuni}.
+Il \textbf{parallelismo delle attività} invece è quando \textbf{diversi core} svolgono \textbf{attività diverse} in parallelo, operando su \textbf{dati comuni}.
 \begin{center}
     \includegraphics[width = 0.60\textwidth]{Images/48.PNG}
 \end{center}
-Questa distinzione tuttavia non deve far pensare che questi due scenari siano \textbf{mutualmente esclusivi}: scenari ibreidi sono \textbf{comuni}.
+Questa distinzione tuttavia non deve far pensare che questi due scenari siano \textbf{mutualmente esclusivi}: scenari ibridi sono \textbf{comuni}.
 
 \subsection{Legge di Amdahl}
 La legge di Amdahl fornisce \textbf{il guadagno in termini di performance} derivante \textbf{dall'aggiunta di core} ad un'applicazione che ha \textbf{componenti sia sequenziali che parallele}. Sia quindi $S$ la porzione (intesa come tempi di calcolo) di applicazione che deve essere realizzata sequenzialmente e $N$ il numero di core. Allora:
@@ -871,11 +872,11 @@ Perché è utile creare programmi concorrenti?
               \item \textbf{Interagiscono} con l'ambiente...
               \item \textbf{Controllano} diverse attività...
               \item \textbf{Gestiscono} eventi diversi..
-              \item Magari il tutto mentre \textbf{forniscse servizi} all'utente
+              \item Magari il tutto mentre \textbf{fornisce servizi} all'utente
           \end{itemize}
 \end{itemize}
 \subsection{Processi}
-Un certo sistema operativo esegue \textbf{un certo numero di programmi} sullo stesso sistema di elaborazione (mutli-programmazione). Il numero di questi programmi può essere \textbf{arbitrariamente elevato}, di solito è molto più grande dei core che la CPU mette a disposizione. A tale scopo, il sistema operativo realizza e mette a disposizione \textbf{un'astrazione} detta \textbf{processo}. Un processo è un'\textbf{entità attiva astratta} definita dal S.O. allo scopo di eseguire \textbf{un programma}.
+Un certo sistema operativo esegue \textbf{un certo numero di programmi} sullo stesso sistema di elaborazione (multi-programmazione). Il numero di questi programmi può essere \textbf{arbitrariamente elevato}, di solito è molto più grande dei core che la CPU mette a disposizione. A tale scopo, il sistema operativo realizza e mette a disposizione \textbf{un'astrazione} detta \textbf{processo}. Un processo è un'\textbf{entità attiva astratta} definita dal S.O. allo scopo di eseguire \textbf{un programma}.
 \subsection{Programmi e processi}
 È necessario notare la differenza tra \textbf{processo} e \textbf{programma}.
 \begin{itemize}
@@ -889,30 +890,30 @@ Un certo sistema operativo esegue \textbf{un certo numero di programmi} sullo st
 \end{itemize}
 Uno stesso programma può \textbf{dare origine a uno o più processi}: diversi utenti possono \textbf{eseguire lo stesso programma} oppure lo stesso utente può \textbf{eseguire più istanze del programma} contemporaneamente.
 \subsection{Multiprogrammazione e multitasking}
-Tra gli obbettivi del S.O. vi sono:
+Tra gli obbiettivi del S.O. vi sono:
 \begin{itemize}
     \item \textbf{Massimizzare l'utilizzo della/e CPU}: Mantenere impegnata/e la/e CPU il \textbf{maggior tempo possibile} nell'esecuzione di programmi
     \item \textbf{Dare l'illusione che ogni processo abbia una CPU dedicata}: Astrazione utile agli sviluppatori
 \end{itemize}
 Due tecniche per raggiungere questi obbiettivi sono la \textbf{multiprogrammazione e il multitasking}:
 \begin{itemize}
-    \item \textbf{Obbiettivo della multiprogrammazione}: Mantenere in memoria \textbf{più programmi} ed impendire che un programma in attesa di una risorsa (es. operazione di I/O) mantenga il controllo della CPU (\textbf{vecchio concetto}).
-    \item \textbf{Obbiettivo del multitasking}: Dare l'illuisione del \textbf{parallelismo}. A differenza della multiprogrammazione, il cui task \textbf{utilizza la CPU fino al suo completamento}, in questo modello ogni task ha una \textbf{quantità predeterminata di tempo in cui può usare la CPU}, detta \textbf{quantum}, durante il quale il task può essere eseguito. Notare che questo modello \textbf{non è rilevante per i sistemi puramente batch}, cioè quei sistemi pensati per \textbf{eseguire task sequenzialmente} e in maniera accorpata.
+    \item \textbf{Obbiettivo della multiprogrammazione}: Mantenere in memoria \textbf{più programmi} ed impedire che un programma in attesa di una risorsa (es. operazione di I/O) mantenga il controllo della CPU (\textbf{vecchio concetto}).
+    \item \textbf{Obbiettivo del multitasking}: Dare l'illusione del \textbf{parallelismo}. A differenza della multiprogrammazione, il cui task \textbf{utilizza la CPU fino al suo completamento}, in questo modello ogni task ha una \textbf{quantità predeterminata di tempo in cui può usare la CPU}, detta \textbf{quantum}, durante il quale il task può essere eseguito. Notare che questo modello \textbf{non è rilevante per i sistemi puramente batch}, cioè quei sistemi pensati per \textbf{eseguire task sequenzialmente} e in maniera accorpata.
 \end{itemize}
 \subsubsection{Multiprogrammazione}
-Nella mutliprogrammazione, il sistema operativo \textbf{mantiene i processi in memoria}: li carica e li assegna una serie di altre informazioni. Quando la CPU non sta eseguendo un processo, il sistema operativo \textbf{sceglie un altro processo non in esecuzione} e lo fa eseguire dalla CPU. Quando un processo \textbf{non può proseguire la sua esecuzione}, cioè quando è in attesa di una risorsa o di un'operazione di I/O, la sua CPU viene \textbf{assegnata ad un altro processo non in esecuzione}.Il risultato di questo modello è che se i processi \textbf{sono più delle CPU}, quest'ultime saranno impegnate nell'esecuzione di un processo per la maggior parte del tempo.
+Nella multiprogrammazione, il sistema operativo \textbf{mantiene i processi in memoria}: li carica e li assegna una serie di altre informazioni. Quando la CPU non sta eseguendo un processo, il sistema operativo \textbf{sceglie un altro processo non in esecuzione} e lo fa eseguire dalla CPU. Quando un processo \textbf{non può proseguire la sua esecuzione}, cioè quando è in attesa di una risorsa o di un'operazione di I/O, la sua CPU viene \textbf{assegnata ad un altro processo non in esecuzione}.Il risultato di questo modello è che se i processi \textbf{sono più delle CPU}, quest'ultime saranno impegnate nell'esecuzione di un processo per la maggior parte del tempo.
 \subsubsection{Multiprogrammazione e memoria}
-La mutliprogrammazione richiede che \textbf{tutte le immagini di tutti i processi siano in memoria} perché queste possano essere eseguite. Se i processi sono troppi, \textbf{non possono essere tutte contenute in memoria}: si può quindi adottare la tecnica dello \textbf{swapping} per spostare le immagini dei processi dentro e fuori dalla memoria: le immagini dei processi in più \textbf{vengono immagazzinate su un dispositivo di memoria secondaria}. \newline
+La multiprogrammazione richiede che \textbf{tutte le immagini di tutti i processi siano in memoria} perché queste possano essere eseguite. Se i processi sono troppi, \textbf{non possono essere tutte contenute in memoria}: si può quindi adottare la tecnica dello \textbf{swapping} per spostare le immagini dei processi dentro e fuori dalla memoria: le immagini dei processi in più \textbf{vengono immagazzinate su un dispositivo di memoria secondaria}. \newline
 Altra tecnica per gestire quest'eventualità è la \textbf{memoria virtuale}: essa consiste nella \textbf{completa separazione} tra la \textbf{memoria logica} di un processo e la sua \textbf{memoria fisica}. Con questa tecnica, quindi, un processo \textbf{può essere eseguito anche se la sua immagine non è completamente in memoria}. Al processo viene assegnato \textbf{uno spazio di indirizzamento virtuale}, di solito molto più grande della memoria fisica effettivamente presente; il sistema operativo si occuperà poi di \textbf{tradurre gli indirizzi virtuali in indirizzi fisici}.
 \begin{center}
     \includegraphics[width = 0.50\textwidth]{Images/51.PNG}
 \end{center}
-Queste tecniche di muliprogrammazione \textbf{aumentano il numero di processi che possono essere eseguiti in multiprogrammazione}, cioè aumentano il \textbf{grado di multiprogrammazione} di un sistema.
+Queste tecniche di multiprogrammazione \textbf{aumentano il numero di processi che possono essere eseguiti in multiprogrammazione}, cioè aumentano il \textbf{grado di multiprogrammazione} di un sistema.
 \subsubsection{Multitasking}
-Il mutltasking è un'estensione della multiprogrammazione. La CPU viene \textbf{sottratta periodicamente} al programma in esecuzione ed assegnata ad un'altro programma. In questo modello \textbf{tutti i processi progrediscono in maniera continuativa nella loro esecuzione}, anziché solo nei momenti in cui un certo processo \textbf{lascia il controllo della CPU} e si mette in attesa.
+Il multitasking è un'estensione della multiprogrammazione. La CPU viene \textbf{sottratta periodicamente} al programma in esecuzione ed assegnata ad un'altro programma. In questo modello \textbf{tutti i processi progrediscono in maniera continuativa nella loro esecuzione}, anziché solo nei momenti in cui un certo processo \textbf{lascia il controllo della CPU} e si mette in attesa.
 Questo permette che i \textbf{programmi batch}, cioè quei programmi che richiedono poche operazione di I/O, non monopolizzino la CPU a scapito dei \textbf{programmi interattivi}.
 \subsection{Operazioni sui processi}
-I sistemi operativi di solito forniscono delle \textbf{chiamate di sistema}(syscall) con le quali un certo processo può \textbf{creare, terminare o manipolare} altri processi. Dal momento che solo un processo può crerne un altro, all'avvio del sistema operativo, esso crea dei \textbf{processi primordiali} dai quali \textbf{tutti i processi utente e di sistema} derivano.
+I sistemi operativi di solito forniscono delle \textbf{chiamate di sistema}(syscall) con le quali un certo processo può \textbf{creare, terminare o manipolare} altri processi. Dal momento che solo un processo può crearne un altro, all'avvio del sistema operativo, esso crea dei \textbf{processi primordiali} dai quali \textbf{tutti i processi utente e di sistema} derivano.
 \subsubsection{Creazione di processi}
 Di solito i sistemi operativi organizzano i processi in maniera gerarchica. Un processo \textbf{padre} può creare una serie di \textbf{processi figlio}. Questi, a loro volta, potranno essere i processi padri di altri processi figlio.
 \begin{center}
@@ -925,7 +926,7 @@ La relazione gerarchica tra processi è di norma importante per le seguenti poli
     \item \textbf{Politiche di coordinazione}: Il padre può \textbf{sospendersi fino a quando i figli non terminano} oppure eseguono tutti in \textbf{maniera concorrente}
 \end{itemize}
 \subsubsection{Terminazione dei processi}
-I processi, di solito, richiedono esplicitamente la propria \textbf{terminazione} al sistema operativo. Tuttavia, un processo padre può richiedere la \textbf{terminazione di un processo figlio}. Le possibli ragioni per il quale un processo padre vuole terminare forzatamente un suo figlio sono:
+I processi, di solito, richiedono esplicitamente la propria \textbf{terminazione} al sistema operativo. Tuttavia, un processo padre può richiedere la \textbf{terminazione di un processo figlio}. Le possibili ragioni per il quale un processo padre vuole terminare forzatamente un suo figlio sono:
 \begin{itemize}
     \item Il figlio sta usando \textbf{risorse in eccesso}
     \item Le funzionalità del figlio \textbf{non sono più richieste} (meglio però, in questo caso, una terminazione \textbf{ordinata})
@@ -965,15 +966,15 @@ Durante l'esecuzione di un processo, esso cambia \textbf{più volte stato}. Gli 
     \includegraphics[width = 0.65\textwidth]{Images/54.PNG}
 \end{center}
 \subsubsection{PCB: Process Control Block}
-Detto anche \textbf{Task Control Block}, il \textbf{Prcoess Control Block} (PCB) è la \textbf{struttura dati} del kernel che contiene tutte le informazioni riguradanti un processo. Essa contiene:
+Detto anche \textbf{Task Control Block}, il \textbf{Process Control Block} (PCB) è la \textbf{struttura dati} del kernel che contiene tutte le informazioni riguardanti un processo. Essa contiene:
 \begin{itemize}
     \item \textbf{Process state}: lo stato del processo
     \item \textbf{Process number}: il PID (Process IDentifier) del processo
     \item \textbf{Program Counter}: Contenuto del registro PC
-    \item \textbf{Registrers}: Contenuto dei registri del processore
+    \item \textbf{Registers}: Contenuto dei registri del processore
     \item \textbf{Informazioni sulla memoria allocata}
     \item \textbf{Informazioni sull'I/O}: dispositivi assegnati, file aperti,...
-    \item \textbf{Informazioni di Scheduling}: Priorità, puntatori a code di schedulin, ...
+    \item \textbf{Informazioni di Scheduling}: Priorità, puntatori a code di scheduling, ...
     \item \textbf{Informazioni di accounting}: CPU utilizzata, tempo trascorso, ...
 \end{itemize}
 \begin{center}
@@ -1001,10 +1002,10 @@ Quando la CPU deve passare dall'esecuzione di un processo a quella di un altro p
 \end{itemize}
 Il tempo necessario ad eseguire un context switch \textbf{è overhead}: non viene eseguito alcun lavoro utile. Da notare che più complesso è il S.O., più è complesso il context switch, più tempo serve per farlo. Alcuni processori offrono \textbf{supporto hardware speciale} per ridurre il tempo dei context switch.
 \subsection{Comunicazione interprocesso (IPC)}
-I processi possono essere \textbf{indipendenti} oppure possono \textbf{cooperare}. Un processo coopera se il suo comportamento è \textbf{influenzato} oppure \textbf{influeza} altri processi. Ci sono più motivi per volere processi cooperanti:
+I processi possono essere \textbf{indipendenti} oppure possono \textbf{cooperare}. Un processo coopera se il suo comportamento è \textbf{influenzato} oppure \textbf{influenza} altri processi. Ci sono più motivi per volere processi cooperanti:
 \begin{itemize}
     \item Condivisione di \textbf{informazioni}
-    \item \textbf{Accellerazione} delle computazioni
+    \item \textbf{Accelerazione} delle computazioni
     \item Modularità e \textbf{isolamento} (Chrome)
 \end{itemize}
 Per permettere ai processi di comunicare, il sistema operativo deve mettere a disposizione delle \textbf{primitive di comunicazione interprocesso} (IPC).
@@ -1023,9 +1024,9 @@ In questo modello, \textbf{viene permesso ai processi sia di comunicare che di s
     \item Un'operazione di \textbf{send(message)} per l'invio di un messaggio tra un processo e l'altro
     \item Un'operazione di \textbf{receive(message)} con la quale un processo ascolta (eventualmente mettendosi in attesa) e riceve i messaggi degli altri processi.
 \end{itemize}
-Quindi per comunicare, i due processi devono \textbf{stabilire un link di comunicazione} tra loro e passarsi messagi. Questo tipo di comunicazione è la normalità nella \textbf{programmazione distribuita}.
+Quindi per comunicare, i due processi devono \textbf{stabilire un link di comunicazione} tra loro e passarsi messaggi. Questo tipo di comunicazione è la normalità nella \textbf{programmazione distribuita}.
 \subsection{Multithreading}
-Se supponiamo che un processo possa avvalersi di \textbf{molte CPU} contemporaneamente, allora una sua serie di istruzini possono essere eseguite \textbf{contemporaneamente}; quindi un processo può avere \textbf{più flussi di esecuzione concorrenti} (threads). I threads (\textbf{lightweight processes)} quindi sono stati introdotti per tale scopo. I thread di un processo condividono:
+Se supponiamo che un processo possa avvalersi di \textbf{molte CPU} contemporaneamente, allora una sua serie di istruzioni possono essere eseguite \textbf{contemporaneamente}; quindi un processo può avere \textbf{più flussi di esecuzione concorrenti} (threads). I threads (\textbf{lightweight processes)} quindi sono stati introdotti per tale scopo. I thread di un processo condividono:
 \begin{itemize}
     \item La \textbf{memoria globale} (data e heap)
     \item La \textbf{code section}
@@ -1041,12 +1042,12 @@ Un programma \textbf{sequenziale} (single-threaded) ha un singolo flusso di cont
 \end{center}
 Un programma \textbf{multi-threaded} ha più flussi di esecuzione che gli permettono di \textbf{svolgere più mansioni allo stesso tempo}. Molto spesso, tuttavia, \textbf{i thread di un programma devono sincronizzarsi}
 \subsection{Thread Control Blocks (TCB)}
-Nei kernel multithreaded, vengono mantenute delle stutture dati analoghe ai PCB, i \textbf{Thread Control Blocks} (TCB); un TCB memorizza il contesto del thread e le sue informazioni di contabilizzazione. Il PCB di un processo \textbf{raccoglie solamente le informazioni di contabilizzazione comuni} (es. lo spazio di memoria) ed è di solito collegato ai TCB dei \textbf{thread kernel}, e viceversa, i TCB dei thread kernel utilizzati da un processo sono collegati al suo PCB.
+Nei kernel multithreaded, vengono mantenute delle strutture dati analoghe ai PCB, i \textbf{Thread Control Blocks} (TCB); un TCB memorizza il contesto del thread e le sue informazioni di contabilizzazione. Il PCB di un processo \textbf{raccoglie solamente le informazioni di contabilizzazione comuni} (es. lo spazio di memoria) ed è di solito collegato ai TCB dei \textbf{thread kernel}, e viceversa, i TCB dei thread kernel utilizzati da un processo sono collegati al suo PCB.
 \subsection{Vantaggi del multithreading e sfide}
 Il multithreading può portare a diversi vantaggi:
 \begin{itemize}
     \item \textbf{Condivisione di codice e dati}: i thread di un processo condividono lo \textbf{stesso spazio di memoria} e lo stesso codice
-    \item \textbf{Economia}: Crare un thread richiede meno risorse che creare un processo, inoltre il cambio di contesto è \textbf{più rapido}
+    \item \textbf{Economia}: Creare un thread richiede meno risorse che creare un processo, inoltre il cambio di contesto è \textbf{più rapido}
     \item \textbf{Migliori tempi di risposta}: L'applicazione può eseguire un compito lungo \textbf{in un thread separato} e comunque rispondere e offrire servizi all'utente
     \item \textbf{Scalabilità}: Il multithreading in una macchina con più processi aumenta il \textbf{grado di parallelismo} di un'applicazione
     \item \textbf{Ottimizzazione delle risorse}: Se un thread è in attesa di una operazione di I/O, un'altro thread può accedere alla CPU \textbf{evitando il context switch} dell'intero processo
@@ -1056,16 +1057,16 @@ Tuttavia presenta anche delle sfide:
     \item \textbf{Identificazione} dei compiti da eseguire dai vari thread
     \item \textbf{Bilanciamento} in maniera tale che i compiti eseguiti dai vari thread abbiano dimensione di attività confrontabili
     \item \textbf{Suddivisione} dei dati per massimizzare l'accesso in parallelo
-    \item \textbf{Dipendenza} trai dati prodotti/consumati dai vari thread, per stabilire la sincronizazione
+    \item \textbf{Dipendenza} trai dati prodotti/consumati dai vari thread, per stabilire la sincronizzazione
     \item \textbf{Testing} e \textbf{Debugging}
 \end{itemize}
 \subsection{Implementazione del multithreading}
 I thread possono essere:
 \begin{itemize}
-    \item \textbf{Thread a livello utente}: i thread disponibili nello spazio utente dei processi; son quelli offerti dalle librerire di thread ai processi (logici)
+    \item \textbf{Thread a livello utente}: i thread disponibili nello spazio utente dei processi; son quelli offerti dalle librerie di thread ai processi (logici)
     \item \textbf{Thread a livello kernel}: I thread implementati nativamente dal kernel; sono utilizzati per sfruttare \textbf{il kernel stesso} in maniera concorrente (reali)
 \end{itemize}
-I thread a livello del kernel vengono usati dalle librerire per \textbf{creare i thread a livello utende di un certo processo} (avviene quindi una commutazione di contesto). A tale scopo possono adottare diverse strategie.
+I thread a livello del kernel vengono usati dalle librerie per \textbf{creare i thread a livello utente di un certo processo} (avviene quindi una commutazione di contesto). A tale scopo possono adottare diverse strategie.
 \subsubsection{Molti a uno}
 \begin{center}
     \includegraphics[width = 0.45\textwidth]{Images/62.PNG}
@@ -1075,7 +1076,7 @@ In questo modello, i thread di un singolo processo sono \textbf{implementati su 
 \begin{center}
     \includegraphics[width = 0.45\textwidth]{Images/63.PNG}
 \end{center}
-Ogni singolo thread a livello utente è implementato su un \textbf{singolo, distingo} thread a livello kernel. Il vantaggio di questo modello è che \textbf{permette un maggior grado di concorrenza} e di sfruttare il \textbf{parallelismo} dei sistemi multicore. Tuttavia \textbf{è un modello pesante da sostenere} per il kernel e presente un \textbf{maggior overhead}.
+Ogni singolo thread a livello utente è implementato su un \textbf{singolo, distinto} thread a livello kernel. Il vantaggio di questo modello è che \textbf{permette un maggior grado di concorrenza} e di sfruttare il \textbf{parallelismo} dei sistemi multicore. Tuttavia \textbf{è un modello pesante da sostenere} per il kernel e presente un \textbf{maggior overhead}.
 \subsubsection{Molti a molti}
 \begin{center}
     \includegraphics[width = 0.45\textwidth]{Images/64.PNG}
@@ -1089,7 +1090,7 @@ Un \textbf{lightweight process} (LWP) è \textbf{l'interfaccia} che il kernel of
     \includegraphics[width = 0.45\textwidth]{Images/65.PNG}
 \end{center}
 \subsubsection{Attivazione dello scheduler}
-L'attivazione dello scheduler è un modello di \textbf{collaborazione tra libreria dei thread e kernel}. Il kernel comunica alla libreria dei thread \textbf{l'occorrenza dei principali eventi di scheduling sugli LWP attraverso upcall}; quest'ultime \textbf{chiamano opprtune funzioni di callback alla libreria dei thread}. In risposta ad una callback, la libreria dei thread può:
+L'attivazione dello scheduler è un modello di \textbf{collaborazione tra libreria dei thread e kernel}. Il kernel comunica alla libreria dei thread \textbf{l'occorrenza dei principali eventi di scheduling sugli LWP attraverso upcall}; quest'ultime \textbf{chiamano opportune funzioni di callback alla libreria dei thread}. In risposta ad una callback, la libreria dei thread può:
 \begin{itemize}
     \item Aggiornare le proprie strutture dati (es. registrare che un certo thread è bloccato)
     \item Decidere di effettuare operazioni di scheduling (es. continuare l'esecuzione di un thread preempted assegnandolo un altro di LWP)
@@ -1098,7 +1099,7 @@ L'attivazione dello scheduler è un modello di \textbf{collaborazione tra librer
     \includegraphics[width = 0.55\textwidth]{Images/66.PNG}
 \end{center}
 \subsection{Multithreading in Java}
-I \textbf{Java Threads} sono astrazioni offerte dalla \textbf{JVM} (Java Virtual Machine) e gestite dalla stessa. Essi vengono tipicamente implementati \textbf{seguendo il modello di threading offerto dal sistema operativo sottostante}, ma la JVM non fornisce uno standard specifico. La JVM quindi offre una \textbf{libreria} per la definizione dei thread eper la loro interazione con il S.O. per la loro esecuzione. Vi sono due modi per creare un thread in java:
+I \textbf{Java Threads} sono astrazioni offerte dalla \textbf{JVM} (Java Virtual Machine) e gestite dalla stessa. Essi vengono tipicamente implementati \textbf{seguendo il modello di threading offerto dal sistema operativo sottostante}, ma la JVM non fornisce uno standard specifico. La JVM quindi offre una \textbf{libreria} per la definizione dei thread e per la loro interazione con il S.O. per la loro esecuzione. Vi sono due modi per creare un thread in java:
 \begin{enumerate}
     \item Usare un oggetto di una classe che estende \textbf{java.lang.Thread}
     \item (Preferibile) Implementare una classe che \textbf{implementa java.lang.Runnable} e il suo metodo \textbf{run()}
@@ -1114,7 +1115,7 @@ I modi più semplici in Java per creare un Thread sono:
           \begin{center}
               \includegraphics[width = 0.70\textwidth]{Images/68.PNG}
           \end{center}
-    \item Effettuare \textbf{l'ovveride} del metodo \textbf{run()} nella sottoclasse. Il codice eseguito dal thread è incluso nel metodo run() e nei metodi invocati indirettamente o direttamente da esso. Questo codice verrà quindi eseguito da ogni thread che viene fatto partire da questa sottoclasse
+    \item Effettuare \textbf{l'override} del metodo \textbf{run()} nella sottoclasse. Il codice eseguito dal thread è incluso nel metodo run() e nei metodi invocati indirettamente o direttamente da esso. Questo codice verrà quindi eseguito da ogni thread che viene fatto partire da questa sottoclasse
     \item Creare un'istanza della sottoclasse
     \item Richiamare il \textbf{metodo start()} su quest'istanza
           \begin{itemize}
@@ -1122,7 +1123,7 @@ I modi più semplici in Java per creare un Thread sono:
           \end{itemize}
 \end{enumerate}
 \subsubsection{Far partire i thread in java}
-Una chiama del tipo \textbf{t.start()} rende il thread t \textbf{pronto} (ready) all'esecuzione. Prima o poi, qunado lo scheduler lo riterrà opportuno, il thread \textbf{verrà mandato in esecuzione} e verrà invocato il metodo run() del thread t. I due thread, \textbf{creante e creato}, saranno eseguiti in maniera \textbf{indipendente e concorrente}. Bisogna notare che, seppur l'ordine delle operazioni di ogni thread è noto, \textbf{l'ordine di esecuzione dei thread è ignoto} (nondeterminismo)
+Una chiama del tipo \textbf{t.start()} rende il thread t \textbf{pronto} (ready) all'esecuzione. Prima o poi, quando lo scheduler lo riterrà opportuno, il thread \textbf{verrà mandato in esecuzione} e verrà invocato il metodo run() del thread t. I due thread, \textbf{creante e creato}, saranno eseguiti in maniera \textbf{indipendente e concorrente}. Bisogna notare che, seppur l'ordine delle operazioni di ogni thread è noto, \textbf{l'ordine di esecuzione dei thread è ignoto} (nondeterminismo)
 \subsubsection{Runnable interface}
 Siccome Java non consente l'ereditarietà multipla, un altro metodo per implementare un thread è \textbf{implementare l'interfaccia Runnable} ed farne l'override del metodo \textbf{run()}. Ciò ci permette di \textbf{estendere un'altra classe} al posto di Thread. La classe base \textbf{Thread} può essere \textbf{inizializzata con un oggetto Runnable}, del quale utilizzerà il metodo run() una volta dato lo start.
 \begin{center}
@@ -1160,7 +1161,7 @@ Poiché ad ogni thread è assegnato un \textbf{quanto di tempo} d'uso della CPU,
     \includegraphics[width = 0.60\textwidth]{Images/73.PNG}
 \end{center}
 \subsubsection{Rallentare un thread: sleep(mill)}
-Per rallentare l'esecuzione di un thread, potremmo implementare un metodo che \textbf{giri a vuoto} (busy loop). Tuttavia questa soluzione è \textbf{inefficiente}: si sprecano cilci di processore quando essi potrebbero essere impegnati in qualche attività utile. Inoltre, se ci sono molti threads, è possibile che quando si arriva al momento il thread esce dal ciclo \textbf{esso non abbia accesso alla CPU}, quindi si rischia di \textbf{rallentarlo più di quanto previsto}. La soluzione è il metodo \textbf{sleep(mill)}, che \textbf{ferma l'esecuzione del thread per un tempo uguale a mill}. Il metodo \textbf{libera la CPU}, è statico e \textbf{non spreca cicli del processore}; tuttavia và gestita la \textbf{InterruptedException} che questo metodo invoca nel caso il thread in pausa riceva una \textbf{richiesta di interruzione} ma esso non abbia accesso alla CPU.
+Per rallentare l'esecuzione di un thread, potremmo implementare un metodo che \textbf{giri a vuoto} (busy loop). Tuttavia questa soluzione è \textbf{inefficiente}: si sprecano cicli di processore quando essi potrebbero essere impegnati in qualche attività utile. Inoltre, se ci sono molti threads, è possibile che quando si arriva al momento il thread esce dal ciclo \textbf{esso non abbia accesso alla CPU}, quindi si rischia di \textbf{rallentarlo più di quanto previsto}. La soluzione è il metodo \textbf{sleep(mill)}, che \textbf{ferma l'esecuzione del thread per un tempo uguale a mill}. Il metodo \textbf{libera la CPU}, è statico e \textbf{non spreca cicli del processore}; tuttavia và gestita la \textbf{InterruptedException} che questo metodo invoca nel caso il thread in pausa riceva una \textbf{richiesta di interruzione} ma esso non abbia accesso alla CPU.
 \subsubsection{Cancellare un thread}
 Cancellare un thread significa \textbf{terminarne l'esecuzione prima del previsto}. Ci sono due possibili modelli di cancellazione:
 \begin{itemize}
@@ -1176,7 +1177,7 @@ Ad ogni chiamata dei metodi \textbf{sleep, join, ecc...} la flag d'interruzione 
 \begin{center}
     \includegraphics[width = 1\textwidth]{Images/74.PNG}
 \end{center}
-Ovviamente \textbf{interrupt()} non funziona se i thread \textbf{non compiono mai attese}, quindi è necesario che essi \textbf{controllino periodicamente che non siano arrivate richieste di interrupt}.
+Ovviamente \textbf{interrupt()} non funziona se i thread \textbf{non compiono mai attese}, quindi è necessario che essi \textbf{controllino periodicamente che non siano arrivate richieste di interrupt}.
 \subsection{Threading implicito}
 Il \textbf{threading implicito} è un meccanismo che \textbf{delega la creazione e gestione dei threads ai compilatori e alle librerie}. L'obbiettivo è permette agli sviluppatori di \textbf{pensare in termini di task da compiere e da mappare su thread}, che verranno poi creati e gestiti automaticamente. Alcuni approcci a questo meccanismo sono:
 \begin{itemize}
@@ -1187,7 +1188,7 @@ Il \textbf{threading implicito} è un meccanismo che \textbf{delega la creazione
     \item \textbf{Intel Threading Building Blocks} (non argomento di questo corso)
 \end{itemize}
 \subsubsection{Thread pools}
-L'idea di questo meccanismo è che \textbf{viene creato un certo numero di thread}, organizzati in gruppo, che attendono di \textbf{rispondere ad una richiesta di lavoro}. Un sistema intelligente quindi \textbf{assenga ad ogni thread un lavoro da svolgere}. Questo meccanismo viene usato per la gestione del ciclo di vita delle \textbf{servlet}. I vantaggi sono:
+L'idea di questo meccanismo è che \textbf{viene creato un certo numero di thread}, organizzati in gruppo, che attendono di \textbf{rispondere ad una richiesta di lavoro}. Un sistema intelligente quindi \textbf{assegna ad ogni thread un lavoro da svolgere}. Questo meccanismo viene usato per la gestione del ciclo di vita delle \textbf{servlet}. I vantaggi sono:
 \begin{itemize}
     \item Più rapido che creare un nuovo thread all'arrivo della richiesta
     \item Il numero di thread esistenti è limitato dalla dimensione del pool
@@ -1218,7 +1219,7 @@ Presentiamo un esempio:
 \end{center}
 \newpage
 \section{Thread e Sincronizzazione}
-I programmi concorrenti hanno delle proprietà diverse rispetto ai programmi sequenziali. Un progrmma \textbf{sequenziale}(deterministico) eseguito ripetutamente con lo stesso input \textbf{produce sempre lo stesso risultato}; eventuali errori saranno quindi \textbf{riproducibili}. Tuttavia lo stesso \textbf{non vale per i programmi concorrenti}, in cui il comportamento di un thread \textbf{può influenzare quello degli alti thread} in maniera \textbf{non deterministica}. È necessario quindi che gli agenti concorrenti interagiscano:
+I programmi concorrenti hanno delle proprietà diverse rispetto ai programmi sequenziali. Un programma \textbf{sequenziale}(deterministico) eseguito ripetutamente con lo stesso input \textbf{produce sempre lo stesso risultato}; eventuali errori saranno quindi \textbf{riproducibili}. Tuttavia lo stesso \textbf{non vale per i programmi concorrenti}, in cui il comportamento di un thread \textbf{può influenzare quello degli alti thread} in maniera \textbf{non deterministica}. È necessario quindi che gli agenti concorrenti interagiscano:
 \begin{itemize}
     \item \textbf{Cooperazione}: interazioni prevedibili e desiderate. La loro presenza è necessaria per la logica del programma. Avviene tramite scambio di informazioni (anche semplici come segnali); questo è il caso della \textbf{sincronizzazione diretta o esplicita} dei threads
     \item \textbf{Competizione}: gli agenti competono per accedere ad una risorsa condivisa. Politiche di accesso alla risorsa sono necessarie. Questo è il caso della \textbf{sincronizzazione indiretta o implicita}
@@ -1228,12 +1229,12 @@ I programmi concorrenti hanno delle proprietà diverse rispetto ai programmi seq
 I meccanismi di sincronizzazione permettono di \textbf{controllare l’ordine relativo} delle varie attività dei processi/thread. Se si implementa un modello di memoria \textbf{condivisa}, essi possono essere:
 \begin{enumerate}
     \item \textbf{Mutua esclusione}: I dati, attraverso la creazione di \textbf{regioni critiche} del codice, non sono accessibili contemporaneamente a più thread
-    \item \textbf{Sincornizzazione su condizione}: si sospende l’esecuzione di un thread fino al \textbf{verificarsi di una opportuna condizione} sulle risorse condivise
+    \item \textbf{Sincronizzazione su condizione}: si sospende l’esecuzione di un thread fino al \textbf{verificarsi di una opportuna condizione} sulle risorse condivise
 \end{enumerate}
 Se si implementa invece un modello basato sullo \textbf{scambio di messaggi}:
 \begin{enumerate}
     \item I meccanismi sono di solito \textbf{impliciti nelle primitive send e receive}, cioè un thread può ricevere un messaggio solo dopo il suo invio
-    \item \textbf{Sincronizazzione su eventi}: si sospende l’esecuzione di un thread \textbf{fino al verificarsi di un evento}
+    \item \textbf{Sincronizzazione su eventi}: si sospende l’esecuzione di un thread \textbf{fino al verificarsi di un evento}
 \end{enumerate}
 Questi meccanismi vengono messi a disposizione dal sistema operativo. In Java ritroviamo le stesse
 soluzioni implementate a livello di JVM per i thread.
@@ -1242,12 +1243,12 @@ Questo meccanismo è un \textbf{esempio di sincronizzazione temporale} tra due t
 \begin{center}
     \includegraphics[width = 0.30\textwidth]{Images/81.PNG}
 \end{center}
-In java, il metodo \textbf{join()} è definito nella classe \textbf{Thread}. Quando si invoca il metodo \textbf{join()} su un thread, il thread chiamante entra in uno stato di \textbf{attesa} (wait). Rimane in tale stato finché il thread chiamato (t1) non termina. § Il metodo join() può anche ritornare se il thread chiamato viene \textbf{interrotto}. In questo caso, il metodo lancia una \textbf{InterruptedException} che dovrà esssere gestita dal thread. Infine, se il thread chiamato è \textbf{già terminato} o \textbf{non è stato avviato}, la
+In java, il metodo \textbf{join()} è definito nella classe \textbf{Thread}. Quando si invoca il metodo \textbf{join()} su un thread, il thread chiamante entra in uno stato di \textbf{attesa} (wait). Rimane in tale stato finché il thread chiamato (t1) non termina. § Il metodo join() può anche ritornare se il thread chiamato viene \textbf{interrotto}. In questo caso, il metodo lancia una \textbf{InterruptedException} che dovrà essere gestita dal thread. Infine, se il thread chiamato è \textbf{già terminato} o \textbf{non è stato avviato}, la
 chiamata al metodo join() \textbf{ritorna immediatamente}.
 \subsubsection{Sincronizzazione su eventi: Barriere}
 In questo modello, i thread vengono \textbf{messi progressivamente in attesa} fin a quando \textbf{una condizione globale non viene soddisfatta}. Una possibile implementazione di questo meccanismo è il seguente:
 \begin{itemize}
-    \item \textbf{Un contatore condivisio} conta il numero di processi che devono terminare
+    \item \textbf{Un contatore condiviso} conta il numero di processi che devono terminare
     \item \textbf{Il contatore decrementa} ogni volta che un thread finisce la sua task
     \item Aggiornamento del \textbf{contatore atomico}
 \end{itemize}
@@ -1262,7 +1263,7 @@ Nei programmi concorrenti, molti problemi sono causati dalle \textbf{corse criti
               \item Ha senso in solo in sistemi \textbf{multiprocessore}
               \item Non richiede commutazione di contesto
               \item Spreca cicli di calcolo della CPU
-              \item Consiste nel \textbf{verificare che una certa conidizone sia verificata}
+              \item Consiste nel \textbf{verificare che una certa condizione sia verificata}
           \end{itemize}
     \item \textbf{Sincronizzazione basata sullo scheduler}
           \begin{itemize}
@@ -1281,18 +1282,18 @@ La \textbf{sezione critica} è un blocco di codice che può essere eseguito \tex
               \item Eventuale \textbf{sezione di uscita} (ad esempio, la notifica agli altri processi)
           \end{enumerate}
 \end{itemize}
-Per realizzare questo protocollo, abbiamo bisogno di un'operazione non interompibile (atomica) \textbf{test\_and\_set(B)} (con B una variabile booleana) che ritorna \textbf{il contenuto originale della cella di memoria puntata e imposta il valore della cella a true}. Vediamo come realizzare il protocollo.
+Per realizzare questo protocollo, abbiamo bisogno di un'operazione non interrompibile (atomica) \textbf{test\_and\_set(B)} (con B una variabile booleana) che ritorna \textbf{il contenuto originale della cella di memoria puntata e imposta il valore della cella a true}. Vediamo come realizzare il protocollo.
 \subsubsection{Lock}
-Il \textbf{lock} è una variabile \textbf{logica} manipolaibile \textbf{atomicamente}:
+Il \textbf{lock} è una variabile \textbf{logica} manipolabile \textbf{atomicamente}:
 \begin{itemize}
     \item È una variabile \textbf{binaria}
     \item Due metodi \textbf{lock()} e \textbf{unlock()} permettono di acquisire e rilasciare il lock in maniera \textbf{atomica}
-    \item Una volta che un thread acquisice un lock, \textbf{gli altri thread si arrestano} fino a quando il thread \textbf{non rilascia il lock}.
+    \item Una volta che un thread acquisisce un lock, \textbf{gli altri thread si arrestano} fino a quando il thread \textbf{non rilascia il lock}.
     \item \textbf{Per ogni lock} deve essere gestita una coda di thread in attesa.
 \end{itemize}
 In java, le implementazioni dei lock sono disponibili in \textbf{java.lang.concurrent.locks}; in particolare i metodi \textbf{lock()} e \textbf{unlock()} devono essere invocati rispettivamente \textbf{all'inizio e alla fine di ogni sezione che si vuole dichiarare critica}.
 \subsubsection{Semaforo}
-Un semaforo è una variabile \textbf{intera} che può essere manipolata \textbf{atomicamente} solo tramite le operazioni \textbf{acquire()} e \textbf{release()}: la prima \textbf{aspetta che la variabile sia maggiore di 0 e poi la decrementa}, la seconda \textbf{incrementa incondizionalmente la variabile}. Per ogni semaforo \textbf{è necessario gestire una coda di thread in attesa}. Come per i lock, \textbf{acquire()} e \textbf{release()} sono da invocare rispettivamente \textbf{all'inizio e alla fine di ogni sezione che si vuole dichiarare critica}. I semafori in Java sono presenti in \textbf{java.lang.concurrent.semaphore}
+Un semaforo è una variabile \textbf{intera} che può essere manipolata \textbf{atomicamente} solo tramite le operazioni \textbf{acquire()} e \textbf{release()}: la prima \textbf{aspetta che la variabile sia maggiore di 0 e poi la decrementa}, la seconda \textbf{incrementa incondizionatamente la variabile}. Per ogni semaforo \textbf{è necessario gestire una coda di thread in attesa}. Come per i lock, \textbf{acquire()} e \textbf{release()} sono da invocare rispettivamente \textbf{all'inizio e alla fine di ogni sezione che si vuole dichiarare critica}. I semafori in Java sono presenti in \textbf{java.lang.concurrent.semaphore}
 \subsubsection{Mutua esclusione implicita in oggetti Java: metodi Synchronized}
 L'attivazione di un certo metodo può essere resa \textbf{mutualmente esclusiva} tramite la specifica della keyword \textbf{synchronized}. Java associa un \textbf{un lock implicito} (un semaforo binario) ad ogni oggetto che abbia almeno \textbf{un metodo synchronized}. Poiché ogni oggetto estende la classe Object, ogni oggetto \textbf{ha un suo lock} (Java Language Specification 17.1). In particolare:
 \begin{itemize}
@@ -1302,7 +1303,7 @@ L'attivazione di un certo metodo può essere resa \textbf{mutualmente esclusiva}
 \end{itemize}
 Quando un metodo synchronized viene invocato:
 \begin{itemize}
-    \item Se l'oggetto non è \textbf{bloccato} (ovvero nessun thread sta eseguendo un metodo synchronized sull'oggett), esso viene bloccato e il metodo viene eseguito.
+    \item Se l'oggetto non è \textbf{bloccato} (ovvero nessun thread sta eseguendo un metodo synchronized sull'oggetto), esso viene bloccato e il metodo viene eseguito.
     \item Se l'oggetto è \textbf{bloccato}, il thread \textbf{viene messo in attesa fino a quando il lock non viene rilasciato}.
 \end{itemize}
 Possiamo quindi rivedere il diagramma di stato dei thread:
@@ -1313,8 +1314,8 @@ La parola chiave \textbf{synchronized} tuttavia implica certe conseguenze:
 \begin{itemize}
     \item L'introduzione di \textbf{synchronized} nella dichiarazione dei metodi di una risorsa condivisa \textbf{forza} un \textbf{ordinamento nell'esecuzione} di questi metodi da parte di \textbf{thread concorrenti}
     \item Quanto un metodo synchronized termina, si stabilisce automaticamente una relazione di \textbf{happens-before} con ogni invocazione successiva di alti metodi synchronized sullo stesso oggetto
-    \item Ai fini delle problematiche di inteferenza, è come se questi metodi fossero stati resi \textbf{atomici}
-    \item L'acquisizone e il rilascio dei lock intrinsechi \textbf{viene gestito completamente dalla JVM} ed è \textbf{trasparente} al programmatore
+    \item Ai fini delle problematiche di interferenza, è come se questi metodi fossero stati resi \textbf{atomici}
+    \item L'acquisizione e il rilascio dei lock intrinsechi \textbf{viene gestito completamente dalla JVM} ed è \textbf{trasparente} al programmatore
 \end{itemize}
 È possibile dichiarare anche solo \textbf{parti di metodi synchronized} usando la dichiarazione \textbf{synchronized(Object) \{...\}}. Ciò dichiara che un certo blocco di codice \textbf{è sincronizzato in relazione ad un determinato oggetto}(tipicamente \textbf{this}). \newline
 I metodi \textbf{synchronized} danno accesso \textbf{esclusivo} ai dati incapsulati in un oggetto \textbf{solo se a tali dati è possibile accedere solo tramite metodi synchronized}. La sincronizzazione dell'accesso ad una risorsa viene infatti \textbf{vanificata} se i dati sono accessibili tramite dot notation. Diventa quindi cruciale dichiarare i dati di una risorsa condivisa \textbf{private}. \newline
@@ -1333,9 +1334,9 @@ La specifica synchronized \textbf{non fa propriamente parte della firma di un me
 \begin{center}
     \includegraphics[width = 0.70\textwidth]{Images/84.PNG}
 \end{center}
-Un \textbf{monitor} è una primitiva a più alto livello rispetto a \textbf{lock e semafori}. Un montior è un tipo di dati astratto, le cui variabili interne sono accessibili solo da un insieme di procedure \textbf{esposte dal monitor}. Solo un processo/thread alla volta può essere attivo su un monitor (mutua esclusione).
+Un \textbf{monitor} è una primitiva a più alto livello rispetto a \textbf{lock e semafori}. Un monitor è un tipo di dati astratto, le cui variabili interne sono accessibili solo da un insieme di procedure \textbf{esposte dal monitor}. Solo un processo/thread alla volta può essere attivo su un monitor (mutua esclusione).
 \subsubsection{Variabili condizione}
-Una vraibile di tipo condizione è una variabile su cui è possibile \textbf{effettuare due operazioni}. Sia x una variaibile di tipo condizione, allora:
+Una variabile di tipo condizione è una variabile su cui è possibile \textbf{effettuare due operazioni}. Sia x una variabile di tipo condizione, allora:
 \begin{itemize}
     \item \textbf{x.wait()} mette in attesa il processo/thread corrente e lo forza a lasciare il monitor
     \item \textbf{x.notify} rende ready un processo/thread che aveva invocato \textbf{x.wait()}, se esiste
@@ -1347,12 +1348,12 @@ IL concetto di monitor permette al programmatore di:
     \item \textbf{Poter bloccare} un thread in attesa del verificarsi di una condizione
     \item \textbf{Poter segnalare} ai thread in attesa che le condizioni in merito alla loro sospensione \textbf{non sono più valide} e quindi di dover rivalutare l'accesso al costrutto.
 \end{itemize}
-Se la gestione del lock implicito dato dalla keywork \textbf{synchronized} è trasparente al programmatore, la gestione dei \textbf{meccanismi di accesso condizionato ad una risorsa}, che usi metodi \textbf{wait, notify/notifyAll}, è \textbf{carico del programmatore}.
+Se la gestione del lock implicito dato dalla keyword \textbf{synchronized} è trasparente al programmatore, la gestione dei \textbf{meccanismi di accesso condizionato ad una risorsa}, che usi metodi \textbf{wait, notify/notifyAll}, è \textbf{carico del programmatore}.
 \subsection{Problema del produttore-consumatore}
 \begin{center}
     \includegraphics[width = 0.60\textwidth]{Images/85.PNG}
 \end{center}
-Supponiamo di avere una risorsa condivisa tra un \textbf{produttore} e un \textbf{consumatore} formata da alcuni stati interni singnificativi, come un \textbf{buffer}. Consideriamo i seguenti vincoli
+Supponiamo di avere una risorsa condivisa tra un \textbf{produttore} e un \textbf{consumatore} formata da alcuni stati interni significativi, come un \textbf{buffer}. Consideriamo i seguenti vincoli
 \begin{itemize}
     \item \textbf{Il buffer ha dimensione finita}. Se è pieno, non si può aggiungere nulla
     \item \textbf{Se il buffer non è vuoto}, è sempre possibile prelevare un dato da esso.
@@ -1390,7 +1391,7 @@ Quando un thread va in attesa (\textbf{wait}) su un oggetto, lo scheduler lo spo
 \begin{center}
     \includegraphics[width = 7.50cm]{Images/86.PNG}
 \end{center}
-Facciamo delle utlime considerazioni:
+Facciamo delle ultime considerazioni:
 \begin{itemize}
     \item Di quante code ha bisogno un \textbf{monitor}?
           \begin{itemize}
@@ -1399,10 +1400,10 @@ Facciamo delle utlime considerazioni:
           \end{itemize}
 \end{itemize}
 \section{Variabili atomiche e algoritmi non bloccanti in Java}
-In ambienti multi-threaded, dove diversi thread operano su una singola risorsa, \textbf{solo un thread alla volta può accedere o modificare una risorsa condivisa} (mutua eslcusione). Se così non fosse, \textbf{si andrebbero a creare problemi di race condition}. Una soluzione alternativa in Java sono le \textbf{variabili atomiche} definite in \textbf{java.util.concurrent.atomic}, in cui sono definite una serie di classi che \textbf{supportano le operazioni atomiche}. L'atomicità delle operazioni \textbf{rende la mutua esclusione ridondante}. Vi sono due tipi di atomicità:
+In ambienti multi-threaded, dove diversi thread operano su una singola risorsa, \textbf{solo un thread alla volta può accedere o modificare una risorsa condivisa} (mutua esclusione). Se così non fosse, \textbf{si andrebbero a creare problemi di race condition}. Una soluzione alternativa in Java sono le \textbf{variabili atomiche} definite in \textbf{java.util.concurrent.atomic}, in cui sono definite una serie di classi che \textbf{supportano le operazioni atomiche}. L'atomicità delle operazioni \textbf{rende la mutua esclusione ridondante}. Vi sono due tipi di atomicità:
 \begin{itemize}
     \item \textbf{Reale}: una sola istruzione di CPU viene impiegata per eseguire l'operazione
-    \item \textbf{Virutale}: Il thread "crede" di avere accesso atomico alla variabile. Concettualmente simile al \textbf{monitor} (oggetti con metodi synchronized)
+    \item \textbf{Virtuale}: Il thread "crede" di avere accesso atomico alla variabile. Concettualmente simile al \textbf{monitor} (oggetti con metodi synchronized)
 \end{itemize}
 \subsection{Problema della visibilità}
 \begin{center}
@@ -1411,17 +1412,17 @@ In ambienti multi-threaded, dove diversi thread operano su una singola risorsa, 
 In caso di accesso ad una risorsa condivisa, bisogna garantire due condizioni:
 \begin{itemize}
     \item \textbf{Mutua esclusione}: solo un thread esegue un'azione critica alla volta
-    \item \textbf{Visibilità}: le modifice apportate da un thread ad una risorsa condivisa sono \textbf{visibili} a tutti gli altri thread per mantenere la coerenza dei dati
+    \item \textbf{Visibilità}: le modifiche apportate da un thread ad una risorsa condivisa sono \textbf{visibili} a tutti gli altri thread per mantenere la coerenza dei dati
 \end{itemize}
-I problemi di visibilità si ottengono quando due thread sono in esecuzione \textbf{su core differenti}, poiché le variabili vengono mantentue in chace \textbf{per motivi di prestazioni}. Si può ovviare al problema tramite variabili \textbf{volatile}. È da notare che \textbf{i blocchi e metodi synchronized} offrono entrambe le proprietà a scapito delle performance.
+I problemi di visibilità si ottengono quando due thread sono in esecuzione \textbf{su core differenti}, poiché le variabili vengono mantenute in cache \textbf{per motivi di prestazioni}. Si può ovviare al problema tramite variabili \textbf{volatile}. È da notare che \textbf{i blocchi e metodi synchronized} offrono entrambe le proprietà a scapito delle performance.
 \subsection{java.util.concurrent}
 Vediamo alcune classi presenti all'interno di questa libreria:
 \begin{itemize}
-    \item \textbf{Osservazione}: alcune classi di questa libreria hanno, in alcune situazionei, \textbf{migliori performance rispetto alle loro alternative bloccanti}.
+    \item \textbf{Osservazione}: alcune classi di questa libreria hanno, in alcune situazioni, \textbf{migliori performance rispetto alle loro alternative bloccanti}.
     \item \textbf{Variabili atomiche}: \textbf{AtomicInteger, AtomicFloat} ecc...
           \begin{itemize}
               \item Variabili \textbf{volatile} migliorate
-              \item Queste classi \textbf{incaspulano lo stato di una variabile} e offrono delle operazioni atomiche per gestirla
+              \item Queste classi \textbf{incapsulano lo stato di una variabile} e offrono delle operazioni atomiche per gestirla
               \item Le operazioni di aggiornamento \textbf{che dovrebbero richiedere lock} sono svolte tramite operazioni atomiche dell'HW (se esistono). \textbf{NOTA CHE NON SEMPRE QUESTO È IL CASO!}
           \end{itemize}
     \item \textbf{Algoritmi non bloccanti}
@@ -1433,7 +1434,7 @@ Vediamo alcune classi presenti all'interno di questa libreria:
 \end{itemize}
 
 \subsection{Problemi associati al meccanismo di locking}
-Se un thread non riesce ad acqusire un lock, \textbf{esso viene sospeso}; ciò implica le seguenti implicazioni:
+Se un thread non riesce ad acquisire un lock, \textbf{esso viene sospeso}; ciò implica le seguenti implicazioni:
 \begin{itemize}
     \item \textbf{Context switch}: risvegliare un thread costa
     \item Un thread in attesa non esegue nessuna operazione
@@ -1448,7 +1449,7 @@ Il modello di \textbf{Optimistic Retrying} si basa sull'idea che "riprovare è p
     \item Per eseguire una scrittura (\textbf{read-modify-write}:
           \begin{enumerate}
               \item Lettura della variabile (crea una copia locale)
-              \item Aggiornamento della copira
+              \item Aggiornamento della copia
               \item Scrittura della variabile \textbf{se non c'è collisione}, altrimenti riprova
           \end{enumerate}
 \end{itemize}
@@ -1463,7 +1464,7 @@ I processori moderni offrono istruzioni (di \textbf{collision detection}) in sup
     \item L'aggiornamento \textbf{ha avuto successo} se:
           \begin{itemize}
               \item Il valore restituito è uguale al \textbf{valore atteso} $E$
-              \item Altrimento non c'è stato alcun aggiornamento
+              \item Altrimenti non c'è stato alcun aggiornamento
           \end{itemize}
 \end{itemize}
 Variante è l'operazione \textbf{compare-and-set}, che restituisce \textbf{true} se è avvenuto l'aggiornamento. Visualizziamo il procedimento:
@@ -1503,7 +1504,7 @@ Alcune classi atomiche sono
 \subsection{Aggiornamento di oggetti complessi}
 Immaginiamo di voler mantenere una \textbf{caratteristica invariante} tra due campi:
 \begin{itemize}
-    \item Possiamo fare un lock per ogni aggironamento per fare in modo che la caratteristica sia mantenuta
+    \item Possiamo fare un lock per ogni aggiornamento per fare in modo che la caratteristica sia mantenuta
     \item Possiamo però farlo con CAS?
 \end{itemize}
 Facciamo un esempio: Realizziamo una classe che rappresenti un intervallo tra 2 numeri interi $l, u$. Siano quindi $l, u$ t.c. l'intervallo rappresentato dalla classe sia $[l,u]$; l'invariante che vogliamo mantenere è quindi che $l \leq u$
@@ -1546,12 +1547,12 @@ Quindi le variabili atomiche sono:
     \item Permettono un sistema di sincronizzazione "leggero" e performante (no context-switch, no thread scheduling)
     \item Permettono operazioni di read-modify-write senza l'uso di lock
 \end{itemize}
-Tuttavia la gestione della contesa \textbf{è limitata alla singola variabile}; inoltre le variabili atomiche \textbf{non ofrrono supporto per sequenze atomiche del tipo check-then-act}:
+Tuttavia la gestione della contesa \textbf{è limitata alla singola variabile}; inoltre le variabili atomiche \textbf{non offrono supporto per sequenze atomiche del tipo check-then-act}:
 \begin{center}
     \includegraphics[width = 0.70\textwidth]{Images/103.PNG}
 \end{center}
 \section{Problematiche di Liveness}
-Iniziamo distingueno due concetti:
+Iniziamo distinguendo due concetti:
 \begin{itemize}
     \item \textbf{Safety}: nessuno stato scorretto/incoerente è raggiungibile dall'applicazione
     \item \textbf{Liveness}: gli agenti riescono sempre a progredire nella loro esecuzione
@@ -1561,8 +1562,8 @@ Nella programmazione concorrente, per \textbf{liveness} si intende il fatto che 
 \begin{center}
     \includegraphics[width = 0.50\textwidth]{Images/104.PNG}
 \end{center}
-Quando ad un processo viene garantito l'accesso esclusivo (per esempio in \textbf{mutua esclusione}) ad una risorsa, pososno crearsi \textbf{delle situazioni di stallo} (\textbf{deadlock}). In programmazione concorrente, la situazione di \textbf{deadlock} si verifica quando \textbf{ogni membro} di un gruppo di agenti (nel nostro caso thread) \textbf{è in attesa} che qualche altro agente \textbf{rilasci il lock su una risorsa} per poter continurare la propria elaborazione. In pratica, si tratta di un \textbf{attesa circolare che non terminerà mai} poiché nessuno potrà \textbf{generare l'evento di sblocco}.
-Perché un deadlock si verifici, è necessario che \textbf{tutte le seguenti condizioni necessarie siano verificate}; esse sono generalmente espresse in forma di \textbf{risorse assegnate ad un thread}:
+Quando ad un processo viene garantito l'accesso esclusivo (per esempio in \textbf{mutua esclusione}) ad una risorsa, possono crearsi \textbf{delle situazioni di stallo} (\textbf{deadlock}). In programmazione concorrente, la situazione di \textbf{deadlock} si verifica quando \textbf{ogni membro} di un gruppo di agenti (nel nostro caso thread) \textbf{è in attesa} che qualche altro agente \textbf{rilasci il lock su una risorsa} per poter continuare la propria elaborazione. In pratica, si tratta di un \textbf{attesa circolare che non terminerà mai} poiché nessuno potrà \textbf{generare l'evento di sblocco}.
+Perché un deadlock si verifichi, è necessario che \textbf{tutte le seguenti condizioni necessarie siano verificate}; esse sono generalmente espresse in forma di \textbf{risorse assegnate ad un thread}:
 \begin{enumerate}
     \item \textbf{Mutua esclusione}: Solo un agente concorrente (thread o processo) per volta \textbf{può utilizzare una risorsa}
     \item \textbf{Accumulo incrementale o Hold and wait}: Agenti concorrenti in possesso di un lock su una risorsa \textbf{ne richiedono un'altra senza prima rilasciare la prima}
@@ -1583,20 +1584,20 @@ Esempi di \textbf{deadlock prevention} per le seguenti condizioni sono:
 \end{itemize}
 Un modo per risolvere una deadlock sarebbe rimuovere il lock sulla risorsa condivisa; tuttavia  richiederebbe rendere la risorsa \textbf{transazionale}: cioè un'operazione su di essa non può considerarsi effettuata fino a quando non è stata "committata" (salvata, ecc...). La diversa priorità dei thread \textbf{NON PUÒ RISOLVERE PROBLEMI DI DEADLOCK}, tuttavia \textbf{NÈ PUÒ IN CASO DIMINUIRE LA PROBABILITÀ}
 \subsection{Resource Starvation}
-In programmazione concorrente, si parla di \textbf{starvation} quando un agente \textbf{non riesce ad accedere ad una risorsa che gli viene perpetuamente negata}. Questo può avvenire a causa di particolari \textbf{politiche di scheduling}: ad esemppio, in uno scheduler con code a \textbf{priorità statiche}, in presenza di molti thread ad altra priorità, \textbf{è possibile che i thread a bassa priorità non vengano mai eseguiti}. Anche una gestione scorretta \textbf{della mutua esclusione} o una definizione inadeguata dell'\textbf{algoritmo di accesso alle risorse} può causare starvation.
+In programmazione concorrente, si parla di \textbf{starvation} quando un agente \textbf{non riesce ad accedere ad una risorsa che gli viene perpetuamente negata}. Questo può avvenire a causa di particolari \textbf{politiche di scheduling}: ad esempio, in uno scheduler con code a \textbf{priorità statiche}, in presenza di molti thread ad altra priorità, \textbf{è possibile che i thread a bassa priorità non vengano mai eseguiti}. Anche una gestione scorretta \textbf{della mutua esclusione} o una definizione inadeguata dell'\textbf{algoritmo di accesso alle risorse} può causare starvation.
 \subsection{Liveness debole e forte}
 Da queste problematiche, possiamo \textbf{definire meglio il concetto di liveness}; almeno in due sue forme:
 \begin{itemize}
-    \item \textbf{Liveness in forma debole}: Questa definizione è \textbf{legata al concetto di deadlock}: Un sistema con diversi thread è \textbf{libero da deadlock} se, nonostante la competizione, \textbf{almeno un processo riuscirà ad acceddere alla sezione critica e a proseguire la sue esecuzione}
-    \item \textbf{Liveness in forma forte}: Questa definizione è \textbf{legata al concetto di stravation}: Un sistema con diversi thread è \textbf{libero da starvation}, se, nonostante la concorrenza, garantisce che \textbf{tutti} i thread riescano ad accedere alla sezione critica e a continuare la loro esecuzione.
+    \item \textbf{Liveness in forma debole}: Questa definizione è \textbf{legata al concetto di deadlock}: Un sistema con diversi thread è \textbf{libero da deadlock} se, nonostante la competizione, \textbf{almeno un processo riuscirà ad accedere alla sezione critica e a proseguire la sue esecuzione}
+    \item \textbf{Liveness in forma forte}: Questa definizione è \textbf{legata al concetto di starvation}: Un sistema con diversi thread è \textbf{libero da starvation}, se, nonostante la concorrenza, garantisce che \textbf{tutti} i thread riescano ad accedere alla sezione critica e a continuare la loro esecuzione.
 \end{itemize}
 \subsection{Livelock}
 Il concetto di Livelock è \textbf{ancora più difficile da definire di quello di deadlock}. In pratica, si ha un \textbf{livelock} quando due agenti, \textbf{seppur attivi e non bloccati non riescono comunque a procedere nella loro esecuzione}. Diversi protocollo distribuiti hanno necessitò di effettuare operazioni di sincronizzazione iniziale, detta \textbf{handshake}, tuttavia entrambi devono parlare \textbf{lo stesso protocollo} per non arrivare a livelock. Di solito, tra due sistemi che non concordano un protocollo, ad un certo punto uno aspetta l'altro e lo imita.
 \subsection{Problema paradigmatico: I filosofi a cena}
-\textbf{Cinque filosifi} sono seduti a un tavolo sul quale sono presenti cinque piatti di spaghetti e \textbf{cinque forchette}. Ogni filosofo alternativamente \textbf{o pensa o mangia}: per mangiare, un filosofo ha \textbf{bisogno di due forchette}, quella alla sua sinistra e quella alla sua destra. Dopo aver mangiato, un filosofo \textbf{rimette le forchette sul tavolo}. Le forchette \textbf{non sono condivisibili simultaneamente}. Il problema consiste nel creare una soluzione che \textbf{prevenga deadlock e starvation}. \newline
+\textbf{Cinque filosofi} sono seduti a un tavolo sul quale sono presenti cinque piatti di spaghetti e \textbf{cinque forchette}. Ogni filosofo alternativamente \textbf{o pensa o mangia}: per mangiare, un filosofo ha \textbf{bisogno di due forchette}, quella alla sua sinistra e quella alla sua destra. Dopo aver mangiato, un filosofo \textbf{rimette le forchette sul tavolo}. Le forchette \textbf{non sono condivisibili simultaneamente}. Il problema consiste nel creare una soluzione che \textbf{prevenga deadlock e starvation}. \newline
 Immaginiamo che i filosofi abbiano il seguente comportamento:
 \begin{enumerate}
-    \item Pernsa (quindi aspetta) che la forchetta alla tua sinistra sia libera, qundi prendila
+    \item Pensa (quindi aspetta) che la forchetta alla tua sinistra sia libera, quindi prendila
     \item Pensa fino a quando la forchetta a destra non diventa disponibile e quindi prendila
     \item Avendo a disposizione entrambe le forchette, mangia per un periodo di tempo
     \item Rimetti a posto la forchetta destra
@@ -1606,7 +1607,7 @@ Immaginiamo che i filosofi abbiano il seguente comportamento:
 \begin{center}
     \includegraphics[width = 0.50\textwidth]{Images/105.PNG}
 \end{center}
-La seguente sequenza di azioni è \textbf{possibile}, partnedo da uno stato in cui tutti i filosofi sono in uno stato iniziale e tutte le forchette sono sul tavolo:
+La seguente sequenza di azioni è \textbf{possibile}, partendo da uno stato in cui tutti i filosofi sono in uno stato iniziale e tutte le forchette sono sul tavolo:
 \begin{enumerate}
     \item Il filosofo 1 prende la forchetta sinistra
     \item Il filosofo 2 prende la forchetta sinistra
@@ -1628,7 +1629,7 @@ Costruiamo anche uno \textbf{state diagram} per la forchetta:
 Presentiamo ora dei modi per \textbf{risolvere il problema}:
 \begin{itemize}
     \item \textbf{Risoluzione di Dijkstra}: La risoluzione proposta da \textbf{Dijkstra} essenzialmente consiste nello \textbf{spezzare la simmetria del problema}: un filosofo tenta \textbf{prima di prendere la forchetta sinistra e poi quella destra}, altrimenti riprova \textbf{nell'ordine inverso}. Quindi \textbf{tutti i filosofi meno uno si comporteranno allo stessa maniera}. La risoluzione quindi considera \textbf{l'ordine delle forchette} e forza a prendere quella con \textbf{identificativo minore}. Il vantaggio di questa risoluzione è che \textbf{non richiede un controllore}, mentre lo svantaggio è la \textbf{sua complessità}.
-    \item \textbf{Soluzione basata sull'attesa casuale}: Se un filosofo ha acquisito una forchetta ma non è riuscito a \textbf{ottenere un lock sulla seconda}, può ipotizzare che si stia creando una \textbf{condizione di deadlock}; \textbf{rilascia quindi la forchetta} e aspetta un tot. di tempo prima di provare a reimpossesarsene. Questo tuttavia non basta: se tutti i filosofi si comportano in questo modo, \textbf{allora tutti i filosofi continueranno a lasciare e reimpossessarsi della forchetta sinistra} creando una \textbf{situazione di livelock}. Perché il procedimento funzioni correttamente \textbf{è necessario che l'attesa sia casuale}, così che diventi altamente improbabile una situazione di \textbf{livelock}.
+    \item \textbf{Soluzione basata sull'attesa casuale}: Se un filosofo ha acquisito una forchetta ma non è riuscito a \textbf{ottenere un lock sulla seconda}, può ipotizzare che si stia creando una \textbf{condizione di deadlock}; \textbf{rilascia quindi la forchetta} e aspetta un tot. di tempo prima di provare a rimpossessarsene. Questo tuttavia non basta: se tutti i filosofi si comportano in questo modo, \textbf{allora tutti i filosofi continueranno a lasciare e rimpossessarsi della forchetta sinistra} creando una \textbf{situazione di livelock}. Perché il procedimento funzioni correttamente \textbf{è necessario che l'attesa sia casuale}, così che diventi altamente improbabile una situazione di \textbf{livelock}.
     \item \textbf{Rimozione di Hold and Wait}: Ogni filosofo \textbf{con una operazione atomica} entrambe le forchette (se disponibili) e aspetti se invece \textbf{non sono disponibili}
 \end{itemize}
 \subsection{Problema lettori/scrittori}
@@ -1662,7 +1663,7 @@ Il web supporta la comunicazione tra client e server tramite \textbf{HTTP}:
 \end{center}
 Il client, o \textbf{user-agent}, è un \textbf{browser}; mentre il server è un \textbf{HTTP Server} (o \textbf{Web-server}). In questo modello, il client non richiede oggetti ma \textbf{risorse web}!
 \subsection{Browser Web}
-Il browser è l'applicazione lato client per ii web. Un \textbf{web browser} (o \textbf{user-agent}) è un programma che consente all'utente la navigazione nel web. La funzione primaria di un browser è quella di \textbf{interpretare il codice con cui sono espresse le informazioni} (pagine web) e \textbf{visualizzarlo} (operazione di \textbf{rendering}). I browser web moderni sono inoltre capaci di \textbf{trattare dati diversi oltre alle pagine web}, come dati multimediali, feed RSS, diversi linguaggi di rappresentazione come XML, JSON, ecc... e di \textbf{ospitare ed eseguire applicazioni} (es. \textbf{JavaScript}). Il rendering dipende dai \textbf{dipsositivi utilizzati}, anche "non visuali", come ad esempio i supporti per \textbf{utenti non vedenti}.
+Il browser è l'applicazione lato client per ii web. Un \textbf{web browser} (o \textbf{user-agent}) è un programma che consente all'utente la navigazione nel web. La funzione primaria di un browser è quella di \textbf{interpretare il codice con cui sono espresse le informazioni} (pagine web) e \textbf{visualizzarlo} (operazione di \textbf{rendering}). I browser web moderni sono inoltre capaci di \textbf{trattare dati diversi oltre alle pagine web}, come dati multimediali, feed RSS, diversi linguaggi di rappresentazione come XML, JSON, ecc... e di \textbf{ospitare ed eseguire applicazioni} (es. \textbf{JavaScript}). Il rendering dipende dai \textbf{dispositivi utilizzati}, anche "non visuali", come ad esempio i supporti per \textbf{utenti non vedenti}.
 \subsection{Web page}
 Una pagina web (web page, o documento) è concettualmente un \textbf{file}, cioè una \textbf{sequenza di dati} (in formato digitale, quindi di \textbf{byte}) che definiscono una \textbf{risorsa} che è identificata da un \textbf{URL} (cioè un \textbf{indirizzo univoco per la risorsa}). Storicamente una pagina web \textbf{HTML} che \textbf{definisce la struttura e i contenuti} della pagina compreso il testo \textbf{più altri elementi}, come immagini, musica ecc... \newline
 \begin{itemize}
@@ -1674,7 +1675,7 @@ Un \textbf{web server} è un'applicazione che si occupa di \textbf{gestire le ri
 \begin{center}
     \includegraphics[width = 0.30\textwidth]{Images/113.PNG}
 \end{center}
-Il modello fondativo del web è \textbf{l'ipertesto} (hypertext). Un ipertesto è un insieme di testi o pagine che possono essere letti in \textbf{maniera non sequenziale} secondo percorsi definiti dagli \textbf{hyperlink} (o più semplicemente \textbf{link}, cioè \textbf{collegamenti}). Gli ipertesti compongono una \textbf{rete raggiata} o \textbf{variamente incrociata} di informazioni organizzate secono \textbf{criteri paritetici o gerarchici}.
+Il modello fondativo del web è \textbf{l'ipertesto} (hypertext). Un ipertesto è un insieme di testi o pagine che possono essere letti in \textbf{maniera non sequenziale} secondo percorsi definiti dagli \textbf{hyperlink} (o più semplicemente \textbf{link}, cioè \textbf{collegamenti}). Gli ipertesti compongono una \textbf{rete raggiata} o \textbf{variamente incrociata} di informazioni organizzate secondo \textbf{criteri paritetici o gerarchici}.
 \subsection{URL: Uniform Resource Locator}
 Un \textbf{Uniform Resource Locator} (URL) \textbf{identifica} un oggetto nella \textbf{rete} e specifica il \textbf{protocollo} da usare per ricevere/inviare dati. Esso ha \textbf{5 componenti principali}:
 \begin{enumerate}
@@ -1712,7 +1713,7 @@ I dati presenti nella rete possono tuttavia essere anche \textbf{non testuali}:
 \begin{itemize}
     \item Encoding \textbf{Multipurpose Internet Mail Extensions} (MIME): Definisce il \textbf{formato dei contenuti}
 \end{itemize}
-Le pagine web possono, come detto sopra, \textbf{contenere degli script} scritti in \textbf{lingauggi di scripting} per \textbf{arricchire l'interazione} e rendere le pagine \textbf{attive}. Esempi di linguaggi sono:
+Le pagine web possono, come detto sopra, \textbf{contenere degli script} scritti in \textbf{linguaggi di scripting} per \textbf{arricchire l'interazione} e rendere le pagine \textbf{attive}. Esempi di linguaggi sono:
 \begin{itemize}
     \item \textbf{JavaScript}
     \item \textbf{VBScript}
@@ -1721,7 +1722,7 @@ Le pagine web possono, come detto sopra, \textbf{contenere degli script} scritti
     \item ecc..
 \end{itemize}
 \subsection{Protocollo HTTP}
-Ricordiamo che i protocolli \textbf{definiscono il formato, l'ordine di invio e ricezione dei messsaggi tra i dispositivi, il tipo di dati e le azioni da eseguire quando si riceve un messaggio}. Due processi devono \textbf{concordare un protocollo} per poter \textbf{forumlare e ricevere delle richieste}. Esempi di protocolli nell'ambito "web" sono:
+Ricordiamo che i protocolli \textbf{definiscono il formato, l'ordine di invio e ricezione dei messaggi tra i dispositivi, il tipo di dati e le azioni da eseguire quando si riceve un messaggio}. Due processi devono \textbf{concordare un protocollo} per poter \textbf{formulare e ricevere delle richieste}. Esempi di protocolli nell'ambito "web" sono:
 \begin{itemize}
     \item \textbf{HyperText Transfer Protocol} (HTTP)
     \item \textbf{File Transfer Protocol} (FTP)
@@ -1738,8 +1739,8 @@ In particolare, ci concentreremo sul protocollo \textbf{HTTP}. Esso è un protoc
 HTTP usa i servizi del \textbf{protocollo TCP}:
 \begin{itemize}
     \item Il client inizia una \textbf{connessione TCP} (crea una socket) verso il server sulla \textbf{porta 80} (well-known port)
-    \item Il server accetta la connesione TCP dal client
-    \item Vengono scambiati \textbf{messsaggi del protocollo HTTP} (messaggi del protocollo applicativo) tra il client (\textbf{HTTP client}) e il server (\textbf{HTTP server})
+    \item Il server accetta la connessione TCP dal client
+    \item Vengono scambiati \textbf{messaggi del protocollo HTTP} (messaggi del protocollo applicativo) tra il client (\textbf{HTTP client}) e il server (\textbf{HTTP server})
 \end{itemize}
 Inoltre, HTTP è un protocollo \textbf{stateless}:
 \begin{itemize}
@@ -1747,7 +1748,7 @@ Inoltre, HTTP è un protocollo \textbf{stateless}:
     \item Ogni richiesta deve quindi contenere \textbf{tutte le informazioni necessarie alla sua esecuzione} (self-contained)
 \end{itemize}
 \subsubsection{Formati dei messagi HTTP}
-I messaggi HTTP sono di due tipi \textbf{request o response}. Essi sono scitti con caratteri \textbf{ASCII}, quindi sono in formato \textbf{leggibile}, e hanno \textbf{la stessa struttura}. Un messaggio HTTP generico ha la seguente struttura:
+I messaggi HTTP sono di due tipi \textbf{request o response}. Essi sono scritti con caratteri \textbf{ASCII}, quindi sono in formato \textbf{leggibile}, e hanno \textbf{la stessa struttura}. Un messaggio HTTP generico ha la seguente struttura:
 \begin{center}
     \includegraphics[width = 1.15\textwidth]{Images/117.PNG}
 \end{center}
@@ -1755,7 +1756,7 @@ Vediamo un esempio di messaggio \textbf{HTTP request}:
 \begin{center}
     \includegraphics[width = 1.15\textwidth]{Images/118.PNG}
 \end{center}
-Vediamo invece un esempio di messatto \textbf{HTTP response}:
+Vediamo invece un esempio di messaggio \textbf{HTTP response}:
 \begin{center}
     \includegraphics[width = 1.15\textwidth]{Images/119.PNG}
 \end{center}
@@ -1802,7 +1803,7 @@ Il protocollo HTTP definisce \textbf{diversi metodi} per la richiesta, i più us
 Prima di riassumere alcuni dei metodi del protocollo HTTP e le loro caratteristiche, chiariamo i seguenti due concetti:
 \begin{itemize}
     \item \textbf{Safety}: I metodi \textbf{NON HANNO EFFETTI SUL SERVER}
-    \item \textbf{Idempotenza}: Gli effetti collaterali di $N > 0$ richieste \textbf{sono gli stessi di aver effettuato una singola richista}; cioè \textbf{ogni rchiesta provoca lo stesso effetto} anche con diverso ordine di ricezione.
+    \item \textbf{Idempotenza}: Gli effetti collaterali di $N > 0$ richieste \textbf{sono gli stessi di aver effettuato una singola richiesta}; cioè \textbf{ogni richiesta provoca lo stesso effetto} anche con diverso ordine di ricezione.
 \end{itemize}
 Riassumiamo quindi \textbf{alcuni} dei metodi HTTP nella seguente tabella:
 \begin{center}
@@ -1819,11 +1820,11 @@ Ad ogni risposta HTTP è \textbf{associato un codice univoco di 3 cifre} che ide
     \item \textbf{5xx} (Server Error): Il server \textbf{non è riuscito a servire una richiesta apparentemente valida}. \textbf{Esempio}: \textbf{505}: HTTP Version not supported: Il server non supporta la versione HTTP della richiesta.
 \end{itemize}
 \subsubsection{Tipi MIME}
-L'encoding \textbf{Mediatype o MIME} (Multipupose Internet Mail Extension) è \textbf{mutuato} dal protocollo di email \textbf{SMTP} ed è definito dalle RFC 2045, 2056. Esso qualifica i \textbf{dati inviati via internet} e, in particolare, in HTTP \textbf{qualifica i tipi dei dati del body}. Esso è \textbf{definito su 5 categorie di dati} che possono essere \textbf{specializzate con sottotipi}:
+L'encoding \textbf{Mediatype o MIME} (Multipurpose Internet Mail Extension) è \textbf{mutuato} dal protocollo di email \textbf{SMTP} ed è definito dalle RFC 2045, 2056. Esso qualifica i \textbf{dati inviati via internet} e, in particolare, in HTTP \textbf{qualifica i tipi dei dati del body}. Esso è \textbf{definito su 5 categorie di dati} che possono essere \textbf{specializzate con sottotipi}:
 \begin{itemize}
     \item \textbf{Text}; di cui i sottotipi possono essere, per esempio, \textbf{plain o HTML}
     \item \textbf{Image};  di cui i sottotipi possono essere, per esempio \textbf{jpeg o png}
-    \item \textbf{Audio};  di cui i sottotipi possono essere, per esempio \textbf{basic (8-bit mu-law encoded) o 32kadpcm(32 kbps enconding)}
+    \item \textbf{Audio};  di cui i sottotipi possono essere, per esempio \textbf{basic (8-bit mu-law encoded) o 32kadpcm(32 kbps encoding)}
     \item \textbf{Video};  di cui i sottotipi possono essere, per esempio \textbf{mpeg o quicktime}
     \item \textbf{Application};  di cui i sottotipi possono essere, per esempio \textbf{msword o octet-stream}. In particolare, questo tipo definisce \textbf{dati che richiedono applicazioni terze per essere processati}.
 \end{itemize}
@@ -1861,10 +1862,10 @@ Ricordiamo le azioni che svolgono TCP, UDP e l'applicazione:
     \item \textbf{Servizio TCP}:
           \begin{itemize}
               \item Scompone e invia \textbf{come UDP}
-              \item Ogni segmento viene \textbf{numerato} per garantire il \textbf{riodinamento dei segmenti arrivati, il controllo delle duplicazioni} (scarto dei segmenti con ordine uguale) e il \textbf{controllo delle perdite} (rinvio dei segmenti mancanti)
+              \item Ogni segmento viene \textbf{numerato} per garantire il \textbf{riordinamento dei segmenti arrivati, il controllo delle duplicazioni} (scarto dei segmenti con ordine uguale) e il \textbf{controllo delle perdite} (rinvio dei segmenti mancanti)
           \end{itemize}
 \end{itemize}
-La comunicazione può avvere in due modi principali:
+La comunicazione può avere in due modi principali:
 \begin{itemize}
     \item \textbf{Comunicazione sincrona}: Il \textbf{sender} e il \textbf{receiver} si sincronizzano ad un certo punto della comunicazione
     \item \textbf{Comunicazione asincrona}: Il \textbf{sender} e il \textbf{receiver NON} si sincronizzano
@@ -1893,7 +1894,7 @@ In questo modello di comunicazione \textbf{asincrona}, l'agente $A$ invia un mes
 \begin{center}
     \includegraphics[width = 0.50\textwidth]{Images/132.PNG}
 \end{center}
-In questo modello di comunicazione \textbf{sincrona}, l'agenta $A$ invia un messaggio all'agente \textbf{B} e \textbf{sospende la sua esecuzione} in attesa della conferma della ricezione del messaggio. Il messaggio, se ricevuto da $B$, verrà \textbf{immagazzinato su $\textbf{B}$} e consegnato più tardi (\textbf{persistenza}). Alla ricezione, $B$ \textbf{invia un messaggio di avvenuta ricezione ad $\textbf{A}$}. Il punto di sincronizzazione è quindi quello descritto al punto \textbf{2}, cioè alla \textbf{richiesta di consegna del messaggio}: questo perché la sincronizzazione avviene \textbf{nel momento in cui il messaggio viene consegnato a B e non quando viene ricevuto!}.
+In questo modello di comunicazione \textbf{sincrona}, l'agente $A$ invia un messaggio all'agente \textbf{B} e \textbf{sospende la sua esecuzione} in attesa della conferma della ricezione del messaggio. Il messaggio, se ricevuto da $B$, verrà \textbf{immagazzinato su $\textbf{B}$} e consegnato più tardi (\textbf{persistenza}). Alla ricezione, $B$ \textbf{invia un messaggio di avvenuta ricezione ad $\textbf{A}$}. Il punto di sincronizzazione è quindi quello descritto al punto \textbf{2}, cioè alla \textbf{richiesta di consegna del messaggio}: questo perché la sincronizzazione avviene \textbf{nel momento in cui il messaggio viene consegnato a B e non quando viene ricevuto!}.
 \newpage
 \subsubsection{Transient asynchronous communication}
 \begin{center}
@@ -1904,7 +1905,7 @@ In questo modello di comunicazione \textbf{asincrona}, l'agente $A$ invia un mes
 \begin{center}
     \includegraphics[width = 0.50\textwidth]{Images/134.PNG}
 \end{center}
-In questo modello di comunicazione \textbf{sincrona}, l'agente $A$ inva un messaggio all'agente $B$ e \textbf{sospsende la propria esecuzione fino a quando non riceve la conferma dell'avvenuta ricezione del messaggio}. L'agente $B$, una volta che riceve il messaggio di $A$, \textbf{invia una conferma di ricezione} (ACK nella figura), tuttavia \textbf{non la processa immediatamente}. Il punto di sincronizzazione è quindi quello descritto al punto \textbf{3a}, cioè alla \textbf{richiesta di ricezione del messaggio}.
+In questo modello di comunicazione \textbf{sincrona}, l'agente $A$ invia un messaggio all'agente $B$ e \textbf{sospende la propria esecuzione fino a quando non riceve la conferma dell'avvenuta ricezione del messaggio}. L'agente $B$, una volta che riceve il messaggio di $A$, \textbf{invia una conferma di ricezione} (ACK nella figura), tuttavia \textbf{non la processa immediatamente}. Il punto di sincronizzazione è quindi quello descritto al punto \textbf{3a}, cioè alla \textbf{richiesta di ricezione del messaggio}.
 \newpage
 \subsubsection{Delivery-based transient synchronous communication at message delivery}
 \begin{center}
@@ -1936,7 +1937,7 @@ Possiamo quindi immaginare l'organizzazione di un sistema di \textbf{message-que
     \includegraphics[width = 0.80\textwidth]{Images/140.PNG}
 \end{center}
 \subsubsection{Message brokers}
-Un \textbf{message broker} è un \textbf{programma intermedio} che \textbf{traduce} un messaggio dal \textbf{protocollo formale di messagistica del mittente} al \textbf{protocollo formale di messagistica del destinatario}. L'organizzazione \textbf{generale} di un message broker in un sistema di \textbf{message-queuing} è la seguente:
+Un \textbf{message broker} è un \textbf{programma intermedio} che \textbf{traduce} un messaggio dal \textbf{protocollo formale di messaggistica del mittente} al \textbf{protocollo formale di messaggistica del destinatario}. L'organizzazione \textbf{generale} di un message broker in un sistema di \textbf{message-queuing} è la seguente:
 \begin{center}
     \includegraphics[width = 1\textwidth]{Images/141.PNG}
 \end{center}
@@ -1959,7 +1960,7 @@ Le caratteristiche di questo modello sono le seguenti:
     \item Se nessun sottoscrittore per un certo topic è presente, allora il \textbf{broker mantiene i dati}. Le politiche che riguardano \textbf{quali messaggi vengono mantenuti} possono essere diverse (mantengo solo l’ultimo valore, mantengo i valori in un intervallo di tempo, ...)
 \end{itemize}
 \subsubsection{Un esempio di publish and subscribe: MQTT}
-\textbf{Message Queuing Telemetry Transport} (MQTT) è l'implementazione più usata del pattern publish and subscribe nel mondo dell'\textbf{Internet of Things} (IoT). MQTT era originariamente \textbf{MQ Telemetry Trasport} del prodotto \textbf{IBM MQ}. Riportiamo una citazione dal paragrafo 3.1.1 della specifica di MQTT: \newline
+\textbf{Message Queuing Telemetry Transport} (MQTT) è l'implementazione più usata del pattern publish and subscribe nel mondo dell'\textbf{Internet of Things} (IoT). MQTT era originariamente \textbf{MQ Telemetry Transport} del prodotto \textbf{IBM MQ}. Riportiamo una citazione dal paragrafo 3.1.1 della specifica di MQTT: \newline
 "MQTT è un protocollo di trasporto messaggi client/server. Esso è leggero, aperto, semplice e \textbf{facile da implementare}. Queste caratteristiche lo rendono ideale per l'uso in molte situazioni, inclusi \textbf{ambienti limitati} come la comunicazione macchina-macchina (M2M) e contesti nell'Internet of Things (IoT) dove la leggerezza del codice è richiesta e/o la \textbf{larghezza di banda} della rete è preziosa"
 \subsubsection{Quality of Service di MQTT}
 Vediamo ora alcune delle qualità "\textbf{Quality of Service}" di MQTT:
@@ -1970,7 +1971,7 @@ Vediamo ora alcune delle qualità "\textbf{Quality of Service}" di MQTT:
           \end{center}
     \item \textbf{QoS 1}: At least once: Il publisher riceve notifica, chiamata \textbf{PUBACK}, della ricezione
           dal broker, il broker dal subscriber. La non ricezione del puback in tempo, provoca un
-          \textbf{reinvio del messaggio} fino alla ricezione della notifica. I messaggi reinviati contengono un flag (DUP) di duplicazione che \textbf{non viene considerato dal broker} e inviato al subscriber che dovrà decidere cosa fare.
+          \textbf{rinvio del messaggio} fino alla ricezione della notifica. I messaggi rinviati contengono un flag (DUP) di duplicazione che \textbf{non viene considerato dal broker} e inviato al subscriber che dovrà decidere cosa fare.
           \begin{center}
               \includegraphics[width = 0.60\textwidth]{Images/143.PNG}
           \end{center}
@@ -1989,8 +1990,8 @@ Vediamo ora quali sono le \textbf{proprietà di MQTT}:
 \begin{itemize}
     \item \textbf{Sessioni persistenti}:
           \begin{itemize}
-              \item Può essere mantenuto uno \textbf{stato} delle connesioni anche quando esse sono state terminate
-              \item Se \textbf{richiesto dalla connessione}, il broker manterrà \textbf{tutti i messaggi}, che saranno consegnati al momento della \textbf{riconnessione}.
+              \item Può essere mantenuto uno \textbf{stato} delle connessioni anche quando esse sono state terminate
+              \item Se \textbf{richiesto dalla connessione}, il broker manterrà \textbf{tutti i messaggi}, che saranno consegnati al momento della \textbf{riconessione}.
           \end{itemize}
     \item \textbf{Retained messages} (messaggi conservati):
           \begin{itemize}
@@ -1998,9 +1999,139 @@ Vediamo ora quali sono le \textbf{proprietà di MQTT}:
           \end{itemize}
     \item \textbf{Last Will and Testament} (LTW):
           \begin{itemize}
-              \item All'atto della connessione, il publisher può specificare un \textbf{messaggo LTW} da inviare ai subscribers in caso di \textbf{disconessione inaspettata}.
+              \item All'atto della connessione, il publisher può specificare un \textbf{messaggio LTW} da inviare ai subscribers in caso di \textbf{disconnessione inaspettata}.
               \item Vengono comunque mantenute le proprietà precedenti
               \item Permette la realizzazione di diverse strategie per gestire le \textbf{connessioni intermittenti}
           \end{itemize}
 \end{itemize}
+\section{Rappresentazione dell'informazione}
+Per rappresentare l'informazione, necessitiamo di un formalismo \textbf{flessibile} che permetta la separazione tra:
+\begin{itemize}
+    \item \textbf{contenuto}
+    \item \textbf{presentazione}
+    \item \textbf{navigazione}
+\end{itemize}
+Inoltre, esso deve permettere la definizione di \textbf{domini} (o \textbf{contesti}), deve essere
+\textbf{indipendente rispetto alla piattaforma} e supportare più lingue. Un formalismo che rispetta tutti questi criteri sono i 
+\textbf{linguaggi di marcatura} (o di \textbf{markup} o \textbf{tag languages}). Una \textbf{marcatura} (o tag) è un qualsiasi tipo di
+codice inserito in un testo in forma elettronica; essa viene utilizzata per \textbf{rendere esplicita} un'interpretazione di un testo. \newline
+Si distinguono \textbf{due tipi} di marcatura:
+\begin{itemize}
+    \item \textbf{Marcatura procedurale}: descrive \textbf{come processare} un documento ((PostScript, PDF, RTF, DOCX)
+    \item \textbf{Marcatura descrittiva}: descrive la \textbf{struttura logica} del documento (HTML, XML, SGML)
+\end{itemize}
+Il \textbf{markup} di una pagina prende la forma di:
+\begin{itemize}
+    \item \textbf{Start-tags}
+    \item \textbf{End-tags}
+    \item \textbf{Entity references}
+    \item \textbf{Character references}
+    \item \textbf{Comments}
+    \item \textbf{CDATA section delimiters}
+    \item \textbf{Document type declarations}
+    \item \textbf{Processing instructions}
+    \item \textbf{XML declarations}
+    \item \textbf{Text declarations}
+\end{itemize}
+E qualsiasi "spazio bianco" che sta al di sopra del \textbf{document entity} (cioè, al di fuori del \textbf{document element} e non all'interno un qualsiasi altro markup). \newline
+Tutto il testo che sta al di fuori della marcatura costituisce il \textbf{character data} del documento.
+\begin{center}
+    \includegraphics[width = 0.70\textwidth]{Images/146.PNG}
+\end{center}
+\subsection{eXtensible Markup Language (XML)}
+XML si è imposto \textbf{de facto} come standard per lo scambio di informazioni \textbf{semi-strutturate}.
+Fu inizialmente pensato come \textbf{successore di HTML} come linguaggio di markup per il web, è diventato un linguaggio
+generico di cui \textbf{HTML5} è una versione specifica. Le caratteristiche di un documento XML sono:
+\begin{itemize}
+    \item La marcatura \textbf{descrittiva} e \textbf{non procedurale} (descrive la struttura logica)
+    \item La marcatura descrive la \textbf{struttura logica del documento}
+    \item \textbf{Flessibilità}: i tag possono cambiare \textbf{in base all'applicazione}
+    \item Il \textbf{tipo di documento} specifica la struttura della marcatura ammessa: \textbf{DTD}: Document Type Declaration è \textbf{parte dello standard HTML}
+\end{itemize}
+Diamo quindi delle definizioni:
+\begin{Definizione}
+    Un \textbf{data object} è un \textbf{documento XML} se è \textbf{ben formato} come definito dalla specifica.
+    Inoltre è \textbf{valido} se ha una \textbf{dichiarazione del tipo di documento} associata e se esso rispetta le restrizioni espresse in essa.
+\end{Definizione}
+
+\begin{Definizione}
+    Un \textbf{textual object} è un \textbf{documento XML ben formato} se:
+    \begin{enumerate}
+        \item Preso per intero, corrisponde alla \textbf{produzione} etichettata come \textbf{documento}, cioè:
+        \begin{enumerate}
+            \item Contiene uno o più elementi
+            \item C'è \textbf{esattamente un elemento}, chiamato \textbf{radice}, o un \textbf{document element}, di cui nessuna parte appare nel \textbf{contenuto} di altri elementi.
+            Per tutti gli altri elementi, se lo \textbf{start-tag} è nel contenuto di un altro elemento, il suo \textbf{end-tag} è nel contenuto dello stesso elemento. Più semplicemente, gli elementi, 
+            delimitati da start-tag ed end-tags, si \textbf{annidano propriamente} l'uno dentro l'altro.
+        \end{enumerate}
+        \item Rispetta tutti le restrizioni di \textbf{buona forma} date nella specifica
+        \item Ognuna delle entità \textbf{parsate} che è \textbf{referenziata direttamente o indirettamente} nel documento è \textbf{ben formata}.
+    \end{enumerate}
+\end{Definizione}
+Un documento che rispetta la specifica di XML si dice \textbf{ben formato} (well-formed), cioè:
+\begin{itemize}
+    \item È costituito da un insieme di \textbf{elementi annidati}
+    \item Un elemento è costituito da una \textbf{coppia di tag di apertura e di chiusura} e \textbf{da tutto quello che racchiudono}.
+\end{itemize}
+\begin{center}
+    \includegraphics[width = 0.60\textwidth]{Images/147.PNG}
+\end{center}
+\subsubsection{Document Type Declaration e DTD}
+La \textbf{Document Type Declaration} di XML contiene o punta alle \textbf{dichiarazioni di markup} che forniscono una \textbf{grammatica} per una classe di documenti.
+Questa grammatica è conosciuta come \textbf{Document Type Definition} (DTD). La \textbf{Document Type Declaration} può puntare ad un \textbf{sottoinsieme esterno} (un tipo speciale di \textbf{entità esterna}) che contiene le dichiarazioni di markup
+o può contenere le dichiarazioni di markup direttamente in un \textbf{sottoinsieme interno} o entrambe le opzioni. Il DTD di un documento consiste di \textbf{entrambi i sottoinsiemi} presi insieme. \newline
+Una \textbf{dichiarazione di markup} (markup declaration) è una \textbf{dichiarazione del tipo di elemento} (element type declaration), una \textbf{dichiarazione di lista di attributi} (attribute-list declaration), una \textbf{dichiarazione di entità} (entity declaration) o una
+\textbf{dichiarazione di notazione} (notation declaration). Queste dichiarazioni possono essere contenute completamente o in parte dentro \textbf{parameter entities}, come descritto nelle restrizioni di buona forma e validità.
+\subsubsection{Documenti validi}
+Un documento XML ha una \textbf{struttura arbitraria}:
+\begin{itemize}
+    \item \textbf{Elementi} con nome arbitrario
+    \item \textbf{Attributi arbitrari} in un qualunque elemento
+    \item Elementi \textbf{organizzati in modo arbitrario}
+\end{itemize}
+Un DTD specifica solamente \textbf{quali sono le strutture ammesse}, cioè specifica il \textbf{tipo del documento} e contiene dichiarazioni:
+\begin{itemize}
+    \item di \textbf{tipi di elemento}
+    \item di \textbf{attributi}
+    \item di \textbf{entità}
+\end{itemize}
+\begin{center}
+    \includegraphics[width = 0.60\textwidth]{Images/148.PNG}
+\end{center}
+\subsubsection{Limitazioni dei DTD}
+I DTD descrivono solamente la \textbf{grammatica} del file XML, non la \textbf{struttura dettagliata} e/o i \textbf{tipi}.
+Questa descrizione grammaticale ha certe ovvie \textbf{problematiche}:
+\begin{itemize}
+    \item Non possiamo esprimere \textbf{restrizioni sul tipo di valori che un elemento o attributo possono assumere}
+    \item Non possiamo esprimere \textbf{che un certo attributo debba comparire solo se un altro attributo è presente}, cioè non possiamo esprimere \textbf{restrizioni di co-occorrenza}
+    \item Non possiamo esprimere che \textbf{all'elemento comment dovrebbe essere permesso di apparire dovunque} (\textbf{flessibilità dello schema})
+    \item Non ci sono \textbf{sottotipi} o \textbf{ereditarietà} (\textbf{riuso di definizioni})
+    \item Non ci sono \textbf{chiavi composte} (\textbf{integrità referenziale})
+\end{itemize}
+\subsubsection{XML Schema}
+\textbf{XML Schema} è uno \textbf{schema language} (cioè un linguaggio di descrizione del contenuto) più sofisticato che risolve le problematiche dei DTD. Esso supporta:
+\begin{itemize}
+    \item La \textbf{tipizzazione dei valori} e la possibilità di porre \textbf{restrizioni sui valori massimi e minimi possibili}
+    \item La creazione di \textbf{tipi complessi definiti dall'utente}
+    \item Molte altre funzionalità, incluse \textbf{l'unicità e le restrizioni sulle chiavi esterne} e \textbf{l'ereditarietà}
+\end{itemize}
+XML Schema è esso stesso \textbf{specificato in XML} a differenza dei DTD; ciò gli dà una \textbf{rappresentazione più standard} però più verbosa. \newline
+XML Schema è infine \textbf{integrato con i namespace}. \newline
+XML Schema però è \textbf{significativamente più complicato dei DTD}:
+\begin{center}
+    \includegraphics[width = 1\textwidth]{Images/149.PNG}
+\end{center}
+Un esempio di traduzione da DTD a Schema è il seguente, si noti il tag:
+\begin{center}
+    <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+\end{center}
+Che indica che si sta utilizzando uno schema \textbf{definito al link indicato} e che il nome ad esso associato nel documento sarà \textbf{xs}.
+\begin{center}
+    \includegraphics[width = 1.20\textwidth]{Images/150.PNG}
+\end{center}
+Vediamo ora invece un \textbf{esempio di schema}
+\begin{center}
+    \includegraphics[width = 0.80\textwidth]{Images/151.PNG}
+\end{center}
+
 \end{document}
