@@ -2133,5 +2133,197 @@ Vediamo ora invece un \textbf{esempio di schema}
 \begin{center}
     \includegraphics[width = 0.80\textwidth]{Images/151.PNG}
 \end{center}
-
+\subsection{HTML5, DOM e CSS}
+Ribadiamo la differenza tra \textbf{linguaggio di programmazione} e \textbf{linguaggio di markup}: \newline
+Un \textbf{linguaggio di programmazione} è utilizzato per comunicare istruzioni a una macchina di calcolo e per \textbf{definire programmi} che controllino il comportamento del calcolatore. \newline
+Un \textbf{linguaggio di markup} è utilizzato per \textbf{annotare un documento} in modo tale che la formattazione sia \textbf{sintatticamente distinguibile} dal testo. Altri esempi di linguaggi di markup sono:
+\begin{itemize}
+    \item \textbf{TeX} (e \textbf{LaTeX})
+    \item \textbf{SGML}
+    \item \textbf{HTML, XHTML}
+\end{itemize}
+Le annotazioni possono avere diverse finalità:
+\begin{itemize}
+    \item \textbf{Descrittive}: \textbf{etichettano semplicemente parti del testo}, disaccoppiando la struttura dalla presentazione del testo stesso
+    \item \textbf{Procedurali}: \textbf{definiscono istruzioni per programmi} che elaborino il testo al quale sono associate
+    \item \textbf{Di presentazione}: Definiscono \textbf{come visualizzare} il testo al quale sono associate
+\end{itemize}
+\subsubsection{Introduzione a HTML e DOM}
+Presentiamo una breve storia di HTML:
+\begin{center}
+    \includegraphics[width = 0.75\textwidth]{Images/152.jpg}
+\end{center}
+Cos'è quindi HTML? HTML (HyperText Markup Language) è un linguaggio di markup usato per \textbf{dare struttura ai contenuti}(web). La specifica di HTML è
+definita dal \textbf{World Wide Web Consortium} (W3C). Presentiamo un esempio:
+\begin{center}
+    \includegraphics[width = 0.90\textwidth]{Images/153.PNG}
+\end{center}
+Cosa si intende invece per DOM? Il \textbf{Document Object Model} (DOM) è un \textbf{interfaccia neutrale} rispetto al linguaggio di programmazione e alla piattaforma utilizzata
+introdotta per consentire ai programmi la possibilità di \textbf{accedere e modificare dinamicamente il contenuto, lo stile e la struttura di un documento}(web).
+DOM è quindi \textbf{una API}, anch'essa definita dal W3C, (e implementata in ogni browser moderno) che consente l'accesso e la modifica dinamica di documenti XML e HTML. \newline
+Possiamo vedere un documento strutturato con HTML come \textbf{un albero} strutturato nel seguente modo:
+\begin{center}
+    \includegraphics[width = 1.10\textwidth]{Images/154.PNG}
+\end{center}
+Ogni nodo può essere caratterizzato da attributi che ne \textbf{facilitano l'identificazione, la ricerca e la selezione}, essi possono essere:
+\begin{itemize}
+    \item \textbf{Un identificatore univoco} (attributo id), tuttavia è necessario tenere a mente che \textbf{il DOM non garantisce l'unicità di tale identificativo}
+    \begin{center}
+        \includegraphics[width = 0.40\textwidth]{Images/155.PNG}
+    \end{center}
+    \item Una \textbf{classe} (attributo class) che indica l'appartenenza dell'elemento ad un insieme che ci è utile definire
+    \begin{center}
+        \includegraphics[width = 0.50\textwidth]{Images/156.PNG}
+    \end{center}
+\end{itemize}
+Il browser stesso \textbf{fornisce funzionalità di ricerca}, come:
+\begin{itemize}
+    \item getElementById(IdName)
+    \item getElementByClassName(ClassName)
+    \item ...altre meno interessanti
+\end{itemize}
+Possiamo anche definire dei \textbf{collegamenti} utilizzando il tag <a>:
+\begin{center}
+    \includegraphics[width = 1.05\textwidth]{Images/157.PNG}
+\end{center}
+\newpage
+\subsubsection{Introduzione a CSS}
+Cosa si intende per CSS? \textbf{Cascading Style Sheets} (CSS) è un linguaggio usato per \textbf{definire lo stile di presentazione/visuale dei contenuti di una pagina}(web).
+Anche la specifica di CSS è definita dal W3C. Vediamo un esempio:
+\begin{center}
+    \includegraphics[width = 0.90\textwidth]{Images/158.PNG}
+\end{center}
+Come si può vedere dall'immagine sopra, ci sono due modi principali per definire uno stile tramite CSS in una pagina HTML:
+\begin{itemize}
+    \item \textbf{Tramite il tag <style>}
+    \item \textbf{Tramite il tag <link>}, che ci permette di definire lo stile \textbf{in un documento separato} e "importarlo" nel documento.
+\end{itemize}
+Tuttavia, l'esempio sopra definisce degli stili che verranno applicati \textbf{a tutte le istanze di un certo tag} (per esempio, tutte le istanze del tag <h2> presenteranno il testo in corsivo e di colore blu). Possiamo quindi definire
+stili che \textbf{agiscano solo su un certo sottoinsieme di tag}? Per farlo possiamo \textbf{specificare un selettore} più preciso rispetto al nome del tag, per esempio specificando \textbf{il nome di una classe} o un \textbf{identificatore di elemento del DOM};
+presentiamo i principali selettori e la loro sintassi:
+\begin{itemize}
+    \item \textbf{Tag name}: è il semplice nome del tag (es. p{...}); lo stile definito verrà applicato a tutti i tag di un certo tipo
+    \item \textbf{dot (.)}: utilizziamo la "dot notation" per indicare la classe a cui deve essere applicato lo stile
+    \begin{center}
+        \includegraphics[width = 0.30\textwidth]{Images/159.PNG}
+    \end{center}
+    \item \textbf{Sharp character (\#)}: utilizziamo "\#" per indicare l'Id a cui deve essere applicato lo stile
+    \begin{center}
+        \includegraphics[width = 0.40\textwidth]{Images/160.PNG}
+    \end{center}
+    Si può usare anche la sintassi "<tag>\#id"
+    \item \textbf{Two dots (:)}: Indica \textbf{stati comportamentali}, cioè come cambia lo stile di un certo tag al verificarsi di un vento (es. p:hover)
+    \item \textbf{brackets ([attr = 'value'])}: Lo stile verrà applicato al tag solo se ha un certo attributo con un certo valore (es. input[type = "text"])
+\end{itemize}
+Una particolarità di CSS sono le \textbf{media query}: esse possono essere viste come \textbf{particolari tipi di selettori} capaci di \textbf{valutare le capacità di accesso alla pagina dei dispositivi}.
+Ciò non riguarda solo gli schermi, ma anche altri dispositivi come stampanti, fax, ecc...  \newline
+Tramite le media query, si possono controllare ad esempio:
+\begin{itemize}
+    \item \textbf{Larghezza o altezza} "del dispositivo" (cioè come verrà mostrato su un determinato dispositivo) o della finestra
+    \item \textbf{L'orientamento} dello schermo
+    \item La \textbf{risoluzione}
+\end{itemize}
+Vediamo questo esempio: Se la pagina è più larga di 480 pixel (e si sta visualizzando sullo schermo), applica determinati stili agli elementi con id “leftsidebar” (un menu) e “main” (la colonna centrale)
+\begin{center}
+    \includegraphics[width = 0.60\textwidth]{Images/161.PNG}
+\end{center}
+Infine, spieghiamo come mai questo linguaggio è chiamato \textbf{Cascading} Style Sheets: possono esistere
+potenzialmente \textbf{diversi stylesheets}:
+\begin{itemize}
+    \item \textbf{L'autore} della pagina generalmente ne specifica \textbf{uno o più di uno}
+    \item Il \textbf{browser} ne ha uno, che può essere un vero e proprio CSS o simulato nel suo codice
+    \item Il \textbf{lettore}, cioè l'utente del browser, ne può definire uno proprio per personalizzare la propria esperienza
+\end{itemize}
+Dei \textbf{conflitti} quindi sono inevitabili ed è quindi necessario stabilire un algoritmo capace di capire quale stile vada applicato a un certo elemento:
+senza entrare nel dettaglio, l'algoritmo tiene conto, in ordine di importanza, i seguenti fattori associati alle regole:
+\begin{enumerate}
+    \item \textbf{Importanza}: flag specifico \textbf{!important} per un attributo
+    \item \textbf{Specificità}: per esempio, id > class > tag
+    \item \textbf{Ordine nel sorgente}: il più recente (cioè quello più in fondo) vince
+\end{enumerate}
+Inoltre, l'algoritmo tiene conto della seguente gerarchia:
+\begin{center}
+    \includegraphics[width = 0.50\textwidth]{Images/162.PNG}
+\end{center}
+\subsubsection{Considerazioni aggiuntive}
+L'impostazione di HTML e CSS \textbf{separa nettamente il contenuto dalla modalità di visualizzazione}:
+\begin{itemize}
+    \item Mette quindi in atto una "\textbf{separation of concerns}", il quale è un principio altamente desiderabile nel contesto informatico
+    \item Purtroppo invece lo \textbf{stile} può avere un \textbf{forte coupling} con il contenuto, come risulta dagli esempi precedenti
+\end{itemize}
+\begin{center}
+    \includegraphics[width = 0.30\textwidth]{Images/163.PNG}
+\end{center}
+Il browser quindi non è un semplice visualizzatore di pagine HTML, ma un vero e proprio \textbf{ambiente di sviluppo}: in particolare, contiene
+un \textbf{interprete JavaScript} e vari strumenti di debug oltre a fornire diverse funzionalità abilitanti. \newline
+Terminiamo questa parte dicendo che definire un CSS esteticamente piacevole \textbf{non è uno sforzo banale}; quindi sono nati diversi \textbf{framework front-end} che mettono a disposizione strumenti e CSS già
+fatti. Tra i tanti citiamo:
+\begin{itemize}
+    \item \textbf{Bootstrap}
+    \item \textbf{Foundation}
+    \item \textbf{Skeleton}
+\end{itemize}
+\subsubsection{Form HTML}
+Quando si richiedono dati ad un utente, è necessario poter includere in una pagina dei controlli tipici di interfacce utente tradizionali, come:
+\begin{itemize}
+    \item \textbf{Caselle di testo}
+    \item \textbf{Checkbox/radio buttons}
+    \item \textbf{Select/combo box}
+    \item \textbf{Selettori di file, date, ...}
+    \item \textbf{Bottoni}
+    \item ecc...
+\end{itemize}
+Questi controlli hanno \textbf{tag HTML dedicati}:
+\begin{center}
+    \includegraphics[width = 0.70\textwidth]{Images/164.PNG}
+\end{center}
+E il risultato è simile a:
+\begin{center}
+    \includegraphics[width = 0.40\textwidth]{Images/165.PNG}
+\end{center}
+\newpage
+Il form stesso è associato a un tag specifico:
+\begin{center}
+    \includegraphics[width = 1\textwidth]{Images/166.PNG}
+\end{center}
+Viene indicata tramite attributo \textbf{action} almeno una URL riferita allo script lato server al quale vanno passati i dati.
+Un attributo opzionale molto rilevante è \textbf{method} (GET o POST), altri attributi sono \textbf{target} (\textbf{dove} visualizzare i risultati dello script indicato in action)
+e \textbf{enctype} (eventuale codifica crittografica dei dati prima dell'invio). \newline
+In particolare, \textbf{method determina anche il modo con cui vengono passati i parametri}: \newline
+la \textbf{GET} include eventuali parametri \textbf{in coda alla URL} della risorsa (detti \textbf{query})
+\begin{center}
+    \includegraphics[width = 0.80\textwidth]{Images/167.PNG}
+\end{center}
+Per esempio, "dammi tutti gli ordini di marzo per il prodotto con
+codice Q2345":
+\begin{center}
+    \includegraphics[width = 0.80\textwidth]{Images/168.PNG}
+\end{center}
+la \textbf{POST} prevede che i dati vengano messi in coda come documento autonomo (detto \textbf{body})
+\begin{center}
+    \includegraphics[width = 0.80\textwidth]{Images/169.PNG}
+\end{center}
+Per esempio, "aggiorna un codice prodotto in tutti gli ordini di aprile":
+\begin{center}
+    \includegraphics[width = 0.80\textwidth]{Images/170.PNG}
+\end{center}
+\subsubsection{Novità di HTML5}
+Tra le novità di HTML5 troviamo:
+\begin{itemize}
+    \item Nuovi \textbf{elementi sintattici} per la strutturazione delle pagine, come:
+    \begin{itemize}
+        \item \textbf{Article}: <article> ... </article>; esso si usa per definire \textbf{contenuto indipendente e auto-contenuto}
+        \item \textbf{Section}: <section>...</section>; esso si usa per \textbf{definire una sezione della pagina}
+        \item \textbf{Aside}: <aside>...</aside>; pone \textbf{il contenuto nel tag a fianco del contenuto del tag in cui è contenuto}
+        \item \textbf{Header}: <header>...</header>; indica il \textbf{contenuto d'intestazione del documento} (da non confondere con <head>)
+        \item \textbf{Footer}: <footer>...</footer>; indica il \textbf{contenuto a piè pagina}
+    \end{itemize}
+    \item Nuovi \textbf{elementi di input e multimediali}:
+    \begin{itemize}
+        \item Widget per:
+        \begin{itemize}
+            \item \textbf{input search}
+        \end{itemize}
+    \end{itemize}
+\end{itemize}
 \end{document}
