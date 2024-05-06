@@ -62,7 +62,8 @@
 \newtheorem{Osservazione}{Osservazione}[subsection]
 \newtheorem{Nota}{Nota}[subsection]
 
-\title{Sistemi Distribuiti}
+
+\title{Analisi e Progettazione del Software}
 \author{spitfire}
 \date{A.A. 2023-2024}
 \begin{document}
@@ -81,3 +82,110 @@
 
 \tableofcontents
 \newpage
+
+\section{Introduzione}
+Che cos'è il \textbf{software}? Esso è \textbf{un programma per computer} unito alla \textbf{documentazione ad esso associata},
+la quale specifica e comprende \textbf{requisiti, modelli di progetto, manuale utente,...} \newline
+I prodotti software possono essere:
+\begin{itemize}
+    \item \textbf{Generici}: sviluppati per un ampio insieme di clienti (elaboratori di testo, database,...)
+    \item \textbf{Personalizzati} (custom): sviluppati per un singolo cliente in base alla sue esigenze specifiche
+\end{itemize}
+Un nuovo prodotto software può essere \textbf{creato da zero, personalizzando software già esistenti o riusando parti o software già esistente}.
+Le caratteristiche essenziali di un buon software sono:
+\begin{center}
+    \includegraphics[width = 0.80\textwidth]{Images/1.png}
+\end{center}
+\subsection{Introduzione all'ingegneria del software}
+Che cos'è \textbf{l'ingegneria del software}? \textbf{L'ingegneria del software} è una disciplina ingegneristica che si occupa
+di tutti gli aspetti della produzione del software di buona qualità, dalle \textbf{prime fasi della specifica del sistema fino alla manutenzione del sistema}
+dopo la messa in uso. Vediamo cosa si intende per \textbf{disciplina ingegneristica} e "\textbf{Tutti gli aspetti della produzione del software}":
+\begin{itemize}
+    \item \textbf{Disciplina ingegneristica}: Utilizzare metodi e teorie \textbf{appropriati} per risolvere i problemi tenendo conto dei vincoli \textbf{organizzativi e finanziari}
+    \item \textbf{Tutti gli aspetti della produzione del software}: Non solo il \textbf{processo tecnico di sviluppo}. Anche la \textbf{gestione del progetto} e lo sviluppo di \textbf{strumenti}
+    ,metodi ecc... per supportare la produzione del software
+\end{itemize}
+\newpage
+\noindent
+La disciplina dell'ingegneria del software si occupa di:
+\begin{center}
+    \includegraphics[width = 0.80\textwidth]{Images/2.png}
+\end{center}
+\subsection{La crisi del software}
+Il termine \textbf{crisi del software} (o software crisis) è usato nell'ambito dell'ingegneria del software per descrivere l'impatto della \textbf{rapida crescita} della potenza degli elaboratori
+e la \textbf{complessità} dei problemi che dovevano esseri affrontati. Le parole chiavi della software crisis erano \textbf{complessità, attese e cambiamento}. Il concetto di software crisis emerse negli
+anni '60.
+\begin{center}
+    \includegraphics[width = 0.80\textwidth]{Images/3.png}
+\end{center}
+\begin{center}
+    \includegraphics[width = 0.80\textwidth]{Images/4.png}
+\end{center}
+Le cause della crisi del software erano legate alla \textbf{complessità dei processi software} e alla \textbf{relativa immaturità dell'ingegneria del software}
+Per superare la crisi infatti si dovettero introdurre:
+\begin{itemize}
+    \item \textbf{Management}
+    \item \textbf{Organizzazione}, attraverso \textbf{analisi e progettazione}
+    \item \textbf{Teorie e tecniche} come la \textbf{programmazione strutturata e ad oggetti}
+    \item \textbf{Strumenti}, come gli IDE
+    \item \textbf{Metodologie}, tra cui il \textbf{modello a cascata e il modello agile}
+\end{itemize}
+\subsection{Analisi e progettazione}
+Che cosa sono \textbf{analisi e progettazione}? \newline
+\textbf{L'analisi} enfatizza un'\textbf{investigazione del problema e dei requisiti} invece che una soluzione: per esempio, se si vuole realizzare un nuovo sistema di trading online,
+bisognerà capire \textbf{come questo sistema verrà utilizzato} e \textbf{quali sono le sue funzioni}. "Analisi" è un termine ampio con più accezioni, tra cui:
+\begin{itemize}
+    \item \textbf{Analisi dei requisiti}, cioè un'investigazione dei requisiti del sistema
+    \item \textbf{Analisi orientata agli oggetti}, cioè un'investigazione degli oggetti di dominio
+\end{itemize} 
+La \textbf{progettazione} enfatizza una soluzione \textbf{concettuale} (software e hardware) che \textbf{soddisfa i requisiti}, anziché la relativa implementazione. Per esempio, la descrizione di uno schema di base di dati
+e di oggetti software. Nella progettazione vengono spesso \textbf{esclusi dettagli di basso livello o "ovvi"} (o almeno "ovvi" per coloro a cui è destinato il software). \newline
+Infine i progetti possono essere \textbf{implementati} e la loro implementazione (ovvero il codice) esprime il progetto realizzato vero e completo.
+Come nel caso dell'analisi, anche "progettazione" è un termine con più accezioni, tra cui:
+\begin{itemize}
+    \item \textbf{Progettazione orientata agli oggetti}
+    \item \textbf{Progettazione di basi di dati}
+\end{itemize}
+L'analisi e la progettazione possono essere riassunti con la seguente frase:
+\begin{center}
+    \textbf{Fare la cosa giusta}(analisi) \textbf{e fare la cosa bene}(progettazione)
+\end{center}
+\subsubsection{Analisi e progettazione orientata agli oggetti}
+Durante \textbf{l'analisi orientata agli oggetti} c'è un enfasi sull'\textbf{identificazione} e la \textbf{descrizione degli oggetti}, o dei \textbf{concetti}, nel \textbf{dominio del problema}.
+Per esempio, nel caso di un sistema informatico per voli aerei, alcuni dei concetti possono essere \textit{Aereo, Volo} e \textit{Pilota}. \newline
+Durante \textbf{la progettazione orientata agli oggetti} (o più semplicemente \textbf{progettazione a oggetti}) l'enfasi è sulla \textbf{definizione di oggetti software} e sul \textbf{modo in cui questi collaborano
+per soddisfare i requisiti}. Per esempio un oggetto software \textit{Aereo} può avere un attributo \textit{codiceDiRegistrazione} e un metodo \textit{getVoliEffettuati}. \newline
+\begin{center}
+    \includegraphics[width = 0.70\textwidth]{Images/5.png}
+\end{center}
+Infine durante \textbf{l'implementazione} o la \textbf{programmazione orientata agli oggetti}, gli oggetti progettati vengono implementati, per esempio implementando la classe \textit{Aereo} in un linguaggio ad oggetti.
+Dunque, analisi e progettazione \textbf{hanno obbiettivi diversi che vengono perseguiti in maniera diversa}. Tuttavia, come mostrato dall'esempio sopra, esse sono \textbf{attività fortemente sinergiche} che sono \textbf{correlate fra loro}
+e con le \textbf{altre attività dello sviluppo del software}.
+\subsection{Introduzione ai diagrammi e ai passi fondamentali dello sviluppo software}
+Vediamo una breve introduzione dei \textbf{vai diagrammi e dei passi fondamentali} legati allo sviluppo software.
+\begin{center}
+    \includegraphics[width = 0.80\textwidth]{Images/6.png}
+\end{center}
+\subsubsection{Definizione dei casi d'uso}
+
+\textbf{L'analisi dei requisiti} può comprendere \textbf{storie o scenari} relativi al modo in cui l'applicazione può essere utilizzata dagli utenti;
+queste storie possono essere scritte come \textbf{casi d'uso}. I casi d'uso \textbf{non sono un elaborato ad oggetti} ma semplicemente delle storie scritte. Sono tuttavia
+uno strumento \textbf{diffuso nell'analisi dei requisiti}. Facciamo un'esempio: \newline
+\textbf{Gioca una partita a Dadi}: Il giocatore chiede di lanciare i dadi. Il Sistema presenta il risultato: se il valore totale delle facce dei dadi è sette, il giocatore ha vinto; altrimenti ha perso.
+\subsubsection{Definizione di un modello di dominio}
+L'analisi orientata agli oggetti è interessata alla \textbf{creazione di una descrizione del dominio da un punto di vista ad oggetti}. Vengono identificati i \textbf{concetti, gli attributi e le associazioni considerati significativi}.
+Il risultato può essere espresso come un \textbf{modello di dominio} che mostra i concetti o gli oggetti \textbf{significativi} del dominio. Esso è rappresentato nel seguente modo:
+\begin{center}
+    \includegraphics[width = 0.65\textwidth]{Images/7.png}
+\end{center}
+\subsubsection{Definizione dei diagrammi di interazione}
+La \textbf{progettazione ad oggetti} è interessata alla \textbf{definizione di oggetti software, delle loro responsabilità e collaborazioni}. Una notazione comune per illustrare queste collaborazione è un
+\textbf{diagramma di sequenza} (un tipo di diagramma UML). Esso mostra lo scambio di messaggi \textbf{tra oggetti software}, dunque l'invocazione di \textbf{metodi}. Esso è rappresentato nel seguente modo:
+\begin{center}
+    \includegraphics[width = 0.65\textwidth]{Images/8.png}
+\end{center}
+È interessante notare come \textbf{la progettazione degli oggetti software e dei programmi si può ispirare a un dominio del mondo reale}, tuttavia essa non è \textbf{nè un modello diretto nè una simulazione di questo dominio}. Quindi, per esempio,
+seppur nel mondo reale è il giocatore a lanciare il dado, nel progetto software è l'oggetto \textit{PartitaADadi} che "lancia" i dadi.
+\subsubsection{Definizione dei diagrammi di classe di progetto}
+
+\end{document}
