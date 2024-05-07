@@ -201,8 +201,101 @@ UML rappresenta una \textbf{collezione di best practices di ingegneria}, dimostr
 Bisogna però tenere a mente che \textbf{UML non è una metodologia ma un linguaggio!} \newline
 Il termine \textit{visuale} della definizione è un punto fondamentale. UML è uno standard de facto per la \textbf{notazione di diagrammi per disegnare o rappresentare figure} (con del testo) \textbf{relative al software}, e in particolare, al software OO.
 A un livello più profondo, di particolare interesse per i produttori di strumenti per \textbf{MDA} (Model Driven Architecture) alla base della notazione UML c'è il \textbf{meta-modello di UML} che descrive la \textbf{semantica} degli elementi di modellazione, tuttavia non è necessario che lo sviluppatore lo conosca. 
-
-
-
+Presentiamo ora una breve storia di UML:
+\begin{center}
+    \includegraphics[width = 1.05\textwidth]{Images/10.PNG}
+\end{center}
+Il più significativo aggiornamento di UML è avvenuto nel \textbf{2003}:
+\begin{itemize}
+    \item Maggiore \textbf{consistenza}
+    \item Semantica definita in maniera \textbf{più chiara e dettagliata}
+    \item \textbf{Nuovi diagrammi}
+    \item Compatibilità con le precedenti versioni (1.x)
+\end{itemize}
+Altra parola importante è \textit{unified}: UML vuole essere un \textbf{linguaggio unificante} sotto diversi aspetti:
+\begin{itemize}
+    \item \textbf{Storico} (OMT, Booch, CRC, Objectory)
+    \item \textbf{Ciclo di sviluppo} (sintassi visuali per tutte le fasi)
+    \item \textbf{Domini applicativi} (dai sistemi embedded ai sistemi gestionali)
+    \item \textbf{Linguaggi e piattaforme di sviluppo} (.Net, Java, C\#,...)
+    \item \textbf{Processi di sviluppo} (UP, BPM, ...)
+\end{itemize}
+\subsubsection{UML e gli oggetti}
+UML modella i sistemi come \textbf{una serie di oggetti che collaborano fra loro}. Si hanno quindi due strutture:
+\begin{itemize}
+    \item \textbf{Struttura statica}:
+    \begin{itemize}
+        \item \textbf{Quali} tipi di oggetti sono necessari
+        \item \textbf{Come} sono correlati
+    \end{itemize}
+    \item \textbf{Struttura dinamica}:
+    \begin{itemize}
+        \item \textbf{Ciclo di vita} di questi oggetti
+        \item \textbf{Come collaborano} per fornire le funzionalità richieste
+    \end{itemize}
+\end{itemize}
+\subsubsection{Tre modi di applicare UML}
+\textbf{Fowler} [Fowler03] descrive tre modi per applicare UML:
+\begin{itemize}
+    \item \textbf{UML come abbozzo}: Diagrammi \textbf{informali e incompleti} (spesso abbozzati a mano su una lavagna bianca), che vengono creati per 
+    \textbf{esplorare parti difficili dello spazio del problema o della soluzione}, sfruttando l'espressività dei linguaggi visuali.
+    \item \textbf{UML come progetto}: Diagrammi di progetto abbastanza dettagliati che vengono utilizzati per:
+    \begin{enumerate}
+        \item \textbf{Il reverse engineering}, ovvero per visualizzare e comprendere meglio \textbf{del codice già esistente} mediante dei diagrammi UML. In questo caso, uno strumento UML legge il codice
+        sorgente o binario per \textbf{generare} (di solito) \textbf{dei diagrammi UML dei package, delle classi e di sequenza}. Questi "progetti" possono aiutare il lettore a capire i principali elementi, le strutture e le collaborazioni
+        \item \textbf{Il forward engineering}, ovvero per la \textbf{generazione di codice}. In questo caso, alcuni diagrammi dettagliati possono fornire una \textbf{guida alla generazione di codice} da fare manualmente o automaticamente con un strumento.
+        Solitamente, i diagrammi sono utilizzati per \textbf{specificare una parte di codice}, mentre il resto del codice viene scritto da uno sviluppatore durante la codifica, magari applicando UML come abbozzo.
+    \end{enumerate}
+    \item \textbf{UML come linguaggio di programmazione}: La specifica \textbf{completamente eseguibile} di un sistema software con UML.
+    Il codice viene generato \textbf{automaticamente} e non viene normalmente normalmente né visto né modificato dagli sviluppatori; quindi UML viene usato come vero e proprio \textbf{linguaggio di programmazione}.
+    Questo utilizzo di UML richiede un modo \textbf{pratico} per rappresentare sotto forma di di diagrammi \textbf{tutto il comportamento o la logica} (probabilmente tramite diagrammi di interazione e di stato).
+    Si tratta di un approccio \textbf{ancora in corso di sviluppo} sia in termini di teoria sia in termini di usabilità e robustezza degli strumenti.
+\end{itemize}
+La \textbf{modellazione agile} enfatizza l'uso di UML come \textbf{abbozzo}; si tratta di un metodo comune per applicare UML, spesso con un elevato ritorno in termini di \textbf{investimento di tempo} (che è normalmente breve).
+\subsubsection{Due punti di vista per applicare UML}
+UML descrive dei tipi \textbf{grezzi} di diagrammi, come i diagrammi delle classi e i diagrammi di sequenza; tuttavia UML \textbf{non impone un particolare punto di vista di modellazione per l'uso di questi diagrammi}; 
+quindi la stessa notazione può essere usata secondo \textbf{due punti di vista} (o prospettive) e \textbf{tipi di modelli}:
+\begin{itemize}
+    \item \textbf{Punto di vista concettuale}: I diagrammi sono scritti e interpretati \textbf{come descrizioni di oggetti del mondo reale} o nel dominio di interesse
+    \item \textbf{Punto di vista software}: I diagrammi, che utilizzano \textbf{la stessa notazione del punto di vista concettuale}, descrivono astrazioni o componenti software. In particolare, i diagrammi possono descrivere:
+    \begin{enumerate}
+        \item \textbf{Implementazioni software} con riferimento a una particolare tecnologia
+        \item \textbf{Specifiche e interfacce} di componenti software, ma \textbf{indipendentemente} da ogni possible implementazione
+    \end{enumerate}
+\end{itemize}
+\begin{center}
+    \includegraphics[width = 0.80\textwidth]{Images/11.PNG}
+\end{center}
+Quindi, in pratica, UMl viene usato:
+\begin{enumerate}
+    \item \textbf{Nell'analisi}, principalmente secondo il \textbf{punto di vista concettuale}
+    \item \textbf{Nella progettazione}, principalmente secondo il \textbf{punto di vista software}
+\end{enumerate}
+\subsubsection{Significato di classe}
+Nell'UML grezzo, abbiamo chiamato "classi" un insieme di oggetti; ma questo termine racchiude una \textbf{varietà di casi}: oggetti fisici, concetti astratti, elementi software, eventi e così via.
+In particolare, una classe UML è un caso particolare di un modello UML generale chiamato \textbf{classificatore}, che è qualcosa che ha delle caratteristiche strutturali e/o comportamentali e comprende \textbf{classi, attori, interfacce e casi d'uso}.
+Un metodo \textbf{impone una terminologia alternativa sovrapposta all'UML grezzo}; in particolare, ci adegueremo a quella di \textbf{UP} (Unified Process), che chiama:
+\begin{itemize}
+    \item \textbf{Classe concettuale}: Oggetto o concetto \textbf{del mondo reale} da un punto di vista \textbf{concettuale}. Il modello di dominio di UP contiene \textbf{classi concettuali}
+    \item \textbf{Classi software}: Una classe che rappresenta un \textbf{componente software}, da un punto di vista \textbf{software}, indipendentemente dal processo, metodo o linguaggio di programmazione. Il modello di progetto di UP contiene \textbf{classi software}.
+\end{itemize}
+\subsubsection{Vantaggi della modellazione visuale}
+Disegnare e leggere UML implica che si sta lavorando in \textbf{modo visuale}. La modellazione visuale ci permette di sfruttare le capacità del nostro cervello di \textbf{comprendere rapidamente simboli, unità e relazioni nelle notazioni} (prevalentemente bidimensionali) a "rettangoli e linee".
+I diagrammi ci aiutano a vedere o esaminare meglio il \textbf{quadro generale} e le relazione tra elementi dell'analisi del software e allo stesso tempo ci permettono di \textbf{ignorare o nascondere i dettagli poco interessanti}.
+\section{Processi per lo sviluppo del software}
+Un \textbf{processo per lo sviluppo del software} (o \textbf{processo software}) definisce un approccio disciplinato per la \textbf{costruzione}, il \textbf{rilascio} e la \textbf{manutenzione del software}.
+Definisce quindi \textbf{chi fa che cosa, quando e come} per raggiungere un certo obbiettivo. In particolare:
+\begin{itemize}
+    \item \textbf{Cosa} sono le \textbf{attività}
+    \item \textbf{Chi} sono i \textbf{ruoli}
+    \item \textbf{Come} sono le \textbf{metodologie}
+    \item \textbf{Quando} riguarda \textbf{l'organizzazione temporale} delle attività
+\end{itemize} 
+\newpage
+\noindent
+Le attività fondamentali di un processo di sviluppo sono:
+\begin{center}
+    \includegraphics[width = 1\textwidth]{Images/12.PNG}
+\end{center}
 
 \end{document}
