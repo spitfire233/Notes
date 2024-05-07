@@ -297,5 +297,212 @@ Le attività fondamentali di un processo di sviluppo sono:
 \begin{center}
     \includegraphics[width = 1\textwidth]{Images/12.PNG}
 \end{center}
+Ciò che distingue i processi software gli uni dagli altri è tuttavia \textbf{sono le scelte che riguardano l'organizzazione temporale delle attività} (quando), ovvero il modo in cui essi rispondono alle domande:
+\begin{itemize}
+    \item Per quanto tempo continueremo a svolgere questa attività
+    \item Cosa faremo dopo?
+\end{itemize}
+\subsection{Processi agili e basati sul piano}
+I processi \textbf{orientati al piano} sono processi in cui tutte le attività sono \textbf{pianificate in anticipo} e i progressi del progetto sono \textbf{misurati rispetto a questo piano}.
+Invece, nei \textbf{processi agili}, la pianificazione è \textbf{incrementale}, quindi risulta più facile modificare il processo per riflettere le mutevoli esigenze del cliente.
+In pratica, \textbf{la maggior parte dei processi software include elementi di entrambi gli approcci}. È necessario notare che \textbf{non esistono processi software totalmente sbagliati o corretti}.
+\subsection{Modelli di processo software}
+In pratica, la maggior parte dei sistemi di grandi dimensioni vengono sviluppati usando processi che incorporano elementi dei seguenti modelli:
+\begin{itemize}
+    \item \textbf{Sviluppo a cascata}: Modello \textbf{basato sul piano}. Fasi separate di \textbf{specifica} e di \textbf{sviluppo}
+    \item \textbf{Sviluppo incrementale}: \textbf{Specifica, sviluppo e validazione} si alternano. Può essere guidato dal piano o agile
+    \item \textbf{Integrazione e configurazione}: Il sistema viene assemblato a partire da \textbf{componenti esistenti e configurabili}. Può essere basato sul piano o agile
+\end{itemize} 
+Tuttavia "\textbf{quale scegliere?}" è una domanda assolutamente non banale. Diamo quindi dei motivi per il quale esistono diversi processi software:
+\begin{itemize}
+    \item \textbf{Complessità del progetto}: I progetti software possono variare \textbf{in termini di complessità}, da semplici applicazioni a sistemi complessi e "mission-critical".
+    La complessità di un progetto \textbf{influenza il livello di formalismo e struttura} necessari nel processo di sviluppo
+    \item \textbf{Dimensione del team}: Il numero di persone che lavorano ad un progetto software \textbf{influenza come il lavoro viene organizzato e coordinato}.
+    Team di grandi dimensioni avranno quindi bisogno di \textbf{un processo più formale} rispetto a team di piccole dimensioni
+    \item \textbf{Budget e tempistiche}:  Il budget e le tempistiche di un progetto software \textbf{influenzano il modo in cui il progetto viene organizzato e gestito}.
+    Progetti software con \textbf{budget e tempistiche limitate} avranno bisogno di un processo software \textbf{più snello} rispetto a progetti con budget e tempistiche flessibili
+    \item \textbf{Rischio}: Il \textbf{rischio} associato ad un progetto software influenza il \textbf{livello di rigore e controllo} necessari nel processo di sviluppo.
+    Maggiore è il fattore di rischio, maggiore sarà il \textbf{rigore} che il processo software dovrà avere.
+\end{itemize}
+\subsubsection{Integrazione e configurazione}
+Questo modello è basato sul \textbf{riutilizzo del software}, in cui i sistemi sono \textbf{integrati da componenti o sistemi applicativi esistenti} (talvolta chiamati \textbf{sistemi COTS}: \textit{commercial-off-the-shelf}).
+Gli elementi riutilizzati possono essere \textbf{configurati} in modo da adattarli alle esigenze del cliente. Il riutilizzo è oggi il sistema standard per la costruzione di molti tipi di software aziendali. \newline
+Quali sono però i tipi di "software riutilizzabile"?
+\begin{itemize}
+    \item Sistemi applicativi \textbf{stand-alone} (COTS) configurati per l'uso in un particolare ambiente
+    \item \textbf{Collezioni di oggetti} sviluppate come \textbf{pacchetti} da integrare con un \textbf{framework} di componenti (es. .NET o J2EE)
+    \item \textbf{Servizi web} sviluppati secondo lo \textbf{standard di servizio} e invocabili in maniera remota
+\end{itemize}
+L'intero processo quindi \textbf{definisce un'ingegneria del software orientata al riuso}:
+\begin{center}
+    \includegraphics[width = 1.10\textwidth]{Images/13.png}
+\end{center}
+\newpage
+\noindent
+Vediamo ora i vantaggi e gli svantaggi di questo approccio:
+\begin{itemize}
+    \item \textbf{Vantaggio}: Riduzione dei costi e dei rischi, poiché \textbf{viene sviluppato meno software da zero}
+    \item \textbf{Vantaggio}: Consegna più rapida del sistema al cliente
+    \item \textbf{Svantaggio}: Si dovranno attuare dei \textbf{compromessi sui requisiti}, quindi il sistema potrebbe non soddisfare appieno le esigenze dell'utente
+    \item \textbf{Svantaggio}: Perdita di controllo sull'\textbf{evoluzione} delle varie componenti che formano il sistema
+\end{itemize}
+\subsubsection{Processo a cascata}
+\begin{center}
+    \includegraphics[width = 0.80\textwidth]{Images/14.png}
+\end{center}
+Il processo a cascata è il processo software \textbf{più vecchio} tra quelli utilizzati ancora oggi.
+Il processo software con ciclo di vita a cascata (o \textbf{sequenziale}) è, in prima approssimazione, basato su uno svolgimento \textbf{sequenziale delle diverse attività di sviluppo del software}.
+All'inizio di un progetto, vengono definiti in dettaglio \textbf{tutti i requisiti} (o almeno la maggior parte di essi); allo stesso modo, più o meno all'inizio del progetto, si cerca di stabilire un \textbf{piano temporale dettagliato e "affidabile"} delle attività da svolgere (non è detto che lo sia).
+Poi si prosegue con la \textbf{modellazione} (analisi e progettazione) e viene creato un \textbf{progetto completo del software}. Solo a questo punto inizia la \textbf{programmazione del sistema software}, a cui seguiranno \textbf{verifica, rilascio e manutenzione}. Si noti come \textbf{ogni fase descritta inizia solo quando la precedente finisce}.
+Ad essere precisi, il processo a cascata \textbf{permette la possibilità di feedback e cicli tra le attività}, ma la maggior parte delle organizzazioni che applica questo processo considera di solito una \textbf{sequenzialità stretta} fra le varie fasi.
+Il principale svantaggio del processo a cascata è quindi quello di \textbf{avere difficoltà ad accogliere i cambiamenti a processo avviato}.
+Il processo a cascata, tuttavia, \textbf{risulta una pratica mediocre per la maggior parte dei progetti software} ([Larman03] e [LB03]): infatti il processo a cascata è associato ad una \textbf{percentuale elevata di fallimenti}. Perché quindi questo processo è così soggetto a frequenti fallimenti?
+\begin{itemize}
+    \item La suddivisione \textbf{inflessibile} del progetti in \textbf{fasi distinte} rende difficile rispondere alle mutevoli esigenze di un cliente
+    \begin{itemize}
+        \item Pertanto, questo modello è appropriato \textbf{solo quando i requisiti sono ben compresi e le modifiche saranno piuttosto limitate durante il processi di sviluppo}. Questo però non accade, come mostrato dal seguente grafico dello studio [Jones97]:
+        \begin{center}
+            \includegraphics[width = 0.70\textwidth]{Images/15.png}
+        \end{center}
+    \end{itemize}
+    \item Il modello a cascata viene utilizzato principalmente per progetti di \textbf{ingegneria dei sistemi di grandi dimensioni}, in cui un sistema viene sviluppato in diversi siti.
+    \begin{itemize}
+        \item In questo caso, la natura pianificata del processo a cascata \textbf{aiuta a coordinare il lavoro}
+    \end{itemize}
+\end{itemize}
+\subsubsection{Sviluppo iterativo, incrementale ed evolutivo}
+Una pratica fondamentale di molti processi software moderni (come UP e SCRUM) è lo \textbf{sviluppo iterativo}.
+In questo approccio al ciclo di vita, lo sviluppo è suddiviso in \textbf{una serie di mini progetti} dalla durata temporale fissa (es. 3 settimane, si dicono quindi \textbf{timeboxed}) chiamate \textbf{iterazioni};
+il risultato di ciascuna iterazione è \textbf{un sistema eseguibile, testato e integrato, ma parziale}. Ciascuna iterazione prevede le proprie fasi di \textbf{analisi dei requisiti, progettazione, implementazione e test}.
+Il ciclo di vita iterativo si basa sul \textbf{susseguirsi di ampliamenti e raffinamenti} di un sistema nel corso di \textbf{molteplici iterazioni}, con \textbf{feedback e adattamenti ciclici} come guide essenziali per \textbf{convergere verso un sistema appropriato}.
+Il sistema quindi \textbf{cresce in modo incrementale} nel tempo. Poiché il feedback e l'adattamento fanno \textbf{evolvere il sistema nel tempo}, questo processo si dice anche \textbf{evolutivo}.
+\begin{center}
+    \includegraphics[width = 1\textwidth]{Images/16.png}
+\end{center}
+Quindi lo sviluppo iterativo, incrementale ed evolutivo si basa su un atteggiamento di \textbf{accettazione del cambiamento} e sull'\textbf{adattamento} come guide \textbf{inevitabili e di fatto essenziali}.
+Tuttavia questo non significa che questo processo supporti uno sviluppo \textbf{caotico} e che gli sviluppatori continuino a cambiare direzione in base alle richieste estemporanee del cliente ("feature creep"). Una via di
+mezzo \textbf{è possibile}:
+\begin{itemize}
+    \item Ciascuna iterazione comporta la scelta di un \textbf{di un piccolo sottoinsieme di requisiti, una rapida progettazione, implementazione e test}.
+    Seppur nelle iterazioni iniziali ciò che si produce \textbf{sarà lontano da ciò che si vuole ottenere}, ciò permette al cliente di dare feedback in maniera \textbf{rapida e precoce}; i quali potranno essere \textbf{analizzati dal team di lavoro} per ottenere delle \textbf{indicazioni pratiche e significative}; ciò permette al team anche di avere un'opportunità di \textbf{modificare o adattare la comprensione dei requisiti e il progetto}.
+    Oltre al chiarimento dei requisiti, attività quali i \textbf{test di carico} dimostreranno se il progetto e l'implementazione parziale sono nella direzione giusta o se è necessaria una modifica dell'architettura.
+    \item Il lavoro procede mediante una serie di \textbf{cicli strutturati di costruzione-feedback-adattamento}
+    \item Nel tempo, attraverso il \textbf{feedback iterativo} e \textbf{l'adattamento}, il sistema sviluppato \textbf{evolve} e \textbf{converge} verso i requisiti corretti e il progetto più appropriato
+    \begin{itemize}
+        \item Non bisogna stupirsi se nelle prime iterazioni lo \textbf{scostamento} dal sistema desiderato è maggiore che in quelle successive
+        \item L'instabilità dei requisiti e del progetto \textbf{tende a diminuire nel tempo}, tuttavia nelle iterazioni finali è \textbf{difficile ma non impossibile} che si verifichi un \textbf{cambiamento significativo dei requisiti}
+    \end{itemize}
+\end{itemize}
+Quali sono quindi i \textbf{vantaggi} dello sviluppo iterativo, incrementale ed evolutivo?
+\begin{itemize}
+    \item \textbf{Minore probabilità di fallimento del progetto}, \textbf{migliore produttività}, \textbf{percentuali più basse di difetti}
+    \item Riduzione precoce, anziché tardiva, dei \textbf{rischi maggiori} (tecnici, requisiti obbiettivi ecc...)
+    \item Progresso visibile \textbf{sin dall'inizio}
+    \item \textbf{Feedback precoce}, coinvolgimento dell'utente e adattamento, che portano a un sistema che soddisfa al meglio le esigenze reali delle parti interessate
+    \item \textbf{Gestione della complessità}, cioè il team non viene sopraffatto dalla "\textbf{paralisi da analisi}" o da \textbf{passi molto lunghi e complessi}
+    \item Ciò che si apprende nel corso di un iterazione \textbf{può essere usato per migliorare le successive}
+\end{itemize}
+Tuttavia questo processo \textbf{non è privo di svantaggi}:
+\begin{itemize}
+    \item Il processo \textbf{non è visibile}: i manager hanno bisogno di documenti \textbf{costanti} per tenere traccia del processo di sviluppo; tuttavia se il sistema continua a cambiare non è conveniente continuare a produrre documenti che riflettono ogni versione del sistema
+    \item La struttura del sistema \textbf{tende a degradarsi} con l'aggiunta di nuovi incrementi: a meno che non si dedichi tempo e denaro al \textbf{refactoring} per migliorare il software, le aggiunte tendono a \textbf{corrompere la struttura del sistema}; quindi incorporare sempre più modifiche software diventa sempre più \textbf{difficile e costoso}
+\end{itemize}
+Lo sviluppo iterativo è basato sul fatto che nei sistemi complessi e mutevoli, il feedback e l'adattamento sono \textbf{incrementi chiave} per il successo:
+\begin{itemize}
+    \item Feedback proveniente dalle \textbf{attività iniziali di sviluppo}, dai \textbf{programmatori} che cercano di leggere le specifiche e da \textbf{dimostrazioni ai clienti} per raffinare i requisiti
+    \item Feedback proveniente dai \textbf{test} e dagli \textbf{sviluppatori} che raffinano il progetto e i modelli
+    \item Feedback circa \textbf{l'avanzamento del team} nell'affrontare le prime caratteristiche, per raffinare le \textbf{stime di tempo e di costi}
+    \item Feedback proveniente dal \textbf{cliente e dal mercato} per assegnare/modificare le \textbf{priorità} alle caratteristiche da affrontare nell'iterazione successiva
+\end{itemize}
+Una pratica fondamentale dello sviluppo iterativo è quella di avere \textbf{iterazioni di lunghezza fissata}, cioè \textbf{timeboxed}; il periodo consigliato è dalle \textbf{due alle sei settimane}.
+Iterazioni più lunghe sono invece contrarie allo spirito dello sviluppo iterativo, poiché esso richiede \textbf{un feedback costante da parte del cliente}; con un periodo più lungo di sei settimane la complessità \textbf{cresce} e il feedback viene \textbf{ritardato}.
+Iterazioni più corte di due settimane invece \textbf{difficilmente permettono di sviluppare abbastanza software} per avere un feedback significativo.
+In questo processo di sviluppo \textbf{non è consentito ritardare la fine di un'iterazione}: se risulta difficile portare a termine tutti i requisiti che si erano previsti per una particolare iterazione, è meglio \textbf{spostarli all'iterazione successiva} piuttosto che modificare la durata dell'iterazione.
+Un'iterazione di durata fissa è detta \textbf{timeboxed}. \newline
+Bisogna anche fare attenzione che il \textbf{pensiero a cascata non si infiltri nello sviluppo iterativo}; segni di questa infiltrazione sono:
+\begin{itemize}
+    \item Si è scritto \textbf{la maggior parte dei requisiti o dei casi d'uso} prima dello sviluppo
+    \item Si è creato in modo \textbf{dettagliato e completo delle specifiche, dei modelli o il progetto} prima di iniziare l'implementazione 
+\end{itemize}
+L'adozione dello sviluppo iterativo richiede che il software venga realizzato in modo \textbf{flessibile}, affinche l'impatto dei cambiamenti sia \textbf{il più basso possibile}. A tal fine il codice (e il progetto del software) devono essere \textbf{facilmente modificabili}.
+Per facilitare questo aspetto il codice deve essere quindi \textbf{leggibile e facilmente comprensibile}, la mancanza di questa qualità infatti rende difficile implementare i cambiamenti in modo incrementale; inoltre è necessario usare degli \textbf{strumenti metodologici opportuni}; per esempio \textbf{tecnologie ad oggetti, sviluppo guidato dai test e refactoring}.
+Vediamo un esempio visuale sul come avviene uno sviluppo iterativo, incrementale ed evolutivo se assumiamo 20 iterazioni (assumiamo di star seguendo UP):
+\begin{center}
+    \includegraphics[width = 1.10\textwidth]{Images/17.png}
+\end{center}
+Un'attività critica dello sviluppo iterativo è la \textbf{pianificazione delle iterazioni}, cioè la definizione delle \textbf{attività da svolgere in ogni iterazione}.
+Se si sta seguendo un processo iterativo, è necessario evitare di \textbf{tentare di pianificare l'intero progetto in modo dettagliato sin dalla prima iterazione}.
+Piuttosto, i processi iterativi promuovono una \textbf{pianificazione iterativa} (o adattiva), in cui in ciascuna iterazione viene stabilito il \textbf{piano di lavoro dettagliato di una singola iterazione}.
+In UP, la pianificazione viene effettuata alla \textbf{fine dell'iterazione corrente} per decidere le attività della \textbf{seguente iterazione}. In SCRUM, la pianificazione viene effettuata \textbf{all'inizio dell'iterazione} per stabilire il piano dell'iterazione \textbf{corrente}.
+Lo sviluppo iterativo promuove la pianificazione \textbf{guidata dal rischio e guidata dall'utente}.
+Ciò significa che gli obbiettivi delle iterazioni iniziali vengono scelti
+\begin{enumerate}
+    \item Per \textbf{identificare e attenuare i rischi maggiori}
+    \item Per \textbf{costruire e rendere visibili} le caratteristiche a cui il cliente tiene di più
+\end{enumerate}
+In particolare, la progettazione guidata dal rischio contiene in sè la pratica dello \textbf{sviluppo centrato sull'architettura}: le prime iterazioni si concentreranno sulla \textbf{costruzione, test e la stabilizzazione del nucleo dell'architettura}.
+Infatti, è un rischio molto alto \textbf{non avere un'architettura di base solida}. \newline
+Importante per il processo iterativo è il \textbf{non cambiare gli obbiettivi dell'iterazione}: durante ciascuna iterazione, i requisiti su cui operare \textbf{vengono prima fissati} (pianificazione iterativa) e poi \textbf{bloccati}, cioè non sono più modificabili.
+Durante ciascuna iterazione, quindi, il team \textbf{può lavorare al suo meglio}, poiché:
+\begin{itemize}
+    \item I requisiti sono \textbf{bloccati}, quindi il team non può essere \textbf{nè interrotto ne disturbato durante l'iterazione}
+    \item I committenti possono interagire con il team di sviluppo \textbf{solo alla fine dell'iterazione}
+\end{itemize}
+Durante un'iterazione è tuttavia possibile che il team di sviluppo decida di \textbf{cambiare il piano dell'iterazione}, per esempio quando valuta, a metà dell'iterazione, la possibilità di raggiungere gli obbiettivi prefissati nella durata prevista.
+\section{Unified Process (UP)}
+Il \textbf{processo unificato} (unified process) o \textbf{UP} è un processo iterativo diffuso per lo sviluppo software orientato agli oggetti.
+UP è molto \textbf{flessibile e aperto}: incoraggia infatti l'uso di \textbf{altre pratiche} prese da \textbf{altri processi iterativi}, come SCRUM o Extreme Programming.
+UP è:
+\begin{itemize}
+    \item \textbf{Pilotato dai casi d'uso} (requisiti) e dai \textbf{fattori di rischio}
+    \item Incentrato \textbf{sull'architettura}
+    \item \textbf{Iterativo, incrementale ed evolutivo}
+\end{itemize}
+L'idea principale da apprezzare e praticare in UP è lo \textbf{sviluppo iterativo, evolutivo e incrementale} con \textbf{timeboxing breve}. Ulteriori best practices e concetti chiavi di UP sono:
+\begin{itemize}
+    \item Affrontare le problematiche di \textbf{rischio maggiore} e valore elevato nelle \textbf{iterazioni iniziali}
+    \item Impegnare gli utenti \textbf{continuamente} sulla valutazione, il feedback e i requisiti
+    \item Creare un'architettura \textbf{coesa} nelle iterazioni iniziali
+    \item Verificare continuamente le \textbf{qualità}: testare \textbf{spesso, presto e in modo realistico}
+    \item Applicare i \textbf{casi d'uso}, se appropriato
+    \item Fare della \textbf{modellazione visuale} (con UML)
+    \item Gestire attentamente i requisiti
+    \item Gestire le richieste di cambiamento e le configurazione
+\end{itemize}
+Vediamo una sua breve storia:
+\begin{center}
+    \includegraphics[width = 1\textwidth]{Images/18.png}
+\end{center}
+\subsection{Iterazioni e discipline}
+Le iterazioni sono \textbf{concetti chiave} in UP. Esse sono come un mini-progetto che include:
+\begin{itemize}
+    \item \textbf{Pianificazione}
+    \item \textbf{Analisi e progettazione}
+    \item \textbf{Costruzione}
+    \item \textbf{Integrazione e test}
+    \item \textbf{Un rilascio}
+\end{itemize}
+Poiché UP è un processo iterativo, si arriva al \textbf{rilascio finale} dopo una \textbf{serie di iterazioni}. 
+Le iterazioni \textbf{possono sovrapporsi}; ciò permette lo \textbf{sviluppo parallelo e il lavoro flessibile in grandi squadre}.
+Tuttavia richiede un'attenta pianificazione. \newline
+UP colloca le attività lavorative in \textbf{discipline}; una disciplina è \textbf{un insieme di attività e dei relativi elaborati in una determinata area}, come, per esempio, l'area dell'analisi dei requisiti.
+In UP, un \textbf{elaborato} è il termine generico con cui si fa riferimento ad un qualsiasi \textbf{prodotto di lavoro} (codice, schema di basi di dati, ecc...).
+UP definisce diverse discipline ed elaborati, ma noi ci concentreremo su:
+\begin{itemize}
+    \item \textbf{Modellazione di business}: L'elaborato \textbf{Modello di dominio}, per visualizzare i concetti significativi nel dominio di applicazione
+    \item \textbf{Requisiti}: Gli elaborati \textbf{Modello dei casi d'uso e Specifica supplementare}, per descrivere i \textbf{requisiti funzionali e non funzionali}
+    \item \textbf{Progettazione}: L'elaborato \textbf{Modello di progetto}, per il progetto degli oggetti software
+\end{itemize}
+Un elenco più ampio è il seguente:
+\begin{center}
+    \includegraphics[width = 1.10\textwidth]{Images/19.png}
+\end{center}
+Come si può vedere sopra, anche se ogni iterazione può prevedere \textbf{tutti i flussi di lavoro}, la collocazione dell'iterazione all'interno del ciclo di vita del progetto \textbf{determina una maggiore enfasi} su uno dei flussi di lavoro.
+\subsubsection{Release}
+Ogni iterazione \textbf{genera una release}: una release è un \textbf{insieme di manufatti}, previsti e approvati. Essa fornisce una \textbf{base approvata per le successive attività di analisi e sviluppo}.
+Un \textbf{incremento} è la \textbf{differenza} tra una release e la successiva. Costituisce quindi un passo in avanti verso il rilascio finale del sistema.
+\newpage
+\subsection{Fasi di UP}
+
 
 \end{document}
