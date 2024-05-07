@@ -503,6 +503,102 @@ Ogni iterazione \textbf{genera una release}: una release è un \textbf{insieme d
 Un \textbf{incremento} è la \textbf{differenza} tra una release e la successiva. Costituisce quindi un passo in avanti verso il rilascio finale del sistema.
 \newpage
 \subsection{Fasi di UP}
-
+Un progetto UP organizza il lavoro in quattro \textbf{fasi temporali principali e successive}:
+\begin{enumerate}
+    \item \textbf{Ideazione}: Visione \textbf{approssimativa}, studio economico, porta, stime \textbf{approssimative} dei costi e dei tempi
+    \item \textbf{Elaborazione}: Visione \textbf{raffinata}, implementazione \textbf{iterativa} del \textbf{nucleo dell'architettura}, risoluzione dei rischi maggiori, identificazione della \textbf{maggior parte} dei requisiti, stime più realistiche.
+    \item \textbf{Costruzione}: Implementazione \textbf{iterativa} degli elementi rimanenti, più facili e a rischio minore; preparazione al rilascio
+    \item \textbf{Transizione}: beta test, rilascio finale
+\end{enumerate}
+Si noti che questo modello \textbf{non è a cascata}: l'ideazione \textbf{non è una fase di requisiti}; piuttosto è una breve fase di \textbf{fattibilità} in cui viene eseguita un'indagine \textbf{sufficiente} a sostenere la decisione di continuare o interrompere il progetto.
+Allo stesso modo, la fase di \textbf{elaborazione} non è una fase dei requisiti o dell'implementazione; piuttosto è una fase in cui \textbf{viene implementato il nucleo dell'architettura} e si risolvono i rischi maggiori.
+Vediamo un'esempio visuale:
+\begin{center}
+    \includegraphics[width = 1\textwidth]{Images/20.png}
+\end{center}
+\begin{center}
+    \includegraphics[width = 1\textwidth]{Images/21.png}
+\end{center}
+\subsection{Scenari di sviluppo di UP}
+Tra gli elaborati e le pratiche di UP, \textbf{quasi tutto è opzionale}
+\begin{itemize}
+    \item Alcune pratiche e principi di UP \textbf{sono fissi}, come lo \textbf{sviluppo iterativo e guidato dal rischio} e \textbf{il controllo continuo della qualità}
+    \item Tutte le attività e gli elaborati sono \textbf{opzionali}, con l'ovvia esclusione del codice
+\end{itemize}
+La scelta delle pratiche degli elaborati UP per un progetto può essere scritta in un breve documento chiamato \textbf{scenario di sviluppo}
+\begin{center}
+    \includegraphics[width = 0.90\textwidth]{Images/22.png}
+\end{center}
+\section{Metodologie e processi agili}
+Lo sviluppo agile è una forma di \textbf{sviluppo iterativo} che incoraggià \textit{l'agilità}, ovvero una risposta \textbf{rapida e flessibile} ai cambiamenti.
+Le pratiche agili, come \textbf{Agile Modelling}, sono fondamentali per applicare UML correttamente.
+I metodi di sviluppo agile di solito applicano lo sviluppo \textbf{iterativo ed evolutivo}, con iterazioni brevi e timeboxed, fanno uso della \textbf{pianificazione iterativa}, promuovono le \textbf{consegne incrementali} e comprendono altri valori che incoraggiano l'agilità.
+Non è possibile dare una definizione di "\textbf{metodo agile}", poiché le pratiche adottate variano da metodo a metodo. Tuttavia una pratica di base, adottata da tutti i metodi, è quella che prevede \textbf{iterazioni brevi}, con un \textbf{raffinamento evolutivo dei piani, dei requisiti e del progetto}.
+Inoltre, essi promuovono pratiche e principi che riflettono una \textbf{sensibilità agile} per \textbf{la semplicità, la leggerezza, la comunicazione, i gruppi di lavoro auto-organizzanti} e altro.
+Qualsiasi metodo iterativo \textbf{può essere applicato in maniera agile}, quindi anche UP, il quale \textbf{incoraggia l'inclusione di pratiche da metodi agili}.
+\subsection{Agile Modelling}
+L'atto puro della modellazione (creare diagrammi UML ecc...) deve essere un modo per \textbf{comprendere meglio il problema o lo spazio delle soluzioni}.
+Da questo punto di vista, lo scopo di "fare UML" non è quello di \textbf{creare e tradurre in codice i diagrammi prodotti}, ma piuttosto quello di \textbf{esplorare rapidamente le alternative e il percorso verso un buon progetto OO}.
+Questo modo di vedere, coerente con i metodi agili, è stato chiamato \textbf{modellazione agile} nel libro \textit{Agile Modelling} [Ambler02]; esso è basato sulle seguenti pratiche e valori:
+\begin{itemize}
+    \item Adottare un metodo agile \textbf{non significa evitare del tutto la modellazione}; infatti molti metodi agili hanno estensive parti di modellazione
+    \item Lo scopo della modellazione e dei modelli è principalmente quello di \textbf{agevolare la comprensione e la comunicazione}, non di documentare.
+    \item Non si deve modellare e applicare UML per \textbf{eseguire per intero o per la maggior parte la progettazione del software}. Si applichi UML sono alle parti del progetto che sono \textbf{difficili on insidiose}
+    \item Si utilizzi lo strumento di modellazione \textbf{più semplice possibile}
+    \item La modellazione \textbf{non è da fare da soli} ma in coppia (o a tre)
+    \item Tenere presente che \textbf{ogni diagramma sarà incompleto e impreciso}
+    \item Nell'abbozzo alla lavagna va usata una \textbf{notazione semplice e "abbastanza buona"}
+    \item La modellazione per la progettazione OO dovrebbe essere fatta \textbf{dagli stessi programmatori che si occuperanno della programmazione}
+\end{itemize}
+\subsection{UP Agile}
+UP non è stato pensato per essere \textbf{pesante o non agile}; anzi UP è stato concepito per essere adottato in uno \textbf{spirito di adattabilità e leggerezza}, come un \textbf{UP agile}.
+Ecco alcuni esempi di come ciò è possibile:
+\begin{itemize}
+    \item Si preferisca un \textbf{insieme piccolo di attività} ed elaborati UP; bisogna quindi tenere presente quasi tutti gli elaborati di UP sono \textbf{opzionali}
+    \item Dato che UP è \textbf{iterativo ed evolutivo}, i requisiti e la progettazione \textbf{non vengono completati prima dell'implementazione} ma emergono in modo \textbf{adattivo} durante una serie di iterazioni, anche sulla base dei feedback
+    \item Si applichi UML \textbf{con le pratiche della modellazione agile}
+    \item Non esiste un \textbf{piano dettagliato per l'intero progetto}. Esiste un piano di alto livello (chiamato il \textbf{piano delle fasi}) che stima la data della fine del progetto e di altre milestone principali, ma non descrive nel dettaglio i \textbf{passi a grana fine per raggiungere queste milestone}.
+    Un piano dettagliato (chiamato il \textbf{piano dell'iterazione}) pianifica in maggior dettaglio un'unica iterazione: \textbf{la successiva}. La pianificazione dettagliata viene eseguita in modo adattivo da un'interazione all'altra
+\end{itemize}
+\subsection{Scrum}
+\textbf{Scrum}[SB01] è un metodo agile che consiste di sviluppare e rilasciare prodotti software \textbf{con il più alto valore possibile per i clienti nel più breve tempo possibile}.
+Scrum si occupa principalmente dell'\textbf{organizzazione del lavoro e della gestione dei progetti} e meno agli aspetti tecnici dello sviluppo software; quindi lascia agli sviluppatori \textbf{libertà sulle tecnologie, sulle tecniche e sulle metodologie specifiche da utilizzare}.
+Di conseguenza può essere facilmente combinato con altri metodi. \newline
+Scrum è un approccio \textbf{incrementale e iterativo} allo sviluppo software; ciascuna iterazione, chiamata uno \textbf{Sprint}, ha una durata fissata, per esempio due settimane.
+Le iterazioni sono quindi \textbf{timeboxed}, e dunque non \textbf{non vengono mai estese}.
+In Scrum ci sono solo tre ruoli:
+\begin{itemize}
+    \item \textbf{Product Owner}: Definisce le \textbf{caratteristiche} del prodotto software da realizzare e specifica le \textbf{le priorità} tra queste caratteristiche.
+    Il suo obbiettivo è \textbf{massimizzare il valore del prodotto}.
+    \item \textbf{Development Team}: è composto di solito da una \textbf{manciata di persone}, che possiedono le competenze necessarie per \textbf{sviluppare il software}.
+    Il team è \textbf{auto-organizzato e auto-gestito} e opera con un alto grado di autonomia.
+    \item \textbf{Scrum master}: aiuta l'intero gruppo ad \textbf{apprendere e applicare Scrum} al fine di ottenere il valore desiderato.
+    Lo Scrum master \textbf{non è il manager del team}, ma piuttosto un istruttore e una guida, che serve, aiuta e protegge il Team.
+\end{itemize}
+Complessivamente tutti e tre formano un \textbf{Team Scrum}. \newline
+Il product owner definisce le \textbf{caratteristiche} del prodotto da realizzare nel \textbf{Product Backlog}, che è un insieme di \textbf{voci} (funzionalità e altri requisiti) ordinato per priorità.
+All'inizio del progetto, il Product Backlog descrive \textbf{tutte le caratteristiche del prodotto}; di iterazione in iterazione questo elaborato \textbf{viene aggiornato} e descrive le cose che devono essere ancora fatte per completare il prodotto.
+All'inizio di ciascuno Sprint, il team seleziona dal Product Backlog un insieme di voci da sviluppare durante quell'iterazione; questa scelta prende il nome di \textbf{Sprint Goal}, ovvero l'obbiettivo di sviluppo del team durante lo sprint corrente.
+Inoltre, il team compila lo \textbf{Sprint backlog} che specifica l'insieme dei compiti dettagliati per raggiungere lo Sprint Goal.
+Ogni giorno, all'inizio della giornata, il Team si riunisce \textbf{brevemente} in un \textbf{Daily Scrum} per verificare i propri progressi e per decidere i passi successivi necessari per completare il lavoro rimanente.
+Dopodiché, il team si mette al lavoro e \textbf{compie tutte le attività necessarie per l'analisi, la progettazione, la costruzione, l'integrazione e la verifica} del software.
+Il risultato di ciascuno Sprint deve essere un prodotto software \textbf{funzionante} chiamato "\textbf{incremento di prodotto potenzialmente rilasciabile}". 
+In linea con i principi di sviluppo \textbf{iterativo e incrementale}, il prodotto software parziale deve essere \textbf{funzionante e pienamente documentato per l'utente finale}.
+Le voci dello Sprint Backlog che sono state sviluppate in questo modo sono considerate \textbf{fatte}.
+Alla fine dello Sprint, nella \textbf{Sprint Review} il \textbf{Product Owner} e il \textbf{Team} presentano alle diverse parti interessate \textbf{l'incremento di prodotto software} che è stato sviluppato e ne fanno una \textbf{dimostrazione}. 
+Lo scopo della Sprint Review è \textbf{ottenere un feedback su quanto è stato fatto}, anche per poter decidere che \textbf{cosa è utile fare nel prossimo Sprint}.
+Si procede così di Sprint in Sprint, in modo iterativo, fino a quando l'intero prodotto non è stato completato.
+\begin{center}
+    \includegraphics[width = 0.80\textwidth]{Images/23.png}
+\end{center}
+La caratteristica distintiva di Scrum tra i metodi agili è \textbf{l'enfasi sull'adozione di team auto-organizzanti e auto-organizzati}.
+Inoltre, Scrum è basato su un insieme di \textbf{elaborati ed eventi che hanno lo scopo di rendere visibili gli obbiettivi e il progresso delle iterazioni e di favorire un adattamento evolutivo del processo di sviluppo}.
+Facciamo un riassunto di alcune delle terminologie viste:
+\begin{center}
+    \includegraphics[width = 1\textwidth]{Images/24.png}
+\end{center}
+\begin{center}
+    \includegraphics[width = 1.10\textwidth]{Images/25.png}
+\end{center}
 
 \end{document}
