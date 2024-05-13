@@ -661,7 +661,7 @@ Ci sono \textbf{due tipi} principali di requisiti:
 Una sfida primaria nell'analisi dei requisiti \textbf{è trovare, comunicare e ricordare} (il che di solito significa scrivere) ciò che è realmente necessario, in una forma che parli \textbf{chiaramente} al cliente e ai membri del team di sviluppo.
 Più generale, UP promuove un insieme di \textbf{best practices}, una delle quali è \textit{gestire i requisiti}; cioè, nel contesto dei desiderata delle parti interessate,  che sono \textbf{poco chiari e inevitabilmente cambieranno}, indica un \textbf{approccio sistematico per trovare, documentare, organizzare e tracciare i requisiti che cambiano di un sistema}.
 \begin{center}
-    \includegraphics[width = 0.85\textwidth]{Images/27.png}
+    \includegraphics[width = 0.85\textwidth]{Images/27.PNG}
 \end{center}
 \subsubsection{Proprietà dei requisiti funzionali}
 Altri problemi possono insorgere quando vi è \textbf{ambiguità nell'interpretazione dei requisiti funzionali}. Per esempio, la parola \textit{verificare} potrebbe essere interpretata in \textbf{modi diversi} dall'utente e dal programmatore.
@@ -673,7 +673,7 @@ In linea di principio, i \textbf{requisiti funzionali} dovrebbero essere:
 In pratica, tuttavia, molto spesso, a causa della \textbf{complessità del sistema e dell'ambiente}, è impossibile produrre un documento completo e coerente sui requisiti.
 \subsubsection{Proprietà dei requisiti non funzionali}
 \begin{center}
-    \includegraphics[width = 0.70\textwidth]{Images/28.png}
+    \includegraphics[width = 0.70\textwidth]{Images/28.PNG}
 \end{center}
 I \textbf{Requisiti non funzionali} definiscono le \textbf{proprietà e i vincoli del sistema}, come ad esempio affidabilità e tempo di risposta; oppure vincoli come la \textbf{capacità dei sistemi di I/O}, le rappresentazioni dei dati nelle interfacce di sistema ecc...
 Essi possono \textbf{vincolare il processo di sviluppo} del software in diversi ambiti, come ad esempio quali \textbf{standard di qualità usare} oppure \textbf{quali strumenti di sviluppo usare}.
@@ -688,7 +688,7 @@ I requisiti non funzionali possono essere tuttavia \textbf{molto difficili da in
 Gli obbiettivi sono utili agli sviluppatori poiché trasmettono le \textbf{intenzioni degli utenti del sistema}.
 Le seguenti sono \textbf{metriche per specificare i requisiti non funzionali}:
 \begin{center}
-    \includegraphics[width = 0.90\textwidth]{Images/29.png}
+    \includegraphics[width = 0.90\textwidth]{Images/29.PNG}
 \end{center}
 \subsubsection{Requisiti evolutivi e a cascata a confronto}
 Un aspetto fondamentale dell'analisi dei requisti è la \textbf{gestione dei requisiti che cambiano}. Una gestione non realistica dei requisiti (e del loro cambiamento) è infatti alla base del \textbf{fallimento di molti progetti software}.
@@ -705,7 +705,7 @@ Secondo lo studio [Thomas01], effettuato su oltre mille progetti software, il fa
 Un altro importante studio ([Johnson02]), svolto su migliaia di progetti, risponde alla seguente domanda: \textit{se si segue un'analisi dei requisiti a cascata; quante delle caratteristiche specificate inizialmente sono effettivamente utili nel prodotto software finale}?
 I risultati sono abbastanza sorprendenti:
 \begin{center}
-    \includegraphics[width = 0.70\textwidth]{Images/30.png}
+    \includegraphics[width = 0.70\textwidth]{Images/30.PNG}
 \end{center}
 Dunque, quasi il \textbf{65\%} delle caratteristiche specificate secondo un approccio a cascata si è rilevato inutile o poco utile.
 Questi risultati non implicano che \textbf{il modo giusto di procedere sia quello di scrivere codice sin dal primo giorno, dimenticandosi dell'analisi dei requisiti}.
@@ -842,7 +842,7 @@ I casi d'uso possono essere scritti \textbf{usando diversi formati e livelli di 
 \end{itemize}
 Un buon template (e quello più diffuso dagli anni 90) è stato definito da \textbf{Alistair Cockburn}:
 \begin{center}
-    \includegraphics[width = 1.05\textwidth]{Images/32.png}
+    \includegraphics[width = 1.05\textwidth]{Images/32.PNG}
 \end{center}
 Vediamo come interpretare le sue varie sezioni:
 \begin{itemize}
@@ -885,8 +885,141 @@ Vediamo come interpretare le sue varie sezioni:
     Similmente, nemmeno l'ultimo passo rientra sempre in questa classificazione, ma può descrivere il fatto che \textbf{l'attore ha effettivamente conseguito i suoi obbiettivi}.
     I nomi degli attori di solito vengono scritti \textbf{con l'iniziale maiuscola} per distinguerli meglio.
     Per indicare una ripetizione di passi, si \textbf{indica testualmente che i passi da n a k vanno ripetuti}
-    \item \textbf{Estensioni (o Flussi alternativi)}: 
+    \item \textbf{Estensioni (o Flussi alternativi)}: In genere,un caso d'uso è composto da molti scenari. Lo scenario principale di successo è solo uno di qeusti scenari.
+    Le \textbf{estensioni} hanno lo scopo di descrivere tutti gli altri scenari, sia di \textbf{successo} che di \textbf{fallimento}.
+    Per questo, le estensioni comprendono solitamente la \textbf{maggior parte del testo di un caso d'uso}.
+    Per descrivere tutti i possibili scenari, è preferibile scriverli \textbf{sotto forma di diramazioni dello scenario principale di successo}. Ciò permette di scrivere un caso d'uso in modo compatto.
+    Inoltre, questo modo di procedere è \textbf{compatibile} con le successive attività di analisi, progettazione e implementazione.
+    Nella scrittura completa dei casi d'uso, la combinazione del flusso di base e degli altri scenari descritti dalle estensioni \textbf{dovrebbe soddisfare quasi tutti gli interessi delle parte interessate}.
+    Tuttavia, alcuni interessi potrebbero essere \textbf{requisiti non funzionali} e quindi essere descritti nelle \textbf{Specifiche supplementari} invece che nei casi d'uso.
+    Un'estensione è composta da due parti: \textbf{la condizione} e la \textbf{gestione}; quindi nel seguente modo:
+    \begin{center}
+        \textit{<numero\_passo/i><lettera\_identificativa>.<Condizione>}
+    \end{center}
+    Quando è possibile, la condizione deve essere scritta come \textbf{qualcosa che possa essere rilevato dal sistema o da un attore}.
+    La sintassi per una diramazione è la seguente:
+    \begin{itemize}
+        \item Se si vuole descrivere una \textbf{diramazione che parte da un singolo passo}, si usa la sintassi descritta sopra
+        \item Se si vuole descrivere una \textbf{diramazione la cui gestione comprende una serie di passi}, si usa la sintassi:
+        \begin{center}
+            \textit{<passo\_inizio-passo\_fine><lettera\_identificativa>.<Condizione>}
+        \end{center}
+        Ciò indica anche che il flusso alternativo può essere gestito nell'ambito della sequenza di passi \textbf{"passo\_inizio e passo\_fine"}.
+        \item In alcuni casi, i punti di estensione sono \textbf{abbastanza complessi}. Questo può essere un motivo per \textbf{esprimere l'estensione come un caso d'uso separato} con ulteriori estensioni.
+        È quindi possibile avere \textbf{estensioni annidate in altre estensioni}.
+        \item Se si desidera descrivere una \textbf{condizione di estensione relativa a tutti o molti passi}, si possono utilizzare le etichette \textit{*a, *b, ...}
+        \item Talvolta un caso d'uso si dirama \textbf{per eseguire un'altro caso d'uso}. L'esecuzione di un'altro caso d'uso è di solito indicata da una \underline{sottolineatura} del nome del caso d'uso eseguito.
+        L'esecuzione di un altro caso d'uso \textbf{deve essere esplicitata come un punto del flusso dell'estensione}.
+    \end{itemize}
+    Per concludere, le estensioni possono essere usate per \textbf{gestire almeno tre tipi di situazioni principali}:\
+    \begin{enumerate}
+        \item L'attore vuole che l'esecuzione del caso d'uso \textbf{proceda in modo diverso da quanto previsto dallo scenario principale}.
+        \item Il caso d'uso \textbf{procede diversamente da quanto previsto nello scenario principale} ed è il \textbf{sistema che se ne accorge} mentre esegue un'azione o una validazione.
+        \item Un passo nello scenario principale \textbf{descrive un'azione generica o astratta}, mentre le estensioni relative a questo passo \textbf{descrivono le possibili azioni specifiche o concrete per eseguire il passo}.
+    \end{enumerate}
+    \item \textbf{Requisti speciali}: Se un requisito non funzionale, un'attributo di qualità o un vincolo \textbf{si riferiscono in modo specifico a un caso d'uso}, allora è bene scriverlo \textbf{insieme al caso d'uso}. Potrebbe trattarsi di qualità come prestazioni, affidabilità ecc... 
+    Registrare questi requisiti insieme al caso d'uso è il consiglio classico di UP, soprattutto se il caso d'uso \textbf{viene scritto prima}. Tuttavia, molti professionisti trovano utile \textbf{spostare e riunire tutti i requisiti funzionali nelle Specifiche supplementari};
+    questo favorisce la gestione dei contenuti, la comprensione e la leggibilità, anche perché questi requisiti vanno di solito considerati come un \textbf{tutt'uno} durante \textbf{l'analisi architetturale}.
+    \item \textbf{Elenco delle varianti tecnologiche e dei dati}: Spesso ci sono variazioni tecnologiche nel \textbf{modo in cui qualcosa deve essere fatto}, ma non nella sostanza delle cose;
+    è importante \textbf{registrare tali varianti} nel caso d'uso. Le \textbf{varianti tecnologiche} possono essere quindi \textbf{vincoli tecnici, imposti da una parte interessata, relativo alle tecnologie da utilizzare}. Si noti che questo è un vincolo precoce della progettazione e che quindi, in generale, sarebbe meglio \textbf{evitare di imporre};
+    tuttavia a volte \textbf{è inevitabile oppure ovvio doverlo fare}.
+    È inoltre necessario capire \textbf{le varianti nel formato dei dati}; cioè in quali modi le informazioni del sistema possono essere rappresentati.
 \end{itemize}
-
-
+\subsubsection{Linea guida: scrivere in uno stile essenziale}
+L'analista di sistema deve essere in grado di \textbf{distinguere il modo in cui si raggiunge uno scopo e lo scopo in sé}. Esaminando la gerarchia degli obbiettivi ("Qual è l'obbiettivo di quell'obbiettivo"), l'analista deve \textbf{giungere a degli obbiettivi indipendenti dai meccanismi}.
+Questo processo di scoperta dell'\textbf{obbiettivo radice}, di livello più alto, può suggerire soluzioni \textbf{migliori e nuove}.
+Tuttavia, per rispondere adeguatamente alla domanda "Dovrei utilizzare una certa tecnologia?" è necessario anche fare un'\textbf{analisi dell'usabilità di essa} nel contesto in cui ci si trova.
+Questa idea è stata riassunta da Cockburn con la frase "\textit{ignorare l'interfaccia utente, concentrarsi sullo scopo}". La sua motivazione è stata analizzata più a fondo da \textbf{Larry Costantine}, il quale giudica \textbf{essenziale} lo stile di \textbf{scrittura} quando esso evita i \textbf{dettagli della UI} e si concentra sullo \textbf{scopo reale dell'utente}.
+In uno stile di scrittura essenziale, la narrativa di un caso d'uso viene espressa a livello delle \textbf{intenzioni dell'utente} e delle \textbf{responsabilità} del sistema, anziché con riferimenti ad azioni concrete.
+Queste intenzioni e responsabilità rimangono \textbf{indipendenti dai dettagli tecnologici e dai movimenti degli attori} soprattutto quelli relativi all'UI.
+\begin{center}
+    \includegraphics[width = 0.35\textwidth]{Images/33.png}
+\end{center}
+In alternativa, esiste uno \textbf{concreto} per la scrittura dei casi d'uso. In questo stile, le decisioni sull'interfaccia utente sono \textbf{incorporate nel testo} del caso d'uso.
+Il testo può anche mostrare delle schermate, discutere la navigazione delle finestre, la manipolazione degli elementi della GUI ecc... 
+I casi d'uso concreti possono costruire un aiuto valido nella \textbf{progettazione di GUI concrete} o dettagliate, in una fase successiva, ma \textbf{non sono adatti durante le attività iniziali dell'analisi dei requisiti}; come lo è invece lo stile \textbf{essenziale}.
+\begin{center}
+    \includegraphics[width = 0.65\textwidth]{Images/34.png}
+\end{center}
+\subsubsection{Linea guida: scrivere casi d'uso concisi}
+Per facilitare la lettura dei requisiti, è perciò opportuno scrivere i casi d'uso in \textbf{modo conciso e allo stesso tempo completo} (con una chiara indicazione di soggetto e verbo e di eventuali frasi subordinate).
+\subsubsection{Linea guida: scrivere casi d'uso a scatola nera}
+I \textbf{casi d'uso a scatola nera} sono il tipo più comune e consigliato; non descrivono il funzionamento interno del sistema, i suoi componenti o aspetti relativi al suo progetto.
+Piuttosto, il sistema è descritto come \textbf{dotato di responsabilità}. Questa è una metafora comune e unificante nel pensare orientato agli oggetti;
+gli elementi software \textbf{hanno responsabilità} e collaborano con altri elementi \textbf{dotati di responsabilità}.
+Usando i casi d'uso a scatola nera per \textbf{definire la responsabilità del sistema} è possibile specificare che \textbf{cosa} deve fare il sistema senza specificare il \textbf{come}.
+Durante l'analisi dei requisiti bisogna specificare il \textbf{comportamento esterno del sistema}, considerato a scatola nera, evitando di prendere decisione sul \textbf{come il sistema effettua le sue operazioni}.
+Successivamente, durante la progettazione, andrà creata una \textbf{soluzione che soddisfa le specifiche}.
+\begin{center}
+    \includegraphics[width = 1\textwidth]{Images/35.png}
+\end{center}
+\subsubsection{Linea guida: adottare un punto di vista dell'attore e dell'attore-obbiettivo}
+La seguente definizione di caso d'uso di RUP è stata formulata dall'inventore dei casi d'uso, \textbf{Ivar Jacobson}:
+\begin{center}
+    \textit{Un caso d'uso è un insieme di istanze di casi d'uso, in cui ciascuna istanza è una sequenza di azioni che un sistema esegue per produrre un risultato osservabile e di valore per uno specifico attore}
+\end{center}
+La frase "un risultato osservabile e di valore per uno specifico attore" è un concetto sottile ma importante, che Jacobson considera \textbf{cruciale}, poiché pone l'accento su due atteggiamenti da tenere nel corso dell'analisi dei requisiti:
+\begin{itemize}
+    \item Scrivere requisiti \textbf{concentrandosi sugli utenti o attori di un sistema}, chiedendo quali sono i loro obbiettivi e le situazioni tipiche.
+    \item Concentrarsi sulla \textbf{comprensione di ciò che l'attore considera un risultato di valore} 
+\end{itemize}
+Seppur possa sembrare banale fornire un valore osservabile per l'utente e concentrarsi sugli obbiettivi tipici degli utenti, l'ingegneria del software è piena di progetti falliti che non hanno saputo fornire agi utenti ciò di cui avevano realmente bisogno.
+Il vecchio approccio basato sull'elencazione delle caratteristiche e delle funzioni per descrivere i requisiti può influire negativamente sul processo di sviluppo poiché \textbf{non porta a formulare domande a chi deve utilizzare il prodotto}.
+\subsubsection{Linea guida: Come trovare i casi d'uso}
+I casi d'uso hanno come scopo quello di soddisfare gli obbiettivi degli attori primari. La procedura base per trovarli è la seguente:
+\begin{enumerate}
+    \item \textbf{Scegliere i confini del sistema}: Di che tipo di sistema stiamo parlando? Per questo studio di caso, il SuD è \textbf{il sistema stesso}.
+    Tutto ciò che è al suo esterno \textbf{è fuori dai confini del sistema}. Per chiarire la definizione dei confini del sistema in corso di progettazione, è utile sapere che gli attori primari e gli attori di supporto sono \textbf{considerati esterni al sistema}.
+    Una volta individuati gli attori esterni, i confini del sistema \textbf{diventano più chiari}.
+    \item \textbf{Identificare gli attori primari}: Coloro che raggiungono i propri obbiettivi attraverso \textbf{l'utilizzo dei servizi del sistema}
+    \item \textbf{Identificare gli obbiettivi di ciascun attore primario}
+    \begin{itemize}
+        \item Non è naturale cercare di identificare, in stretta sequenza, prima gli attori primari e poi i loro obbiettivi.
+        In un workshop sui requisiti, le persone effettuano un brainstorming e \textbf{considerano insieme entrambi gli aspetti}.
+        Alcune volte sono gli \textbf{obbiettivi a svelare gli attori} o viceversa.
+        Oltre agli attori primari e agli obbiettivi più evidenti, le seguenti domande possono aiutare a identificarne altri:
+        \begin{itemize}
+            \item Chi avvia il sistema?
+            \item Chi si occupa della gestione degli utenti e della sicurezza?
+            \item Esiste un processo di monitoraggio che riavvia il sistema se si verifica un errore?
+            \item Come vengono gestiti gli aggiornamenti software?
+            \item Sono aggiornamenti automatici o a richiesta?
+            \item Oltre agli attori primari \textit{umani}, ci sono sistemi software o robotizzati esterni che utilizzano i servizi del sistema?
+            \item Chi si occupa dell'amministrazione del sistema?
+            \item Il "tempo" è un \textit{attore del sistema}? Nel senso che il sistema esegue operazioni in risposta ad alcuni eventi temporali?
+            \item Chi valuta le attività e le prestazioni del sistema?
+            \item Chi valuta i log? Vi si accede da remoto?
+            \item Chi viene avvisato quando si verificano errori o guasti?
+        \end{itemize}
+        Ci sono almeno due approcci per \textbf{organizzare gli attori e i loro obbiettivi}:
+        \begin{enumerate}
+            \item Man mano che vengono scoperti, vengono \textbf{disegnati in un diagramma dei casi d'uso}, chiamando i casi d'uso come gli obbiettivi
+            \item Scrivere \textbf{dapprima un elenco attori-obbiettivi}, rivederlo e raffinarlo, per poi \textbf{disegnare il diagramma dei casi d'uso}
+        \end{enumerate}
+        Se si crea un elenco attori-obbiettivi allora, in termini di elaborati UP, è utile riportare una tabella simile nell'elaborato \textbf{Visione}:
+        \begin{center}
+            \includegraphics[width = 0.70\textwidth]{Images/36.png}
+        \end{center}
+        Gli attori hanno \textbf{degli obbiettivi e utilizzano le applicazioni per raggiungerli}.
+        La modellazione dei casi d'uso è interessata a \textbf{trovare questi attori e i rispettivi obbiettivi} e creare soluzioni che producono un risultato di valore.
+        Questo sposta leggermente l'interesse del \textbf{modellatore del caso d'uso}. Anziché chiedere "\textit{Quali sono le attività svolte?}" si chiederà:
+        \begin{center}
+            \textit{Chi utilizza il sistema e quali sono i suoi obbiettivi?}
+        \end{center}
+        È necessario anche identificare \textbf{l'attore primario} del sistema. Ciò non è sempre evidente e dipende \textbf{dai confini del sistema in corso di progettazione}.
+        In un caso d'uso di un sistema POS per esempio, potrebbe avere come \textbf{attore primario il cassiere}, poiché è la persona che \textbf{utilizza il sistema per soddisfare i suoi obbiettivi}, tuttavia il cliente \textbf{è considerabile come attore "finale" del caso d'suo} poiché, magari, il caso d'uso soddisfa \textbf{principalmente gli obbiettivi del cliente}.
+        \begin{center}
+            \includegraphics[width = 0.80\textwidth]{Images/37.png}
+        \end{center}
+        Un'ultimo approccio per trovare gli attori e i loro obbiettivi è \textbf{basato sull'identificazione di eventi esterni al sistema}. 
+        Per esempio: \textit{Quali sono? Da dove provengono? Perché?}.
+        \begin{center}
+            \includegraphics[width = 0.55\textwidth]{Images/38.png}
+        \end{center}
+    \end{itemize}
+     \item \textbf{Definire i casi d'uso che soddisfano gli obbiettivi degli utenti}: il loro nome va scelto \textbf{in base all'obbiettivo}. 
+     Di solito, i casi d'uso a livello di \textbf{obbiettivo utente} sono in \textbf{corrispondenza biunivoca} con gli \textbf{obbiettivi degli utenti}; tuttavia c'è più un di un'eccezione a questa regola.
+     In generale, va definito definito un \textbf{caso d'uso per ciascuno obbiettivo utente}. È opportuno assegnare al caso d'uso un nome simile all'obbiettivo utente.L
+     La linea guida è che \textbf{i nomi dei casi d'uso deve iniziare con un verbo}.
+\end{enumerate}
 \end{document}
