@@ -1021,5 +1021,72 @@ I casi d'uso hanno come scopo quello di soddisfare gli obbiettivi degli attori p
      Di solito, i casi d'uso a livello di \textbf{obbiettivo utente} sono in \textbf{corrispondenza biunivoca} con gli \textbf{obbiettivi degli utenti}; tuttavia c'è più un di un'eccezione a questa regola.
      In generale, va definito definito un \textbf{caso d'uso per ciascuno obbiettivo utente}. È opportuno assegnare al caso d'uso un nome simile all'obbiettivo utente.L
      La linea guida è che \textbf{i nomi dei casi d'uso deve iniziare con un verbo}.
+     Un'eccezione comune alla scelta di un caso d'uso per \textbf{obbiettivo} è quella che \textbf{riunisce gli obbiettivi separati CRUD} in un unico \textbf{caso d'uso CRUD}.
+     In questo caso, il caso d'uso potrà iniziare con la parola \textit{gestisci} seguita dalla cosa che si vuole gestire.
 \end{enumerate}
+\subsubsection{Linea guida: Verificare l'utilità dei casi d'uso}
+Quali sono i casi d'uso \textbf{validi}? Piuttosto che chiedere questo è più pratico chiedersi \textbf{Qual è un livello utile per esprimere i casi d'uso nell'analisi dei requisiti software}?
+Ci sono diverse regole pratiche, tra cui:
+\begin{itemize}
+    \item \textbf{Test del capo}: Il capo vi chiede: "Cosa avete fatto tutto il giorno?" e voi rispondete di aver fatto \textbf{tutto il giorno qualcosa}. Il vostro capo sarà facile?
+    Se non lo è, il caso d'uso non \textbf{supera il test del capo}, il che significa che non è fortemente \textbf{mirato a ottenere risultati il cui valore sia misurabile}.
+    Potrebbe essere un caso d'uso a un \textbf{livello più basso}, ma non al livello a cui è desiderabile concentrarsi durante l'analisi dei requisiti.
+    Ciò non significa che \textbf{bisogna sempre ignorare i casi d'uso che non superano il test del capo}; a volte il livello di un caso d'uso è basso, quindi non supera il test del capo, ma può invece risultare \textbf{complesso e importante}
+    \item \textbf{Test EBP}: La nozione di \textbf{Processo di Business Elementare} (Elementary Business Process, \textbf{EBP}) deriva dal settore dell'ingegneria dei processi da business: \newline
+    \textit{Un processo di business elementare è un'attività svolta da una persona in un determinato tempo e luogo, in risposta ad un evento di business, che aggiunge un valore di business misurabile e lascia dati in uno stato consistente} \newline
+    La linea guida in questi casi è quindi quella di \textbf{concentrarsi sui casi d'uso che corrispondono a degli EBP}.
+    La definizione di EBP tuttavia non deve essere presa in maniera troppo letterale: un caso d'uso fallisce come EBP se ci sono due persone che effettuano l'operazione?
+    Probabilmente no, ma il \textbf{tono della definizione è più o meno corretto}.
+    Non è un singolo passo; anzi lo scenario principale di successo sarà formato da \textbf{cinque-dieci passi}.
+    Non occorrono giorni e sessioni multiple; è \textbf{un'attività eseguita in una sola sessione di lavoro} e probabilmente richiede un lasso di tempo che va dai pochi minuti all'ora.
+    Come nella definizione di UP, \textbf{enfatizza l'aggiunta di un valore di business osservabile o misurabile e giunge a una situazione in cui il sistema e i dati sono in uno stato stabile e consistente}.
+    \item \textbf{Test della dimensione}: Un caso d'uso è \textbf{raramente costituito da una singola azione o passo}; normalmente comprende diversi passi e nel suo formato dettagliato richiede spesso dalle 3 alle 10 pagine di testo.
+    Un errore comune nella modellazione dei casi d'uso è \textbf{definire un caso d'uso formato da un singolo passo}, all'interno di una sequenza di passi correlati. Si può intravedere l'errore \textbf{delle sue dimensioni ridotte}.
+\end{itemize}
+Benché la maggior parte dei casi d'uso dovrebbe soddisfare i test proposti; ci sono delle eccezioni comuni.
+Talvolta è utile scrivere casi d'uso \textbf{separati a livello di sottofunzione} che rappresentano attività secondarie o passi all'interno di un normale caso d'uso a livello EBP.
+Per esempio, un'attività secondaria o un'estensione di un certo caso d'uso \textbf{potrebbe essere ripetuta in più casi d'uso di base}.
+In questo caso è preferibile \textbf{separarla in un proprio caso d'uso}, anche se non soddisfa pienamente il test EBP.
+Un caso d'uso potrebbe non superare il \textbf{test del capo}, ma essere sufficientemente complesso da \textbf{richiedere un'analisi accurata}.
+\subsubsection{Definizione: livello dei casi d'uso}
+I casi d'uso possono essere scritti a diversi \textbf{livelli}, con riferimento all'obbiettivo che rappresentano:
+\begin{itemize}
+    \item \textbf{Livello di obbiettivo utente}: Nell'analisi dei requisiti per un sistema software è utile concentrarsi principalmente sui casi d'uso EBP.
+    Un caso d'uso di questo tipo è detto \textbf{a livello di obbiettivo utente}, poiché consente all'utente di \textbf{raggiungere l'obbiettivo tramite un solo utilizzo del sistema}
+    \item \textbf{Livello di sotto-funzione}: Un caso d'uso a \textbf{livello di sotto-funzione} indica invece un \textbf{passo complesso che il sistema deve compiere nell'ambito di un'altro caso d'uso}.
+    La modellazione di questo tipo di casi d'uso è utile quando è necessario indicare a fattor comune delle \textbf{sequenze di passi condivisi da più casi d'uso}.
+    \item \textbf{Livello di sommario}: Un caso d'uso \textbf{a livello di sommario} indica un caso d'uso la cui esecuzione ha un lasso temporale d'esecuzione \textbf{mediamente più lungo degli altri casi d'uso} (ore, giorni, mesi, anni ecc...)
+    Questi casi d'uso sono utili per \textbf{descrivere una visione complessiva sugli obbiettivi del sistema}. Tuttavia, essi non forniscono direttamente dei requisiti da sviluppare per il sistema software.
+    Un caso d'uso di questo tipo \textbf{contiene più casi d'uso a livello obbiettivo utente}
+\end{itemize}
+\subsection{Diagramma UML dei casi d'uso}
+UML fornisce una notazione dei \textbf{diagrammi dei casi d'uso} che consente di utilizzare i nomi e gli attori dei casi d'uso nonché le relazioni tra essi.
+Si ricorda tuttavia che l'attività di descrizione dei casi d'uso riguarda \textbf{scrivere testo, non disegnare diagrammi}.
+Basta quindi modellare solo un \textbf{semplice diagramma dei casi d'uso insieme ad un elenco attori-obbiettivi}.
+Tuttavia, un diagramma dei casi d'uso rappresenta un \textbf{ottimo quadro del contesto di un sistema} poiché esso costituisce un buon \textbf{diagramma di contesto}, che consente di mostrare i confini del sistema.
+È quindi un utile strumento di comunicazione che \textbf{riassume il comportamento del sistema e i suoi attori}.
+\begin{center}
+    \includegraphics[width = 0.85\textwidth]{Images/39.png}
+\end{center}
+Si noti il rettangolo nella figura sopra con scritto "actor" tra virgolette basse.
+Questa sintassi \textbf{indica parole chiave o stereotipi UML}. Per motivi di chiarezza, alcuni preferiscono modellare gli attori che sono \textbf{enti informatici esterni usando la notazione a rettangolo}
+\begin{center}
+    \includegraphics[width = 0.75\textwidth]{Images/40.png}
+\end{center}
+\subsubsection{Relazione di associazione attore-caso d'uso}
+Un'\textbf{associazione} tra un attore e un caso d'uso è un \textbf{canale di comunicazione} tra i due.
+Essa è rappresentata con una \textbf{linea continua} e può essere \textbf{sia orientata che non orientata}.
+In particolare:
+\begin{itemize}
+    \item \textbf{Direzione}: chi da inizio all'interazione
+    \item \textbf{Nessuna direzione}: entrambe le parti possono dare inizio all'interazione
+\end{itemize}
+\begin{center}
+    \includegraphics[width = 0.05\textwidth]{Images/41.png}
+\end{center}
+\subsubsection{Relazione di inclusione}
+La \textbf{relazione di inclusione} è la relazione tra casi d'uso \textbf{più frequente e importante}.
+È comune avere \textbf{comportamenti parziali in comune tra diversi casi d'uso}; quindi anziché duplicare il testo del caso d'uso, è opportuno separarlo in un proprio caso d'uso \textbf{a livello di sotto-funzione} e indicare la sua inclusione.
+
+
 \end{document}
