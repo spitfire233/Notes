@@ -1082,11 +1082,42 @@ In particolare:
     \item \textbf{Nessuna direzione}: entrambe le parti possono dare inizio all'interazione
 \end{itemize}
 \begin{center}
-    \includegraphics[width = 0.05\textwidth]{Images/41.png}
+    \includegraphics[width = 0.20\textwidth]{Images/41.png}
 \end{center}
 \subsubsection{Relazione di inclusione}
 La \textbf{relazione di inclusione} è la relazione tra casi d'uso \textbf{più frequente e importante}.
 È comune avere \textbf{comportamenti parziali in comune tra diversi casi d'uso}; quindi anziché duplicare il testo del caso d'uso, è opportuno separarlo in un proprio caso d'uso \textbf{a livello di sotto-funzione} e indicare la sua inclusione.
-
+Quando viene realizzata una relazione di inclusione, \textbf{il caso d'uso incluso viene eseguito completamente quando viene raggiunto il punto di inclusione}
+\begin{center}
+    \includegraphics[width = 0.80\textwidth]{Images/42.png}
+\end{center}
+Nei diagrammi dei casi d'uso, la relazione di include viene espressa nel seguente modo:
+\begin{center}
+    \includegraphics[width = 0.85\textwidth]{Images/43.png}
+\end{center}
+Nei casi d'uso dettagliati, una notazione semplice e preferibile per indicare la relazione di include \textbf{consiste semplicemente nel sottolineare il caso d'uso incluso} (o evidenziarlo in qualche modo).
+Una linea guida semplice e pratica per capire quando usare la relazione di inlcude è offerta da \textbf{Fowler}: \textit{usare la relazione di include quando ci si ripete in due o più casi d'uso separati e si desidera evitare la ripetizione}.
+Un'altra motivazione è quella di \textbf{voler scomporre un caso d'uso più complesso per facilitarne la comprensione}.
+Un altro uso della relazione di include è per descrivere la \textbf{gestione di un evento asincrono}. La notazione di base per questi casi d'uso è quella di utilizzare la sintassi "\textit{*a, *b, ...}"
+Si ricordi che queste possono indicare che l'evento si può \textbf{verificare in qualsiasi momento}. Una notazione minore è quella di indicare \textbf{un'etichetta intervallo} (es. 3-9a) per indicare che l'evento asincrono si può verificare all'interno del flusso di un numero elevato di passi, ma non in tutti.
+\begin{center}
+    \includegraphics[width = 0.85\textwidth]{Images/44.png}
+\end{center}
+\subsubsection{Terminologia: caso base concreto, astratto e aggiunto}
+Un \textbf{caso d'uso concreto} viene iniziato da un'attore ed esegue \textbf{l'intero comportamento desiderato dall'attore} [RUP]
+Questi sono i \textbf{casi d'uso EBP}, che descrivono processi di business elementari.
+Un caso \textbf{caso d'uso astratto} non viene \textbf{mai istanziato per se} ma si tratta invece di una \textbf{sottofunzione che fa parte di un'altro caso d'uso}.
+Un caso d'uso che \textbf{include o è esteso da un'altro caso d'uso} è detto \textbf{caso d'uso base}; mentre il caso d'uso che è un estensione o inclusione è detto \textbf{caso d'uso aggiunto}.
+I casi d'uso aggiunti sono \textbf{di solito astratti} mentre i casi d'uso base sono di solito \textbf{concreti}.
+\subsubsection{Relazione di estensione}
+Si supponga che il testo di un caso d'uso \textbf{non debba essere modificato} (almeno non in modo significativo) per qualche ragione.
+Per esempio, perché modificare il caso d'uso con estensioni e modifiche risulta \textbf{difficile e poco manutenibile}.
+Come possiamo aggiungere qualcosa al caso d'uso senza modificarlo?
+La \textbf{relazione di estensione} offre una risposta a questa domanda. L'idea è quella di \textbf{creare un caso d'uso di estensione} (o aggiunto) e al suo interno descrivere \textbf{come modifica ed estende il comportamento del caso d'uso base}.
+Un caso d'uso d'estensione è \textbf{attivato da una certa condizione trigger} e viene "eseguito" solo se \textbf{la condizione di estensione è vera}.
+I punti di estensione sono \textbf{etichette nel caso d'uso base} a cui il caso d'uso d'estensione fa riferimento come \textbf{punto d'estensione}, cosicché la numerazione in passi del caso d'uso base può \textbf{cambiare senza influire sul caso d'uso d'estensione}.
+L'extend può essere usata anche per la \textbf{gestione di eventi asincroni} e quando \textbf{il caso d'uso è chiuso rispetto a qualsiasi modifica}.
+Il caso d'uso base \textbf{non dipende, per la sua esecuzione, dal caso d'uso aggiunto}; esso è un caso d'uso intero di per sé e per tanto \textbf{non definisce o controlla le condizioni in cui vengono attivate le estensioni}.
+Alcune linee guida suggeriscono di usare la relazione extend e i casi d'uso di estensione \textbf{per modellare il comportamento condizionale o opzionale inserito nel caso d'uso base}, tuttavia ciò non coglie l'obbiettivo per il quale il comportamento opzionale e condizionale può \textbf{semplicemente essere registrato come testo nella sezione estensioni del caso d'uso base}.
 
 \end{document}
