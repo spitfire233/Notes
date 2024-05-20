@@ -49,6 +49,7 @@
 \newcommand{\Hsquare}{%
 \text{\fboxsep=-.2pt\fbox{\rule{0pt}{1ex}\rule{1ex}{0pt}}}%
 }
+\newcommand{\tb}{\textbf}
 
 \newtheorem{Definizione}{Definizione}[subsection]
 \newtheorem{Lemma}{Lemma}[subsection]
@@ -831,7 +832,7 @@ I casi d'uso possono essere scritti \textbf{usando diversi formati e livelli di 
     \begin{itemize}
         \item \textbf{Quando va usato?} Durante \textbf{l'analisi iniziale dei requisiti}, per capire rapidamente l'argomento e la portata
     \end{itemize}
-    \item \textbf{Formato informale}: Più paragrafi, scritti in maneire \textbf{informale}, relativi a \textbf{vari scenari}
+    \item \textbf{Formato informale}: Più paragrafi, scritti in maniera \textbf{informale}, relativi a \textbf{vari scenari}
     \begin{itemize}
         \item \textbf{Quando va usato?} Come nel caso del formato breve, solo con un livello di dettaglio maggiore
     \end{itemize}
@@ -866,7 +867,7 @@ Vediamo come interpretare le sue varie sezioni:
     \item \textbf{Pre-condizioni e garanzie di successo (post-condizioni)}: Le \textbf{pre-condizioni} descrivono \textbf{cosa deve essere sempre vero all'inizio del caso d'uso}.
     Le pre-condizioni \textbf{non vengono verificate all'interno del caso d'uso} ma si presuppongono vere. Normalmente una pre-condizione implica che \textbf{lo scenario di un'altro caso d'uso sia stato completato con successo}.
     È necessario notare che vale la pena di scrivere \textbf{solamente le pre-condizioni non banali o che vale la pena descrivere al lettore}.
-    Le \textbf{garanzie di successo} o \textbf{post-condizioni} affermano \textbf{cosa deve essere vero quando è stato completato con successo il caso d'uso}, ovvero quando si completa \textbf{lo scenario principale di successo} o un percoso alternativo.
+    Le \textbf{garanzie di successo} o \textbf{post-condizioni} affermano \textbf{cosa deve essere vero quando è stato completato con successo il caso d'uso}, ovvero quando si completa \textbf{lo scenario principale di successo} o un percorso alternativo.
     La garanzia \textbf{deve soddisfare tutte le esigenze delle parti interessate}. Anche in questo caso, vale la pena di scrivere \textbf{solo le post-condizioni non ovvie o significative}.
     \item \textbf{Scenario principale di successo e i suoi passi (Flusso di base)}: Lo scenario principale di successo viene anche chiamato \textbf{happy path} oppure \textbf{flusso di base} o \textbf{flusso tipico}.
     Esso descrive \textbf{un percorso di successo comune} che soddisfa gli interessi di tutte le parti interessate. Lo scenario principale è costituito da una \textbf{sequenza di passi numerati}, che può contenere \textbf{passi da ripetere più volte}, ma che di solito non comprende alcuna condizione o diramazione (rimandate alla sezione delle estensioni).
@@ -885,7 +886,7 @@ Vediamo come interpretare le sue varie sezioni:
     Similmente, nemmeno l'ultimo passo rientra sempre in questa classificazione, ma può descrivere il fatto che \textbf{l'attore ha effettivamente conseguito i suoi obbiettivi}.
     I nomi degli attori di solito vengono scritti \textbf{con l'iniziale maiuscola} per distinguerli meglio.
     Per indicare una ripetizione di passi, si \textbf{indica testualmente che i passi da n a k vanno ripetuti}
-    \item \textbf{Estensioni (o Flussi alternativi)}: In genere,un caso d'uso è composto da molti scenari. Lo scenario principale di successo è solo uno di qeusti scenari.
+    \item \textbf{Estensioni (o Flussi alternativi)}: In genere,un caso d'uso è composto da molti scenari. Lo scenario principale di successo è solo uno di questi scenari.
     Le \textbf{estensioni} hanno lo scopo di descrivere tutti gli altri scenari, sia di \textbf{successo} che di \textbf{fallimento}.
     Per questo, le estensioni comprendono solitamente la \textbf{maggior parte del testo di un caso d'uso}.
     Per descrivere tutti i possibili scenari, è preferibile scriverli \textbf{sotto forma di diramazioni dello scenario principale di successo}. Ciò permette di scrivere un caso d'uso in modo compatto.
@@ -929,7 +930,7 @@ Vediamo come interpretare le sue varie sezioni:
 L'analista di sistema deve essere in grado di \textbf{distinguere il modo in cui si raggiunge uno scopo e lo scopo in sé}. Esaminando la gerarchia degli obbiettivi ("Qual è l'obbiettivo di quell'obbiettivo"), l'analista deve \textbf{giungere a degli obbiettivi indipendenti dai meccanismi}.
 Questo processo di scoperta dell'\textbf{obbiettivo radice}, di livello più alto, può suggerire soluzioni \textbf{migliori e nuove}.
 Tuttavia, per rispondere adeguatamente alla domanda "Dovrei utilizzare una certa tecnologia?" è necessario anche fare un'\textbf{analisi dell'usabilità di essa} nel contesto in cui ci si trova.
-Questa idea è stata riassunta da Cockburn con la frase "\textit{ignorare l'interfaccia utente, concentrarsi sullo scopo}". La sua motivazione è stata analizzata più a fondo da \textbf{Larry Costantine}, il quale giudica \textbf{essenziale} lo stile di \textbf{scrittura} quando esso evita i \textbf{dettagli della UI} e si concentra sullo \textbf{scopo reale dell'utente}.
+Questa idea è stata riassunta da Cockburn con la frase "\textit{ignorare l'interfaccia utente, concentrarsi sullo scopo}". La sua motivazione è stata analizzata più a fondo da \textbf{Larry Constantine}, il quale giudica \textbf{essenziale} lo stile di \textbf{scrittura} quando esso evita i \textbf{dettagli della UI} e si concentra sullo \textbf{scopo reale dell'utente}.
 In uno stile di scrittura essenziale, la narrativa di un caso d'uso viene espressa a livello delle \textbf{intenzioni dell'utente} e delle \textbf{responsabilità} del sistema, anziché con riferimenti ad azioni concrete.
 Queste intenzioni e responsabilità rimangono \textbf{indipendenti dai dettagli tecnologici e dai movimenti degli attori} soprattutto quelli relativi all'UI.
 \begin{center}
@@ -1096,7 +1097,7 @@ Nei diagrammi dei casi d'uso, la relazione di include viene espressa nel seguent
     \includegraphics[width = 0.85\textwidth]{Images/43.png}
 \end{center}
 Nei casi d'uso dettagliati, una notazione semplice e preferibile per indicare la relazione di include \textbf{consiste semplicemente nel sottolineare il caso d'uso incluso} (o evidenziarlo in qualche modo).
-Una linea guida semplice e pratica per capire quando usare la relazione di inlcude è offerta da \textbf{Fowler}: \textit{usare la relazione di include quando ci si ripete in due o più casi d'uso separati e si desidera evitare la ripetizione}.
+Una linea guida semplice e pratica per capire quando usare la relazione di include è offerta da \textbf{Fowler}: \textit{usare la relazione di include quando ci si ripete in due o più casi d'uso separati e si desidera evitare la ripetizione}.
 Un'altra motivazione è quella di \textbf{voler scomporre un caso d'uso più complesso per facilitarne la comprensione}.
 Un altro uso della relazione di include è per descrivere la \textbf{gestione di un evento asincrono}. La notazione di base per questi casi d'uso è quella di utilizzare la sintassi "\textit{*a, *b, ...}"
 Si ricordi che queste possono indicare che l'evento si può \textbf{verificare in qualsiasi momento}. Una notazione minore è quella di indicare \textbf{un'etichetta intervallo} (es. 3-9a) per indicare che l'evento asincrono si può verificare all'interno del flusso di un numero elevato di passi, ma non in tutti.
@@ -1119,5 +1120,99 @@ I punti di estensione sono \textbf{etichette nel caso d'uso base} a cui il caso 
 L'extend può essere usata anche per la \textbf{gestione di eventi asincroni} e quando \textbf{il caso d'uso è chiuso rispetto a qualsiasi modifica}.
 Il caso d'uso base \textbf{non dipende, per la sua esecuzione, dal caso d'uso aggiunto}; esso è un caso d'uso intero di per sé e per tanto \textbf{non definisce o controlla le condizioni in cui vengono attivate le estensioni}.
 Alcune linee guida suggeriscono di usare la relazione extend e i casi d'uso di estensione \textbf{per modellare il comportamento condizionale o opzionale inserito nel caso d'uso base}, tuttavia ciò non coglie l'obbiettivo per il quale il comportamento opzionale e condizionale può \textbf{semplicemente essere registrato come testo nella sezione estensioni del caso d'uso base}.
+\section{Iterazione 1: Introduzione}
+\begin{center}
+    \includegraphics[width = 0.85\textwidth]{Images/45.png}
+\end{center}
+Prerequisito fondamentale per questa parte è comprendere che in una vera modellazione di un progetto software con UP, l'iterazione 1 è \textbf{guidata dal rischio e dagli obbiettivi}.
+In questi appunti, invece, ci focalizziamo sull'approccio scandito dal libro; cioè più orientato \textbf{all'apprendimento}.
+Bisogna inoltre tenere a mente che \textbf{in uno progetto di sviluppo con ciclo di vita iterativo}, si inizia la programmazione di qualità produzione e il test solo per \textbf{un sottoinsieme dei requisiti},
+e si inizia quello sviluppo \textbf{prima che l'analisi di tutti requisiti sia stata completata}.
+Si noti che non tutti i requisiti dei casi d'uso vengono implementati durante l'iterazione 1. È comune \textbf{lavorare su diversi scenari di uno stesso caso d'uso per diverse iterazioni}, estendendo il sistema \textbf{in modo graduale per gestire, alla fine, tutte le funzionalità richieste}.
+D'altra parte, i casi d'uso più brevi e semplici \textbf{possono essere completati in una singola iterazione}.
+\subsection{Processo: ideazione ed elaborazione}
+In termini di UP, si immagini di aver trattato la \textbf{fase di ideazione} e che si stia per iniziare la \textbf{fase di elaborazione}.
+La fase di ideazione per gli studi di caso \textbf{potrebbe durare anche una sola settimana}.
+Poiché non si tratta della \textbf{fase dei requisiti del progetto}, gli elaborati creati dovrebbero essere \textbf{brevi e incompleti}, la fase \textbf{rapida} e l'indagine \textbf{superficiale}.
+L'ideazione è un passo breve al fine di stabilire se il progetto \textbf{merita un'indagine più approfondita}; cioè verso \textbf{l'elaborazione}. Essa quindi determina
+la \textbf{portata di base} del progetto.
+Alcune attività ed elaborati probabili durante la fase di ideazione sono i seguenti:
+\begin{itemize}
+    \item Un breve \textbf{workshop sui requisiti}
+    \item \textbf{Assegnazione} dei \textbf{nomi} per la maggior parte degli \textbf{attori, degli obbiettivi e dei casi d'uso}.
+    \item Scrittura \textbf{in formato breve} della maggior parte dei casi d'uso, il 10-20\% \textbf{è scritto in formato dettagliato} per migliorare la comprensione della portata e della complessità
+    \item \textbf{Identificazione della maggior parte dei requisiti di qualità più influenti e rischiosi}
+    \item Scrittura della \textbf{prima versione dei documenti di Visione e Specifiche Supplementari}
+    \item \textbf{Lista dei rischi} (anche dal punto di vista del business e delle esigenze dell'utente)
+    \item \textbf{Prototipi proof-of-concept} e altre indagini per esaminare la \textbf{fattibilità tecnica dei requisiti speciali}
+    \item \textbf{Prototipi orientati all'UI} per chiarire la visione dei requisiti funzionali
+    \item Raccomandazioni su \textbf{quali componenti acquistare/costruire/riutilizzare}, da raffinare durante la fase di elaborazione
+    \item \textbf{Proposta dell'architettura di alto livello dei componenti candidati}: Ciò non si tratta di una descrizione dettagliata dell'architettura, e non ha la pretesa di \textbf{essere definitiva o corretta}.
+    Al contrario, è una \textbf{breve speculazione da utilizzare come punto di partenza dell'indagine nell'elaborazione}.
+    \item \textbf{Piano per la prima iterazione}
+    \item \textbf{Elenco di strumenti candidati}
+\end{itemize}
+\subsection{Verso l'elaborazione}
+\textbf{L'elaborazione} è la serie iniziale di iterazioni durante le quali, in un progetto normale:
+\begin{itemize}
+    \item Viene \textbf{programmato e verificato} il \textbf{nucleo}, rischioso, dell'architettura software
+    \item Viene \textbf{scoperta e stabilizzata la maggior parte dei requisiti}
+    \item I rischi maggiori \textbf{sono risolti o rientrano}
+\end{itemize}
+L'elaborazione è la serie iniziale di iterazioni durante le quali il team \textbf{esegue un'indagine seria, implementa il nucleo dell'architettura, chiarisce la maggior parte dei requisiti e affronta le problematiche ad alto rischio}.
+In UP, tra i rischi vi sono anche quelli legati al valore di business. Pertanto, il lavoro iniziale può includere le \textbf{implementazioni di scenari che sono ritenuti importanti dal cliente ma che non sono particolarmente rischiosi a livello tecnico}.
+L'elaborazione è spesso costituita da \textbf{due o più iterazioni}: è consigliabile che ciascuna di essi duri \textbf{dalle due fino alle sei settimane}; ovviamente è da privilegiare la versione più breve, tuttavia ciò non potrebbe essere possibile se il team di sviluppo è molto grande.
+Ogni iterazione è \textbf{timeboxed}, quindi la data di fine è fissata.
+L'elaborazione \textbf{non è una fase di progettazione o una fase in cui vengono sviluppati completamente dei modelli in preparazione dell'implementazione} da fare durante la fase di costruzione; questo sarebbe una sovrapposizione del pensiero a cascata su UP.
+Durante questa fase non vengono creati prototipi "usa e getta"; al contrario, il codice e la progettazione prodotta sono \textbf{parti di qualità produzione del sistema finale}.
+Per descrivere il sistema parziale creato durante questa fase, si utilizzare il termine \textbf{architettura eseguibile} o \textbf{baseline dell'architettura}.
+Se volessimo quindi riassumere l'elaborazione in una sola frase:
+\begin{center}
+    \textit{L'elaborazione è la fase dello sviluppo in cui viene costruito il nucleo dell'architettura, vengono risolti gli elementi ad alto rischio, vengono definiti la maggior parte dei requisiti e viene stiamo il piano di lavoro e le risorse complessive}
+\end{center}
+Alcune idee e best practices fondamentali per l'elaborazione possono essere:
+\begin{itemize}
+    \item Eseguire iterazioni \textbf{guidate dal rischio}, \textbf{brevi} e \textbf{timeboxed}
+    \item Iniziare la programmazione \textbf{presto}
+    \item Progettare, implementare e testare, in modo \textbf{adattivo}, le parti principali e più rischiose dell'architettura
+    \item Effettuare \textbf{test presto}, \textbf{spesso} e in \textbf{modo realistico}
+    \item Adattare in base al feedback da \textbf{test, utenti e sviluppatori}
+    \item Scrivere \textbf{la maggior parte dei casi d'uso e degli altri requisiti nel dettaglio}, attraverso \textbf{una serie di workshop}, uno per \textbf{ciascuna} iterazione dell'elaborazione
+\end{itemize}
+Vediamo quindi alcuni elaborati che possono essere iniziati durante la fase di elaborazione:
+\begin{center}
+    \includegraphics[width = 0.70\textwidth]{Images/46.png}
+\end{center}
+\subsection{Processo: pianificare l'iterazione successiva}
+I requisiti e le iterazioni vanno \textbf{organizzati in base a rischio, copertura e criticità}, cioè:
+\begin{itemize}
+    \item \textbf{Rischio}: comprende tanto la \textbf{complessità tecnica} quanto altri fattori, come l'incertezza dello sforzo e l'usabilità
+    \item \textbf{Copertura}: implica che le iterazioni iniziali prendano in considerazione \textbf{tutte le parti principali del sistema}, probabilmente con un'implementazione "in ampiezza e poco profonda" di molti componenti.
+    \item \textbf{Criticità} (valore): Si riferisce alle \textbf{funzioni} che il cliente considera di alto valore di business
+\end{itemize}
+Questi criteri sono utilizzati per collocare il \tb{lavoro nelle iterazioni}. Ai casi d'uso o ai loro scenari viene dato un "voto" per l'implementazioni;
+le iterazioni iniziali \tb{implementano scenari con voto elevato}. Inoltre, alcuni requisiti sono espressi come caratteristiche di \tb{alto livello}, non correlate a un particolare caso d'uso.
+Anche nelle caratteristiche viene \tb{dato un voto}. La "classifica" viene stilata \tb{prima dell'iterazione 1}, ma poi \tb{nuovamente prima dell'iterazione 2} e così via, man mano che nuovi requisiti e nuove istruzioni influenzano l'ordine.
+In altre parole, \tb{il piano delle iterazioni è adattivo}, anziché essere predisposto in modo speculativo e congelato all'inizio del progetto.
+Normalmente sarà scelto \tb{un gruppo di requisiti} utilizzando, in modo combinato, alcune tecniche di votazione, per esempio:
+\begin{center}
+    \includegraphics[width = 0.75\textwidth]{Images/47.png}
+\end{center}
+\subsection{Riassunto sull'elaborazione}
+Rivediamo quindi cosa \tb{non è previsto} da una fase di elaborazione di un processo di sviluppo iterativo: non si è capita la fase di elaborazione se:
+\begin{itemize}
+    \item Ha una durata \tb{superiore ad alcuni mesi} per la maggior parte dei progetti
+    \item Ha una \tb{sola iterazione}, con rare eccezioni per problemi di chiara comprensione
+    \item La maggior parte dei requisiti sono stati definiti \tb{prima dell'elaborazione}
+    \item Le \tb{fondamenta dell'architettura} e gli \tb{elementi rischiosi} non vengono affrontati
+    \item Non produce una \tb{architettura eseguibile}; il codice non è di qualità produzione
+    \item È considerata una \tb{fase di analisid dei requisiti} che precede una fase di implementazione
+    \item Prova a fare una progettazione completa prima dell'implementazione
+    \item \tb{Feedback} e \tb{adattamenti minimi}; gli utenti non sono coinvolti in modo unico
+    \item Non c'è \tb{test precoce} e realistico
+    \item È considerata una fase in cui vengono prodotti \tb{prototipi per mostrare le idee} e non la \tb{baseline dell'architettura eseguibile}
+    \item Non ci sono \tb{vari e brevi workshop dei requisiti}, che adattano e raffinano i requisiti basandosi sui \tb{feedback} delle iterazioni precedenti e corrente.
+\end{itemize}
+\subsection{Verso l'analisi ad oggetti}
 
 \end{document}
