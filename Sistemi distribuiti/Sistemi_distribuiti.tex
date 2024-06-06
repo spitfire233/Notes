@@ -425,7 +425,7 @@ Le applicazioni su \textbf{TCP/IP}:
     \item Gli stream scambiati possono essere \textbf{segmentati in messaggi} (\textbf{politica}) definiti da un \textbf{protocollo condiviso}
 \end{itemize}
 \begin{center}
-    \includegraphics[width = 0.50\textwidth]{Images/20.PNG}
+    \includegraphics[width = 0.50\textwidth]{Images/20.png}
 \end{center}
 Nell'esempio sopra, il file \textbf{header.h} definisce il protocollo usato \textbf{sia dal client che dal server}.
 \section{Stream-Oriented Communication}
@@ -830,20 +830,20 @@ Gli approcci possibili a questo "modello" di programmazione possono essere:
 \subsection{Concorrenza e Parallelismo}
 Possiamo quindi definire la \textbf{concorrenza} come la capacità di \textbf{far eseguire più attività} (processi, thread) \textbf{nel tempo}. Il \textbf{parallelismo} è invece la capacità di \textbf{poter eseguire simultaneamente più attività}. Infatti, un'applicazione \textbf{concorrente ma non parallelizzata} avrebbe, per esempio, questa "coda" di esecuzione:
 \begin{center}
-    \includegraphics[width = 0.80\textwidth]{Images/45.PNG}
+    \includegraphics[width = 0.80\textwidth]{Images/45.png}
 \end{center}
 mentre un'applicazione \textbf{concorrente e parallelizzata} avrebbe, per esempio, questa "coda" di esecuzione:
 \begin{center}
-    \includegraphics[width = 0.60\textwidth]{Images/46.PNG}
+    \includegraphics[width = 0.60\textwidth]{Images/46.png}
 \end{center}
 \subsubsection{Parallelismo dei dati e delle attività}
 Il \textbf{parallelismo dei dati} è l'attività di diversi \textbf{core} che eseguono \textbf{la stessa mansione} (quindi eseguono in parallelo attività \textbf{uguali} ma in maniera distinta) operando su \textbf{sottoinsiemi diversi di dati}.
 \begin{center}
-    \includegraphics[width = 0.60\textwidth]{Images/47.PNG}
+    \includegraphics[width = 0.60\textwidth]{Images/47.png}
 \end{center}
 Il \textbf{parallelismo delle attività} invece è quando \textbf{diversi core} svolgono \textbf{attività diverse} in parallelo, operando su \textbf{dati comuni}.
 \begin{center}
-    \includegraphics[width = 0.60\textwidth]{Images/48.PNG}
+    \includegraphics[width = 0.60\textwidth]{Images/48.png}
 \end{center}
 Questa distinzione tuttavia non deve far pensare che questi due scenari siano \textbf{mutualmente esclusivi}: scenari ibridi sono \textbf{comuni}.
 
@@ -856,12 +856,12 @@ Facciamo un esempio: supponiamo che la un'applicazione data sia per il 75\% para
     \item Per $N = 4$ abbiamo un'incremento fino a 2,24 volte più veloce di single-core
 \end{itemize}
 \begin{center}
-    \includegraphics[width = 0.60\textwidth]{Images/49.PNG}
+    \includegraphics[width = 0.60\textwidth]{Images/49.png}
 \end{center}
 \subsection{Programmazione concorrente}
 Con \textbf{programmazione concorrente} si indica la pratica di implementare dei programmi che \textbf{contengono più flussi di esecuzione} (processi, thread).
 \begin{center}
-    \includegraphics[width = 0.80\textwidth]{Images/50.PNG}
+    \includegraphics[width = 0.80\textwidth]{Images/50.png}
 \end{center}
 Perché è utile creare programmi concorrenti?
 \begin{itemize}
@@ -1253,7 +1253,7 @@ In questo modello, i thread vengono \textbf{messi progressivamente in attesa} fi
     \item Aggiornamento del \textbf{contatore atomico}
 \end{itemize}
 \begin{center}
-    \includegraphics[width = 0.60\textwidth]{Images/82.PNG}
+    \includegraphics[width = 0.60\textwidth]{Images/82.png}
 \end{center}
 \subsection{Problematiche di sincronizzazione: Race Condition}
 Nei programmi concorrenti, molti problemi sono causati dalle \textbf{corse critiche} (Race condition), cioè tutte quelle situazioni in cui thread diversi \textbf{operano su una risorsa comune} ed il cui risultato viene a dipendere \textbf{dall'ordine} in cui i thread eseguono. Questo problema avviene a causa della \textbf{competizione per l'accesso ad una risorsa condivisa}, come una variabile in memoria. Il problema è causato dal fatto che certe azioni di un thread, come la lettura/scrittura, \textbf{non sono atomiche} e quindi sono \textbf{interrompibili dallo scheduler}. Un aggiornamento incorretto di una risorsa a causa di una combinazione \textbf{aleatoria} di letture e scritture viene detto \textbf{interferenza}. Per evitare questo problema, esistono diverse soluzioni:
@@ -1308,7 +1308,7 @@ Quando un metodo synchronized viene invocato:
 \end{itemize}
 Possiamo quindi rivedere il diagramma di stato dei thread:
 \begin{center}
-    \includegraphics[width = 0.70\textwidth]{Images/83.PNG}
+    \includegraphics[width = 0.70\textwidth]{Images/83.png}
 \end{center}
 La parola chiave \textbf{synchronized} tuttavia implica certe conseguenze:
 \begin{itemize}
@@ -1332,7 +1332,7 @@ La specifica synchronized \textbf{non fa propriamente parte della firma di un me
 \end{enumerate}
 \subsection{Monitor}
 \begin{center}
-    \includegraphics[width = 0.70\textwidth]{Images/84.PNG}
+    \includegraphics[width = 0.70\textwidth]{Images/84.png}
 \end{center}
 Un \textbf{monitor} è una primitiva a più alto livello rispetto a \textbf{lock e semafori}. Un monitor è un tipo di dati astratto, le cui variabili interne sono accessibili solo da un insieme di procedure \textbf{esposte dal monitor}. Solo un processo/thread alla volta può essere attivo su un monitor (mutua esclusione).
 \subsubsection{Variabili condizione}
@@ -1351,7 +1351,7 @@ IL concetto di monitor permette al programmatore di:
 Se la gestione del lock implicito dato dalla keyword \textbf{synchronized} è trasparente al programmatore, la gestione dei \textbf{meccanismi di accesso condizionato ad una risorsa}, che usi metodi \textbf{wait, notify/notifyAll}, è \textbf{carico del programmatore}.
 \subsection{Problema del produttore-consumatore}
 \begin{center}
-    \includegraphics[width = 0.60\textwidth]{Images/85.PNG}
+    \includegraphics[width = 0.60\textwidth]{Images/85.png}
 \end{center}
 Supponiamo di avere una risorsa condivisa tra un \textbf{produttore} e un \textbf{consumatore} formata da alcuni stati interni significativi, come un \textbf{buffer}. Consideriamo i seguenti vincoli
 \begin{itemize}
@@ -1385,11 +1385,11 @@ Dobbiamo quindi avere delle \textbf{primitive} per \textbf{attendere il verifica
 \end{itemize}
 Rivediamo quindi il diagramma degli stati di un thread aggiungendo wait() e notify()/notifyAll():
 \begin{center}
-    \includegraphics[width = 0.70\textwidth]{Images/87.PNG}
+    \includegraphics[width = 0.70\textwidth]{Images/87.png}
 \end{center}
 Quando un thread va in attesa (\textbf{wait}) su un oggetto, lo scheduler lo sposta in una coda d'attesa \textbf{dedicata a quell'oggetto} e rilascia il lock del thread sul quell'oggetto. Quando un thread viene svegliato (\textbf{mediante notify()/notifyAll()}, lo scheduler lo sposta nella \textbf{Ready list}.
 \begin{center}
-    \includegraphics[width = 7.50cm]{Images/86.PNG}
+    \includegraphics[width = 7.50cm]{Images/86.png}
 \end{center}
 Facciamo delle ultime considerazioni:
 \begin{itemize}
@@ -1407,7 +1407,7 @@ In ambienti multi-threaded, dove diversi thread operano su una singola risorsa, 
 \end{itemize}
 \subsection{Problema della visibilità}
 \begin{center}
-    \includegraphics[width = 0.60\textwidth]{Images/88.PNG}
+    \includegraphics[width = 0.60\textwidth]{Images/88.png}
 \end{center}
 In caso di accesso ad una risorsa condivisa, bisogna garantire due condizioni:
 \begin{itemize}
@@ -1469,13 +1469,13 @@ I processori moderni offrono istruzioni (di \textbf{collision detection}) in sup
 \end{itemize}
 Variante è l'operazione \textbf{compare-and-set}, che restituisce \textbf{true} se è avvenuto l'aggiornamento. Visualizziamo il procedimento:
 \begin{center}
-    \includegraphics[width = 0.90\textwidth]{Images/89.PNG}
+    \includegraphics[width = 0.90\textwidth]{Images/89.png}
 \end{center}
 \begin{center}
-    \includegraphics[width = 0.90\textwidth]{Images/90.PNG}
+    \includegraphics[width = 0.90\textwidth]{Images/90.png}
 \end{center}
 \begin{center}
-    \includegraphics[width = 0.90\textwidth]{Images/91.PNG}
+    \includegraphics[width = 0.90\textwidth]{Images/91.png}
 \end{center}
 \textbf{NOTA}: CAS può (remotamente) portare a \textbf{problemi di starvation}: un thread con meccanismo CAS può \textbf{non accedere mai alla risorsa}
 \subsection{Classi atomiche in Java}
@@ -1486,7 +1486,7 @@ La libreria contiene \textbf{12 classi contenitori} per variabili, vettori e rif
 \end{itemize}
 Le variabili atomiche sono state spesso usate per implementare gli algoritmi di \textbf{java.util.concurrent}. Come esempio, presentiamo la tabella (di alcuni) dei metodi per la classe \textbf{AtomiInteger}
 \begin{center}
-    \includegraphics[width = 1.10\textwidth]{Images/92.PNG}
+    \includegraphics[width = 1.10\textwidth]{Images/92.png}
 \end{center}
 Alcune classi atomiche sono
 \begin{itemize}
@@ -1499,7 +1499,7 @@ Alcune classi atomiche sono
     \item \textbf{AtomicReferenceArray}
 \end{itemize}
 \begin{center}
-    \includegraphics[width = 0.90\textwidth]{Images/93.PNG}
+    \includegraphics[width = 0.90\textwidth]{Images/93.png}
 \end{center}
 \subsection{Aggiornamento di oggetti complessi}
 Immaginiamo di voler mantenere una \textbf{caratteristica invariante} tra due campi:
@@ -1509,36 +1509,36 @@ Immaginiamo di voler mantenere una \textbf{caratteristica invariante} tra due ca
 \end{itemize}
 Facciamo un esempio: Realizziamo una classe che rappresenti un intervallo tra 2 numeri interi $l, u$. Siano quindi $l, u$ t.c. l'intervallo rappresentato dalla classe sia $[l,u]$; l'invariante che vogliamo mantenere è quindi che $l \leq u$
 \begin{center}
-    \includegraphics[width = 1\textwidth]{Images/94.PNG}
+    \includegraphics[width = 1\textwidth]{Images/94.png}
 \end{center}
 Questa invariante \textbf{sopravvive im ambiente multithreaded}? Immaginiamo due thread, uno che esegue \textbf{setLower} e uno che \textbf{esegue setUpper}: entrambi possono avere successo e \textbf{invalidare l'invariante}. Proviamo quindi ad implementare una strategia di aggiornamento tramite \textbf{CAS e Optimistic Retrying}. Per farlo possiamo usare delle \textbf{helper classes} in cui salvare entrambi i campi. Possiamo usare \newline \textbf{AtomicReference<T>} per verificare \textbf{l'aggiornamento dell'oggetto} in questione ed usare \textbf{CAS}. Visualizziamo il processo:
 \begin{center}
-    \includegraphics[width = 0.60\textwidth]{Images/95.PNG}
+    \includegraphics[width = 0.60\textwidth]{Images/95.png}
 \end{center}
 \begin{center}
-    \includegraphics[width = 1\textwidth]{Images/96.PNG}
+    \includegraphics[width = 1\textwidth]{Images/96.png}
 \end{center}
 \begin{center}
-    \includegraphics[width = 1\textwidth]{Images/97.PNG}
-\end{center}
-\begin{center}
-    \hfill
-    \includegraphics[width = 0.80\textwidth]{Images/98.PNG}
+    \includegraphics[width = 1\textwidth]{Images/97.png}
 \end{center}
 \begin{center}
     \hfill
-    \includegraphics[width = 0.80\textwidth]{Images/99.PNG}
+    \includegraphics[width = 0.80\textwidth]{Images/98.png}
 \end{center}
 \begin{center}
     \hfill
-    \includegraphics[width = 0.80\textwidth]{Images/100.PNG}
+    \includegraphics[width = 0.80\textwidth]{Images/99.png}
 \end{center}
 \begin{center}
     \hfill
-    \includegraphics[width = 0.80\textwidth]{Images/101.PNG}
+    \includegraphics[width = 0.80\textwidth]{Images/100.png}
 \end{center}
 \begin{center}
-    \includegraphics[width = 0.60\textwidth]{Images/102.PNG}
+    \hfill
+    \includegraphics[width = 0.80\textwidth]{Images/101.png}
+\end{center}
+\begin{center}
+    \includegraphics[width = 0.60\textwidth]{Images/102.png}
 \end{center}
 \subsection{Riassunto}
 Quindi le variabili atomiche sono:
@@ -1549,7 +1549,7 @@ Quindi le variabili atomiche sono:
 \end{itemize}
 Tuttavia la gestione della contesa \textbf{è limitata alla singola variabile}; inoltre le variabili atomiche \textbf{non offrono supporto per sequenze atomiche del tipo check-then-act}:
 \begin{center}
-    \includegraphics[width = 0.70\textwidth]{Images/103.PNG}
+    \includegraphics[width = 0.70\textwidth]{Images/103.png}
 \end{center}
 \section{Problematiche di Liveness}
 Iniziamo distinguendo due concetti:
@@ -1560,7 +1560,7 @@ Iniziamo distinguendo due concetti:
 Nella programmazione concorrente, per \textbf{liveness} si intende il fatto che \textbf{un programma sia sempre in grado di progredire correttamente}. Questa proprietà \textbf{non è garantita} dal fatto che le componenti siano attive oppure che accedano alle sezioni critiche di un programma in maniera mutualmente esclusiva. La proprietà di liveness è quindi \textbf{desiderabile}, tuttavia bisogna specificare \textbf{quali sono i problemi che non si vuole che si verifichino}.
 \subsection{Deadlock}
 \begin{center}
-    \includegraphics[width = 0.50\textwidth]{Images/104.PNG}
+    \includegraphics[width = 0.50\textwidth]{Images/104.png}
 \end{center}
 Quando ad un processo viene garantito l'accesso esclusivo (per esempio in \textbf{mutua esclusione}) ad una risorsa, possono crearsi \textbf{delle situazioni di stallo} (\textbf{deadlock}). In programmazione concorrente, la situazione di \textbf{deadlock} si verifica quando \textbf{ogni membro} di un gruppo di agenti (nel nostro caso thread) \textbf{è in attesa} che qualche altro agente \textbf{rilasci il lock su una risorsa} per poter continuare la propria elaborazione. In pratica, si tratta di un \textbf{attesa circolare che non terminerà mai} poiché nessuno potrà \textbf{generare l'evento di sblocco}.
 Perché un deadlock si verifichi, è necessario che \textbf{tutte le seguenti condizioni necessarie siano verificate}; esse sono generalmente espresse in forma di \textbf{risorse assegnate ad un thread}:
@@ -1605,7 +1605,7 @@ Immaginiamo che i filosofi abbiano il seguente comportamento:
     \item Torna al punto 1
 \end{enumerate}
 \begin{center}
-    \includegraphics[width = 0.50\textwidth]{Images/105.PNG}
+    \includegraphics[width = 0.50\textwidth]{Images/105.png}
 \end{center}
 La seguente sequenza di azioni è \textbf{possibile}, partendo da uno stato in cui tutti i filosofi sono in uno stato iniziale e tutte le forchette sono sul tavolo:
 \begin{enumerate}
@@ -1617,14 +1617,14 @@ La seguente sequenza di azioni è \textbf{possibile}, partendo da uno stato in c
 \end{enumerate}
 A questo punto abbiamo \textbf{raggiunto un deadlock}. Come possiamo risolvere il problema? Cominciamo a modellarlo:
 \begin{center}
-    \includegraphics[width = 0.80\textwidth]{Images/106.PNG}
+    \includegraphics[width = 0.80\textwidth]{Images/106.png}
 \end{center}
 \begin{center}
-    \includegraphics[width = 0.80\textwidth]{Images/107.PNG}
+    \includegraphics[width = 0.80\textwidth]{Images/107.png}
 \end{center}
 Costruiamo anche uno \textbf{state diagram} per la forchetta:
 \begin{center}
-    \includegraphics[width = 0.80\textwidth]{Images/108.PNG}
+    \includegraphics[width = 0.80\textwidth]{Images/108.png}
 \end{center}
 Presentiamo ora dei modi per \textbf{risolvere il problema}:
 \begin{itemize}
@@ -1659,7 +1659,7 @@ La soluzione proposta non è "\textbf{giusta}" (fair) perché in caso ci sia uno
 \section{Message-oriented communication}
 Il web supporta la comunicazione tra client e server tramite \textbf{HTTP}:
 \begin{center}
-    \includegraphics[width = 0.45\textwidth]{Images/112.PNG}
+    \includegraphics[width = 0.45\textwidth]{Images/112.png}
 \end{center}
 Il client, o \textbf{user-agent}, è un \textbf{browser}; mentre il server è un \textbf{HTTP Server} (o \textbf{Web-server}). In questo modello, il client non richiede oggetti ma \textbf{risorse web}!
 \subsection{Browser Web}
@@ -2323,7 +2323,101 @@ Tra le novità di HTML5 troviamo:
         \item Widget per (il supporto per questi widget \textbf{non è uniforme tra tutti i browser}, cioè alcuni ):
         \begin{itemize}
             \item \textbf{input search}: <input type=“search” name=“search” />
+            \item \textbf{email}
+            \item \textbf{URL}
+            \item \textbf{numeri di telefono}
+            \item \textbf{audio}
+            \item \textbf{video}
+            \item \textbf{canvas}
+            \item ecc...
         \end{itemize}
+        \item Nuove \textbf{API JavaScript} per la manipolazione delle pagine (Offline data, drag \& drop, web storage)
     \end{itemize}
 \end{itemize}
+In particolare, queste novità permetteno di avere una \textbf{notazione più concisa e che richiede meno definizioni di classi}; ciò risulta in \textbf{gerarchie di contenuti più leggibili e analizzabili in fase di progettazione, manutenzione e debug}.
+\subsubsection{Semantica di HTML5}
+Parlaremo di \textbf{web semantico} più avanti; in questo caso per \textbf{semantica di HTML5} si intende un utilizzo \textbf{sensato e comprensibile dei tag HTML}.
+Esempi di usi sensati sono:
+\begin{itemize}
+    \item <p> per \textbf{definire un paragrafo}
+    \item <ul> per \textbf{una lista puntata di elementi}
+    \item <address> per \textbf{indicare informazioni relative ad un indirizzo}
+    \item <div> e <span> per \textbf{contenere informazioni che si vuole delimitare per qualche motivo}
+\end{itemize}
+Esempi invece di usi \textbf{NON SENSATI} sono:
+\begin{itemize}
+    \item <p> per andare a capo
+    \item <blockquote> per gestire l'indentazione
+    \item <h1> per ingrandire il testo
+\end{itemize}
+Una pagina HTML \textbf{non dovrebbe contenere informazioni di presentazione}, riservata ai \textbf{CSS}, quindi:
+\begin{itemize}
+    \item \textbf{Nessun tag} <font>, <b>, <i>
+    \item Nessun utilizzo di \textbf{stili in-line}
+\end{itemize}
+\subsubsection{Looking forward: JavaScript}
+HTML  e CSS ci forniscono il necessario per definire \textbf{contenuti} (web), la loro \textbf{struttura} (comprese le regole di accesso e di modifica) e lo stile grafico.
+Manca quindi il modo di \textbf{definire e governare la dinamicità delle pagina} cioè il modo della pagina di cambiare \textbf{in modo reattivo} al comportamento dell'utente o anche in maniera \textbf{proattiva}, senza
+necessariamente attendere l'input dell'utente. \textbf{JavaScript} è il linguaggio di \textbf{scripting} che svolgeq questa funzione.
+\subsection{JavaScript Object Notation: JSON}
+JavaScript Object Notation (JSON) è \textbf{formato per lo scambio di dati} leggero e facile da \textbf{interpretare e scrivere anche per un essere umano}.
+Esso è basato su un \textbf{sottoinsieme} dello standard ECMA-262 (3° edizione - Dicembre 1999) del linguaggio di JavaScript.
+È necessario sottolineare che JSON \textbf{NON È}:
+\begin{itemize}
+    \item Un \textbf{formato di documento}
+    \item Un \textbf{linguaggio di markup}
+    \item Un \textbf{formato generale di serializzazione}: non sono quindi presenti in JSON:
+    \begin{itemize}
+        \item Nessuna struttura ciclica/ricorrente
+        \item Nessuna struttura invisibile
+        \item Nessuna funzione
+    \end{itemize}
+\end{itemize}
+JSON è \textbf{un formato testuale completamente indipendente dal linguaggio}. Usa convenzioni che sono \textbf{familiari ai linguaggi C-like}.
+Il formato JSON è costruito su \textbf{due strutture dati universali}:
+\begin{itemize}
+    \item Una \textbf{collezione di coppie nome/valore}. In molti linguaggi ciò è implementato come un oggetto, record, struct, dizionario, hash table, keyed lists o array associativi.
+    \item Una \textbf{lista ordinata di valori}. In molti linguaggi ciò è realizzati come un array, vector, lista o sequenza
+\end{itemize}
+Virtualmente, \textbf{ogni linguaggio di programmazione moderno} supporta queste strutture. \newline
+JSON ha le seguenti \textbf{regole sintattiche}:
+\begin{itemize}
+    \item Il minimo dato rappresentabile è \textbf{una coppia nome/valore}
+    \item I dati sono \textbf{separati da virgole}
+    \item Le \textbf{parentesi graffe} contengono \textbf{oggetti} (\{\})
+    \item Le \textbf{parentesi quadrate} contengono \textbf{array} (\[\])
+\end{itemize}
+I \textbf{tipi di base} di JSON sono:
+\begin{itemize}
+    \item \textbf{Number}: interi, reali o a virgola mobile
+    \item \textbf{String}: con doppia apice, sequenze UNICODE con backslashes
+    \item \textbf{Boolean}: vero e falso
+    \item \textbf{Array}: sequenze ordinate di valori \textbf{separati da virgole} racchiusi tra parentesi quadrate
+    \item \textbf{Object}: Collezione di coppie "chiave": valore racchiuse tra parentesi graffe
+    \item \textbf{Null}
+\end{itemize}
+In JSON bisogna utilizzare degli \textbf{array} quando i "nomi" nelle coppie "key: value" sono \textbf{degli interi sequenziali}.
+Bisogna utilizzare invece degli \textbf{oggetti} quando i "nomi" delle coppie "key: value" sono \textbf{nomi arbitrari}.
+Altre particolarità di JSON sono:
+\begin{itemize}
+    \item \textbf{MIME Media Type}: Un file JSON è denotato, in una response HTTP, come \textbf{application/json}.
+    \item La codifica di caratteri utilizzata è \textbf{UTF-8}, tuttavia anche UTF-16 e UTF-32 sono permesse. Le codifiche di un file JSON sono comunque \textbf{strettamente UNICODE}
+    \item JSON è \textbf{versionless}: JSON non ha \textbf{numeri di revisione} e nessuna revisione alla grammatica di JSON è prevista; rendendolo \textbf{molto stabile}
+\end{itemize}
+\subsubsection{Come usare JSON}
+Un \textbf{decoder} JSON:
+\begin{itemize}
+    \item \textbf{deve} accettare \textbf{tutti i testi JSON ben formati}
+    \item può accettare anche \textbf{testo non JSON}
+\end{itemize}
+Un \textbf{encoder} JSON deve invece \textbf{generare un testo JSON ben formato}. Una massima da seguire è quindi:
+\begin{center}
+    "Be conservative in what you do, be liberal in what you accept"
+\end{center}
+Superset di JSON sono:
+\begin{itemize}
+    \item \textbf{YAML Ain't Markup Language}(YAML): YAML è sia un \textbf{encoder} che un \textbf{decoder} di JSON
+    \item \textbf{JavaScript}: Un compilatore JavaScript è un \textbf{decodificatore di JSON}
+\end{itemize}
+\subsubsection{Oggetti JSON}
 \end{document}
