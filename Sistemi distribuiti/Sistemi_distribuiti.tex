@@ -2499,6 +2499,448 @@ Le principali caratteristiche del protocollo di comunicazione per un applicazion
     \end{itemize}
 \end{itemize}
 Un applicazione web \textbf{adotta il protocollo HTTP} per la comunicazione tra client e server.
-
-
+\subsection{Dal web alle applicazioni web}
+Il web supporta le interazioni tra client e server tramite il \textbf{protocollo HTTP}. Dalla sua creazione, il web si è presto evoluto andando \textbf{al di là del semplice trasferimento di pagine HTML}.
+È diventato uno \textbf{strumento per fornire accesso ad applicazioni remote}. Per eseguire un'applicazione web, il \textbf{web server} utilizza un \textbf{application server}; esso esegue applicazioni \textbf{di terze parti rispetto al client e al web server}.
+Un application server si caratterizza dal \textbf{protocollo di comunicazione con il web server}; l'interazione con il client invece avviene sempre tramite protocollo HTTP.
+\begin{center}
+    \includegraphics[width = 0.70\textwidth]{Images/175.png}
+\end{center}
+\subsection{Tecnologia server-side}
+La computazione avviene (in parte) \textbf{lato server} e può avvenire tramite l'esecuzione di \textbf{programmi compilati} o di \textbf{script interpretati}.
+L'application server fornisce un \textbf{ambiente per la gestione automatizzata del ciclo di vita di tali programmi}:
+\begin{itemize}
+    \item Nel caso di \textbf{programmi compilati}, il web server si limita ad invocare, su richiesta del client, \textbf{un eseguibile}; il quale può essere scritto in un qualsiasi linguaggio capace di \textbf{supportare l'interazione con il web server}.
+    \item Nel caso di \textbf{esecuzione di script}, il web server ha al suo interno un \textbf{motore} (\textbf{engine}) in grado di \textbf{interpretare il linguaggio di scripting usato}. Utilizzando script si \textbf{perde in velocità di esecuzione}, ma si \textbf{guadagna in facilità di scrittura dei programmi}.
+\end{itemize}
+\subsubsection{Architettura di un'applicazione web compilata}
+In un applicazione web compilata (e anche interpretata), si fa utilizzo di \textbf{URL} per definire \textbf{un naming globale delle risorse disponibili} (quindi, come visto sopra, la posizione della risorsa e il modo (protocollo) in cui ci si accede).
+Il protocollo di comunicazione utilizzato tra il client e il server web è il \textbf{protocollo HTTP}, il quale permette di \textbf{invocare i programmi sul server come fossero risorse}.
+Il server, inoltre deve implementare un particolare protocollo chiamato \textbf{Common Gateway Interface} (CGI), che permette al server di:
+\begin{itemize}
+    \item \textbf{Attivare} un programma (creare un processo)
+    \item \textbf{Passargli le richieste} e i \textbf{parametri} provenienti dal client
+    \item \textbf{Recuperare} la risposta
+\end{itemize}
+Il client deve quindi \textbf{utilizzare un API} per \textbf{formattare secondo CGI} i messaggi che deve inviare al server.
+Quando un client richiede al server un \textbf{URL corrispondente a un documento HTML}, il server restituisce il documento come un file di testo. Ciò significa che il documento \textbf{viene generato una volta per tutte e poi viene inviato al client senza ulteriori elaborazioni}.
+Quando l'URL richiesto \textbf{corrisponde a un'applicazione CGI}, il server \textbf{esegue il programma in tempo reale}, generando dinamicamente la risposta per l'utente.
+\begin{center}
+    \includegraphics[width = 0.65\textwidth]{Images/176.png}
+\end{center}
+\subsubsection{Architettura di un'applicazione web interpretata}
+\begin{center}
+    \includegraphics[width = 0.65\textwidth]{Images/177.png}
+\end{center}
+Un'applicazione web interpretata implementa tutto ciò che implementa un'applicazione web compilata.
+La differenza sostanziale è che il \textbf{protocollo CGI viene gestito dall'interprete per il linguaggio usato}; le applicazioni quindi non devono più gestire direttamente il protocollo.
+I \textbf{vantaggi} sono, ad esempio:
+\begin{itemize}
+    \item Il programmatore \textbf{dovrà programmare solo la logica dell'applicazione}
+    \item Il modello delle applicazioni \textbf{sarà conforme al modello del linguaggio utilizzato}
+    \item Le applicazioni risultano più \textbf{semplici}, di più facile \textbf{portabilità} e di più facile \textbf{manutenibilità}
+\end{itemize}
+Lo \textbf{svantaggio} di questo tipo di approccio è che il programmatore ha \textbf{meno libertà quando lavora con script}: esso infatti \textbf{può solo usare i linguaggi parlati dall'application server}
+\subsection{Client-side: HTML}
+Dal punto di vista del client (e del browser), si possono utilizzare delle "funzionalità" di HTMl per \textbf{realizzare l'invio di richieste}.
+\subsubsection{Richieste basate su link}
+Un \textbf{link} in un documento HTML può essere usato per \textbf{puntare ad una risorsa remota}:
+\begin{center}
+    \includegraphics[width = 1\textwidth]{Images/178.png}
+\end{center}
+Il browser invia una richiesta del tipo:
+\begin{center}
+    \includegraphics[width = 0.75\textwidth]{Images/179.png}
+\end{center}
+\newpage
+\subsubsection{Richieste per mezzo di form}
+Un \textbf{FORM HTML} può essere usato per mandare \textbf{dati al server} (chiedendoli in input all'utente):
+\begin{center}
+    \includegraphics[width = 1\textwidth]{Images/180.png}
+\end{center}
+Il browser invia una richiesta del tipo:
+\begin{center}
+    \includegraphics[width = 0.95\textwidth]{Images/181.png}
+\end{center}
+I dati possono essere inviati con un FORM anche \textbf{usando il metodo GET}:
+\begin{center}
+    \includegraphics[width = 0.95\textwidth]{Images/182.png}
+\end{center}
+Il browser invia una richiesta del tipo:
+\begin{center}
+    \includegraphics[width = 0.95\textwidth]{Images/183.png}
+\end{center}
+In questo caso si sta quindi \textbf{chiedendo un dato al server}.
+\subsection{Server-side: Java Servlet}
+Le \textbf{Java Servlet} sono piccole applicazioni Java \textbf{residenti sull'application server} (Esempio di application server può essere \textbf{Apache Tomcat}).
+Una servlet è un \textbf{componente} gestito in modo \textbf{automatico} da un \textbf{container} (detto anche \textbf{engine}).
+Una Java Servlet \textbf{deve} implementare un'interfaccia prestabilita che definisce uno \textbf{specifico set di metodi}.
+\begin{itemize}
+    \item \textbf{Vantaggi}: semplicità e standardizzazione
+    \item \textbf{Svantaggi}: rigidità del modello
+\end{itemize}
+Il \textbf{container} controlla le servlet (le attiva/disattiva) \textbf{in base alle richieste dei client}.
+Questo è possibile in maniera \textbf{automatica} perché le \textbf{le servlet implementano un'interfaccia nota al server}.
+Le servlet sono quindi \textbf{oggetti Java residenti in memoria}:
+\begin{itemize}
+    \item Il \textbf{codice dei metodi} delle servlet viene eseguito da \textbf{thread creati e gestiti dall'application server}
+    \item Una servlet può \textbf{interagire con altre servlet}
+\end{itemize}
+\subsubsection{Stateless vs stateful}
+HTTP non \textbf{prevede una persistenza della comunicazione} (comunicazione \textbf{stateless}):
+\begin{itemize}
+    \item Non si possono mantenere \textbf{informazioni tra un messaggio e i successivi}
+    \item Non si possono \textbf{identificare i client}
+\end{itemize}
+Mantenere quindi lo stato della conversazione \textbf{è compito delle applicazioni}; questo può essere realizzato tramite:
+\begin{itemize}
+    \item \textbf{Cookies}: informazioni memorizzate a livello client. Permettono di gestire sessioni di lavoro
+    \item \textbf{HTTPSession}: Oggetto gestito \textbf{automaticamente dall'engine} (con Cookies o riscrittura dell'URL). Le servlet \textbf{possono accedervi per memorizzare informazioni sulla conversazione} 
+\end{itemize}
+\subsubsection{Interfaccia di una servlet}
+Ogni servlet implementa l'interfaccia \textbf{jakarta.servlet.Servlet}, con 5 metodi:
+\begin{itemize}
+    \item \textbf{void init(ServletConfig config)}: Inizializza la servlet, viene invocato \textbf{dopo la creazione della stessa}
+    \item \textbf{void destroy()}: Chiamata \textbf{quando la servlet termina} (es. per chiudere un file o una connessione ad un database)
+    \item \textbf{void service(ServletRequest request, ServletResponse response)}: Invoato per \textbf{gestire le richieste del client}
+    \item \textbf{ServletConfig getServletConfig()}: Restituisce i \textbf{parametri di inizializzazione} e il \textbf{ServletContext} che da accesso all'ambiente
+    \item \textbf{String getServletInfo()}: Restituisce informazioni sulla servlet (es. autore, versione, ecc...)
+\end{itemize}
+\subsubsection{Classi astratte}
+Le interfacce sopra elencate \textbf{rappresentano solo la firma dei metodi} che, per essere utilizzabili, necessitano di un'\textbf{implementazione in una classe}.
+Sono presenti \textbf{due classi astratte}, cioè che \textbf{implementano i metodi dell'interfaccia in modo che non facciano nulla}:
+\begin{itemize}
+    \item \textbf{jakarta.servlet.GenericServlet}: Definisce \textbf{metodi indipendenti dal protocollo}
+    \item \textbf{jakarta.servlet.http.HTTPServlet}: Definisce \textbf{metodi per l'uso in ambiente web}
+\end{itemize}
+Questo semplifica l'implementazione delle servlet vere e proprie, in quanto basta \textbf{implementare} (ridefinendoli) solo i metodi che interessano.
+\subsubsection{La classe HTTPServlet}
+\begin{center}
+    \includegraphics[width = 0.55\textwidth]{Images/184.png}
+\end{center}
+La classe \textbf{HTTPServlet} implementa il metodo service() in modo da \textbf{invocare i metodi per servire le richieste dal web}
+Essa implementa e offre i seguenti:
+\begin{itemize}
+    \item \textbf{Metodi}: do\textbf{X}
+    \begin{itemize}
+        \item \textbf{X} è un \textbf{metodo HTTP} (doGet, doPost, ...)
+        \item \textbf{doX} è dedicato alle richieste di tipo X
+    \end{itemize}
+    \item \textbf{Parametri}:
+    \begin{itemize}
+        \item \textbf{HTTPServletRequest}
+        \item \textbf{HTTPServletResponse}
+    \end{itemize}
+    \item \textbf{Eccezioni}:
+    \begin{itemize}
+        \item \textbf{ServletException}
+        \item \textbf{IOException}
+    \end{itemize}
+\end{itemize}
+\subsubsection{Richieste e risposte}
+I metodi principali per manipolare le richieste sono:
+\begin{itemize}
+    \item \textbf{String getParameter(String name)}: Restituisce il valore del \textbf{query parameter} dato il nome (valore singolo)
+    \begin{center}
+        \includegraphics[width = 0.85\textwidth]{Images/185.png}
+    \end{center}
+    \item \textbf{Enumeration getParameterNames()}: Restituisce l'eneco dei \textbf{nomi degli argomenti}
+    \item \textbf{String[] getParametersValues(String name)}: Restituisce i valori dell'argomento name (valore multiplo)
+\end{itemize}
+I metodi principali per manipolare le risposte sono invece:
+\begin{itemize}
+    \item \textbf{void setContentType(String type)}: Specifica il tipo \textbf{MIME} della risposta per dire al browser \textbf{come visualizzarla} (es. text/html)
+    \item \textbf{ServletOutputStream getOutputStream()}: Restituisce lo \textbf{stream di byte per scrivere la risposta}
+    \item \textbf{PrintWriter getWriter()}: Restituisce lo \textbf{stream di caratteri} per scrivere la risposta
+\end{itemize}
+Altri metodi che citiamo sono:
+\begin{itemize}
+    \item \textbf{Cookie[] getCockies()}: Restituisce i cookies del server sul client
+    \item \textbf{void addCookie(Cookie cookie)}: Aggiunge un cookie \textbf{nell'header della risposta}
+    \item \textbf{HTTPSession getSession(boolean create)}: Una \textbf{HTTPSession} che identifica il client. Se \textbf{create = true} allora viene creata
+\end{itemize}
+È fondamentale notare che \textbf{una servlet non genera automaticamente una risposta come pagina HTML}. È quindi dovere del programmatore \textbf{costruire la risposta come pagina HTML} e ritornarla al client
+scrivendola nello stream dedicato alla comunicazione con esso.
+\subsubsection{Ciclo di vita di una servlet}
+Una servlet viene \textbf{creata dal container/engine}:
+\begin{itemize}
+    \item Quando \textbf{viene effettuata la prima chiamata ad essa}
+    \item La servelt viene \textbf{condivisa tra tutti i client connessi}
+    \item Ogni richiesta \textbf{genera un thread} che esegua la doXX appropriata alla richiesta
+\end{itemize}
+Il container/engine invoca inizialmente il \textbf{metodo init()} per inizializzare le specifiche.
+Una servlet viene invece \textbf{distrutta dall'engine all'occorrenza di due eventi}:
+\begin{itemize}
+    \item Quando \textbf{non ci sono thread in esecuzione su quella servlet}
+    \item Quando è \textbf{scaduto un timeout predefinito}
+\end{itemize}
+All'avvenire di uno di questi due eventi viene invocato il metodo \textbf{destroy()} per terminare correttamente la servlet.
+\begin{center}
+    \includegraphics[width = 0.45\textwidth]{Images/186.png}
+\end{center}
+\subsubsection{Servlet e Threads}
+\begin{center}
+    \includegraphics[width = 0.55\textwidth]{Images/187.png}
+\end{center}
+Dal punto di visto dello sviluppatore, ogni client \textbf{è thread che chiama la servlet tramite il metodo service(), doGet() o doPost()}.
+Ciò significa che, durante il ciclo di vita di una servelt, ci saranno \textbf{molti thread che fanno accesso a una singola istanza della servlet}.
+Poiché più richieste vengono servite dalla stessa servlet, questo vuol dir eche \textbf{bisogna fare attenzione a come la servlet implementa l'accesso alle sue risorse}.
+In questo modello spesso le risorse sono condivise \textbf{a livello di database}. Questa scelta implementativa ha diverse motivazioni:
+\begin{itemize}
+    \item \textbf{Minor uso di memoria}: un solo oggetto servlet
+    \item \textbf{Ridurre il costo di gestione}: per esempio i tempi di inizializzazione di molti oggetti che sarebbero spesso identici
+    \item \textbf{Abilita la persistenza in memoria} di risorse condivisibili tra diverse richieste (es. una connessione ad un DB).
+\end{itemize}
+\subsubsection{Terminazione}
+Il container e le richieste del client \textbf{devono sincronizzarsi sulla terminazione}. Alla scadenza del timeout infatti \textbf{potrebbero esserci ancora dei thread in esecuzione in service()}.
+Bisogna quindi:
+\begin{itemize}
+    \item Tener traccia dei \textbf{thread in esecuzione}
+    \item Progettare il metodo \textbf{destroy()} in modo da \textbf{notificare lo shutdown e attendere il completamente del metodo service}
+    \item Progettare i metodi lunghi in modo che \textbf{verifichino periodicamente se è in corso uno shutdown e comportarsi di conseguenza}
+\end{itemize}
+\subsubsection{Realizzazione di applicazioni con le servlet}
+Per realizzare applicazioni con le servlet si possono usare diversi strumenti aggiuntivi
+\begin{itemize}
+    \item \textbf{Servlets classiche}: uso dell'ereditarietà; supporta \textbf{tutti i metodi HTTP}
+    \item \textbf{Spring MVC}: Spring@MVC, dalla versione 2.5 gestisce \textbf{tutti i metodi HTTP}. Usa delle \textbf{annotazione per assegnare i metodi}
+    \begin{center}
+        \includegraphics[width = 0.75\textwidth]{Images/188.png}
+    \end{center}
+    \item \textbf{JAX-RS} (i.e. jersey framework): Framework \textbf{REST} basato su annotazioni:
+    \begin{center}
+        \includegraphics[width = 0.75\textwidth]{Images/189.png}
+    \end{center}
+\end{itemize}
+In particolare, riportiamo le seguenti \textbf{annotazioni di JAX-RS}:
+\begin{itemize}
+    \item \textbf{@PATH(your\_path)}: Imposta il percorso a "URL + /your\_path". L'URL di base è \textbf{basato sul nome dell'applicazione, sulla servlet e sul pattern degli URL definito nel file di configurazione web.xml}
+    \item \textbf{@POST}: Indica che il metodo seguente \textbf{risponderà a richieste HTTP POST}
+    \item \textbf{@GET}: Indica che il metodo seguente \textbf{risponderà a richieste HTTP GET}
+    \item \textbf{@PUT}: Indica che il metodo seguente \textbf{risponderà a richieste HTTP PUT}
+    \item \textbf{@DELETE}: Indica che il metodo seguente \textbf{risponderà a richieste HTTP DELETE}
+    \item \textbf{@Produces( MediaType.TEXT\_PLAIN [, more-types ] )}: Definisce di quale \textbf{tipo MIME} è la risposta di un metodo \textbf{annotato con @GET}.
+    \item \textbf{@Consumes( type [, more-types ] )}: Definisce quale \textbf{tipo MIME} è consumato dal metodo
+    \item \textbf{@PathParam}: È usato per \textbf{iniettare valori dall'URL nei parametri del metodo}.
+\end{itemize}
+\subsection{Java Server Pages (JSP)}
+Le \textbf{Java Server Pages} (JSP) è sono una tecnologia per la creazione di applicazioni web. Esse specificano l'interazione tra un contenitore/server di un insieme di \textbf{pagine}
+che presentano informazioni all'utente dette \textbf{viste}.
+Le pagine sono costituite da tag tradizionali (HTML, XML, WML, ...) e da \textbf{tag applicativi} che controllano la \textbf{generazione del contenuto} (effettuata lato server).
+JSP e Servlet hanno \textbf{un approccio duale l'uno con l'altra}:
+\begin{itemize}
+    \item \textbf{Servlet}: Il codice viene compilato e poi caricato
+    \item \textbf{JSP}: Il codice viene caricato e poi \textbf{compilato alla prima richiesta}
+\end{itemize}
+Rispetto alle servlet, tuttavia, le JSP \textbf{facilitano la separazione tra logica applicativa e presentazione}. Esse sono analoghe
+alla tecnologia di Microsoft \textbf{Active Server Page} (ASP); con alcune differenze:
+\begin{itemize}
+    \item Una JSP \textbf{chiama un programma Java eseguito sul web server}
+    \item Una ASP \textbf{contiene uno script VBScript o JScript}
+\end{itemize}
+Le JSP separano quindi \textbf{la parte dinamica delle pagine} dal template HTML statico; il codice JSP
+va incluso in tag delimitati da "<\%" e "\%>".
+\begin{center}
+    \includegraphics[width = 0.85\textwidth]{Images/190.png}
+\end{center}
+\newpage
+\noindent
+La pagina \textbf{viene convertita automaticamente in una servlet Java la prima volta che viene richiesta}
+\begin{center}
+    \includegraphics[width = 0.45\textwidth]{Images/191.png}
+\end{center}
+Un esempio di JSP è il seguente:
+\begin{center}
+    \includegraphics[width = 1.15\textwidth]{Images/192.png}
+\end{center}
+\subsubsection{Gli elementi di una JSP}
+Una JSP è formata da:
+\begin{itemize}
+    \item \textbf{Template text}: Le parti statiche della pagina HTML
+    \item \textbf{Commenti}: Racchiusi tra "<\%--" e "-->"
+    \item \textbf{Direttive}: Racchiuse tra "<\%@" e "\%>"; le direttive \textbf{non influenzano la gestione di una singola richiesta HTTP} ma influenzano le proprietà generali della JSP e come questa deve essere tradotta in una servlet
+    \item \textbf{Azioni}: Racchiuse tra "<jsp:XXX <attributes> >" e "</jsp:XXX>"; le azioni permettono di supportare diversi comportamenti della JSP. Essi \textbf{vengono processati ad ogni invocazione della pagina JSP} e permettono di trasferire il controllo \textbf{da una JSP all'altra}, di \textbf{interagire con i Java Data Beans} ecc...
+    \item \textbf{Elementi di scripting}: Sono \textbf{istruzioni nel linguaggio specificato nelle direttive} e sono di tre tipi:
+    \begin{itemize}
+        \item \textbf{Scriptlet}
+        \item \textbf{Declaration}
+        \item \textbf{Expression}
+    \end{itemize}
+\end{itemize}
+\subsubsection{Direttive}
+Vediamo alcune direttive:
+\begin{itemize}
+    \item \textbf{Page}: sono liste di \textbf{attributo/valore} e valgono per la pagina in cui sono inseriti
+    \begin{center}
+        \includegraphics[width = 0.70\textwidth]{Images/193.png}
+    \end{center}
+    \item \textbf{Include}: include in compilazione \textbf{pagine HTML o JSP}
+    \begin{center}
+        \includegraphics[width = 0.65\textwidth]{Images/194.png}
+    \end{center}
+    \item \textbf{Taglib}: Dichiara tag \textbf{definiti dall'utente} implementando opportune classi
+    \begin{center}
+        \includegraphics[width = 0.70\textwidth]{Images/195.png}
+    \end{center}
+\end{itemize}
+\subsubsection{Azioni}
+Vediamo alcune azioni:
+\begin{itemize}
+    \item \textbf{forward}: Determina l'invio della richiesta corrente, eventualmente aggiornata con ulteriori parametri, alla JSP indicata:
+    \begin{center}
+        \includegraphics[width = 0.70\textwidth]{Images/196.png}
+    \end{center}
+    \item \textbf{include}: Invia dinamicamente la richiesta ad una data URL e ne include il risultato
+    \begin{center}
+        \includegraphics[width = 0.65\textwidth]{Images/197.png}
+    \end{center}
+    \item \textbf{useBean}: localizza ed istanzia (se necessario) un \textbf{JavaBean} nel contesto specificato. Il contesto può essere \textbf{la pagina stessa, la richiesta, la sessione o l'applicazione}
+    \begin{center}
+        \includegraphics[width = 0.75\textwidth]{Images/198.png}
+    \end{center}
+\end{itemize}
+\subsubsection{Elementi di scripting}
+Vediamo alcuni elementi di scripting:
+\begin{itemize}
+    \item \textbf{Declaration}: variabili o metodi \textbf{statici} usati nella pagina
+    \begin{center}
+        \includegraphics[width = 0.50\textwidth]{Images/199.png}
+    \end{center}
+    \item \textbf{Expression}: Un'espressione nel linguaggio di scripting (Java) che viene \textbf{valutata al momento della richiesta} e sostituita al tag
+    \begin{center}
+        \includegraphics[width = 0.65\textwidth]{Images/200.png}
+    \end{center}
+    \item \textbf{Scriptlet}: Frammenti di codice che \textbf{controllano la generazione del codice HTML}, valutati alla richiesta. Tale codice \textbf{diverrà parte dei metodi doGet/doPost della servlet associata alla JSP}.
+    \begin{center}
+        \includegraphics[width = 0.65\textwidth]{Images/201.png}
+    \end{center}
+\end{itemize}
+Il linguaggio di scripting ha lo scopo di \textbf{interagire con gli oggetti Java e con le altre servlet} e di \textbf{gestire le eccezioni Java}.
+Può anche utilizzare oggetti \textbf{impliciti} (sono 9) che non devono essere creati:
+\begin{itemize}
+    \item \textbf{request}
+    \item \textbf{response}
+    \item \textbf{out}
+    \item \textbf{page}
+    \item \textbf{pageContext}
+    \item \textbf{session}
+    \item \textbf{application}
+    \item \textbf{config}
+    \item \textbf{exception}
+\end{itemize}
+\subsubsection{Scope degli oggetti}
+Gli oggetti in una JSP possono essere creati:
+\begin{itemize}
+    \item \textbf{implicitamente} usando le direttive JSP
+    \item \textbf{esplicitamente} tramite azioni
+    \item \textbf{direttamente} usano uno script (raro)
+\end{itemize}
+Gli oggetti hanno un'attributo che ne definisce lo \textbf{scope}:
+\begin{center}
+    \includegraphics[width = 0.80\textwidth]{Images/202.png}
+\end{center}
+\subsubsection{JavaBeans}
+Un \textbf{JavaBean} è una classe che \textbf{segue una specifica precisa}:
+\begin{itemize}
+    \item Deve avere un \textbf{costruttore senza parametri}
+    \item Dovrebbe avere campi (property) \textbf{privati}
+    \item I metodi di accesso ai campi \textbf{sono set/get/isXX} con XX = campo
+\end{itemize}
+Un esempio è il seguente:
+\begin{center}
+    \includegraphics[width = 0.60\textwidth]{Images/203.png}
+\end{center}
+\subsubsection{JSP e JavaBeans}
+Un JavaBean in una JSP può essere utilizzato \textbf{tramite un'azione}:
+\begin{itemize}
+    \item \textbf{Accesso (inizializzazione) ad un bean}:
+    \begin{center}
+        \includegraphics[width = 1\textwidth]{Images/204.png}
+    \end{center}
+    \item \textbf{Accesso alle proprietà}:
+    \begin{center}
+        \includegraphics[width = 1\textwidth]{Images/205.png}
+    \end{center}
+\end{itemize}
+L'attributo \textbf{scope} che determina la visibilità di un bean. Esso può avere valori:
+\begin{itemize}
+    \item \textbf{page}: è lo scope di default, viene messo in \textbf{pageContext} ed acceduto con \textbf{getAttribute}
+    \item \textbf{request}: viene messo in \textbf{ServletRequest} ed acceduto con \textbf{getAttribute}
+    \item \textbf{session e application}: se non esiste un bean con lo stesso ID, ne viene creato uno nuovo
+\end{itemize}
+L'attributo \textbf{type} permette di assegnare ad un bean una superclasse o un'interfaccia.
+L'attributo \textbf{beanName = "name"} permette di utilizzare il nome del bean, dovne "name" è \textbf{la classe o un file serializzato}
+\subsubsection{Sessioni}
+\begin{center}
+    \includegraphics[width = 0.70\textwidth]{Images/206.png}
+\end{center}
+Quando si accede ad un ogetto \textbf{HTTPSession} (session) si sta accedendo ad una \textbf{mappa chiave valore}.
+Si possono fare diversi esempi sulle modalità e le ragioni per le quali si vuole accedere ad un oggetto sessione:
+\begin{itemize}
+    \item \textbf{Memorizzazione}:
+    \begin{center}
+        \includegraphics[width = 0.70\textwidth]{Images/207.png}
+    \end{center}
+    \item \textbf{Recupero}:
+    \begin{center}
+        \includegraphics[width = 0.70\textwidth]{Images/208.png}
+    \end{center}
+    \item \textbf{Esclusione di una pagina dalla sessione}:
+    \begin{center}
+        \includegraphics[width = 0.50\textwidth]{Images/209.png}
+    \end{center}
+\end{itemize}
+\subsection{Pattern Model View Controller (MVC)}
+Il pattern \textbf{Model View Controller} (MVC) ha lo scopo di \textbf{separare}:
+\begin{itemize}
+    \item I \textbf{dati} e i \textbf{metodi principali} per la loro manipolazione (\textbf{Model})
+    \item La \textbf{presentazione}, cioè l'interfaccia (\textbf{View})
+    \item Il \textbf{coordinamento} tra interfaccia e dati (\textbf{Controller})
+\end{itemize}
+\begin{center}
+    \includegraphics[width = 0.75\textwidth]{Images/210.png}
+\end{center}
+\begin{center}
+    \includegraphics[width = 1\textwidth]{Images/211.png}
+\end{center}
+In particolare, MVC è un pattern architetturale che \textbf{separata data model, UI e control logic} in tre componenti distinte
+\begin{itemize}
+    \item \textbf{Model}: i dati (gli oggetti) trattati dall'applicazione e le operazioni su di essi
+    \item \textbf{View}: La struttura dei dati restituiti al richiedente (la pagina HTML/CSS)
+    \item \textbf{Control}: Definisce le azioni da eseguire a fronte di una richiesta. Interagisce con il Model per modificare i dati e con la View per generare la risposta
+\end{itemize}
+Realizzato con \textbf{forward}, il pattern diventa:
+\begin{center}
+    \includegraphics[width = 1\textwidth]{Images/212.png}
+\end{center}
+Vediamo ora quali sono i \textbf{vantaggi} e gli \textbf{svantaggi} di questo pattern:
+\begin{itemize}
+    \item \textbf{Vantaggi}:
+    \begin{itemize}
+        \item \textbf{Chiara separazione tra logica di business e logica di presentazione}
+        \begin{itemize}
+            \item Poter cambiare la view senza modificare il control e viceversa
+            \item Poter arricchire la view senza appesantire il codice del controller
+            \item Poter definire e scegliere a run-time la view da usare a seconda dell'interazione, dei device utilizzati, dello stato dei dati o delle preferenze dell'utente
+        \end{itemize}
+        \item \textbf{Chiara separazione tra logica di business e modello dei dati}: Poter definire diversi mapping tra le azioni degli utenti sul controller e le funzioni sul model
+        \item \textbf{Ogni componente ha una responsabilità ben definita}:
+        \begin{itemize}
+            \item Poter sviluppare in parallelo
+            \item Poter manutenere e far evolvere ogni componente in modo indipendente, quindi semplificando la gestione
+        \end{itemize}
+        \item \textbf{Ogni parte può essere affidata a esperti}:
+        \begin{itemize}
+            \item Poter assegnare lo sviluppo della view ad esperti di interfaccia e interazione
+            \item Uso di tecnologie adatte allo sviluppo delle singole componenti
+        \end{itemize}
+    \end{itemize}
+    \item \textbf{Svantaggi}:
+    \begin{itemize}
+        \item Aumento della \textbf{complessità dovuta alla concorrenza} (è un sistema distribuito)
+        \item Uso tecnologie adatte allo sviluppo delle singole componenti
+    \end{itemize}
+\end{itemize}
 \end{document}
+
+
