@@ -2420,4 +2420,85 @@ Superset di JSON sono:
     \item \textbf{JavaScript}: Un compilatore JavaScript è un \textbf{decodificatore di JSON}
 \end{itemize}
 \subsubsection{Oggetti JSON}
+Un \textbf{oggetto} è un insieme non ordinato di coppie nome/valore.
+Un oggetto JSON è racchiuso tra parentesi graffe e ogni nome è succeduto da due punti (:).
+Le coppie nome/valori sono separati da virgole.
+\begin{center}
+    \includegraphics[width = 0.60\textwidth]{Images/171.png}
+\end{center}
+\subsubsection{Array JSON}
+Un array è un \textbf{insieme ordinato di valori}. Un array è delimitato da \textbf{parentesi graffe} e i suoi valori sono separati da virgole.
+Un array JSON può anche contenere valori \textbf{di tipi diversi}.
+\begin{center}
+    \includegraphics[width = 0.60\textwidth]{Images/172.png}
+\end{center}
+\subsection{Valori JSON}
+Un valore in JSON può essere:
+\begin{itemize}
+    \item Una \textbf{stringa} delimitata da doppi apici (")
+    \item Un \textbf{numero}
+    \item Un \textbf{valore booleano} (true/false)
+    \item Un \textbf{valore nullo} (null)
+    \item Un \textbf{array}
+\end{itemize}
+Gli oggetti e gli array \textbf{possono essere innestati l'uno dentro l'altro}
+\begin{center}
+    \includegraphics[width = 0.70\textwidth]{Images/173.png}
+\end{center}
+\newpage
+\subsubsection{Stringhe JSON}
+Una \textbf{stringa} è una sequenza di \textbf{zero o più caratteri UNICODE}, delimitata da doppi apici (") e che può usare \textbf{delle sequenze di escape con un backslash} (\\).
+Un carattere è rappresentato come una stringa con un singolo carattere. Una stringa quindi è molto simile alle stringhe di Java o C.
+\begin{center}
+    \includegraphics[width = 0.55\textwidth]{Images/174.png}
+\end{center}
+\section{Web App, Servlet e servizi}
+Un'\textbf{applicazione web} (\textbf{web app} in inglese) in informatica indica, in generale, \textbf{tutte le applicazioni distribuite}
+ovvero applicazioni \textbf{accessibili/fruibili via web} per mezzo di un \textbf{network}, per esempio tramite \textbf{intranet} all'interno di un sistema informatico
+oppure per mezzo di \textbf{internet} in un'architettura \textbf{client-server} in cui il server offre dei determinati servizi al client.
+\subsubsection{Il Web}
+Una domanda che può sorgere è: perché il Web? Elenchiamo alcuni motivi:
+\begin{itemize}
+    \item \textbf{Basato su internet}
+    \begin{itemize}
+        \item Tuttavia \textbf{IL WEB E INTERNET NON SONO LA STESSA COSA!} Internet è \textbf{è l'ecosistema su cui si basa il web}.
+        \item Ambiente \textbf{standard}: alla base c'è il protocollo TCP/IP
+        \item \textbf{Ampia diffusione}: conoscenza diffusione
+    \end{itemize}
+    \newpage
+    \item \textbf{Semplicità e uniformità dell'informazione}
+    \begin{itemize}
+        \item Interfaccia grafica: un \textbf{browser}; il quale è oggi paragonabile (in senso lato) ad una \textbf{VM} su cui viene eseguito del codice.
+        Un browser moderno ha i suoi \textbf{thread, DB associati e le sue librerie}.
+        \item Interazione \textbf{attraverso un protocollo standard} (HTTP): viene quindi definita una API per la comunicazione (es. REST)
+    \end{itemize}
+    \item \textbf{Infrastruttura matura ed estesa}
+    \begin{itemize}
+        \item Supporta \textbf{sistemi aperti} (connessione dinamica di nuovi componenti)
+        \item Strumenti \textbf{sempre più completi e potenti}: evoluzioni di HTML, AJAX, Web app,...
+    \end{itemize}
+\end{itemize}
+\subsection{Caratteristiche principali: protocollo di comunicazione}
+Le principali caratteristiche del protocollo di comunicazione per un applicazione web sono:
+\begin{itemize}
+    \item \textbf{Formato a caratteri} (lento): occorre \textbf{tradurre e ritrattare i dati}
+    \item \textbf{Header} per i \textbf{metadati} e \textbf{Body} per il \textbf{corpo del messaggio}
+    \item Utilizzo del \textbf{linguaggio HTML} per I/O:
+    \begin{itemize}
+        \item Uso di \textbf{FORM} per l'acquisizione dei dati (invio di dati al server)
+        \item Uso di \textbf{documenti HTML} in risposta (dal server verso il client)
+        \item Possibilità di \textbf{pagine dinamiche} (JavaScript con dati scambiati in JSON)
+    \end{itemize}
+    \item Utilizzo di \textbf{payload in formato MIME} (Multimedia Internet Mail Extension): Per \textbf{generalizzare il tipo di informazioni scambiate} oltre a pagine HTML, come XML, JSON, Zip, jpeg, ...
+    \item \textbf{Conversazioni} (cioè interazioni client-server) \textbf{prive di stato} (quindi di memoria)
+    \begin{itemize}
+        \item Ogni richiesta \textbf{è un messaggio autonomo}, indipendente dagli altri
+        \item Per creare \textbf{sessioni di lavoro} (quindi legare più richiesta fra loro) servono \textbf{informazioni esplicite} come \textbf{cookies} o \textbf{campi nascosti}
+        \item \textbf{Cookie HTTP}: È un \textbf{piccolo blocco di dati} che un server invia al browser web di un utente. Il browser \textbf{può memorizzare il cookie e rinviarlo allo stesso server} per le richieste successive.
+        In genere, un cookie viene utilizzato per \textbf{stabilire se due richieste provengono dallo stesso browser}, quindi, ad esempio, per mantenere un utente autenticato.
+    \end{itemize}
+\end{itemize}
+Un applicazione web \textbf{adotta il protocollo HTTP} per la comunicazione tra client e server.
+
+
 \end{document}
