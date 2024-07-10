@@ -1991,7 +1991,7 @@ Vediamo ora quali sono le \textbf{proprietà di MQTT}:
     \item \textbf{Sessioni persistenti}:
           \begin{itemize}
               \item Può essere mantenuto uno \textbf{stato} delle connessioni anche quando esse sono state terminate
-              \item Se \textbf{richiesto dalla connessione}, il broker manterrà \textbf{tutti i messaggi}, che saranno consegnati al momento della \textbf{riconessione}.
+              \item Se \textbf{richiesto dalla connessione}, il broker manterrà \textbf{tutti i messaggi}, che saranno consegnati al momento della \textbf{riconnessione}.
           \end{itemize}
     \item \textbf{Retained messages} (messaggi conservati):
           \begin{itemize}
@@ -2334,9 +2334,9 @@ Tra le novità di HTML5 troviamo:
         \item Nuove \textbf{API JavaScript} per la manipolazione delle pagine (Offline data, drag \& drop, web storage)
     \end{itemize}
 \end{itemize}
-In particolare, queste novità permetteno di avere una \textbf{notazione più concisa e che richiede meno definizioni di classi}; ciò risulta in \textbf{gerarchie di contenuti più leggibili e analizzabili in fase di progettazione, manutenzione e debug}.
+In particolare, queste novità permettono di avere una \textbf{notazione più concisa e che richiede meno definizioni di classi}; ciò risulta in \textbf{gerarchie di contenuti più leggibili e analizzabili in fase di progettazione, manutenzione e debug}.
 \subsubsection{Semantica di HTML5}
-Parlaremo di \textbf{web semantico} più avanti; in questo caso per \textbf{semantica di HTML5} si intende un utilizzo \textbf{sensato e comprensibile dei tag HTML}.
+Parleremo di \textbf{web semantico} più avanti; in questo caso per \textbf{semantica di HTML5} si intende un utilizzo \textbf{sensato e comprensibile dei tag HTML}.
 Esempi di usi sensati sono:
 \begin{itemize}
     \item <p> per \textbf{definire un paragrafo}
@@ -2358,7 +2358,7 @@ Una pagina HTML \textbf{non dovrebbe contenere informazioni di presentazione}, r
 \subsubsection{Looking forward: JavaScript}
 HTML  e CSS ci forniscono il necessario per definire \textbf{contenuti} (web), la loro \textbf{struttura} (comprese le regole di accesso e di modifica) e lo stile grafico.
 Manca quindi il modo di \textbf{definire e governare la dinamicità delle pagina} cioè il modo della pagina di cambiare \textbf{in modo reattivo} al comportamento dell'utente o anche in maniera \textbf{proattiva}, senza
-necessariamente attendere l'input dell'utente. \textbf{JavaScript} è il linguaggio di \textbf{scripting} che svolgeq questa funzione.
+necessariamente attendere l'input dell'utente. \textbf{JavaScript} è il linguaggio di \textbf{scripting} che svolgere questa funzione.
 \subsection{JavaScript Object Notation: JSON}
 JavaScript Object Notation (JSON) è \textbf{formato per lo scambio di dati} leggero e facile da \textbf{interpretare e scrivere anche per un essere umano}.
 Esso è basato su un \textbf{sottoinsieme} dello standard ECMA-262 (3° edizione - Dicembre 1999) del linguaggio di JavaScript.
@@ -2602,7 +2602,7 @@ Ogni servlet implementa l'interfaccia \textbf{jakarta.servlet.Servlet}, con 5 me
 \begin{itemize}
     \item \textbf{void init(ServletConfig config)}: Inizializza la servlet, viene invocato \textbf{dopo la creazione della stessa}
     \item \textbf{void destroy()}: Chiamata \textbf{quando la servlet termina} (es. per chiudere un file o una connessione ad un database)
-    \item \textbf{void service(ServletRequest request, ServletResponse response)}: Invoato per \textbf{gestire le richieste del client}
+    \item \textbf{void service(ServletRequest request, ServletResponse response)}: Invocato per \textbf{gestire le richieste del client}
     \item \textbf{ServletConfig getServletConfig()}: Restituisce i \textbf{parametri di inizializzazione} e il \textbf{ServletContext} che da accesso all'ambiente
     \item \textbf{String getServletInfo()}: Restituisce informazioni sulla servlet (es. autore, versione, ecc...)
 \end{itemize}
@@ -2644,7 +2644,7 @@ I metodi principali per manipolare le richieste sono:
     \begin{center}
         \includegraphics[width = 0.85\textwidth]{Images/185.png}
     \end{center}
-    \item \textbf{Enumeration getParameterNames()}: Restituisce l'eneco dei \textbf{nomi degli argomenti}
+    \item \textbf{Enumeration getParameterNames()}: Restituisce l'elenco dei \textbf{nomi degli argomenti}
     \item \textbf{String[] getParametersValues(String name)}: Restituisce i valori dell'argomento name (valore multiplo)
 \end{itemize}
 I metodi principali per manipolare le risposte sono invece:
@@ -2655,7 +2655,7 @@ I metodi principali per manipolare le risposte sono invece:
 \end{itemize}
 Altri metodi che citiamo sono:
 \begin{itemize}
-    \item \textbf{Cookie[] getCockies()}: Restituisce i cookies del server sul client
+    \item \textbf{Cookie[] getCookies()}: Restituisce i cookies del server sul client
     \item \textbf{void addCookie(Cookie cookie)}: Aggiunge un cookie \textbf{nell'header della risposta}
     \item \textbf{HTTPSession getSession(boolean create)}: Una \textbf{HTTPSession} che identifica il client. Se \textbf{create = true} allora viene creata
 \end{itemize}
@@ -2684,7 +2684,7 @@ All'avvenire di uno di questi due eventi viene invocato il metodo \textbf{destro
 \end{center}
 Dal punto di visto dello sviluppatore, ogni client \textbf{è thread che chiama la servlet tramite il metodo service(), doGet() o doPost()}.
 Ciò significa che, durante il ciclo di vita di una servelt, ci saranno \textbf{molti thread che fanno accesso a una singola istanza della servlet}.
-Poiché più richieste vengono servite dalla stessa servlet, questo vuol dir eche \textbf{bisogna fare attenzione a come la servlet implementa l'accesso alle sue risorse}.
+Poiché più richieste vengono servite dalla stessa servlet, questo vuol dire che \textbf{bisogna fare attenzione a come la servlet implementa l'accesso alle sue risorse}.
 In questo modello spesso le risorse sono condivise \textbf{a livello di database}. Questa scelta implementativa ha diverse motivazioni:
 \begin{itemize}
     \item \textbf{Minor uso di memoria}: un solo oggetto servlet
@@ -2869,12 +2869,12 @@ L'attributo \textbf{scope} che determina la visibilità di un bean. Esso può av
     \item \textbf{session e application}: se non esiste un bean con lo stesso ID, ne viene creato uno nuovo
 \end{itemize}
 L'attributo \textbf{type} permette di assegnare ad un bean una superclasse o un'interfaccia.
-L'attributo \textbf{beanName = "name"} permette di utilizzare il nome del bean, dovne "name" è \textbf{la classe o un file serializzato}
+L'attributo \textbf{beanName = "name"} permette di utilizzare il nome del bean, dove "name" è \textbf{la classe o un file serializzato}
 \subsubsection{Sessioni}
 \begin{center}
     \includegraphics[width = 0.70\textwidth]{Images/206.png}
 \end{center}
-Quando si accede ad un ogetto \textbf{HTTPSession} (session) si sta accedendo ad una \textbf{mappa chiave valore}.
+Quando si accede ad un oggetto \textbf{HTTPSession} (session) si sta accedendo ad una \textbf{mappa chiave valore}.
 Si possono fare diversi esempi sulle modalità e le ragioni per le quali si vuole accedere ad un oggetto sessione:
 \begin{itemize}
     \item \textbf{Memorizzazione}:
@@ -2889,57 +2889,6 @@ Si possono fare diversi esempi sulle modalità e le ragioni per le quali si vuol
     \begin{center}
         \includegraphics[width = 0.50\textwidth]{Images/209.png}
     \end{center}
-\end{itemize}
-\subsection{Pattern Model View Controller (MVC)}
-Il pattern \textbf{Model View Controller} (MVC) ha lo scopo di \textbf{separare}:
-\begin{itemize}
-    \item I \textbf{dati} e i \textbf{metodi principali} per la loro manipolazione (\textbf{Model})
-    \item La \textbf{presentazione}, cioè l'interfaccia (\textbf{View})
-    \item Il \textbf{coordinamento} tra interfaccia e dati (\textbf{Controller})
-\end{itemize}
-\begin{center}
-    \includegraphics[width = 0.75\textwidth]{Images/210.png}
-\end{center}
-\begin{center}
-    \includegraphics[width = 1\textwidth]{Images/211.png}
-\end{center}
-In particolare, MVC è un pattern architetturale che \textbf{separata data model, UI e control logic} in tre componenti distinte
-\begin{itemize}
-    \item \textbf{Model}: i dati (gli oggetti) trattati dall'applicazione e le operazioni su di essi
-    \item \textbf{View}: La struttura dei dati restituiti al richiedente (la pagina HTML/CSS)
-    \item \textbf{Control}: Definisce le azioni da eseguire a fronte di una richiesta. Interagisce con il Model per modificare i dati e con la View per generare la risposta
-\end{itemize}
-Realizzato con \textbf{forward}, il pattern diventa:
-\begin{center}
-    \includegraphics[width = 1\textwidth]{Images/212.png}
-\end{center}
-Vediamo ora quali sono i \textbf{vantaggi} e gli \textbf{svantaggi} di questo pattern:
-\begin{itemize}
-    \item \textbf{Vantaggi}:
-    \begin{itemize}
-        \item \textbf{Chiara separazione tra logica di business e logica di presentazione}
-        \begin{itemize}
-            \item Poter cambiare la view senza modificare il control e viceversa
-            \item Poter arricchire la view senza appesantire il codice del controller
-            \item Poter definire e scegliere a run-time la view da usare a seconda dell'interazione, dei device utilizzati, dello stato dei dati o delle preferenze dell'utente
-        \end{itemize}
-        \item \textbf{Chiara separazione tra logica di business e modello dei dati}: Poter definire diversi mapping tra le azioni degli utenti sul controller e le funzioni sul model
-        \item \textbf{Ogni componente ha una responsabilità ben definita}:
-        \begin{itemize}
-            \item Poter sviluppare in parallelo
-            \item Poter manutenere e far evolvere ogni componente in modo indipendente, quindi semplificando la gestione
-        \end{itemize}
-        \item \textbf{Ogni parte può essere affidata a esperti}:
-        \begin{itemize}
-            \item Poter assegnare lo sviluppo della view ad esperti di interfaccia e interazione
-            \item Uso di tecnologie adatte allo sviluppo delle singole componenti
-        \end{itemize}
-    \end{itemize}
-    \item \textbf{Svantaggi}:
-    \begin{itemize}
-        \item Aumento della \textbf{complessità dovuta alla concorrenza} (è un sistema distribuito)
-        \item Uso tecnologie adatte allo sviluppo delle singole componenti
-    \end{itemize}
 \end{itemize}
 \end{document}
 
