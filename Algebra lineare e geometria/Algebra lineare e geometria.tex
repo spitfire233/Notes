@@ -136,7 +136,7 @@ Come conseguenza logica della dimostrazione, si ha che il vettore opposto di $\u
 
 \begin{Proposizione}
 La differenza $\underline{v}-\underline{w}$ di due vettori si definisce ponendo $$\underline{v}-\underline{w} = \underline{v} + (-\underline{w})$$
-Naturalmente, $\underline{w} + (\underline{v}-\underline{w}) = v$: analogamente al caso dell'aritmeitca, la differenza tra $\underline{v}$ e $\underline{w}$ è quel vettore che sommato a $\underline{w}$ da come risultato $\underline{v}$.
+Naturalmente, $\underline{w} + (\underline{v}-\underline{w}) = v$: analogamente al caso dell'aritmetica, la differenza tra $\underline{v}$ e $\underline{w}$ è quel vettore che sommato a $\underline{w}$ da come risultato $\underline{v}$.
 \end{Proposizione}
 
 \begin{Teorema} [Legge di annullamento del prodotto per uno scalare]
@@ -156,7 +156,7 @@ Riassumendo, in uno spazio vettoriale è definita un'operazione di somma che god
 Sia V uno spazio vettoriale su campo $\mathbb{K}$ e $W \subset V$. Diremo che W è un sottopsazio vettoriale di V se W è uno spazio vettoriale rispetto alle operazioni di somma e prodotto per uno scalare di V. Questo è il caso se e solo se W soddisfa le seguenti proprietà:
 \begin{itemize}
     \item  Il vettore nullo $\underline{0_V}$ appartiene a W
-    \item W è chisuo rispetto alla somma, cioè se $\underline{w_1}+\underline{w_2}\in W \; \forall\underline{w_1},\underline{w_2}\in W$
+    \item W è chiuso rispetto alla somma, cioè se $\underline{w_1}+\underline{w_2}\in W \; \forall\underline{w_1},\underline{w_2}\in W$
     \item W è chiuso rispetto al prodotto per uno scalare, cioè se $\lambda \underline{w}\in W \; \forall\underline{w}\in W$ e $\forall \lambda \in \mathbb{K}$
 \end{itemize}
 \end{Definizione}
@@ -210,7 +210,7 @@ Il risultato esprime una combinazione lineare di vettori di S con almeno un $\la
 non nullo.
 \end{Dimostrazione}
 \begin{Osservazione}
-Per abuso di linguaggio, si dice spesso che i vettori $\underline{v_1},...,\underline{v_d}$ sono linearmente (in)dipendenti se l'insieme $\{\underline{v_1},...,\underline{v_d}\}$ è linearmente (in)dipendente. Si tratta di un abuso di linguaggio perché la dipendenza lineare non è una proprietà die singoli vettori ma dell'insieme da essi formato. Dire che i vettori $\underline{v_1},...,\underline{v_d}$ sono linearmente indipendenti non significa che ognungo di essi ha la capacità di essere linearmente indipendente ma che tra i vettori non sussistono relazioni di dipendenza lineare.
+Per abuso di linguaggio, si dice spesso che i vettori $\underline{v_1},...,\underline{v_d}$ sono linearmente (in)dipendenti se l'insieme $\{\underline{v_1},...,\underline{v_d}\}$ è linearmente (in)dipendente. Si tratta di un abuso di linguaggio perché la dipendenza lineare non è una proprietà die singoli vettori ma dell'insieme da essi formato. Dire che i vettori $\underline{v_1},...,\underline{v_d}$ sono linearmente indipendenti non significa che ognuno di essi ha la capacità di essere linearmente indipendente ma che tra i vettori non sussistono relazioni di dipendenza lineare.
 \end{Osservazione}
 
 \section{Basi}
@@ -239,7 +239,7 @@ Ogni spazio vettoriale che ammette un sistema finito di generatori ammette una b
 \end{Corollario}
 
 \begin{Proposizione}[Base canonica]
-Dato $V = \mathbb{R}^n$ spazio vettoriale, una base particolare è la cosiddetta "base canonica", la quale si presenta nella seguenta forma: $S = \{(1,0,0,0,...,0),(0,1,0,0,...,0), ..., (0,0,0,...,1)\}$
+Dato $V = \mathbb{R}^n$ spazio vettoriale, una base particolare è la cosiddetta "base canonica", la quale si presenta nella seguente forma: $S = \{(1,0,0,0,...,0),(0,1,0,0,...,0), ..., (0,0,0,...,1)\}$
 \end{Proposizione}
 
 \subsection{Teorema di estensione ad una base e conseguenze}
@@ -302,12 +302,12 @@ $$Base = \{\begin{pmatrix}
     0 & 0 & 0 & ...  & 0\\
     ... & ... & ... & ... \\
     0 & ... & ... & ... & 1
-\end{pmatrix} \}$$ Dopo aver messo 1 all'ultimo elemento di una riga, l'elemento successivo mette 1 al primo elemento della riga succcessiva. La dimensione dello spazio vettoriale delle matrici è: $dim(M(m,k)) = k \cdot m$
+\end{pmatrix} \}$$ Dopo aver messo 1 all'ultimo elemento di una riga, l'elemento successivo mette 1 al primo elemento della riga successiva. La dimensione dello spazio vettoriale delle matrici è: $dim(M(m,k)) = k \cdot m$
 \subsection{Prodotto di matrici}
 \begin{Definizione}[Prodotto righe per colonne]
 Siano A e B matrici di tipo $m \times n$ e $n \times p$ rispettivamente. Il prodotto righe per colonne di A e B è la matrice AB di tipo $m \times p$ il cui elemento di posizione (i,k) è il prodotto della riga i di A per la colonna k di B. Se $A = (a_{ij})$ e $B =(b_{jk})$, l'elemento di posto (i,k) della matrice prodotto è quindi:
 $$(ab)_{ik} = \sum_{j=1}^n{a_{ij} \cdot b_{jk}}$$
-Si noti come il prodotto è definito solo se il numero di colonne di A è uguale al numero di righe di B. Infatti, solo in questo modo è possibile motliplicare completamente fra loro righe e colonne delle due matrici.
+Si noti come il prodotto è definito solo se il numero di colonne di A è uguale al numero di righe di B. Infatti, solo in questo modo è possibile moltiplicare completamente fra loro righe e colonne delle due matrici.
 \end{Definizione}
 
 \begin{Corollario}
@@ -339,7 +339,7 @@ a_{21}x_1 + a_{22}x_2 + ... + a_{2n}x_n = b_2 \\
 a_{k1}x_1 + a_{k2}x_2 + ... + a_{kn}x_n = b_n
 \end{cases}$$ Al sistema possiamo associare due matrici:
 \begin{itemize}
-    \item Matrice incompleta: $A = (a_{ij})$, cioè una matricne $k \times n$
+    \item Matrice incompleta: $A = (a_{ij})$, cioè una matrice $k \times n$
     \item Matrice completa (a blocchi): $A | \underline{b} = (A|\underline{b})$ con k righe e $n+1$ colonne
 \end{itemize}
 Possiamo riscrivere il sistema anche in "forma matriciale": $$A \cdot \underline{x} = \underline{b}$$ dove $\underline{x} = \begin{pmatrix}
@@ -363,7 +363,7 @@ Se $\underline{b} = 0$, diremo che il sistema di equazioni lineari è "omogeneo"
 \begin{Teorema}
     Sia $A \underline{x} = \underline{b}$ un sistema di equazioni lineari in n incognite a coefficienti in $\mathbb{K}$. Allora:
     \begin{itemize}
-        \item Il sistema ammette soluzioni se e solo se il rango di A è uguale al ragndo della matrice completa $A|\underline{b}$
+        \item Il sistema ammette soluzioni se e solo se il rango di A è uguale al rango della matrice completa $A|\underline{b}$
         \item Supponiamo che ammetta soluzioni. Allora l'insieme delle soluzioni dipende da $n-r$ parametri; la forma dell'insieme di tutte le soluzioni è $$\underline{c}+W = \{\underline{c}+\underline{w}|w\in W\}$$ Dove $\underline{c}$ è una soluzione qualsiasi del sistema e $W = \{soluzioni \; di\; A\underline{x} = \underline{0}\}$, cioè le soluzioni del sistema omogeneo associato. W è inoltre il sottospazio vettoriale di $\mathbb{R}^n$ formato dalle soluzioni del sistema omogeneo associato.
     \end{itemize}
 \end{Teorema}
@@ -376,7 +376,7 @@ Se $\underline{b} = 0$, diremo che il sistema di equazioni lineari è "omogeneo"
 \begin{Dimostrazione}[Validità per $\lambda \underline{c}$]
 Sia A$\underline{c} = 0$. Consideriamo $\lambda\underline{c} \Rightarrow A(\lambda\underline{c})$
 $$A(\lambda\underline{c})=A(\lambda \cdot I_{d_n} \cdot \underline{c}) = (A \cdot \lambda I_{d_n})\underline{c}$$
-Poichè $\lambda I_{d_n}$ è una matrice scalare, la proprietà commutativa vale sempre. Quindi:
+Poiché $\lambda I_{d_n}$ è una matrice scalare, la proprietà commutativa vale sempre. Quindi:
 $$\lambda \cdot I_{d_n} \cdot A \cdot \underline{c} = \lambda \cdot I_{d_n} \cdot 0 = 0$$
 \end{Dimostrazione}
 
@@ -389,7 +389,7 @@ Le soluzioni del sistema $A\underline{x} = \underline{b}$, se esistono, coincido
 \begin{enumerate}
     \item Calcolare $S(A|\underline{b}) = (S(A)|S(\underline{b}))$
     \item Controlliamo che $A\underline{x} = \underline{b}$ ammetta soluzioni verificando se $Rg(S(A)) = Rg((S(A)|S(\underline{b})))$
-    \item In caso esistano soluzini, troviamo le soluzioni del sistema risolvenda il sistema $S(A)\underline{x} = S(\underline{b})$
+    \item In caso esistano soluzioni, troviamo le soluzioni del sistema risolvendo il sistema $S(A)\underline{x} = S(\underline{b})$
 \end{enumerate}
 \end{Teorema}
 
@@ -464,7 +464,7 @@ Come oggetto matematico, il determinante è una funzione \newline $f:\{Matrici \
 \end{Definizione}
 \newpage
 \subsubsection{Prorpietà caratterizzanti del determinante}
-Il determinante rispetta le seguenti 4 prorpietà:
+Il determinante rispetta le seguenti 4 proprietà:
 \begin{enumerate}
     \item $det(\underline{c_1}, ..., \underline{a}+\underline{b},...,\underline{c_n})$ = $det(\underline{c_1}, ..., \underline{a},...,\underline{c_n}) + det(\underline{c_1}, ..., \underline{b},...,\underline{c_n}) \; \forall i=\{1,...,n\}$ con a e b messi in posizione i-esima qualunque. (Proprietà di multilinearità rispetto alla somma)
     \item $det(\underline{c_1}, ..., \lambda\underline{c_i}, ..., \underline{c_n}) = \lambda det(\underline{c_1}, ..., \underline{c_i}, ..., \underline{c_n})$ (Proprietà di multilinearità rispetto al prodotto per scalare)
@@ -477,7 +477,7 @@ Esiste un'unica funzione che soddisfi tutte le proprietà
 \end{Teorema}
 
 \begin{Osservazione}
-    La prorpietà 3 vale $\Leftrightarrow$ $det(\underline{c_1}, ..., \underline{c_i}, \underline{c_{i+1}}, ..., \underline{c_n}) = -det(\underline{c_1}, ..., \underline{c_{i+1}},\underline{c_i}, ..., \underline{c_n})$. Cio è equivalente a: $det(\underline{c_1}, ..., \underline{c_i}, ..., \underline{c_{j}}, ..., \underline{c_n}) = -det(\underline{c_1}, ..., \underline{c_j}, ..., \underline{c_{i}}, ..., \underline{c_n})$, che è equivalente a:
+    La proprietà 3 vale $\Leftrightarrow$ $det(\underline{c_1}, ..., \underline{c_i}, \underline{c_{i+1}}, ..., \underline{c_n}) = -det(\underline{c_1}, ..., \underline{c_{i+1}},\underline{c_i}, ..., \underline{c_n})$. Cio è equivalente a: $det(\underline{c_1}, ..., \underline{c_i}, ..., \underline{c_{j}}, ..., \underline{c_n}) = -det(\underline{c_1}, ..., \underline{c_j}, ..., \underline{c_{i}}, ..., \underline{c_n})$, che è equivalente a:
 $det(\underline{c_1}, ..., \underline{c}, ..., \underline{c}, ..., \underline{c_n}) = 0$. È equivalente per i vettori riga.
 \end{Osservazione}
 \subsubsection{Formula di Laplace per il calcolo del determinante}
@@ -505,7 +505,7 @@ Il determinante di una matrice 2 per 2 $\begin{pmatrix}
     Data una matrice 3 per 3 $\begin{pmatrix}
     a & b  & c\\
     d & e  & f
-\end{pmatrix}$ si può utilizzare il seguento metodo per calcolare il determinante: \begin{enumerate}
+\end{pmatrix}$ si può utilizzare il seguente metodo per calcolare il determinante: \begin{enumerate}
     \item Riscrivere la matrice e accostarla a destra
     \item Sommare i prodotti dei primi 3 elementi delle 3 diagonali principali (da sinistra a destra)
     \item Sommare i prodotti dei primi 3 elementi delle 3 antidiagonali principali (da destra a sinistra)
@@ -578,7 +578,7 @@ Ricordiamo che, se T è una trasformazione elementare sulle righe, allora $T(A) 
 Si calcola prima la matrice trasposta $^tA$. A partire da essa, costruiamo la matrice con elemento generico $$b_{ij} = (-1)^{i+j}\cdot \frac{det(A_{ij})}{det(A)}$$
 \end{Proposizione}
 \begin{Proposizione}[2° Metodo pratico per il calcolo di $\bold{A^{-1}}$]
-    Scriviamo la matrice a blocchi $(I_d|A)$. Dopodiché, operiamo le trasformazioni elementari necessarie per portare A a scala; controlliamo quindi se è invertibile (nessuno 0 sulla diag. principale). Se A è invertibile, continuiamo con le transformazioni elementari fino ad arrivare alla matrice a blocchi $(A^{-1}|I_d)$
+    Scriviamo la matrice a blocchi $(I_d|A)$. Dopodiché, operiamo le trasformazioni elementari necessarie per portare A a scala; controlliamo quindi se è invertibile (nessuno 0 sulla diag. principale). Se A è invertibile, continuiamo con le trasformazioni elementari fino ad arrivare alla matrice a blocchi $(A^{-1}|I_d)$
 \end{Proposizione}
 \subsubsection{Relazione tra invertibilità, determinante e rango}
 Se A è una matrice qualunque con solo il rango definito, allora $Rg(A) = $ max.numero di righe di A lin. indip. $= $ max. num. di colonne di A lin. indip. $= $ massimo ordine dei minori non nulli di A.
@@ -594,7 +594,7 @@ Le funzioni insiemistiche(cioè funzioni con nessun'altra regola tranne che esse
     \begin{itemize}
         \item $f(\underline{v_1}+_{V}\underline{v_2}) = f(\underline{v_1}) +_{W}f(\underline{v_2}) \; \forall \underline{v_1},\underline{v_2} \in V$
         \item $f(\lambda \cdot_{V} \underline{v}) = \lambda \cdot_{W} f(\underline{v}) \; \forall \underline{v} \in V, \forall \lambda \in \mathbb{K}$
-        \item Equivalentemenente $f(\lambda \underline{v} + \beta \underline{v_2}) = \lambda f( \underline{v}) + \beta f( \underline{v_2})$
+        \item Equivalentemente $f(\lambda \underline{v} + \beta \underline{v_2}) = \lambda f( \underline{v}) + \beta f( \underline{v_2})$
     \end{itemize}
 \end{Definizione}
 \begin{Corollario}
@@ -632,7 +632,7 @@ In particolare, $f$ è completamente determinata, come funzione, da $\{f(\underl
     Segue dal fatto che $f(\underline{v_i})$ è un sistema di generatori di $f(\underline{v})$ se $\{\underline{v_i}\}$ è una base di V.
 \end{Dimostrazione}
 \begin{Definizione}
-    Due spazi vettoriali V e W sono detti "isomorfi" se esistono due funzioni $f:V \rightarrow W$ e $g:W \rightarrow V$ entambe lineari tali che: $g \circ f = I_{d_{V}}$ e $f \circ g = I_{d_W}$. È vero che V e W sono isomorfi $\Leftrightarrow dim(V) = dim(W)$. Inoltre, $f:V \rightarrow W$ è detto "isomorfismo" se è biettiva lineare.
+    Due spazi vettoriali V e W sono detti "isomorfi" se esistono due funzioni $f:V \rightarrow W$ e $g:W \rightarrow V$ entrambe lineari tali che: $g \circ f = I_{d_{V}}$ e $f \circ g = I_{d_W}$. È vero che V e W sono isomorfi $\Leftrightarrow dim(V) = dim(W)$. Inoltre, $f:V \rightarrow W$ è detto "isomorfismo" se è biettiva lineare.
 \end{Definizione}
 \subsection{Nucleo di un'applicazione lineare}
 Sia $f:V \rightarrow W$ lineare. $f^{-1}(\underline{z}) < V$? Affinché lo sia, $\underline{0_V} \in f^{-1}(\underline{z})$ e quindi $\underline{z} = \underline{0_W}$ per il corollario 5.0.1. Si verifica che $f^{-1}(\underline{0_W})<V$.
@@ -668,7 +668,7 @@ Il nucleo di un'applicazione lineare è importante per il seguente teorema:
 \begin{enumerate}
     \item Controlliamo se i vettori del dominio sono linearmente dipendenti; se lo sono, l'omomorfismo esiste sempre, se invece NON lo sono, proseguiamo
     \item Troviamo quali vettori del dominio sono dipendenti dagli altri
-    \item Utilizziamo le condizioni di linearità per vedere se l'immagine dei vettori dipendenti coincida con l'immagine del vettore dipendente espresso come combinazione lineare degli altri vettori; se corrisponde per tutti i vettori alloa l'omomorfismo esiste, in caso contrario non esiste.
+    \item Utilizziamo le condizioni di linearità per vedere se l'immagine dei vettori dipendenti coincida con l'immagine del vettore dipendente espresso come combinazione lineare degli altri vettori; se corrisponde per tutti i vettori allora l'omomorfismo esiste, in caso contrario non esiste.
 \end{enumerate}
     
 \end{Proposizione}
@@ -709,7 +709,7 @@ La forma parametrica è la seguente:
 \end{itemize}
 \end{Definizione}
 \begin{Proposizione}
-    L'esperssione in coordinate ci permette di utilizzare meglio le informazioni contenute in $f$. (e.g. trovare l'immagine di tanti vettori).
+    L'espressione in coordinate ci permette di utilizzare meglio le informazioni contenute in $f$. (e.g. trovare l'immagine di tanti vettori).
 \end{Proposizione}
 \begin{Proposizione}
     L'espressione parametrica è l'unica che può essere usata se il dominio o il codominio non sono euclidei. Spesso è la forma più immediata in cui esprimere un'applicazione lineare.
@@ -754,13 +754,13 @@ La forma parametrica è la seguente:
         ...\\
         1
     \end{pmatrix}$\newline
-Quindi saper scrivere una funzione lineare tra spazi euclidei in coordinate corrisponde col conoscere l'immagine tramie f dei vettori della base canonica del dominio. Possiamo trovare questa immagine scrivendo i vettori della base canonica come combinazione lineare degli elementi della base del dominio di f e usando la proprietà di linearità oppure tramite la matrice associata ad $f$.
+Quindi saper scrivere una funzione lineare tra spazi euclidei in coordinate corrisponde col conoscere l'immagine tramite f dei vettori della base canonica del dominio. Possiamo trovare questa immagine scrivendo i vettori della base canonica come combinazione lineare degli elementi della base del dominio di f e usando la proprietà di linearità oppure tramite la matrice associata ad $f$.
 \end{Osservazione}
 \begin{Proposizione}[Passi pratici per la risoluzioni di esercizi sugli omomorfismi]
 Per controllare l'esistenza degli omomorfismi, dobbiamo:
 \begin{enumerate} %Da togliere
     \item Controllare se il determinante della matrice associata ai vettori pre-immagine sia diverso da 0. In questo caso, l'esercizio è finito, poiché sono lin. indipendenti. In caso contrario proseguiamo
-    \item Se vi è parametro, determiniamo $\forall$ i valori che annullano il determinate se l'omomorfismo esiste (tutte le ugaglianze devono essere possibili). In generale, quindi, troviamo i vettori lin. dip. e li riscriviamo come combinazione lineare degli elementi di una base del dominio.
+    \item Se vi è parametro, determiniamo $\forall$ i valori che annullano il determinate se l'omomorfismo esiste (tutte le uguaglianze devono essere possibili). In generale, quindi, troviamo i vettori lin. dip. e li riscriviamo come combinazione lineare degli elementi di una base del dominio.
 \end{enumerate}
 \end{Proposizione}
 \begin{Proposizione}[Iniettività e suriettività di un'applicazione lineare]
@@ -805,7 +805,7 @@ Ricavo che $\begin{pmatrix}
     ...\\
     \alpha_n
 \end{pmatrix}$\newline
-Possiamo quindi usare la matrice associata ad un omomorifsmo di spazi euclidei per calcolare l'immagine dei vettori della base canonica del dominio, così da poter scrivere $f$ in coordinate:
+Possiamo quindi usare la matrice associata ad un omomorfismo di spazi euclidei per calcolare l'immagine dei vettori della base canonica del dominio, così da poter scrivere $f$ in coordinate:
 \begin{Osservazione}
     Se $(\underline{v_j}) = (\underline{e_j})$ e $(\underline{w_i}) = (\underline{e_i})$ allora: \newline $f\begin{pmatrix}
         x_1 \\
@@ -936,7 +936,7 @@ Con P e Q "matrici del cambiamento di base" rispettivamente del dominio e del co
 \end{Definizione}
 \subsection{Ortogonalità e ortonormalità}
 \begin{Definizione}
-    $\underline{v}, \underline{w}$ sono detti "ortonormali" se sono ortogonali e normali, cioé:
+    $\underline{v}, \underline{w}$ sono detti "ortonormali" se sono ortogonali e normali, cioè:
     $$\bigl||\underline{v}|\bigr| = \bigl||\underline{w}|\bigr| = 1$$
 \end{Definizione}
 \begin{Osservazione}
@@ -997,13 +997,13 @@ Il prodotto scalare è una funzione $\mathbb{R}^n \times \mathbb{R}^n \rightarro
     y_n
 \end{pmatrix} = \sum_{i=1}^n x_i y_i$
 \begin{Proposizione}[Proprietà fondamentale]
-$<\underline{v}, \underline{w}> = \bigl||\underline{v}|\bigr| \cdot \bigl||\underline{w}|\bigr| \cdot \cos{\theta}$ dove $\theta$ è l'angolo compresto tra la semiretta tra $\underline{0} \; e \; \underline{v}$ e la semiretta tra $\underline{0} \; e \; \underline{w}$. Notiamo che $<\underline{v}, \underline{w}> = 0 \Leftrightarrow \cos{\theta} = 0 \Leftrightarrow \theta = \frac{\pi}{2}$
+$<\underline{v}, \underline{w}> = \bigl||\underline{v}|\bigr| \cdot \bigl||\underline{w}|\bigr| \cdot \cos{\theta}$ dove $\theta$ è l'angolo compreso tra la semiretta tra $\underline{0} \; e \; \underline{v}$ e la semiretta tra $\underline{0} \; e \; \underline{w}$. Notiamo che $<\underline{v}, \underline{w}> = 0 \Leftrightarrow \cos{\theta} = 0 \Leftrightarrow \theta = \frac{\pi}{2}$
 \end{Proposizione}
 \begin{Definizione}[Significato geometrico del prodotto scalare]
 Il prodotto scalare tra due vettori $\underline{v}$ e $\underline{w}$, $<\underline{v},\underline{w}>$ è la proiezione del vettore $\underline{v}$ sul vettore $\underline{w}$. La proiezione è quindi definibile come $v_r = \bigr||\underline{v}|\bigl| \cdot \cos{\theta}$ con $\theta$ l'angolo tra i due vettori. Ricavando $\bigr||\underline{v}|\bigl|$ dalla formula del prodotto vettoriale, si ha che: $v_r = \frac{<\underline{v},\underline{w}>}{\bigr||\underline{w}|\bigl|}$
 \end{Definizione}
 \begin{Proposizione}[Proprietà prodotto scalare]
-Il prodotto scalare gode delle seguenti prorpietà:\begin{itemize}
+Il prodotto scalare gode delle seguenti proprietà:\begin{itemize}
     \item $<\alpha \underline{v_1} + \beta \underline{v_1}, w> = \alpha<\underline{v_1}, \underline{w}> + \beta <\underline{v_2}, \underline{w}>$ (vale anche al contrario
     \item $<\underline{v}, \underline{w}> = <\underline{w}, \underline{v}>$ (simmetria)
     \item $<\underline{0_v}, \underline{v}> = <\underline{v}, \underline{0_v}> = 0$
@@ -1042,7 +1042,7 @@ Il prodotto vettoriale gode delle seguenti proprietà: \newline
 \end{Proposizione}
 \subsubsection{Metodo pratico per trovare una base ortonormale di $\bold{\mathbb{R}^3}$}
 Vi sono due metodi principali: \begin{enumerate}
-    \item Si applica la procedura di ortonormalizzazione di Gram-Schimdt: Se $\underline{v_1}, \underline{v_2}, ..., \underline{v_n}$ sono vettori linearmente indipendenti, allora possiamo costruire una famiglia di vettori ortogonali $\underline{w_1}, \underline{w_2}, ..., \underline{w_n}$ seguendo questo algoritmo: \newline
+    \item Si applica la procedura di ortonormalizzazione di Gram-Schmidt: Se $\underline{v_1}, \underline{v_2}, ..., \underline{v_n}$ sono vettori linearmente indipendenti, allora possiamo costruire una famiglia di vettori ortogonali $\underline{w_1}, \underline{w_2}, ..., \underline{w_n}$ seguendo questo algoritmo: \newline
     $\underline{w_1} = \underline{v_1}$ \newline
     $\underline{w_2} = \underline{v_2} - \frac{<\underline{v_2}, \underline{w_1}>}{<\underline{w_1}, \underline{w_1}>}\cdot\underline{w_1}$ \newline
     $\underline{w_3} = \underline{v_3} - \frac{<\underline{v_3}, \underline{w_1}>}{<\underline{w_1}, \underline{w_1}>}\cdot\underline{w_1} - \frac{<\underline{v_3}, \underline{w_2}>}{<\underline{w_2}, \underline{w_2}>}\cdot\underline{w_2}$ \newline
@@ -1108,7 +1108,7 @@ Sia H un piano.
 $H = \{(x,y,z)\in \mathbb{R}^3 | ax+by+cz+d= 0\}$
 \end{Proposizione}
 \begin{Osservazione}
-    La componente omogena $H_0$ di $H$ in coordinate è \newline $H_0 = \{(x,y,z)\in \mathbb{R}^3 | ax+by+cz = 0\}$ con $ax+by+cz = <(x,y,z),(a,b,c)>$
+    La componente omogenea $H_0$ di $H$ in coordinate è \newline $H_0 = \{(x,y,z)\in \mathbb{R}^3 | ax+by+cz = 0\}$ con $ax+by+cz = <(x,y,z),(a,b,c)>$
 \end{Osservazione}
 \begin{Osservazione}
     $(a,b,c)$ è un vettore ortogonale ad $H_0$ sia in senso algebrico ($<(a,b,c), \underline{v}> = 0 \; \forall \underline{v} \in H$) sia in senso geometrico(angolo tra $(a,b,c)$ e $H_0$ è 90°). Inoltre, il vettore è ortogonale ad $H$ solo in senso geometrico.
@@ -1151,7 +1151,7 @@ Alternativamente, si può procedere in questo modo: Siano $\underline{p}$ il pun
 La distanza fra due rette parallele r ed s di equazioni $ax+by+h = 0$ e $ax+by+k = 0$ rispettivamente è data da: $$d=\frac{|-h+k|}{\sqrt{a^2+b^2}}$$
 Le equazioni delle due bisettrici degli angoli formati da due rette incidenti r ed s, rispettivamente di equazioni $ax+by+c = 0$ e $a_1x+b_1y+c_1=0$ sono $$\frac{ax+by+c}{\sqrt{a^2+b^2}}=\pm \frac{a_1x+b_1y+c_1}{\sqrt{a_1^2+b_1^2}}$$
 \subsubsection{Retta-Piano e Piano-Piano (in $\bold{\mathbb{R}^3}$)}
-Due piani $\pi: ax+by+cz+d = 0, \; \pi^{'}=a^{'}x+b^{'}y+c^{'}z+d^{'}=0$, tenendo conto anche della matrice dei loro coefficenti 
+Due piani $\pi: ax+by+cz+d = 0, \; \pi^{'}=a^{'}x+b^{'}y+c^{'}z+d^{'}=0$, tenendo conto anche della matrice dei loro coefficienti 
 $$A = \begin{pmatrix}
     a & b & c \\
     a^{'} & b^{'} & c^{'}
@@ -1189,7 +1189,7 @@ $$Rg(A) = \begin{cases}
 \begin{Proposizione}
     Per trasformare H da parametrica a "in coordinate" è necessario trovare un vettore "normale" ortogonale alla base di H.
 \end{Proposizione}
-Due rette r ed $r^{'}$ possono essere complanari se esiste un piano che le contiene entrambe oppure sghembe se non esiste un piano che le contiene entrambe. Di fatto, quindi, sono rette non parallalele fra loro senza punti di intersezione. La condizione per la quale due rette siano sghembe è la seguente:\newline Siano: $$r: \begin{cases}
+Due rette r ed $r^{'}$ possono essere complanari se esiste un piano che le contiene entrambe oppure sghembe se non esiste un piano che le contiene entrambe. Di fatto, quindi, sono rette non parallele fra loro senza punti di intersezione. La condizione per la quale due rette siano sghembe è la seguente:\newline Siano: $$r: \begin{cases}
     ax+by+cz-d = 0 \\
     a^{'}x+b^{'}y+c^{'}z+d^{'} = 0
 \end{cases}$$
@@ -1227,14 +1227,14 @@ In alternativa, siano $l = <\underline{v}> + \underline{p}$ e $s = <\underline{w
     \end{pmatrix}$$
 Se: \begin{itemize}
     \item $det(A) \neq 0$ le rette sono sghembe
-    \item $det(A) = 0$ sono complanari, ma pssono essere parallele o incidenti
+    \item $det(A) = 0$ sono complanari, ma possono essere parallele o incidenti
     \item $det(A) = 0 \; e \; \underline{v}\land \underline{w} \neq 0$ allora sono incidenti, mentre se è 0, allora sono parallele.
 \end{itemize}
 \end{Proposizione}
 Dati 2 punti $P = (x_p, y_p, z_p)$ e $Q = (x_q. y_q, z_q)$ di $\mathbb{R}^3$ si definisce distanza tra P e Q la norma del vettore $\underline{PQ}$, ovvero il numero (non negativo): $$d(Q,P) = \bigl||P-Q|\bigr| = \sqrt{(x_q-x_p)^2+(y_q-y_p)^2+(z_q-z_p)^2}$$
 Sia $\pi: ax+by+cz+d = 0$ un piano e $P = (x_0, y_0, z_0)$ un punto. La distanza minima tra P e un punto di $\pi$ si ottiene quando il punto del piano è la proiezione ortogonale di P su $\pi$. In formule: $$d(P, \pi) = \frac{|ax_0+by_0+cz_0+d|}{\sqrt{a^2+b^2+c^2}}$$
 Sia  r una retta espressa in forma parametrica $r: \underline{X} = R_0 + \lambda \underline{v}$. La distanza $d(P, R)$ di un punto P da un punto sulla retta R è minima quando $\underline{PR}$ è ortogonale a r. Si può determinare tale punto R intersecando r con il piano per P ortogonale a r. In formule $$d(P,R) = \frac{\bigl||(P-R)\land \underline{v}|\bigr|}{\bigl||\underline{v}|\bigr|}$$
-Alternativamente, sia $H = \{(x,y,z)| <(x,yz), \underline{v} > + d = 0 \}$ un piano e \newline $l = <\underline{v}> + \underline{p}$ la retta che passa per P.. Determiniamo d tale che H passi per P e calcoliamo la distanza.\newline Inoltre siano P un punto e R una retta espressa in coordiante; possiamo usare questa procedura per capire la distanza fra i 2: \begin{enumerate}
+Alternativamente, sia $H = \{(x,y,z)| <(x,yz), \underline{v} > + d = 0 \}$ un piano e \newline $l = <\underline{v}> + \underline{p}$ la retta che passa per P.. Determiniamo d tale che H passi per P e calcoliamo la distanza.\newline Inoltre siano P un punto e R una retta espressa in coordinate; possiamo usare questa procedura per capire la distanza fra i 2: \begin{enumerate}
     \item Trovo la direzione $V_R$ della retta 
     \item Trovo l'equazione del piano ortogonale a R passante per P utilizzando i componenti di $V_R$ come coefficienti del piano e imponendo il passaggio per P in modo da trovare l'ultimo valore mancante.
     \item Trovo la proiezione P' di P su R intersecando il piano e la retta
@@ -1253,7 +1253,7 @@ Siano $\pi$ e $\pi'$ due piani. La loro distanza è determinata dalla loro posiz
 Siano $r$ e $r'$ dure rette. La loro distanza è determinata dalla loro posizione reciproca:
 \begin{itemize}
     \item Se $r$ e $r'$ sono incidenti, allora $d(r, r')=0$
-    \item Se $r$ e $r'$ sono parallele (distine o coincidenti) allora: $d(r, r')=d(R, r')=d(r, R') \; \forall R\in r \land \forall R' \in r'$
+    \item Se $r$ e $r'$ sono parallele (distinte o coincidenti) allora: $d(r, r')=d(R, r')=d(r, R') \; \forall R\in r \land \forall R' \in r'$
 \end{itemize}
 Se $r$ e $r'$ sono sghembe, allora si può calcolare la distanza in 3 modi diversi:
 \begin{enumerate}
@@ -1298,7 +1298,7 @@ Si possono trovare 3 vettori A,B,C appartenenti ad un piano H affine in $R^3$ SE
 \section{Regressione lineare}
 Si consideri un sistema di equazioni lineari del tipo: $A\underline{x} = \underline{b}$. Questo sistema può avere una, nessuna o infinite soluzioni. Nel caso abbia soluzioni, il teorema di Rouché-Capelli dà importanti informazioni sulla sua geometria dell'insieme delle soluzioni. Esistono tuttavia contesti nel quale la situazione in cui il sistema non ha soluzioni è la più frequente. Supponiamo per esempio di voler trovare un modello che ci permetta di calcolare l'altezza $a$ in base al peso $p$ e alla lunghezza del piede $l$; il modello più semplice, in questo caso, è detto "modello regressivo lineare" e nella situazione che stiamo considerando ce ne sono di due tipi: $$a = \beta_1'\cdot p + \beta_2' \cdot l$$
 $$a = \beta_0'+\beta_1' \cdot p +\beta_2' \cdot l p$$
-Dove $\beta_0', \beta_1', \beta_2'$ sono coefficenti da determinare. Facciamo quindi un esperimento dove selezioniamo n persone e per ogni persona i ne registriamo l'altezza $a_i$, il peso $p_i$ e la lunghezza del piede $l_i$. Otteniamo quindi il sistema di equazioni lineari: $$\begin{cases}
+Dove $\beta_0', \beta_1', \beta_2'$ sono coefficienti da determinare. Facciamo quindi un esperimento dove selezioniamo n persone e per ogni persona i ne registriamo l'altezza $a_i$, il peso $p_i$ e la lunghezza del piede $l_i$. Otteniamo quindi il sistema di equazioni lineari: $$\begin{cases}
     a_1 = \beta_1 p_1 + \beta_2 l_1 \\
     a_2 = \beta_1 p_2 + \beta_2 l_2 \\
     ...\\
@@ -1341,8 +1341,8 @@ Per ogni equazione del sistema, abbiamo una coppia di valori reali $(x_i, y_i)$ 
     \beta_0' \\
     \beta_1'
 \end{pmatrix}.$\newline
-Se i dati originano da un esperimento e i valori di $y_i$ sono misure che possono essere numeri reali con numero di cifre decimali arbitrarie, quasi sicuramente il sistema non avrà soluzione. È quindi lecito pensare: qual'é la retta che meglio approssima l'insieme di tali punti? \newline
-La parola "meglio" va innanzitutto definita: sia $D = \{(x_i, y_i)\}_{i=1,...,n} \subset \mathbb{R}^2$ e $$l = \{(x,y)\in \mathbb{R}^2 | x\in \mathbb{R}, y = cx + d\}$$ una retta. Allora l'i-esimo residuo di D rispetto ad l è $r(l) := y_i - cx_i -d$. Diremo che la retta l approsima meglio della retta s un insieme D se la somma dei quadrati dei residui $SS_l(D) := \sum_{i} r(l)_i^2 \leq SS_s(D) := \sum_i r(s)_i^2$.
+Se i dati originano da un esperimento e i valori di $y_i$ sono misure che possono essere numeri reali con numero di cifre decimali arbitrarie, quasi sicuramente il sistema non avrà soluzione. È quindi lecito pensare: qual è la retta che meglio approssima l'insieme di tali punti? \newline
+La parola "meglio" va innanzitutto definita: sia $D = \{(x_i, y_i)\}_{i=1,...,n} \subset \mathbb{R}^2$ e $$l = \{(x,y)\in \mathbb{R}^2 | x\in \mathbb{R}, y = cx + d\}$$ una retta. Allora l'i-esimo residuo di D rispetto ad l è $r(l) := y_i - cx_i -d$. Diremo che la retta l'approssima meglio della retta s un insieme D se la somma dei quadrati dei residui $SS_l(D) := \sum_{i} r(l)_i^2 \leq SS_s(D) := \sum_i r(s)_i^2$.
 \begin{Osservazione}
     Esistono altre funzioni, oltre a quella della somma dei minimi quadrati residui, per valutare la "bontà" di un modello, ma essa è particolarmente affidabile quando valutata su un insieme di vettori ortogonali.  
 \end{Osservazione}
@@ -1352,7 +1352,7 @@ La parola "meglio" va innanzitutto definita: sia $D = \{(x_i, y_i)\}_{i=1,...,n}
     $$reg_D = \{(x,y)\in \mathbb{R}^2 | y=\beta_0'+\beta_1'x\}$$
     Dove $\beta_0' = \overline{y}-\beta_1'\overline{x}$ e $\beta_1' = \frac{\sum_{i=1}^n(x_i-\overline{x})(y_i-\overline{y})}{\sum_{i=n}^n(x_i-\overline{x})^2}$ e $\overline{x}$ e $\overline{y}$ sono le medie dei dati di $x_i$ e $y_i$.
 \end{Teorema}
-$reg_D$ è detta "retta di regessione lineare semplice", con l'aggettivo riferito al modello che prevede dure variabili regressive di cui una costante uguale a 1 e l'altra x ottenuta da osservazioni. L'uni-dimensionalità dello spazio regressivo $reg_D$ origina dal fatto che dei due regessori corrispondenti alle colonne $\underline{X}$, nel modello che abbiamo scelto, solo la seconda colonna è data dall'osservazione di una variabile x.
+$reg_D$ è detta "retta di regressione lineare semplice", con l'aggettivo riferito al modello che prevede dure variabili regressive di cui una costante uguale a 1 e l'altra x ottenuta da osservazioni. L'uni-dimensionalità dello spazio regressivo $reg_D$ origina dal fatto che dei due regressori corrispondenti alle colonne $\underline{X}$, nel modello che abbiamo scelto, solo la seconda colonna è data dall'osservazione di una variabile x.
 \begin{Proposizione}[Metodo per controllare se dei punti sono allineati]
 Dati 3 punti $A,B,C \in \mathbb{R}^2$, per controllare se essi sono allineati, si procede con il calcolo del determinante della seguente matrice $$\begin{pmatrix}
     x_A-x_B & y_A-y_b \\
@@ -1438,7 +1438,7 @@ A è diagonalizzabile (su $\mathbb{R}$) $\Leftrightarrow$ \begin{enumerate}
 \subsection{Procedura pratica per la diagonalizzazione}
 \begin{enumerate}
     \item Trovare le radici di $P_A(x)$; tutte le radici DEVONO essere in $\mathbb{R}$; se $\exists \lambda_j | P_A(\lambda_j) = 0 \; con \; \lambda_j \notin \mathbb{R} \Rightarrow $ A non è diagonalizzabile in $\mathbb{R}$.
-    \item $\forall \lambda_i | m_a(\lambda_i)>1$, calolcare $m_g(\lambda_i)$; quindi verificare che $m_g(\lambda_i) = m_a(\lambda_i) \; \forall i$(quando è 1, allora $m_g(\lambda_i) = m_a(\lambda_i)$) e che la somma di tutte le molteplicità algebriche sia uguale all'ordine della matrice (in caso contrario, la matrice NON è diagonalizzabile)
+    \item $\forall \lambda_i | m_a(\lambda_i)>1$, calcolare $m_g(\lambda_i)$; quindi verificare che $m_g(\lambda_i) = m_a(\lambda_i) \; \forall i$(quando è 1, allora $m_g(\lambda_i) = m_a(\lambda_i)$) e che la somma di tutte le molteplicità algebriche sia uguale all'ordine della matrice (in caso contrario, la matrice NON è diagonalizzabile)
     \item Per determinare le matrici P e D-diagonale tali che $P^{-1}AP = D$, nel caso A è diagonalizzabile devo: \begin{itemize}
         \item D = $\begin{pmatrix}
             \lambda_1 & 0 & ... & 0 & ... & 0\\
@@ -1447,7 +1447,7 @@ A è diagonalizzabile (su $\mathbb{R}$) $\Leftrightarrow$ \begin{enumerate}
             0  & ...& \lambda_2 & 0 &...&0 \\
             ...&...&...&...&...&...
         \end{pmatrix}$ \newline con ogni autovalore che si ripete nella matrice un numero $m_a(\lambda_i)$ volte
-        \item $P = (\underline{v_1}_1 | \underline{v_1}_2 | \underline{v_2}_1 |...)$ con ogni vettore colonna un vettore della base $\{v_{ij}\}_j$ delle soluzioni del sistema omogeno associato all'autovalore \newline $(A-\lambda_i \cdot I_{d_n})\underline{x} = 0$. Se $m_a(\lambda_i) = n$, scriverò nella matrice P n vettori della base delle soluzioni del sistema associato.
+        \item $P = (\underline{v_1}_1 | \underline{v_1}_2 | \underline{v_2}_1 |...)$ con ogni vettore colonna un vettore della base $\{v_{ij}\}_j$ delle soluzioni del sistema omogeneo associato all'autovalore \newline $(A-\lambda_i \cdot I_{d_n})\underline{x} = 0$. Se $m_a(\lambda_i) = n$, scriverò nella matrice P n vettori della base delle soluzioni del sistema associato.
     \end{itemize} 
 \end{enumerate}
 \begin{Teorema}[Teorema spettrale]
@@ -1469,7 +1469,7 @@ Con la condizione che $det(A_Q) \neq 0$, allora:
 \begin{itemize}
     \item Q è un "iperbole" $\Leftrightarrow det(A) < 0$
     \item Q è una "parabola" $\Leftrightarrow det(A) = 0$
-    \item Q è un' "elisse" $\Leftrightarrow det(A) > 0$
+    \item Q è un' "ellisse" $\Leftrightarrow det(A) > 0$
 \end{itemize}
 In particolare:
 \begin{itemize}
