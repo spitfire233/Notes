@@ -252,6 +252,223 @@ Uno stesso programma può dare origine a \textbf{diversi processi}:
 \subsection{Struttura di un processo}
 Un processo è composto da diverse parti:
 \begin{itemize}
-    \item 
+    \item Lo stato dei registri del processore che esegue il programma, incluso il PC
+    \item Lo stato della \textbf{immagine} del processo, ossia della regione di memoria centrale usata dal programma
+    \item Le risorse del sistema operativo in uso al programma (files, locks, ...)
+    \item Più diverse informazioni sullo stato del processo per il sistema operativo
 \end{itemize}
+Notare che processi distinti hanno immagini distinte! Due processi operano su zone di memoria centrale separate!
+Le risorse del sistema operativo invece possono essere condivise tra processi (a seconda del tipo di risorsa)
+\subsubsection{L'immagine di un processo}
+L'intervallo di indirizzi di memoria in cui è contenuta l'immagine di un processo è anche detto \textbf{spazio di indirizzamento} (\textbf{address space}) del processo.
+L'immagine di un processo di norma contiene:
+\begin{itemize}
+    \item \textbf{Text section}: contiene il codice macchina del programma
+    \item \textbf{Data section}: contiene le variabili globali
+    \item \textbf{Heap}: contiene la memoria allocata dinamicamente durante l'esecuzione
+    \item \textbf{Stack delle chiamate}: contiene parametri, variabili locali e indirizzo di ritorno delle varie procedure che vengono invocate durante l'esecuzione del programma
+\end{itemize}
+\begin{center}
+    \includegraphics[width = 0.35\textwidth]{Images/10.PNG}
+\end{center}
+Text e data section hanno dimensioni costanti per tutta la vita del processo; mentre stack e heap invece crescono e decrescono durante la vita del processo.
+\subsection{Operazioni sui processi}
+I sistemi operativi di solito forniscono delle chiamate di sistema con le quali un processo può creare, terminare e manipolare altri processi.
+Dal momento che solo un processo può creare un altro processo, all'avvio il sistema operativo crea dei processi \textbf{primordiali} dai quali tutti i processi utente e di sistema vengono progressivamente creati.
+\subsubsection{Creazione di processi}
+Di solito nei sistemi operativi i processi sono organizzati in maniera \textbf{gerarchica}:
+Un processo \textbf{padre} può creare altri processi \textbf{figli} che a loro volta potranno essere i padri di nuovi processi.
+Ciò va a creare un \textbf{albero di processi}
+\begin{center}
+    \includegraphics[width = 0.74\textwidth]{Images/11.PNG}
+\end{center}
+La relazione padre/figlio è di norma importante per le politiche di condivisione delle risorse e di coordinazione tra processi.
+Vi sono diverse \textbf{politiche di condivisione di risorse}:
+\begin{itemize}
+    \item Padre e figlio condividono \textbf{tutte le risorse}...
+    \item ...o un \textbf{opportuno sottoinsieme}...
+    \item ...o \textbf{nessuna risorsa}
+\end{itemize}
+Quando un processo padre crea un processo figlio, esso può adottare diverse \textbf{politiche di creazione di spazio di indirizzi}:
+\begin{itemize}
+    \item Il figlio è un \textbf{duplicato} del padre (stessa memoria e programma1)...
+    \item oppure no, e bisogna \textbf{specificare quale programma deve eseguire il figlio}
+\end{itemize}
+I processi padri e i loro figli possono inoltre \textbf{coordinarsi fra loro} seguendo delle \textbf{politiche di coordinazione padre/figli}:
+\begin{itemize}
+    \item Il padre è \textbf{sospeso} finché i figli non terminano...
+    \item oppure eseguono in maniera \textbf{concorrente}
+\end{itemize}
+\subsubsection{Terminazione di processi}
+I processi di regola richiedono esplicitamente la propria terminazione al sistema operativo. 
+Un processo padre può attendere o meno la terminazione di un figlio oppure la \textbf{può forzare} per una serie di ragioni:
+\begin{itemize}
+    \item Il figlio sta usando \textbf{risorse in eccesso} (tempo, memoria, ...)
+    \item Le funzionalità del figlio \textbf{non sono più richieste} (in questo caso, tuttavia, è meglio terminarlo in maniera ordinata tramite IPC)
+    \item Il padre \textbf{termina prima del figlio} (in alcuni S.O.)
+\end{itemize}
+Riguardo all'ultimo punto, alcuni sistemi operativi \textbf{non permettono che i processi figli esistano se il loro processo padre è terminato}:
+\begin{itemize}
+    \item \textbf{Terminazione a cascata}: anche i nipoti, pronipoti, ecc... devono essere terminati
+    \item La terminazione viene iniziata dal \textbf{sistema operativo}
+\end{itemize}
+\subsection{API POSIX per le operazioni sui processi}
+\textbf{POSIX} (Portable Operating System Interface for Unix) è una famiglia di standard specificata dalla \textbf{IEEE} per mantenere la compatibilità del software tra diversi sistemi operativi,
+in particolare tra le varianti di Unix (Linux e MacOS per esempio). In particolare definisce l'API disponibile (come la libreria \textbf{C POSIX} per il linguaggio C) e l'interfaccia a linea di comando
+utilizzabile per shell (come \textbf{bash} e \textbf{dash}) e altri comandi fondamentali.
+Un sistema operativo che segue gli standard POSIX si dice \textbf{POSIX-Compliant}.
+Per operare sui processi, POSIX definisce le seguenti API:
+\begin{itemize}
+    \item \textbf{fork()}: Crea un nuovo processo figlio; il figlio è un duplicato del padre ed esegue concorrentemente ad esso; ritorna al padre un \textbf{numero identificatore} (PID) del processo figlio e al figlio il PID 0.
+    \item \textbf{exec()}: Sostituisce il programma in esecuzione da un processo con un altro programma, che viene \textbf{eseguito dall'inizio}; viene tipicamente usato dopo una fork() dal figlio per iniziare ad eseguire un programma diverso da quello del padre.
+    exec() tuttavia definisce un intera \textbf{famiglia di funzioni} in POSIX, ognuna distinta da dei \textbf{suffissi} di cui ogni lettera ha un significato particolare:
+    \begin{itemize}
+        \item \textbf{e}: Un \textbf{array di puntatori a variabili d'ambiente} è passato esplicitamente alla nuova immagine del processo
+        \item \textbf{l}: Gli argomenti passati \textbf{da linea di comando} sono passati individualmente (come lista) alla funzione
+        \item \textbf{p}: Utilizza la variabile d'ambiente \textbf{PATH} per trovare il file nominato nell'argomento "file" per eseguirlo
+        \item \textbf{v}: Gli argomenti passati \textbf{da linea di comando} sono passati come un array di puntatori
+    \end{itemize}
+    Tendenzialmente, gli argomenti di una exec() sono:
+    \begin{itemize}
+        \item Il \textbf{path} del programma da eseguire oppure il \textbf{file descriptor} (fd) del file da eseguire
+        \item Gli \textbf{argomenti} da passare all'entry point del programma da eseguire
+    \end{itemize}
+    \item \textbf{wait()}: viene chiamata dal padre per attendere la fine dell'esecuzione di un figlio; ritorna:
+    \begin{itemize}
+        \item il \textbf{PID} del figlio che è terminato
+        \item Il codice di ritorno del figlio (passato come parametro dal figlio in \textbf{exit()})
+    \end{itemize}
+    \item \textbf{exit()}: fa terminare il processo che la invoca:
+    \begin{itemize}
+        \item Accetta come parametro un codice di ritorno numerico
+        \item Il sistema operativo elimina il processo e recupera le sue risorse
+        \item Quindi restituisce al processo padre il codice di ritorno (se ha invocato wait(), altrimenti lo memorizza per quando lo invocherà)
+        \item Viene implicitamente invocata se il processo esce dalla funzione main
+    \end{itemize}
+    \item \textbf{abort()}: fa terminare forzatamente un processo figlio
+\end{itemize}
+Tendenzialmente la tipica sequenza di fork-exec è rappresentabile come segue:
+\begin{center}
+    \includegraphics[width = 1\textwidth]{Images/12.PNG}
+\end{center}
+\subsection{Processi zombie e orfani}
+Se un processo termina ma il suo padre non lo sta aspettando (cioè non ha invocato wait()), il processo è detto essere \textbf{zombie}:
+le sue risorse non possono essere completamente deallocate (il padre potrebbe prima o poi invocare wait()).
+Se un processo padre termina prima di un suo figlio e \textbf{non vi è terminazione a cascata} allora i suoi processi figli si dicono \textbf{orfani}.
+\subsection{Comunicazione interprocesso}
+Più processi possono essere indipendenti o cooperare. Un processo coopera con uno o più altri processi se il suo comportamento "influenza" o "è influenzato da" il comportamento di questi ultimi.
+Vi sono più motivi per il quale si vogliono avere processi cooperanti:
+\begin{itemize}
+    \item \textbf{Condivisione} di informazioni
+    \item \textbf{Accelerazione} di computazioni
+    \item \textbf{Modularità} e \textbf{isolamento} (come in Chrome)
+\end{itemize}
+Per permettere ai processi di cooperare il sistema operativo deve mettere a disposizione primitive di \textbf{comunicazione interprocesso} (IPC).
+Vi sono due tipi di primitive:
+\begin{itemize}
+    \item \textbf{Memoria condivisa}
+    \item \textbf{Message passing}
+\end{itemize}
+\subsubsection{Modelli di IPC}
+\begin{center}
+    \includegraphics[width = 0.65\textwidth]{Images/13.PNG}
+\end{center}
+\subsubsection{IPC tramite memoria condivisa}
+Nella IPC tramite memoria condivisa viene stabilita una zona di memoria condivisa tra i processi che intendono comunicare.
+La comunicazione è \textbf{controllata dai processi che comunicano} e non dal sistema operativo.
+Un problema importante è permette ai processi che comunicano tramite memoria condivisa di \textbf{sincronizzarsi} (un processo non deve leggere la memoria condivisa mentre l'altro sta scrivendo).
+Allo scopo, i sistemi operativi mettono a disposizione ulteriori primitive per la \textbf{sincronizzazione}.
+\subsubsection{IPC tramite message passing}
+Nell'IPC tramite message passing, si permette ai processi \textbf{sia di comunicare che di sincronizzarsi}.
+I processi comunicano tra di loro \textbf{senza condividere memoria} attraverso la mediazione del sistema operativo.
+Questo mette a disposizione:
+\begin{itemize}
+    \item Un'operazione \textbf{send(message)} con la quale un processo può inviare un messaggio ad un altro processo
+    \item Un'operazione \textbf{receive(message)} con la quale un processo può ricevere un messaggio o mettersi in attesa fino a quando non ne riceve uno.
+\end{itemize}
+Per comunicare fra loro, due processi devono:
+\begin{itemize}
+    \item Stabilire un \textbf{link di comunicazione} tra di loro
+    \item Scambiarsi \textbf{messaggi} usando \textit{send} e \textit{receive}
+\end{itemize}
+\subsubsection{Pipe}
+Le \textbf{pipe} sono canali di comunicazione tra i processi e sono una forma di IPC tramite \textbf{message passing}.
+Ve ne sono di vario tipo:
+\begin{itemize}
+    \item \textbf{Unidirezionale}
+    \item \textbf{Bidirezionale}
+    \begin{itemize}
+        \item \textbf{Half-Duplex}
+        \item \textbf{Full-Duplex}
+    \end{itemize}
+    \item \textbf{Relazione} tra i processi comunicanti (sono padre-figlio oppure no)
+    \item Usabili o meno in \textbf{rete}
+\end{itemize}
+Convenzionalmente, le pipe sono:
+\begin{itemize}
+    \item \textbf{Unidirezionali}
+    \item Non accessibili al di fuori del processo creatore; sono quindi di solito \textbf{condivise} con un processo figlio attraverso una \textbf{fork()}
+    \item In Windows sono chiamate \textbf{pipe anonime}
+\end{itemize}
+Vi sono anche le \textbf{named pipes}:
+\begin{itemize}
+    \item \textbf{Bidirezionali}
+    \item Esistono anche \textbf{dopo la terminazione} del processo che le ha create 
+    \item Non richiedono una relazione padre-figlio tra i processi che la usano
+\end{itemize}
+In \textbf{Unix}, le named pipes sono:
+\begin{itemize}
+    \item Half-duplex
+    \item Sono accessibili solo sulla stessa macchina
+    \item Trasportano solo dati byte-oriented
+\end{itemize}
+In \textbf{Windows} invece, le named pipes sono:
+\begin{itemize}
+    \item Full-duplex
+    \item Sono accessibili anche da macchine diverse
+    \item Trasportano anche dati message-oriented
+\end{itemize}
+\subsubsection{Notifiche con callback}
+In alcuni sistemi operativi (es. API POSIX e Win32) un processo può \textbf{notificare} un altro processo in maniera da causare \textbf{l'esecuzione di un blocco di codice} ("callback"), similmente a 
+ciò che avviene durante un \textbf{interrupt}.
+Nei sistemi Unix-like (POSIX, Linux) tale notifiche vengono dette \textbf{segnali} ed interrompono in maniera \textbf{asincrona} la computazione del processo corrente,
+causando un \textbf{salto brusco alla callback di gestione}, al termine della quale la computazione \textbf{ritorna al punto di interruzione}.
+Nelle API Win32 esiste un meccanismo simile, detto \textbf{Asynchronous Procedure Call} (APC), che però richiede che il ricevente si metta \textbf{esplicitamente in uno stato di attesa} e che esponga un servizio che il mittente possa invocare.
+\subsection{API POSIX per l'IPC}
+\subsubsection{Memoria condivisa in POSIX}
+Un processo crea o apre un segmento di memoria condivisa con la funzione \textit{smh\_open}:
+\begin{center}
+    \textit{int shm\_fd = shm\_open(const char *name, int oflag, mode\_t mode);}
+\end{center}
+dove:
+\begin{itemize}
+    \item Il parametro \textbf{oflag} può avere i seguenti valori:
+    \begin{itemize}
+        \item \textbf{O\_RDONLY}: Apertura in sola lettura
+        \item \textbf{O\_RDWR}: Apertura per lettura o scrittura
+        \item \textbf{O\_CREAT}: Crea lo spazio di memoria condivisa
+        \item \textbf{O\_EXCL}: Se \textbf{O\_EXCL} e \textbf{O\_CREAT} sono settate; allora \textit{shm\_open} fallisce se l'oggetto di memoria condivisa con quel nome esiste già. Se invece Se \textbf{O\_EXCL} è settata ma non Se \textbf{O\_CREAT} allora il risultato è \textbf{indefinito}
+        \item \textbf{O\_TRUNC}: Se l'oggetto esiste ed è stato aperto con successo tramite \textbf{O\_RDWR}, allora l'oggetto sarà troncato a lunghezza 0.
+        \item Si possono utilizzare \textbf{O\_RDONLY} e \textbf{O\_RDWR} in combinazione con le altre flag, ma non insieme.
+    \end{itemize}
+    \item Il parametro \textit{mode} indica invece la \textbf{modalità di accesso} con cui si sta accedendo all'oggetto di memoria condivisa.
+    La modalità è quindi con quali \textbf{permessi} si accede all'oggetto ed essi sono rappresentati da una \textbf{maschera di bit} in base 8 (da 0 a 7).
+    In UNIX, i permessi sono rappresentati tramite \textbf{3 triadi}, che rappresentano rispettivamente quali permessi sul file hanno \textbf{l'utente, i membri del gruppo e gli utenti "esterni al gruppo"}.
+    Diamo una tabella di quelli più comuni:
+    \begin{center}
+        \includegraphics[width = 0.90\textwidth]{Images/14.PNG}
+    \end{center}
+\end{itemize}
+Un esempio di chiamata è:
+\begin{center}
+    \textit{int shm\_fd = shm\_open(name, O\_CREAT | O\_RWDR, 0666)}
+\end{center}
+Quando si crea un nuovo segmento, è necessario \textbf{impostarne la dimensione}; ciò viene fatto tramite la funzione
+\textbf{ftruncate} che ha firma:
+\begin{center}
+    \textit{int ftruncate(int fildes, off\_t length)}
+\end{center}
+Dove \textbf{fildes}, nel nostro caso, è il \textbf{file descriptor} del segmento di memoria e \textbf{length} sarà la dimensione
+che gli vogliamo dare (in byte).
+Infine, la funzione \textbf{mmap} mappa la memoria condivisa nello spazio 
 \end{document}
