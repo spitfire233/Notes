@@ -772,5 +772,266 @@ Oltre al diagramma E-R, lo schema concettuale è descritto dal cosiddetto \textb
     \includegraphics[width = 0.75\textwidth]{Images/43.PNG}
 \end{center}
 In particolare, il dizionario dei vincoli esterni può avere, a sua volta, altri vincoli esterni espressi in un altro dizionario.
+\section{Progettazione concettuale}
+L'analisi dei requisiti e la progettazione concettuale ("analisi dei dati") comprende attività interconnesse di:
+\begin{itemize}
+    \item Acquisizione dei requisiti
+    \item Analisi dei requisiti
+    \item Costruzione dello schema concettuale
+    \item Costruzione del glossario
+\end{itemize}
+Per i requisti, possibili fonti sono:
+\begin{itemize}
+    \item \textbf{Utenti}, attraverso:
+    \begin{itemize}
+        \item Interviste
+        \item Documentazione apposita
+    \end{itemize}
+    \item \textbf{Documentazione esistente}
+    \begin{itemize}
+        \item Normative (leggi, regolamenti di settore)
+        \item Regolamenti interni, procedure aziendali
+        \item Realizzazioni preesistenti
+    \end{itemize}
+    \item \textbf{Modulistica}
+\end{itemize}
+Il reperimento dei requisiti è un 'attività difficile e non standardizzabile. L'attività di anlisi iniza con i primi requisiti raccolti e spesso indirizza verso altre acquisizioni.
+\begin{center}
+    \includegraphics[width = 0.35\textwidth]{Images/44.PNG}
+\end{center}
+\subsection{Requisiti}
+\subsubsection{Acquisizione per interviste}
+Utenti diversi possono fornire informazioni diverse.
+Utenti a livello più alto hanno spesso una visione più ampia ma meno dettagliata.
+Le interviste portano spesso ad una acquisizione dei requisiti "per raffinamenti successivi".
+\subsubsection{Interazione con gli utenti}
+Spunti per ottenere requisiti tramite l'interazione con gli utenti possono essere:
+\begin{itemize}
+    \item Effettuare spesso verifiche di comprensione e coerenza
+    \item Verificare anche per mezzo di esempi (generali e relativi ai casi limite)
+    \item Richiedere definizioni e classificazioni
+    \item Far evidenziare gli aspetti essenziali rispetto a quelli marginali
+\end{itemize}
+\subsubsection{Documentazione descrittiva}
+Le regole generali sono:
+\begin{itemize}
+    \item Scegliere il corretto livello di astrazione
+    \item Standardizzare la struttura delle frasi
+    \item Suddividere le frasi articolate
+    \item Separare le frasi sui dati da quelle sulle funzioni
+\end{itemize}
+\subsubsection{Organizzazione di termini e concetti}
+Le regole generali sono:
+\begin{itemize}
+    \item Costruire un glossario dei termini
+    \item Individuare omonimi e sinonimi e unificare i termini
+    \item Rendere esplicito il riferimento fra termini
+    \item Riorganizzare le frasi per concetti
+\end{itemize}
+L'analisi dei requisiti procede per \textbf{raffinamenti successivi}.
+\subsubsection{Scrittura dei requisiti}
+Per scrivere correttamente i requisiti serve:
+\begin{itemize}
+    \item \textbf{Scegliere il livello di astrazione}: Si devono evitare termini troppo generici o troppo specifici
+    \item \textbf{Standardizzare la struttura delle frasi}: È preferibile usare sempre lo stesso stile sintattico
+    \item \textbf{Evitare frasi contorte}
+    \item \textbf{Individuare sinonimi/omonimi e unificare i termini}: Usare un solo termine al posto dei sinonimi; usare termini distinti in caso di omonimi
+    \item \textbf{Rendere esplicito il riferimento fra termini}: In assenza di un contesto di riferimento alcuni termini possono risultare ambigui. Occorre rappresentare il riferimento fra i termini
+    \item \textbf{Costruire un glossario dei termini (facoltativo)}: per ogni termine si indica una breve descrizione, i sinonimi e gli altri termini con cui esiste un legame logico. Facilita la comprensione e la precisazione dei termini
+\end{itemize}
+\subsection{Specifiche sulle operazione}
+Per scrivere le specifiche sulle operazioni occorre utilizzare la stessa terminologia utilizzata per le specifiche dei dati (glossario).
+Serve anche conoscere la frequenza con la quale le operazioni sono eseguite.
+\subsection{Dalle specifiche al modello E-R}
+Per passare dalle specifiche al modello E-R si utilizzano le definizioni dei costrutti del modello E-R.
+Se un concetto proprietà significative e descrive classi di oggetti con esistenza autonoma conviene rappresentarlo con una \textbf{entità}.
+Se un concetto ha una struttura semplice e non possiede proprietà rilevanti associate conviene rappresentarlo come un \textbf{attributo} di un altro concetto a cui si riferisce.
+Se sono state individuate due o più entità e nei requisiti compare un concetto che le associa, questo concetto può essere rappresentato con una \textbf{relazione}.
+Se uno pià concetti risultano essere il caso particolare di un altro è opportuno rappresentarli facendo uso della \textbf{generalizzazione}.
+\subsection{Design patterns}
+I \textbf{design patterns} sono soluzioni progettuali a problemi comuni.
+Sono largamente usati nell'ingegneria del software.
+I design pattern per le basi di dati utilizzano il concetto di \textbf{reificazione}, cioè il procedimento di creazione di un modello dati su un concetto astratto predefinito.
+\subsubsection{Reificazione di attributo di entità}
+Questo design pattern estrae un attributo e lo rende entità poiché, nel contesto applicativo, esso ha dignità di entità
+\begin{center}
+    \includegraphics[width = 0.60\textwidth]{Images/45.PNG}
+\end{center}
+\subsubsection{Part-of}
+A volte un'entità può essere legata a un'altra entità creando una relazione di tipo (1, N). Gli esempi
+mostrano come il concetto di part-of possa essere di \textbf{dipendenza}.
+\begin{center}
+    \includegraphics[width = 0.50\textwidth]{Images/46.PNG}
+\end{center}
+\subsubsection{Instance-of}
+A volte si viene a creare la necessità di creare un'entità astratta che prenda concretezza in un'entità istanza.
+\begin{center}
+    \includegraphics[width = 0.70\textwidth]{Images/47.PNG}
+\end{center}
+\subsubsection{Reificazione di relazione binaria}
+\begin{center}
+    \includegraphics[width = 0.80\textwidth]{Images/48.PNG}
+\end{center}
+\subsubsection{Reificazione di relazione ricorsiva}
+Nell'esempio, partita potrebbe essere vista come una relazione binaria tra squadra e se stessa.
+\begin{center}
+    \includegraphics[width = 0.50\textwidth]{Images/49.PNG}
+\end{center}
+Come sappiamo una squadra può giocare più volte, reificare partita come nello schema seguente è più utile per esprimere questo concetto:
+\begin{center}
+    \includegraphics[width = 0.65\textwidth]{Images/50.PNG}
+\end{center}
+\subsubsection{Reificazione di attributo di relazione}
+\begin{center}
+    \includegraphics[width = 0.75\textwidth]{Images/51.PNG}
+\end{center}
+\subsubsection{Storicizzazione di concetto}
+\begin{center}
+    \includegraphics[width = 0.55\textwidth]{Images/52.PNG}
+\end{center}
+\begin{center}
+    \includegraphics[width = 0.80\textwidth]{Images/53.PNG}
+\end{center}
+\subsubsection{Evoluzione di concetto}
+\begin{center}
+    \includegraphics[width = 0.70\textwidth]{Images/54.PNG}
+\end{center}
+\subsubsection{Reificazione di relazione ternaria}
+\begin{center}
+    \includegraphics[width = 0.70\textwidth]{Images/55.PNG}
+\end{center}
+\begin{center}
+    \includegraphics[width = 0.75\textwidth]{Images/56.PNG}
+\end{center}
+\subsection{Strategie di progetto}
+Come procediamo con tante specifiche anche dettagliate? Come ci orizzontiamo?
+Le varie strategie di progetto che possiamo adottare sono:
+\begin{itemize}
+    \item \textbf{Top-down}: si parte da uno schema iniziale molto astratto ma completo, che viene successivamente raffinato fino ad arrivare allo schema finale
+    \item \textbf{Bottom-up}: si suddividono le specifiche in modo da sviluppare semplici schemi parziali ma dettagliati, che poi vengono integrati tra loro
+    \item \textbf{Inside-out}: lo schema si sviluppa "a macchia d'olio", partendo dai concetti più importanti, aggiungendo quelli ad essi correlati e così via
+\end{itemize}
+Ciascuna strategia prevede opportune \textbf{primitive di raffinamento} che specificano in che modo sostituire o integrare una parte dello schema con una versione più raffinata della stessa.
+Vediamo i vantaggi e gli svantaggi dei vari approcci:
+\begin{itemize}
+    \item \textbf{Top-down}
+    \begin{itemize}
+        \item \textbf{Pro}: non è inizialmente necessario specificare i dettagli
+        \item \textbf{Contro}: richiede sin dall'inizio una visione globale del problema, non sempre ottenibile in casi complessi
+    \end{itemize}
+    \item \textbf{Bottom-up}:
+    \begin{itemize}
+        \item \textbf{Pro}: permette una ripartizione delle attività 
+        \item \textbf{Contro}: Richiede una fase di integrazione
+    \end{itemize}
+    \item \textbf{Inside-out}:
+    \begin{itemize}
+        \item \textbf{Pro}: non richiede passi di integrazione
+        \item \textbf{Contro}: Richiede ad ogni passo di esaminare tutte le specifiche per trovare i concetti non ancora modellati
+    \end{itemize}
+\end{itemize}
+\subsubsection{Strategia top-down}
+Vediamo quali sono le \textbf{primitive di trasformazione top-down}: esse operano su un singolo concetto trasformandolo in una struttura più complessa in grado di descrivere il concetto di partenza con maggior dettaglio:
+\begin{itemize}
+    \item \textbf{T1}: Una entità descirve due concetti diversi legati logicamente fra loro
+    \begin{center}
+        \includegraphics[width = 0.75\textwidth]{Images/57.PNG}
+    \end{center}
+    \item \textbf{T2}: Una entità è composta da sotto-entità distinte
+    \begin{center}
+        \includegraphics[width = 0.75\textwidth]{Images/58.PNG}
+    \end{center}
+    \item \textbf{T3}: Una relazione in realtà descrive due relazioni diverse fra le stesse entità
+    \begin{center}
+        \includegraphics[width = 0.75\textwidth]{Images/59.PNG}
+    \end{center}
+    \item \textbf{T4}: Una relazione descrive in realtà un concetto con esistenza autonoma
+    \begin{center}
+        \includegraphics[width = 0.75\textwidth]{Images/60.PNG}
+    \end{center}
+    \item \textbf{T5}: Si aggiungono attributi ad entità
+    \begin{center}
+        \includegraphics[width = 0.75\textwidth]{Images/61.PNG}
+    \end{center}
+    \item \textbf{T6}: Si aggiungo attributi a relazioni
+    \begin{center}
+        \includegraphics[width = 0.60\textwidth]{Images/62.PNG}
+    \end{center}
+\end{itemize}
+Nella strategia top-down, si trasformano gli attributi composti di un'entità in un'altra entità connessa alla prima da una relazione
+\begin{center}
+    \includegraphics[width = 0.60\textwidth]{Images/63.PNG}
+\end{center}
+Si può anche andare a trasformare una relazione in una entità nel seguente modo:
+\begin{center}
+    \includegraphics[width = 0.70\textwidth]{Images/64.PNG}
+\end{center}
+\subsubsection{Strategia bottom-up}
+\begin{center}
+    \includegraphics[width = 0.80\textwidth]{Images/65.PNG}
+\end{center}
+Vediamo le \textbf{primitive di trasformazione bottom-up}: esse introducono nuovi concetti in grado di descrivere aspetti non ancora rappresentati.
+\begin{itemize}
+    \item \textbf{T1}: Creazione di una entità relativa a una classe di oggetti con proprietà comuni
+    \begin{center}
+        \includegraphics[width = 0.30\textwidth]{Images/66.PNG}
+    \end{center}
+    \item \textbf{T2}: Individuazione di un legame logico fra due entità (relazione)
+    \begin{center}
+        \includegraphics[width = 0.70\textwidth]{Images/67.PNG}
+    \end{center}
+    \item \textbf{T3}: Individuazione di un legame tra diverse entità riconducibile ad una generalizzazione
+    \begin{center}
+        \includegraphics[width = 0.75\textwidth]{Images/68.PNG}
+    \end{center}
+    \item \textbf{T4}: A partire da una serie di attributi si individua un'entità che aggrega tali attributi
+    \begin{center}
+        \includegraphics[width = 0.55\textwidth]{Images/69.PNG}
+    \end{center}
+    \item \textbf{T5}: A partire da una serie di attributi si individua una relazione che aggrega tali attributi
+    \begin{center}
+        \includegraphics[width = 0.75\textwidth]{Images/70.PNG}
+    \end{center}
+\end{itemize}
+\subsubsection{Strategia inside-out}
+\begin{center}
+    \includegraphics[width = 0.95\textwidth]{Images/71.PNG}
+\end{center}
+\subsubsection{In pratica - Strategia ibrida}
+Nella pratica si utilizzano diverse tecniche provenienti da strategie diverse.
+La strategia ibrida combina i vantaggi delle strategie top-down e bottom-up:
+\begin{itemize}
+    \item Suddivisone dei requisiti in \textbf{componenti separate}
+    \item Definizione di uno \textbf{schema scheletro} per i concetti principali
+\end{itemize}
+Lo schema scheletro facilita le fasi di integrazione:
+\begin{itemize}
+    \item Si individuano i concetti più importanti (\textbf{bottom-up})
+    \item Si organizzano tali concetti in un semplice schema concettuale (\textbf{inside-out})
+    \item Ci si concentra sugli aspetti essenziali (molti attributi, le cardinalità delle relazioni, le gerarchie articolate sono rimandate) (\textbf{top-down})
+\end{itemize}
+\subsection{Qualità di uno schema concettuale}
+Le qualità di uno schema concettuale sono:
+\begin{itemize}
+    \item \textbf{Correttezza}: Uso corretto dei costrutti (sintassi e semantica)
+    \item \textbf{Completezza}: Tutti i dati sono rappresentati; tutte le operazioni possono essere eseguite (tutti i dati previsti da un'operazione sono raggiungibili \textit{navigando} il diagramma E-R)
+    \item \textbf{Leggibilità}: Lo schema deve essere il più possibile autoesplicativo (nomi, layout dello schema)
+    \item \textbf{Minimalità}: Lo schema non contiene ridondanze a livello intensionale ed estensionale
+\end{itemize}
+\subsubsection{Minimalità}
+Vi sono due tipi di ridondanza: \textbf{intensionale} ed \textbf{estensionale}.
+Esempio di ridondanza estensionale e della sua risoluzione è la seguente:
+\begin{center}
+    \includegraphics[width = 0.40\textwidth]{Images/72.PNG}
+\end{center}
+\begin{center}
+    \includegraphics[width = 0.35\textwidth]{Images/73.PNG}
+\end{center}
+Esempio di ridondanza a livello estensionale è il seguente:
+\begin{center}
+    \includegraphics[width = 0.85\textwidth]{Images/74.PNG}
+\end{center}
+Lo schema non deve contenere ridondanza (concetti che possono essere derivati da altri)
+\section{Modello relazionale}
 
 \end{document}
