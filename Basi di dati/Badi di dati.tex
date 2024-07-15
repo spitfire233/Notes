@@ -355,5 +355,422 @@ L'approccio alla \textbf{rappresentazione dei dati tramite basi di dati} ha le s
     \item \textbf{Astrazione dei dati}: si usa un \textbf{modello dati} per nascondere dettagli e presentare all'utente una \textit{vista concettuale} del database
     \item \textbf{Supporto di viste multiple dei dati}: Ogni utente può usare una vista (view) differente del database, contente solo i dati di interesse per quell'utente
 \end{itemize}
+\section{Progettazione di unaa base di dati}
+La \textbf{progettazione di basi di dati} è una delle attività del processo di sviluppo dei sistemi informativi e va quindi inquadrata in un contesto più generale: \textbf{il ciclo di vita dei sistemi informativi}.
+\subsection{Ciclo di vita dei sistemi informativi}
+Il ciclo di vita dei sistemi informativi è \textbf{l'insieme e sequenzializzazione delle attività svolte da analisti, progettisti, utenti nello sviluppo e nell'uso dei sistemi informativi}.
+È un attività iterativa, quindi è un "ciclo".
+\newpage
+\noindent
+Le fasi del ciclo di vita sono:
+\begin{center}
+    \includegraphics[width = 0.85\textwidth]{Images/11.PNG}
+\end{center}
+Diamone una definizione:
+\begin{itemize}
+    \item \textbf{Studio di fattibilità}: definizione dei costi e delle priorità
+    \item \textbf{Raccolta e analisi dei requisiti}: studio delle proprietà del sistema
+    \item \textbf{Progettazione}: di dati e funzioni
+    \item \textbf{Validazione e collaudo}: sperimentazione
+    \item \textbf{Funzionamento}: il sistema diventa operativo
+\end{itemize}
+Possiamo anche rappresentare questo ciclo di vita come una spirale:
+\begin{center}
+    \includegraphics[width = 0.85\textwidth]{Images/12.PNG}
+\end{center}
+\subsubsection{Progettazione}
+La progettazione dei dati individua l'organizzazione e la struttura della base di dati.
+La progettazione delle applicazioni schematizza le operazioni sui dati e progetta il software applicativo.
+I dati hanno \textbf{un ruolo centrale} e grazie alla progettazione:
+\begin{itemize}
+    \item i dati sono \textbf{più stabili}
+    \item Si progetta prima la base di dati e poi le applicazioni
+\end{itemize}
+\subsubsection{Metodologia di progettazione}
+Per garantire prodotti di buona qualità è opportuno seguire \textbf{una metodologia di progetto}; cioè un'articolazione in fasi/passi di guida ad una attività di progettazione.
+Serve una metodologia di progettazione (insieme di strumenti) che:
+\begin{itemize}
+    \item permetta di \textbf{suddividere} la progettazione in fasi successive indipendenti
+    \item fornisca \textbf{strategie} da seguire e criteri di scelta in caso di alternative
+    \item fornisca \textbf{modelli di riferimento (linguaggi)} per descrivere la realtà che stiamo progettando
+\end{itemize}
+e che garantisca:
+\begin{itemize}
+    \item \textbf{Generalità} rispetto ai problemi da affrontare
+    \item \textbf{Qualità} in termini di correttezza, completezza ed efficienza
+    \item \textbf{Facilità d'uso}
+\end{itemize}
+Una metodologia di progettazione di basi di dati si basa su un principio semplice ma efficace:
+\textbf{la separazione netta tra decisioni relative a}:
+\begin{itemize}
+    \item \textbf{Come rappresentare}
+    \item \textbf{Come farlo}
+\end{itemize}
+\begin{center}
+    \includegraphics[width = 0.80\textwidth]{Images/13.PNG}
+\end{center}
+La metodologia introdotta prevede 3 fasi:
+\begin{itemize}
+    \item Progettazione \textbf{concettuale}
+    \item Progettazione \textbf{logica}
+    \item Progettazione \textbf{fisica}
+\end{itemize}
+Ognuna delle fasi si basa su un \textbf{modello}, che permette di generare una rappresentazione formale (schema) della base di dati ad un dato livello di astrazione (concettuale, logico e fisico):
+\begin{itemize}
+    \item Schema concettuale
+    \item Schema logico
+    \item Schema fisico
+\end{itemize}
+\subsubsection{Fase di progettazione concettuale}
+La fase diu progettazione concettuale traduce i requisiti del sistema informatico in una descrizione \textbf{formalizzata e integrata} delle esigenze aziendali, espressa in modo \textbf{indipendente} dalle scelte implementative (DBMS, SW e HW).
+Essa è:
+\begin{itemize}
+    \item \textbf{Formale}: la descrizione deve essere espressa con un linguaggio non ambiguo e capace di descrivere in modo soddisfacente il sistema analizzato
+    \item \textbf{Integrata}: la descrizione deve essere in grado di descrivere nella globalità l'ambiente analizzato
+    \item \textbf{Indipendente dall'ambiente tecnologico}: la descrizione deve concentrarsi sui dati e sulle loro relazioni e non sulle scelte implementative
+\end{itemize}
+\subsubsection{Fase di progettazione logica}
+La progettazione logica consiste nella traduzione dello schema concettuale nel modello dei dati del DBMS.
+Il risultato è uno schema logico, espresso nel DDL del DBMS.
+In questa fase si considerano anche aspetti legati ai vincoli e all'efficienza.
+La progettazione logica si articola in due sotto-fasi:
+\begin{itemize}
+    \item \textbf{Ristrutturazione dello schema concettuale}
+    \item \textbf{Traduzione verso il modello logico}
+\end{itemize}
+\subsubsection{Progettazione fisica}
+La progettazione fisica completa lo schema logico ottenuto con le specifiche proprie dell'hw/sw scelto.
+Il risultato è lo \textbf{schema fisico} che descrive le strutture di memorizzazione ed accesso ai dati.
+\subsubsection{Vantaggi della progettazione concettuale}
+La progettazione concettuale permette una descrizione dei dati indipendete degli aspetti tecnologici con un livello di astrazione intermedio fra utente e sistema.
+\textbf{Prevale l'aspetto intensionale}.
+Inoltre, essa utilizza una rappresentazione prevalentemente \textbf{grafica}, che migliora la comunicazione tra i progettisti, gli utenti e tutte le persone coinvolte nella realizzazione dell'applicazione.
+È inoltre utile per la \textbf{documentazione}.
+\begin{center}
+    \includegraphics[width = 0.80\textwidth]{Images/14.PNG}
+\end{center}
+\section{Modello Entità-Relazione (E-R)}
+Il modello entità-relazione (E-R) è un linguaggio grafico semi-formale per la rappresentazione di schemi concettuali.
+Il modello E-R si è ormai affermato come uno standard nelle metodologie di progetto e nei sistemi SW di ausilio alla progettazione.
+Ne esistono molte versione più o meno diverse l'una dall'altra.
+\subsection{Introduzione ai costrutti}
+\begin{center}
+    \includegraphics[width = 0.81\textwidth]{Images/15.PNG}
+\end{center}
+\subsection{Entità}
+Un'entità è una classe di oggetti (fatti, persone, cose) della applicazione di interesse con proprietà comuni e con esistenza \textbf{autonoma} e della quale si vogliono registrare fatti specifici.
+Per esempio, un'entità potrebbe essere un impiegato, un dipartimento, una città, un conto corrente, un'università, uno studente, ...
+Graficamente le entità si rappresentano nel seguente modo:
+\begin{center}
+    \includegraphics[width = 0.70\textwidth]{Images/16.PNG}
+\end{center}
+Ogni entità ha un nome che la identifica univocamente nello schema, il quale deve essere:
+\begin{itemize}
+    \item \textbf{Espressivo}
+    \item \textbf{Al singolare}
+\end{itemize}
+A livello \textbf{estensionale} un'entità è costituita da un insieme di oggetti, che sono chiamati le sue \textbf{istanze}.
+Ciò significa che, se in uno schema $S$ è definita una entità $E$, in ogni istanza $I$ dello schema $S$, alla entità $E$ è associato un insieme di oggetti
+$$istanze(I,E) = \{e_1, e_2, e_3, \dots\}$$
+che viene detto anche \textit{l'estensione} di $E$ nella istanza $I$ dello schema $S$.
+Una istanza di entità non è un valore che identifica un oggetto, ma è \textbf{l'oggetto stesso}.
+Quindi ogni istanza di entità è \textbf{oggetto della classe che l'entità rappresenta}.
+Nello schema concettuale rappresentiamo le \textbf{entità}, non le singole istanze ("astrazione").
+Quindi:
+\begin{itemize}
+    \item \textbf{Conoscenza astratta}: entità
+    \item \textbf{Conoscenza concreta}: istanza di entità
+\end{itemize}
+\subsection{Attributi}
+Un attributo di entità è una proprietà locale di un'entità, di interesse ai fini dell'applicazione.
+Un attributo associa ad ogni istanza di entità un valore appartenente ad un insieme detto \textbf{dominio dell'attributo} (tipicamente interi, caratteri, stringhe, ecc\dots).
+Si definisce quindi un attributo per l'entità $E$ quando si vuole rappresentare una proprietà \textbf{locale} delle istanze dell'entità $E$.
+Una proprietà di un oggetto si dice locale quando in ogni istanza dello schema il valore di tale proprietà dipende \textbf{solamente} dall'oggetto stesso e \textbf{non ha alcun rapporto} con altri elementi dell'istanza dello schema.
+Nel modello E-R, gli attributi si rappresentano nella seguente maniera:
+\begin{center}
+    \includegraphics[width = 0.25\textwidth]{Images/17.PNG}
+\end{center}
+Ogni attributo di entità ha un nome che lo identifica in modo univoco nell'ambito dell'entità, ed è rappresentato da un cerchio collegato alla entità a cui appartiene.
+Ogni attributo è definito su un dominio di valori. Un attributo associa ad ogni istanza di entità o associazione un valore nel corrispondente dominio.
+I domini solitamente non vengono specificati nell'E-R ma nella documentazione associata. Se li si vuole indicare, la notazione è la seguente:
+\begin{center}
+    \includegraphics[width = 0.50\textwidth]{Images/18.PNG}
+\end{center}
+Quindi, ogni attributo può essere pensato come una vera e propria \textbf{funzione} che associa una determinata istanza di un'entità ad un particolare valore per quell'attributo;
+di conseguenza \textbf{valgono tutte le definizioni e tutte le proprietà delle funzioni}
+\begin{center}
+    \includegraphics[width = 0.65\textwidth]{Images/19.PNG}
+\end{center}
+Inoltre, un'attributo è una \textbf{funzione totale}, quindi ogni istanza di un'entità deve avere un valore associato per ogni suo attributo.
+\subsection{Attributi composti}
+Gli attributi composti si ottengono raggruppando attributi di una medesima entità o relazione che presentano affinità nel loro significato o uso:
+\begin{center}
+    \includegraphics[width = 0.40\textwidth]{Images/20.PNG}
+\end{center}
+\subsection{Relazioni}
+Una relazione è un fatto che descrive un'azione o una situazione che \textbf{stabilisce legami logici} tra istanze di entità (associa, mette in relazione) nella
+\textbf{realtà che stiamo considerando}.
+\textbf{I legami possono essere fra più di due entità}. Il numero di entità coinvolte in una relazione determina il suo \textbf{grado}.
+Nel modello E-R una relazione si indica nel seguente modo:
+\begin{center}
+    \includegraphics[width = 0.65\textwidth]{Images/21.PNG}
+\end{center}
+Ogni relazione ha un nome che la identifica univocamente nello schema ed esso deve essere:
+\begin{itemize}
+    \item \textbf{Espressivo}
+    \item \textbf{Singolare} e usare \textbf{sostantivi invece che verbi}
+\end{itemize}
+A livello \textbf{estensionale} una relazione $R$ tra le entità $E$ ed $F$ è costituita da un insieme di coppie $(x,y)$, tali che $x$ è una istanza di $E$ ed $y$ è un istanza di $F$.
+Ogni coppia è detta \textbf{istanza} della relazione $R$.
+cIò significa che, se in uno schema $S$ è definita una relazione $R$ sulle entità $E$ ed $F$, in ogni istanza $I$ dello schema $S$, alla relazione $R$ è associato un insieme di coppie
+(denotato da istanze $(I, R)$)
+$$\{(x_1, y_1) (x_2, y_2), (x_3, y_3), \dots\}$$
+che viene detto anche \textit{l'estensione} di $R$ nella istanza $I$ dello schema $S$.
+In altre parole, una relazione nel modello E-R è, dal punto di vista della semantica, una relazione matematica.
+In ogni istanza $I$ dello schema $S$ si ha:
+$$istanze(I, R) \subseteq istanze(I,E) \times istanze(I,F)$$
+In particolare si dice \textbf{istanza di un'associazione} la combinazione (aggregazione) di istanze di entità che prendono parte alla associazione.
+Dalla semantica delle relazioni segue immediatamente che \textbf{non} possono esistere due istanze della stessa relazione che coinvolgono le stesse istanze di entità.
+\newpage
+\noindent
+Tuttavia \textbf{due entità possono essere coinvolte in più associazioni}:
+\begin{center}
+    \includegraphics[width = 0.65\textwidth]{Images/22.PNG}
+\end{center}
+Inoltre le relazioni possono coinvolgere più di due entità:
+\begin{center}
+    \includegraphics[width = 0.65\textwidth]{Images/23.PNG}
+\end{center}
+\begin{center}
+    \includegraphics[width = 0.65\textwidth]{Images/24.PNG}
+\end{center}
+Se si parla quindi di una relazione \textbf{n-aria}, a livello \textbf{estensionale} (ovvero in ogni istanza $I$ dello schema $S$) una relazione $R$ tra le entità
+$E_1, E_2, \dots, E_n$ è costituita dun insieme di n-uple (o tuple) $(x_1, x_2, \dots, x_n)$, tali che $x_1$ è un istanza di $E_1$ in $I$, $x_2$ è un istanza di $E_2$ in $I$, \dots
+$x_N$ è un istanza di $E_n$ in $I$.
+Ogni n-upla è detta \textbf{istanza} della relazione $R$ nella istanza $I$ dello schema $S$.
+Quindi, in ogni istanza $I$ dello schema si ha:
+$$istanze(I,R) \subseteq istanze(I, E_1) \times \dots \times istanze(I, E_n)$$
+\subsection{Attributi di relazione}
+Un attributo di relazione è una proprietà locale di una relazione, di interesse ai fini dell'applicazione.
+Un attributo della relazione $R$ tra le entità $E_1, E_2, \dots, E_n$ modella una proprietà \textbf{non} propria delle entità
+ma del \textbf{legame} tra le varie entità rappresentato da $R$.
+Un attributo associa ad ogni istanza di relazione un valore appartenente ad un insieme detto \textbf{dominio} dell'attributo.
+Ogni attributo di relazione ha un nome che lo identifica in modo univoco nell'ambito della relazione, ed è rappresentato da un cerchio collegato alla relazione a cui appartiene.
+\begin{center}
+    \includegraphics[width = 0.70\textwidth]{Images/25.PNG}
+\end{center}
+\begin{center}
+    \includegraphics[width = 0.70\textwidth]{Images/26.PNG}
+\end{center}
+Ovviamente gli attributi possono essere presenti su associazioni n-arie:
+\begin{center}
+    \includegraphics[width = 0.75\textwidth]{Images/27.PNG}
+\end{center}
+\begin{center}
+    \includegraphics[width = 0.75\textwidth]{Images/28.PNG}
+\end{center}
+\subsection{Analisi dei casi dubbi}
+I nomi di entità e associazioni alle volte traggono in inganno: è bene quindi, nel caso si presentino situazioni poco chiare, bisogna provare a ragionare anche in termini di istanze:
+cosa "contiene" effettivamente questa entità/associazione?
+\subsection{Relazioni ricorsive}
+Una associazione può coinvolgere "due o più volte" la stessa entità:
+\begin{center}
+    \includegraphics[width = 0.40\textwidth]{Images/29.PNG}
+\end{center}
+Vi è però il problema di \textbf{identificare i ruoli in questa associazione}.
+Per farlo, essi si scrivono di fianco ai "collegamenti" che collegano la relazione con l'entità:
+\begin{center}
+    \includegraphics[width = 0.60\textwidth]{Images/30.PNG}
+\end{center}
+\newpage
+\noindent
+Un'associazione ricorsiva può essere o meno:
+\begin{itemize}
+    \item \textbf{Simmetrica}: $(a,b) \in A \Rightarrow (b,a) \in A$
+    \item \textbf{Riflessiva}: $(a,a) \in A$
+    \item \textbf{Transitiva}: $(a,b) \in A, (b,c) \in A \Rightarrow (a,c) \in A$
+\end{itemize}
+Una associazione ricorsiva può essere anche n-aria:
+\begin{center}
+    \includegraphics[width = 0.30\textwidth]{Images/31.PNG}
+\end{center}
+\subsection{Scelta tra entità, relazione e attributo}
+Un concetto verrà modellato come:
+\begin{itemize}
+    \item \textbf{Entità}:
+    \begin{itemize}
+        \item Se le sue istanze sono concettualmente significative indipendentemente da altre istanze
+        \item Se ha o potrà avere delle proprietà indipendenti dagli altri concetti
+        \item Se il concetto è importante nell'applicazione
+    \end{itemize}
+    \item \textbf{Attributo} di un'entità o di una relazione:
+    \begin{itemize}
+        \item Se le sue istanze non sono concettualmente significative
+        \item Se non ha senso considerare una sua istanza indipendentemente da altre istanze
+        \item Se serve solo a rappresentare una proprietà locale di un altro concetto
+    \end{itemize}
+    \item \textbf{Relazione}:
+    \begin{itemize}
+        \item Se le sue istanze non sono concettualmente significative indipendentemente da altre istanze, cioè le sue istanze rappresentano n-uple di altre istanze
+        \item Se non ha senso pensare alla partecipazione delle sue istanze ad altre relazioni
+    \end{itemize}
+\end{itemize}
+Le scelte che si prendono possono cambiare durante l'analisi.
+\subsection{Cardinalità}
+La cardinalità è una coppia di valori che si associa a ogni entità che partecipa a una relazione.
+Specificano il numero minimo e massimo di occorrenze della relazione cui ciascuna occorrenza di una entità può partecipare.
+Per semplicità usiamo solo tre simboli:
+\begin{itemize}
+    \item 0 e 1 per la cardinalità \textbf{minima}
+    \begin{itemize}
+        \item 0 = "partecipazione \textbf{opzionale}"
+        \item 1 = "partecipazione \textbf{obbligatoria}"
+    \end{itemize}
+    \item 1 e "N" per la \textbf{massima}; con N che non pone alcun limite
+\end{itemize}
+Nel modello E-R le cardinalità si rappresentano nel seguente modo:
+\begin{center}
+    \includegraphics[width = 0.65\textwidth]{Images/32.PNG}
+\end{center}
+Con riferimento alle cardinalità \textbf{massime}, abbiamo relazioni:
+\begin{itemize}
+    \item \textbf{Uno a uno}: se le cardinalità massime di entrambe le entità sono uno
+    \item \textbf{Uno a molti}: se la cardinalità massima associata ad un'entità è 1 e la cardinalità massima associata all'altra entità è N 
+    \item \textbf{Molti a molti}: se le cardinalità massime per entrambe le entità è N
+\end{itemize}
+\subsubsection{Vincoli di cardinalità}
+Un \textbf{vincolo di cardinalità} tra un'entità $E$ e una relazione $R$ esprime un limite minimo (\textbf{cardinalità minima})
+ed un limite massimo (\textbf{cardinalità massima}) di istanze della relazione $R$ a cui può partecipare ogni istanza dell'entità $E$.
+Serve a caratterizzare meglio il significato di una relazione.
+\subsubsection{Cardinalità di attributi}
+È possibile associare delle cardinalità anche agli attributi, con due scopi:
+\begin{itemize}
+    \item Indicare \textbf{opzionalità}
+    \item Indicare \textbf{attributi multivalore}
+\end{itemize}
+\begin{center}
+    \includegraphics[width = 0.65\textwidth]{Images/33.PNG}
+\end{center}
+\subsection{Identificatori di un'entità}
+L'identificatore è uno "strumento" per l'identificazione univoca delle occorrenze di un'entità.
+Esso è costituito da
+\begin{itemize}
+    \item \textbf{Attributi dell'entità}; in questo caso è detto \textbf{identificatore interno}
+    \item \textbf{Attributi dell'entità più entità esterne attraverso relazioni}; in questo caso è detto \textbf{identificatore esterno}
+\end{itemize}
+Per gli \textbf{identificatori interni} si segue la seguente notazione:
+\begin{itemize}
+    \item Se l'identificatore è formato da un solo attributo, si annerisce il corrispondente pallino
+    \item Se l'identificatore è formato da più attributi, si uniscono gli attributi con una linea che termina con pallino annerito
+\end{itemize}
+\begin{center}
+    \includegraphics[width = 0.65\textwidth]{Images/34.PNG}
+\end{center}
+Per gli \textbf{identificatori esterni} si segue la seguente notazione:
+\begin{itemize}
+    \item Se l'identificatore è formato da attributi e relazioni (o meglio, ruoli), si indica unendo gli attributi ed i ruoli con una linea che termina con pallino annerito.
+    \item Una identificazione esterna è possibile solo \textbf{attraverso una relazione a cui l'entità da identificare partecipa con cardinalità (1,1)}
+\end{itemize}
+\begin{center}
+    \includegraphics[width = 0.65\textwidth]{Images/35.PNG}
+\end{center}
+Ogni entità deve possedere almeno un identificatore, ma può averne in generale più di uno.
+\subsection{Relazione IS-A tra entità}
+Fino ad ora non abbiamo detto nulla sul fatto se due entità possano o no avere istanze in comune.
+È facile verificare che, in molti contesti, può accadere che tra due classi rappresentate da due entità nello schema concettuale sussista la \textbf{relazione IS-A} (o relazione di sottoinsieme), e cioè che \textbf{ogni istanza di una sia anche istanza dell'altra}.
+(Es. Studente, Studente della laurea breve).
+La relazione IS-A nel modello E-R si può definire tra due entità, che si dicono rispettivamente "entità padre" ed "entità figlia" (o sottoentità, cioè quella che rappresenta un sottoinsieme dell'entità padre).
+La relazione IS-A si rappresenta nel diagramma dello schema concettuale nel seguente modo:
+\begin{center}
+    \includegraphics[width = 0.50\textwidth]{Images/36.PNG}
+\end{center}
+\subsubsection{Ereditarietà su entità}
+La relazione IS-A implica il \textbf{principio di ereditarietà}: ongi proprietà dell'entità padre è anche una proprietà della sottoentità, e non si riporta esplicitamente nel diagramma.
+L'entità figlia può avere ovviamente ulteriori proprietà.
+\subsection{Generalizzazione tra entità}
+Finora, abbiamo considerato la relazione IS-A che stabilisce che l'entità padre è più generale della sottoentità.
+Talvolta, però, l'entità padre può generalizzare diverse sottoentità rispetto ad un unico criterio. In questo caso si parla di \textbf{generalizzazione}.
+Nella generalizzazione, le sottoentità hanno insiemi di istanze disgiunti a coppie (anche se in alcune varianti del modello E-R, si può specificare se due sottoentità della stessa entità padre sono disgiunte o no).
+Una generalizzazione può essere di due tipi:
+\begin{itemize}
+    \item \textbf{Completa}: l'unione delle istanze delle sottoentità è uguale all'insieme delle istanze dell'entità padre; si indica con una freccia annerita
+    \item \textbf{Non completa}: si indica con una freccia non riempita
+\end{itemize}
+Alla generalizzazione si associa una coppia di lettere che indica come interpretare la generalizzazione.
+La prima lettera indica il tipo di generalizzazione e può assumere i valori:
+\begin{itemize}
+    \item \textbf{t} per le generalizzazione complete (totali)
+    \item \textbf{p} per le generalizzazioni non complete (parziali)
+\end{itemize}
+\newpage
+\noindent
+La seconda lettera invece indica se le sottoentità si sovrappongono o meno; essa può assumere i valori:
+\begin{itemize}
+    \item \textbf{e} se le sottoentità non si sovrappongono (esclusiva)
+    \item \textbf{s} se le sottoentità si sovrappongono (sovrapposte)
+\end{itemize}
+\begin{center}
+    \includegraphics[width = 0.77\textwidth]{Images/37.PNG}
+\end{center}
+Nel modello E-R vige la regola che una entità può avere \textbf{al massimo una} entità padre. In altre parole, il modello E-R \textbf{non ammette ereditarietà multipla}.
+Ovviamente, quando si contano i padri di una sottoentità si tiene conto anche di eventuali relazioni \textbf{IS-A} che essa ha con altre entità.
+\begin{center}
+    \includegraphics[width = 0.60\textwidth]{Images/38.PNG}
+\end{center}
+\subsubsection{Generalizzazioni ed ereditarietà}
+Il \textbf{principio di ereditarietà} vale anche per le generalizzazioni: ogni proprietà dell'entità padre è anche una proprietà della sottoentità, e non si riporta esplicitamente nel diagramma.
+L'entita figlia può avere ovviamente ulteriori proprietà.
+\subsubsection{Diverse generalizzazioni della stessa classe}
+La stessa entità può essere padre in diverse generalizzazioni.
+Concettualmente, non c'è alcuna correlazione tra due generalizzazioni diverse, perché rispondono a due criteri diversi di classificare le istanze delle entità padre.
+\subsubsection{Differenza tra due IS-A e una generalizazione}
+Ci si potrebbe chiedere se non si possa utilizzare due IS-A per rappresentare una generalizzazione.
+In realtà, le due (o più) sottoclassi che derivano da una generalizzazione derivano da uno stesso criterio di classificazione delle istanze della superclasse.
+Le due sottoentità di due IS-A differenti invece sono indipendenti, nel senso che il loro significato non deriva dallo stesso criterio di classificazione delle istanze della entità padre.
+\subsubsection{Altre proprietà}
+Vi sono altre proprietà della generalizzazione:
+\begin{itemize}
+    \item Possono esistere gerarchie a più livelli e multiple generalizzazioni allo stesso livello
+    \item Un'entità può essere inclusa in più gerarchie, come genitore e/o come figlia
+    \item Se una generalizzazione ha solo un'entità figlia, si parla di \textbf{sottoinsieme}
+\end{itemize}
+\subsection{Relazione IS-A fra relazioni}
+Nel caso di una relazione IS-A fra relazioni la semantica non cambia rispetto al caso della relazione IS-A tra entità:
+se in uno schema $S$ è definita la relazione IS-A tra $R$ e $Q$ ($R$ IS-A $Q$, dove $R$ e $Q$ sono due relazioni con lo stesso grado e gli stessi ruoli), allora
+in ogni istanza $I$ dello schema $S$, si ha che
+$$istanze(I, R) \subseteq istanze(I, Q)$$
+\begin{center}
+    \includegraphics[width = 0.90\textwidth]{Images/39.PNG}
+\end{center}
+\subsection{Vincoli non esprimibili nel diagramma E-R}
+Gli schemi E-R permettono di cogliere la maggior parte delle interrelazioni tra i dati del dominio d'interesse.
+Tuttavia alcune interrelazioni non possono essere colte direttamente da uno schema E-R.
+Talli interrelazioni vanno in ogni caso tenute presenti attraverso delle asserzioni aggiuntive dette \textbf{vincoli esterni al diagramma}, o semplicemente, \textbf{vincoli esterni}.
+Come rappresentiamo tali vincoli?
+\begin{itemize}
+    \item Attraverso formalismi opportuni (es. \textbf{logica matematica})
+    \item Attraverso asserzioni in linguaggio naturale (che devono essere il più possibile \textbf{precise e non ambigue})
+\end{itemize}
+\subsection{Documentazione associata agli schemi E-R}
+Oltre al diagramma E-R, lo schema concettuale è descritto dal cosiddetto \textbf{dizionario dei dati}: esso è costituito dalle tabelle di
+\begin{itemize}
+    \item Entità
+    \item Relazioni 
+    \item Attributi 
+    \item Vincoli esterni
+\end{itemize}
+\begin{center}
+    \includegraphics[width = 0.75\textwidth]{Images/40.PNG}
+\end{center}
+\begin{center}
+    \includegraphics[width = 0.80\textwidth]{Images/41.PNG}
+\end{center}
+\begin{center}
+    \includegraphics[width = 0.75\textwidth]{Images/42.PNG}
+\end{center}
+\begin{center}
+    \includegraphics[width = 0.75\textwidth]{Images/43.PNG}
+\end{center}
+In particolare, il dizionario dei vincoli esterni può avere, a sua volta, altri vincoli esterni espressi in un altro dizionario.
 
 \end{document}
