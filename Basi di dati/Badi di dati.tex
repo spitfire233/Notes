@@ -1033,5 +1033,236 @@ Esempio di ridondanza a livello estensionale è il seguente:
 \end{center}
 Lo schema non deve contenere ridondanza (concetti che possono essere derivati da altri)
 \section{Modello relazionale}
+Ricordiamo che un modello dati è un insieme di \textbf{concetti} per organizzare i dati e descriverne la struttura.
+Questo modello deve essere comprensibile a un elaboratore.
+Componente fondamentale di ogni modello sono i \textbf{meccanismi di strutturazione} (analogo dei \textbf{costruttori di tipo}).
+Ogni modello dei dati prevede alcuni costruttori che permettono di definire nuovi tipi sulla base di tipi predefiniti (elementari).
+\textbf{Il modello relazionare è il modello dati più diffuso}.
+Esso permette edi definire tipi per mezzo del costruttore \textbf{relazione} che permette di organizzxare i dati in insiemi di record a \textbf{struttura fissa}.
+Una \textbf{relazione} è spesso rappresentata da una \textbf{tabella}:
+\begin{itemize}
+    \item \textbf{Le righe} rappresentano specifici record
+    \item \textbf{Le colonne} corrispondono ai campi dei record
+\end{itemize}
+L'ordine di righe e colonne è sostanzialmente \textbf{irrilevante}.
+In una base di dati relazionale ci sono in generale più relazioni
+\begin{center}
+    \includegraphics[width = 0.75\textwidth]{Images/75.PNG}
+\end{center}
+Il modello relazionale fu proposto da E.F. Codd nel 1970 per favorire \textbf{l'indipendenza dei dati}.
+Esso è disponibile in DBMS reali dal 1981 (non è facile implementare l'indipendenza con efficienza e affidabilità).
+Esso è basato:
+\begin{itemize}
+    \item sul concetto matematico di relazione - \textbf{concetto fondamentale} (con una variante)
+    \item Tabella - \textbf{concetto intuitivo}
+\end{itemize}
+Il modello relazionale definisce come sono organizzati i dati e non come sono poi memorizzati e gestiti dal sistema informatico.
+Il termine relazione può avere diverse accezioni:
+\begin{itemize}
+    \item \textbf{Relazione matematica}: come nella teoria degli insiemi
+    \item \textbf{Relazione}: secondo il modello relazionale dei dati
+    \item \textbf{Relazione} (dall'inglese \textbf{relationship}): rappresenta una classe di fatti, nel modello E-R; tradotto anche con \textbf{associazione} o \textbf{correlazione}.
+\end{itemize}
+\subsection{Prodotto cartesiano}
+Dati due insiemi $D_1, D_2$ (Estendibile a n insiemi distinti o non)
+si definisce come \textbf{prodotto cartesiano} $D_1 \times D_2$ l'insieme di tutte le coppie \textbf{ordinate} $(v_1, v_2)$ tali che $v_1 \in D_1 \; e \; v_2 \in D_2$.
+\subsection{Relazione matematica}
+Siano $D_1, \dots, D_n$ $n$ insiemi anche non distinti.
+Allora il loro prodotto cartesiano $D_1 \times \dots \times D_n$ è l'insieme di tutte le n-uple ordinate $(d_1, \dots, d_n)$ tali che
+$d_1 \in D_1, \dots , d_n \in D_n$.
+Allora una \textbf{relazione matematica} su $D_1,\dots,D_n$ è un sottoinsieme di $D_1 \times \dots \times D_n$.
+$D_1, \dots, D_n$ sono i \textbf{domini} della relazione.
+Il numero delle componenti del prodotto (n) è detto \textbf{grado} della relazione; il numero di n-uple della relazione è la \textbf{cardinalità} della relazione.
+\begin{center}
+    \includegraphics[width = 0.45\textwidth]{Images/76.PNG}
+\end{center}
+Le proprietà di una relazione matematica sono:
+\begin{itemize}
+    \item Non c'è ordinamento fra le n-uple (in verticale)
+    \item Le n-uple sono distinte
+    \item \textbf{Ciascuna n-upla è ordinata (in orizzontale)}: l'i-esimo valore proviene dall'i-esimo dominio
+\end{itemize}
+In particolare, l'ultima proprietà implica che \textbf{ciascun dominio può avere diversi ruoli diversi, distinguibili attraverso la posizione}.
+Ciò da alle relazioni matematiche una struttura \textbf{posizionale}.
+\subsection{Relazioni nel modello relazionale}
+Nel modello relazionale, a ciascun dominio si associa un nome (\textbf{attributo}), che ne descrive il "ruolo".
+Gli attributi possono essere usati come \textbf{intestazione della tabella}.
+Ciò da alle relazioni nel modello relazionale una struttura \textbf{non posizionale}.
+\begin{center}
+    \includegraphics[width = 0.65\textwidth]{Images/77.PNG}
+\end{center}
+\subsection{Tabelle e relazioni}
+Una tabella rappresenta una relazione se
+\begin{itemize}
+    \item I valori di ogni colonna sono fra loro omogenei
+    \item Le righe sono diverse fra loro
+    \item Le intestazioni delle colonne sono diverse tra loro
+\end{itemize}
+In una tabella che rappresenta una relazione:
+\begin{itemize}
+    \item L'ordinamento tra le righe è irrilevante
+    \item L'ordinamento tra le colonne è irrilevante
+\end{itemize}
+\subsection{Varianti del modello relazionale}
+Ci sono principalmente due varianti del modello relazionale:
+il modello \textbf{basato su valori}
+\begin{center}
+    \includegraphics[width = 0.70\textwidth]{Images/78.PNG}
+\end{center}
+e il modello \textbf{basato su puntatori}
+\begin{center}
+    \includegraphics[width = 0.70\textwidth]{Images/79.PNG}
+\end{center}
+In particolare, il modello basato su valori presenta i seguenti \textbf{vantaggi}:
+\begin{itemize}
+    \item Indipendenza dalle strutture fisiche (si potrebbe avere anche con puntatori di alto livello) che possono cambiare dinamicamente
+    \item Si rappresenta solo ciò che è rilevante dal punto di vista dell'applicazione
+    \item I dati sono portabili più facilmente da un sistema ad un altro
+    \item Per accedere ai dati non serve sapere come sono memorizzati fisicamente
+\end{itemize}
+\subsection{Definizioni per il modello relazionale}
+Diamo le definizioni necessarie a definire il modello relazionale: \newline
+\textbf{Schema di una relazione}: un nome $R_1$ (MAIUSCOLO) con un insieme di attributi $X = \{A_1, ..., A_n\}$.
+Si scrive nel seguente modo:
+$$R_1(A_1,\dots,A_n) = R_1(X)$$
+\begin{center}
+    \includegraphics[width = 0.80\textwidth]{Images/80.PNG}
+\end{center}
+\textbf{Schema di base di dati}: Insieme di schemi di relazione con \textbf{nomi diversi}:
+$$R = \{R_1(X),\dots,R_k(X_k)\}$$
+\begin{center}
+    \includegraphics[width = 1\textwidth]{Images/81.PNG}
+\end{center}
+\textbf{Tupla}: Una funzione $t$ che associa a ciascun attributo $A$ in $X$ un valore del dominio di $A$.
+La notazione $T[A]$ (o $t.A$) denota il valore della tupla $t$ sull'attributo $A$.
+Una relazione $R$ con attributi $A_1,\dots,A_n$ e corrispondenti domini $D_1, \dots, D_n$ si può denotare come
+$$R(A_1: D_1 \dots A_n:D_n)$$
+\textbf{(istanza di) relazione sun uno schema R(X)}: insieme $r_1$ (minuscolo) di tuple su $X$. \newline
+\textbf{(istanza di) base di dati su uno schema $R = \{R_1(X_1),\dots, R_n(X_n)\}$}: insieme di relazioni $r = \{r_1,\dots,r_n\}$, con $r_i$ relazione su $R_i$.
+\subsection{Notazione per il modello relazionale}
+Diamo la notazione per il modello relazionale:
+\begin{itemize}
+    \item \textbf{Attributi}: lettere iniziali dell'alfabeto, maiuscole (A, B, C, A', A1, \dots)
+    \item \textbf{Insiemi di attributi}: lettere finale dell'alfabeto, maiuscole (X, Y, Z, X', X1, \dots)
+    \item \textbf{Nomi di relazione}: $R$ e lettere circostanti, maiuscole, anche con indici e pedici ($R$, $S$, \dots)
+    \item \textbf{Relazione}: come il nome della relazione, ma in minuscolo
+    \item \textbf{Schema di base di dati}: lettera maiuscola in grassetto (\textbf{R}, \textbf{S}, \dots)
+    \item \textbf{Base di dati}: stesso simbolo dello schema, ma in minuscolo
+\end{itemize}
+\subsection{Superchiavi e chiavi}
+All'interno dell'istanza di una relazione, come possiamo \textbf{riconoscere le tuple fra loro}?
+Per farlo facciamo uso di una \textbf{chiave}, cioè un insieme di attributi che identificano univocamente le tuple di una relazione.
+Formalmente: \newline
+Un insieme $K$ di attributi è \textbf{superchiave} per $r$ se $r$ non contiene due tuple distinte $t_1$ e $t_2$ con $t_1[K] = t_2[K]$. \newline
+$K$ è \textbf{chiave} per $r$ se è una \textbf{superchiave minimale} per $r$ (cioè essa non contiene un'altra superchiave). \newline
+In alcuni casi, può essere che i particolari valori di un'istanza di una relazione \textbf{vadano a formare una chiave}.
+Tuttavia queste sono \textbf{chiavi per caso!} A noi interessano le chiavi corrispondenti a vincoli di integrità soddisfatti da tutte le relazioni lecite dello schema.
+\subsection{Informazione incompleta}
+Il modello relazionale impone ai dati una struttura rigida:
+\begin{itemize}
+    \item Le informazioni sono rappresentate per mezzo di tuple
+    \item Solo alcuni formati di tuple sono ammessi: quelli che corrispondono agli schemi di relazione
+\end{itemize}
+I dati disponibili possono non corrispondere al formato previsto:
+\begin{itemize}
+    \item Hanno attributi in più che non sono nello schema
+    \item Mancando di alcuni attributi = \textbf{informazione incompleta}
+\end{itemize}
+Le motivazioni per le quali possiamo avere informazione incompleta sono le seguenti:
+\begin{itemize}
+    \item Esiste un certo valore, ma \textbf{non lo conosciamo}
+    \item Un certo valore \textbf{non esiste} per una determinata tupla
+    \item Un certo valore \textbf{non sappiamo se esiste} per una tupla e se esiste \textbf{non lo conosciamo}
+\end{itemize}
+Per gestire questi casi si adotta una tecnica rudimentale ma efficace:
+\begin{itemize}
+    \item \textbf{Valore nullo}: denota l'assenza di un valore del dominio (e non è un valore dominio)
+\end{itemize}
+Quindi, esprimendolo in maniera formale: \newline
+$t[A]$, per ogni attributo $A$, è un valore del dominio $dom(A)$ oppure il valore nullo NULL.
+Vi sono 3 tipi di valore nullo:
+\begin{itemize}
+    \item Valore \textbf{sconosciuto}
+    \item Valore \textbf{inesistente}
+    \item Valore \textbf{senza informazione}
+\end{itemize}
+I DBMS non distinguono i tipi di valore nullo; si possono (e si devono) però imporre restrizioni sulla presenza di valori nulli.
+\subsection{Vincoli di integrità}
+Risulta evidente che solo alcune configurazioni di valori nulli sono ammissibili.
+Esistono vincoli (detti \textbf{di integrità}) che possono essere espressi per ognuno dei domini della relazione e non solo relativamente ai valori nulli.
+In un base di dati, può essere che non tutte le tuple rappresentano l'informazione corretta per un'applicazione:
+\begin{itemize}
+    \item Valori nulli
+    \item Valori fuori dal dominio di un attributo
+    \item Tuple inconsistenti (valori di più attributi non simultaneamente assegnabili)
+    \item Tuple con valori uguali per attributi identificanti (chiavi)
+    \item Valori inesistenti in attributi usati per corrispondenze tra relazioni
+\end{itemize}
+Per evitare queste situazioni, si impongono i vincoli di integrità:
+\begin{itemize}
+    \item Descrizione più accurata della realtà 
+    \item Contributo alla "qualità dei dati"
+    \item Utili nella progettazione
+    \item Usati dai DBMS nell'esecuzione delle interrogazioni
+\end{itemize}
+Tuttavia non tutte le proprietà di interesse sono rappresentabili per mezzo di vincoli di integrità esprimibili direttamente. \newline
+Vi sono 2 tipi di vincoli: i vincoli di integrità \textbf{intrarelazionali} sono:
+\begin{itemize}
+    \item Vincoli su \textbf{valori} (o di \textbf{dominio})
+    \item Vincoli di \textbf{tupla}
+    \item Vincoli di \textbf{chiave} (valuta le tuple nel complesso. es. non possono esistere due tuple con uno stesso valore per un particolare attributo $A$ chiave)
+\end{itemize}
+i vincoli di integrità \textbf{interrelazionali} (coinvolgono più relazioni) sono:
+\begin{itemize}
+    \item Vincoli di \textbf{integrità referenziale}
+\end{itemize} 
+Un vincolo è quindi una proprietà che deve essere soddisfatta dalle istanze che rappresentano informazioni corrette per l'applicazione.
+Possono essere quindi visti come una funzione booleana (un \textbf{predicato}) che associa ad ogni istanza il valore \textbf{vero} oppure \textbf{falso}:
+\begin{itemize}
+    \item \textbf{Vero}: istanza corretta (\textit{ammissibile, lecita})
+    \item \textbf{Falso}: istanza inconsistente
+\end{itemize}
+\subsubsection{Sintassi dei vincoli di integrità}
+Una possibile sintassi è un'espressione booleana che confronta valori di attributo o espressioni aritmetiche su di essi.
+Per esempio, un vincolo di dominio può essere:
+$$(Voto \geq 18) \; AND \; (Voto \leq 30)$$
+oppure un vincolo di tupla può essere:
+$$(Voto = 30) \; OR \; (NOT (Lode = "e lode"))$$
+\subsubsection{Esistenza delle chiavi}
+Una relazione non può contenere tuple distinte ma uguali.
+\textbf{il numero degli attributi è inoltre finito e diverso da 0}.
+Da questo possiamo concludere che:
+\begin{itemize}
+    \item Ogni relazione ha come superchiave \textbf{l'insieme degli attributi su cui è definita}
+    \item E quindi ha (almeno) una chiave
+\end{itemize}
+L'esistenza delle chiavi garantisce l'accessibilità a ciascun dato della base di dati.
+Le chiavi permettono di correlare i dati in \textbf{relazioni diverse}: il modello relazionale è quindi basato sui valori; quindi la presenza di valori nulli nelle chiavi deve essere limitata (\textbf{anche perché non ci si può riferire in altre relazioni della base di dati a certe tuple se esse hanno chiavi con campi nulli})
+\newpage
+\subsubsection{Chiavi primarie}
+Una \textbf{chiave primaria} è una chiave su cui non sono ammessi valori nulli.
+La notazione è una \textbf{sottolineatura}
+\begin{center}
+    \includegraphics[width = 0.70\textwidth]{Images/82.PNG}
+\end{center}
+\subsubsection{Vincoli di integrità referenziale}
+Un vincolo di \textbf{integrità referenziale} ("\textbf{foreign key}") fra gli attributi $X$ di una relazione $R_1$ e un'altra relazione $R_2$ impone ai valori su $X$ in $R_1$ di comparire
+\textbf{come valori della chiave primaria di $R_2$}
+\begin{center}
+    \includegraphics[width = 0.60\textwidth]{Images/83.PNG}
+\end{center}
+Graficamente si indicano nel seguente modo:
+\begin{center}
+    \includegraphics[width = 0.70\textwidth]{Images/84.PNG}
+\end{center}
+\newpage
+\noindent
+Essi possono anche coinvolgere più attributi:
+\begin{center}
+    \includegraphics[width = 0.60\textwidth]{Images/85.PNG}
+\end{center}
+\begin{center}
+    \includegraphics[width = 0.70\textwidth]{Images/86.PNG}
+\end{center}
 
 \end{document}
