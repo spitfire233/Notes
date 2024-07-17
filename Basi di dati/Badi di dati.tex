@@ -1645,5 +1645,441 @@ Si devono documentare i \textbf{vincoli di integrità referenziale}
     \includegraphics[width = 0.80\textwidth]{Images/122.PNG}
 \end{center}
 Il diagramma è utile anche per visualizzare i \textbf{cammini di join}.
+\section{Algebra relazionale}
+I modelli concettuali e logici permettono di descrivere informazioni, ma non sono direttamente interpretabili da un elaboratore.
+Dai modelli dobbiamo passare ai \textbf{linguaggi}, dotati di:
+\begin{itemize}
+    \item \textbf{Sintassi}, che definisce le frasi corrette del linguaggio
+    \item \textbf{Semantica}, che definisce le operazioni effettuate quando vengono eseguite gli operatori (o istruzioni o comandi) del linguaggio
+\end{itemize}
+\begin{center}
+    \includegraphics[width = 1\textwidth]{Images/123.PNG}
+\end{center}
+\newpage
+\noindent
+Vi sono due tipi di linguaggi:
+\begin{itemize}
+    \item \textbf{Procedurali}: specificano le modalità di generazione del risultato ("come")
+    \item \textbf{Dichiarativi}: specificano le proprietà del risultato ("che cosa")
+\end{itemize}
+In particolare:
+\begin{itemize}
+    \item \textbf{Algebra relazionale}: procedurale
+    \item \textbf{Calcolo relazionale}: dichiarativo
+    \item \textbf{SQL}: (parzialmente) dichiarativo
+    \item \textbf{QBE}(Query by Example): dichiarativo
+\end{itemize}
+L'algebra relazionale è un linguaggio prettamente \textbf{formale} che forma la base per linguaggi "reali".
+Essa è un linguaggio \textbf{procedurale}: si specifica l'algoritmo con cui ottenere il risultato.
+Le sue istruzioni possono differire in termini di \textbf{efficienza}.
+In algebra relazionale (da qui in poi AR) le relazioni sono intese in senso matematico, quindi come \textbf{insiemi di tuple}, definite su attributi.
+Negli insiemi \textbf{non} ci possono essere \textbf{elementi uguali}.
+L'AR può essere vista anche com un insieme di \textbf{operatori}:
+\begin{itemize}
+    \item su relazioni
+    \item che producono relazioni
+    \item e possono essere composti tra loro a formare nuove interrogazioni
+\end{itemize}
+L'insieme minimo di operatori che danno l'intero potere espressivo del linguaggio sono:
+\begin{center}
+    \includegraphics[width = 0.90\textwidth]{Images/124.PNG}
+\end{center}
+\subsection{Operatori insiemistici}
+In matematica una relazione è un \textbf{sottoinsieme del prodotto cartesiano} di due o più insiemi.
+Il prodotto cartesiano degli insiemi $D_1, D_2, \dots D_n$ indicato come $D_1 \times D_2 \times \dots \times D_n$ è l'insieme di tutte le n-uple ordinate $(d_1, d_2, \dots, d_n)$ tali che
+$d_1 \in D_1, d_2 \in D_2, \dots, d_n \in D_n$.
+Una relazione è quindi un \textbf{insieme}:
+\begin{itemize}
+    \item Non c'è ordinamento tra le diverse tuple
+    \item Le tuple sono distinte (non ce ne possono essere due uguali)
+    \item Ciascuna tupla è al suo interno ordinata: l'i-esimo valore proviene dall'i-esimo dominio
+\end{itemize}
+Quindi possiamo applicare gli operatori \textbf{tra insiemi}, i quali \textbf{producono insiemi}.
+Quindi valgono le seguenti regole:
+\begin{itemize}
+    \item È possibile applicare unione, intersezione, differenza solo a relazioni \textbf{definite sugli stessi attributi}
+    \item I risultati devono essere relazioni, quindi \textbf{n-uple identiche} nel risultato danno luogo ad una unica n-upla
+\end{itemize}
+\subsubsection{Unione}
+L'operatore unione in AR ha le seguenti sintassi: siano $r_1$ e $r_2$ due relazioni
+$$r_1 \cup r_2$$
+$$r_1 \; UNION \; r_2$$
+\begin{center}
+    \includegraphics[width = 1\textwidth]{Images/125.PNG}
+\end{center}
+\subsubsection{Intersezione}
+L'operatore intersezione nell'AR ha la seguenti sintassi:
+$$r_1 \cap r_2$$
+$$r_1 \; INT \; r_2$$
+\begin{center}
+    \includegraphics[width = 1\textwidth]{Images/126.PNG}
+\end{center}
+\subsection{Differenza}
+L'operatore differenza in AR ha le seguenti sintassi:
+$$r_1 - r_2$$
+$$r_1 \; DIFF \; r_2$$
+\begin{center}
+    \includegraphics[width = 0.60\textwidth]{Images/127.PNG}
+\end{center}
+\subsubsection{Limiti degli operatori insiemistici}
+Gli operatori insiemistici devono essere applicati a relazioni che hanno la stessa struttura e nomi degli attributi.
+Per poter rilasciare questo vincolo abbiamo bisogno di poter uniformare i nomi degli attributi.
+\subsection{Ridenominazione}
+L'operatore ridenominazione ha la seguente sintassi:
+\begin{center}
+    \includegraphics[width = 0.60\textwidth]{Images/128.PNG}
+\end{center}
+Esso ha la seguente semantica: \textit{Cambia il nome dell'attributo x della relazione r in y}.
+Questo operatore \textbf{modifica lo schema} lasciando inalterata l'istanza di r.
+Esso si può applicare anche a più attributi contemporaneamente:
+\begin{center}
+    \includegraphics[width = 0.60\textwidth]{Images/129.PNG}
+\end{center}
+In questo caso la semantica cambia: \textit{Cambia il nome dell'attributo x della relazione r in y e dell'attributo w in z}.
+Bisogna tenere presente che ciò che si va a produrre con questa operazione sono \textbf{relazioni}:
+\begin{center}
+    \includegraphics[width =1\textwidth]{Images/130.PNG}
+\end{center}
+\subsection{Proiezione}
+Come già detto, non possiamo applicare gli operatori insiemistici a relazioni che non sono definite sugli stessi attributi.
+Tuttavia, l'operatore di ridenominazione non può essere usato per \textbf{aggiungere attributi} o cambiare \textbf{il nome di un attributo in un altro che non rispetta più il significato semantico di quell'attributo}.
+A volte quindi dobbiamo limitarci ad un \textbf{sottoinsieme di attributi} così da poter effettuare le operazioni che ci occorrono.
+L'operatore dell'AR che ci permette di fare ciò è la \textbf{proiezione} che ha la seguente sintassi:
+\begin{center}
+    \includegraphics[width =0.65\textwidth]{Images/131.PNG}
+\end{center}
+L'operatore ha la seguente semantica: \textit{Produce una relazione}:
+\begin{itemize}
+    \item \textit{Definita su \textbf{una parte} degli attributi della relazione r, quelli specificati nella ListaAttributi}
+    \item \textit{Che contiene n-uple a cui contribuiscono tutte le n-uple di r}
+\end{itemize}
+\begin{center}
+    \includegraphics[width =0.90\textwidth]{Images/132.PNG}
+\end{center}
+\subsubsection{Cardinalità delle proiezioni}
+La cardinalità di una relazione è il numero delle sue n-uple; si indica con $|r|$.
+Una relazione risultato di una proiezione contiene \textbf{al più tante n-uple quanto l'operando}.
+Se $x$ è \textbf{superchiave} di $r$, allora $\Pi_x(r)$ contiene esattamente tante n-uple quante $r$:
+$$|\Pi_x(r)| = |r|$$
+Ciò avviene perché, per definizione, ogni superchiave compare una volta sola nella relazione.
+\subsection{Selezione}
+L'operatore di selezione è un operatore \textbf{ortogonale} alla proiezione:
+\begin{center}
+    \includegraphics[width =0.90\textwidth]{Images/133.PNG}
+\end{center}
+Esso ha le seguenti sintassi:
+\begin{center}
+    \includegraphics[width =0.70\textwidth]{Images/134.PNG}
+\end{center}
+La sua semantica è la seguente: \textit{Produce una relazione che}:
+\begin{itemize}
+    \item \textit{Ha lo \textbf{stesso schema} dell'operando}
+    \item \textit{Contiene  un \textbf{sottoinsieme delle n-uple} dell'operando: quelle che soddisfano la condizione espressa dall'operatore}
+\end{itemize}
+\begin{center}
+    \includegraphics[width =0.75\textwidth]{Images/135.PNG}
+\end{center}
+\begin{center}
+    \includegraphics[width =0.75\textwidth]{Images/136.PNG}
+\end{center}
+Data una relazione $r$, la condizione è un'\textbf{espressione booleana} ottenuta combinando con i connettivi \textbf{OR} ($\lor$), \textbf{AND} ($\land$) e \textbf{NOT} ($\neg$)
+condizioni atomiche.
+Ogni condizione atomica è del tipo $A \; \theta \; B$ oppure $A \; \theta \; c$ dove:
+\begin{itemize}
+    \item $\theta$ è un operatore di confronto ($=, >, <, \leq, \geq, \neq$)
+    \item $A$ e $B$ sono attributi di $r$ sui cui valori $\theta$ abbia senso (es. intero $>$ intero)
+    \item $c$ è una costante per cui il confronto $\theta$ abbia senso (es. intero $>$ 5)
+\end{itemize}
+Si applica la normale \textbf{precedenza degli operatori booleani}:
+\begin{enumerate}
+    \item NOT
+    \item AND
+    \item OR
+\end{enumerate}
+\begin{center}
+    \includegraphics[width =0.75\textwidth]{Images/137.PNG}
+\end{center}
+\subsection{Join}
+Supponiamo di avere il seguente schema relazionale:
+\begin{center}
+    \includegraphics[width =0.80\textwidth]{Images/138.PNG}
+\end{center}
+Vogliamo trovare i docenti che guadagnano almeno 60.000.
+Come possiamo fare?
+Ci serve poter accoppiare le tuple delle due relazioni creando una relazione di questo tipo:
+\begin{center}
+    \includegraphics[width =1\textwidth]{Images/139.PNG}
+\end{center}
+Nella pratica quello che abbiamo fatto mentalmente è prendere un sottoinsieme del prodotto cartesiano delle due relazioni.
+Per farlo usiamo l'operatore di \textbf{join}.
+Esso è un \textbf{operatore fondamentale} dell'AR (e anche di SQL) che ci permette di combinare tuple appartenenti a relazioni diverse.
+Fa proprio quello che ci serve per risolvere l'esempio di prima: produce il \textbf{sottoinsieme del prodotto cartesiano} di due relazioni in cui il valore di determinati attributi coincide.
+Esistono diverse varianti dell'operazione di join:
+\begin{itemize}
+    \item Join naturale
+    \item Prodotto cartesiano
+    \item Theta join
+    \item Join esterno (destro, sinistro e completo)
+\end{itemize}
+\subsubsection{Join naturale}
+Data una relazione $r_1(X_1)$ definita sugli attributi $X_1$ e una relazione $r_2(X_2)$ definita sugli attributi $X_2$;
+ogni tupla che compare nel risultato del join naturale di $r_1$ e $r_2$ è ottenuta come combinazione ("match") di una tupla $r_1$ con una tupla di $r_2$ sulla base dell'\textbf{uguaglianza dei valori degli attributi comuni} (stesso nome) alle due relazioni, cioè quell in $X_1 \cap X_2$.
+Inoltre lo schema del risultato è \textbf{l'unione degli schemi} degli operandi $X_1 \cup X_2$.
+La sintassi del join naturale è:
+\begin{center}
+    \includegraphics[width =0.70\textwidth]{Images/140.PNG}
+\end{center}
+La sua semantica è la seguente: \textit{Produce una relazione definita sull'unione $X_1X_2$ degli attributi degli operandi composta da n-uple t che rispettano la condizione:}
+$$\{t \; su \; X_1\cup X_2 | t[X_1] \in r_1 \; e \; t[X_2] \in r_2\}$$
+\begin{center}
+    \includegraphics[width =1\textwidth]{Images/141.PNG}
+\end{center}
+In particolare, se una tupla non partecipa al risultato della join si dice \textbf{dangling}; in questo caso si tratta di un \textbf{join incompleto} in quanto non tutte le tuple degli operandi contribuiscono al risultato.
+Se due relazioni sono \textbf{definite sugli stessi attributi} il join naturale equivale all'intersezione delle due relazioni.
+Se un join produce una relazione di cardinalità 0 allora si dice \textbf{join vuoto}.
+\begin{center}
+    \includegraphics[width =1\textwidth]{Images/142.PNG}
+\end{center}
+Supponiamo di avere il seguente schema relazionale:
+\begin{center}
+    \includegraphics[width =0.70\textwidth]{Images/143.PNG}
+\end{center}
+E di voler produrre nome e tipologia del corso di laurea a cui è iscritto ciascuno studente.
+In questo caso, non possiamo usare una join naturale come abbiamo fatto prima, poiché entrambe le relazioni hanno un attributo nome!
+Dobbiamo quindi effettuare una \textbf{ridenominazione}:
+\begin{center}
+    \includegraphics[width =1.10\textwidth]{Images/144.PNG}
+\end{center} 
+Un join naturale su relazioni che \textbf{non hanno attributi in comune} produce il \textbf{prodotto cartesiano} delle relazioni, perché non essendoci un criterio di combinazione tutte le coppie di n-uple sono combinabili tra loro, e quindi esso contiene sempre un numero di n-uple uguale al prodotto delle cardinalità degli operandi.
+Due possibili soluzioni per ottenere un join sensato (salvo i rari casi in cui ha senso il prodotto cartesiano) in caso si abbiamo attributi in comune sono:
+\begin{itemize}
+    \item \textbf{Ridenominazione} degli attributi
+    \item \textbf{Selezione} sul prodotto cartesiano
+\end{itemize}
+\subsubsection{Theta join}
+In pratica, il prodotto cartesiano ha senso solo se eseguito da selezione.
+Per la \textbf{selezione sul prodotto cartesiano} esiste un operatore dedicato: il theta join.
+La sua sintassi è:
+\begin{center}
+    \includegraphics[width =0.70\textwidth]{Images/145.PNG}
+\end{center} 
+La sua semantica è la seguente:
+\begin{center}
+    \includegraphics[width =0.90\textwidth]{Images/146.PNG}
+\end{center} 
+\begin{center}
+    \includegraphics[width =1\textwidth]{Images/147.PNG}
+\end{center} 
+\subsubsection{Equi-join: un tipo di theta join}
+La condizione del theta join è tipicamente una congiunzione (AND) di espressioni di confronto $A \; \theta \; B$ dove $\theta$ (da qui il nome \textbf{theta}) è uno degli operatori di confronto.
+Se l'operatore utilizzato nella condizione è \textbf{l'uguaglianza} ($\theta : =$) allora si parla di \textbf{equi-join}
+\subsubsection{Pushing selection down}
+Supponiamo di avere il seguente schema relazionale:
+\begin{center}
+    \includegraphics[width =1\textwidth]{Images/148.PNG}
+\end{center} 
+La seguente soluzione è corretta:
+\begin{center}
+    \includegraphics[width =1\textwidth]{Images/149.PNG}
+\end{center}
+\begin{center}
+    \includegraphics[width =1.10\textwidth]{Images/150.PNG}
+\end{center}
+Anticipare la selezione rispetto al join è una strategia nota come \textbf{pushing selection down} che si rivela spesso efficiente in termini computazionali perché riduce la dimensione degli operandi del join.
+Si può anticipare la selezione rispetto al join sempre che la condizione si riferisca \textbf{solo ad attributi della singola relazione}
+\subsubsection{Join esterno}
+Come abbiamo visto prima, con i join \textbf{interni} ci possono essere problemi relativi a tuple dangling.
+Se però fossimo interessati a dei dati e anche alle eventuali associazioni che hanno con altre relazioni?
+Abbiamo bisogno di un nuovo tipo di join: il join \textbf{esterno}.
+Esso ci permette di ottenere un join completo, estendendo con valori nulli
+\begin{center}
+    \includegraphics[width =1.10\textwidth]{Images/151.PNG}
+\end{center}
+Vi sono tre tipologie di join esterni:
+\begin{enumerate}
+    \item \textbf{Sinistro} (LEFT JOIN): mantiene tutte le n-uple del \textbf{primo operando}, estendendole con valori nulli, se necessario
+    \item \textbf{Destro} (RIGHT JOIN): mantiene tutte le n-uple del \textbf{secondo operando}, estendendole con valori nulli, se necessario
+    \item \textbf{Completo} (FULL JOIN): Mantiene tutte le n-uple di \textbf{entrambi gli operandi}, estendendole con valori nulli, se necessario
+\end{enumerate}
+La \textbf{sintassi del join esterno} è:
+\begin{center}
+    \includegraphics[width =0.70\textwidth]{Images/152.PNG}
+\end{center}
+La semantica è la seguente: \textit{Estende, con valori nulli, quelle n-uple di $r_1$ (opzione left), di $r_2$ (right) o di entrambe (full) che verrebbero escluse dal join tra $r_1$ e $r_2$}
+\subsubsection{Self-join}
+Si effettua una join di una relazione con (una copia di) se stessa per:
+\begin{itemize}
+    \item \textbf{Confrontare tuple} di una relazione tra loro
+    \item Trovare elementi duplicati
+    \item Quando una tupla fa \textbf{riferimento} a dati nella stessa tabella. Esempi tipici sono:
+    \begin{itemize}
+        \item \textbf{Relazioni gerarchiche} (genitore-figlio, dipendente-capo)
+        \item \textbf{Relazioni sequenziali}
+        \item \textbf{Relazioni a grafo}
+    \end{itemize}
+\end{itemize}
+\subsection{Valori nulli}
+Non sempre l'informazione nella basi di dati è completa, e questo influisce sulle interrogazioni
+\begin{center}
+    \includegraphics[width =0.70\textwidth]{Images/153.PNG}
+\end{center}
+\newpage
+\noindent
+Se volessimo fare la seguente interrogazione in AR:
+\begin{center}
+    \includegraphics[width =0.30\textwidth]{Images/154.PNG}
+\end{center}
+Ciò che ci verrebbe restituito sarebbe un risultato \textbf{inconsistente}
+\begin{center}
+    \includegraphics[width =0.70\textwidth]{Images/155.PNG}
+\end{center}
+Quindi ciò che viene effettivamente introdotto dalla presenza di valori nulli è una \textbf{logica a 3 valori}, dove il terzo valore è "Sconosciuto" (Unknown, ?)
+\begin{center}
+    \includegraphics[width =1\textwidth]{Images/156.PNG}
+\end{center}
+\subsubsection{IS NULL e IS NOT NULL}
+Per riferirsi ai valori nulli esistono le apposite condizioni: IS NULL e IS NOT NULL.
+Esse possono essere usate nelle condizioni di un qualsiasi operatore dell'AR.
+\begin{center}
+    \includegraphics[width =0.65\textwidth]{Images/157.PNG}
+\end{center}
+\subsubsection{Comportamento degli operatori in presenza di valori nulli}
+Vediamo come si comportano gli operatori che abbiamo visto fin qui in presenza di valori nulli:
+\begin{itemize}
+    \item \textbf{Unione, intersezione e differenza} continuano a comportarsi usualmente, quindi due tuple sono uguali anche se ci sono dei NULL
+    \item Il \textbf{join naturale non combina due tuple se una delle due o entrambe hanno valore null} su un attributo in comune (e valori uguali sugli eventuali altri attributi comuni)
+    \item Per la \textbf{selezione} il problema è stabilire se, in presenza di NULL, un predicato è vero o meno per una data tupla; si usa quindi la logica a 3 valori
+\end{itemize}
+\subsection{Le viste}
+Supponiamo di avere il seguente schema relazionale:
+\begin{center}
+    \includegraphics[width =1.10\textwidth]{Images/158.PNG}
+\end{center}
+Per formulare un'espressione che produca tutte le persone dell'ateneo nate a Milano potrei definire la seguente espressione di AR:
+\begin{center}
+    \includegraphics[width =1.15\textwidth]{Images/159.PNG}
+\end{center}
+Dopodiché correlare con un JOIN la relazione precedente con la relazione città:
+\begin{center}
+    \includegraphics[width =0.45\textwidth]{Images/160.PNG}
+\end{center}
+Dopodiché eliminare gli attributi che non servono:
+\begin{center}
+    \includegraphics[width =0.75\textwidth]{Images/161.PNG}
+\end{center}
+L'espressione intera risulterebbe così:
+\begin{center}
+    \includegraphics[width =1.15\textwidth]{Images/162.PNG}
+\end{center}
+Che è troppo complicata.
+Per semplificare, soprattutto nel caso di sotto espressioni spesso ripetute, è utile avere delle \textbf{relazioni derivate} a partire dalle relazioni definite nello schema di base di dati.
+A questo scopo, in AR è possibile definire delle \textbf{viste}, ache altro non sono che espressioni acui viene assegnato un nome.
+È quindi possibile utilizzare le viste all'interno di altre espressioni, il che semplifica la scrittura di espressioni complesse.
+La sintassi per una vista è:
+\begin{center}
+    \includegraphics[width = 0.55\textwidth]{Images/163.PNG}
+\end{center}
+Le viste sono relazioni virtuali, non sono effettivamente memorizzate nella base di dati.
+Questo permette di evitare ridondanze.
+Una interrogazione su una vista viene eseguita "ricalcolando" la vista.
+\subsubsection{Viste e aggiornamenti}
+Aggiornare una vista significa modificare le relazioni di base in modo che la vista, "ricalcolata", rispecchi l'aggiornamento.
+L'aggiornamento sulle relazioni di base corrispondente a quello specificato sulla vista deve essere univoco. In generale però \textbf{non lo è}!
+Ben pochi aggiornamenti sono ammissibili su viste
+\begin{center}
+    \includegraphics[width = 1.15\textwidth]{Images/164.PNG}
+\end{center}
+\newpage 
+\subsection{Interrogazioni in AR}
+Un metodo per produrre interrogazioni in algebra relazionale è il seguente:
+\begin{enumerate}
+    \item Dalle espressioni della interrogazione in linguaggio naturale, trova prima \textbf{l'insieme di relazioni} su cui applicare gli operatori
+    \item Procedi secondo la strategia "dall'interno all'esterno
+\end{enumerate}
+\begin{center}
+    \includegraphics[width = 1\textwidth]{Images/165.PNG}
+\end{center}
+\subsection{Proprietà degli operatori insiemistici}
+Due espressioni sono equivalenti se producono lo \textbf{stesso risultato qualunque sia l'istanza} attuale della base di dati.
+L'equivalenza è importante in pratica perché i DBMS cercano di eseguire espressioni equivalenti a quelle date, ma più \textbf{efficienti} ad esempio riducendo la dimensione del risultato intermedio.
+Vediamo quindi le proprietà degli operatori insiemistici:
+\begin{itemize}
+    \item \textbf{Unione}:
+    \begin{itemize}
+        \item \textbf{Commutativa}: $r_1 \cup r_2 = r_2 \cup r_1$
+        \item \textbf{Associativa}: $r_1 \cup (r_2 \cup r_3) = (r_1 \cup r_2) \cup r_3$
+    \end{itemize}
+    \item \textbf{Intersezione}
+    \begin{itemize}
+        \item \textbf{Commutativa}: $r_1 \cap r_2 = r_2 \cap r_1$
+        \item \textbf{Associativa}: $r_1 \cap (r_2 \cap r_3) = (r_1 \cap r_2) \cap r_3$
+    \end{itemize}
+    \item \textbf{Differenza}: non è ne \textbf{commutativa} ne \textbf{associativa}
+    \item \textbf{L'intersezione} è esprimibile attraverso la differenza:
+    $$r(X) = r_1 \cap r_2(X) = r_1(X) - (r_1(X) - r_2(X))$$
+\end{itemize}
+\section{Structured Query Language (SQL)}
+SQL è il linguaggio per la definizione e la manipolazione dei dati in database relazionali, adottato da tutti i principali DBMS.
+dal 1983 e circa lo \textbf{standard de facto}.
+Dal 1986 è uno standard e ne sono state proposte diverse versioni (e.g. SQL-89, SLQ-2, SQL-3).
+SQL è \textbf{parzialmente dichiarativo}: si specifica il risultato da ottenere senza preoccuparsi di specificare l'algoritmo.
+Delle istruzioni equivalenti in SQL differiscono \textbf{solo per leggibilità}.
+Le relazioni in SQL sono intese come \textbf{tabelle}; quindi possono esserci anche \textbf{righe uguali}!
+SQL contiene al suo interno:
+\begin{itemize}
+    \item \textbf{Data Definition Language (DDL)}: Operazioni di definizione e modifica schema
+    \item \textbf{Data Manipulation Language (DML)}: Operazioni di interrogazione (SELECT) oppure di aggiornamento (INSERT, UPDATE, DELETE)
+\end{itemize}
+Poiché è un linguaggio parzialmente dichiarativo, \textbf{non possiamo scegliere l'ordine in cui avvengono le operazioni} ma dobbiamo attenerci alla \textbf{struttura sintattica delle istruzioni}
+Il seguente schema può essere utile per ricordare l'ordine di esecuzione:
+\begin{center}
+    \includegraphics[width = 1\textwidth]{Images/166.PNG}
+\end{center}
+In questi appunti useremo la seguente notazione:
+\begin{itemize}
+    \item \textbf{termini del linguaggio} in maiuscolo
+    \item \textbf{termini variabili} (ovvero argomenti specificati dall'utente) in minuscolo
+    \item \textbf{termini opzionali} tra parentesi quadre
+    \item \textbf{termini che possono comparire zero o più volte} tra parentesi graffe
+    \item \textbf{varie opzioni mutualmente esclusive} separate da |
+\end{itemize}
+Chiariamo una cosa: il termine \textbf{SELECT} non ha nulla a che fare con l'operatore di \textbf{SELEZIONE}
+\begin{center}
+    \includegraphics[width = 0.45\textwidth]{Images/167.PNG}
+\end{center}
+Ogni query in SQL inizia con l'istruzione SELECT.
+\newpage
+\subsection{SELECT}
+La sintassi dell'istruzione SELECT è la seguente:
+\begin{center}
+    \includegraphics[width = 1\textwidth]{Images/168.PNG}
+\end{center}
+La sua semantica è la seguente: \textit{Seleziona tra le n-uple del prodotto cartesiano delle tabelle citate nella \textbf{FROM}, quelle che soddisfano la condizione presentata nella \textbf{WHERE}, e di esse ne rappresenta solo gli attributi nella \textit{ListaAttributi}}
+Il risultato di una SELECT è sempre una tabella (result set).
+\textbf{Una tabella è sempre ottenuta con un'istruzione di SELECT}. Non basta scrivere il nome con in AR!
+Per ottenere tutti gli attributi di una tabella si utilizza la clausola *, che equivale a elencarli tutti
+\begin{center}
+    \includegraphics[width = 1\textwidth]{Images/169.PNG}
+\end{center}
+Nel caso sopra la semantica della proiezione coincide con la semantica del corrispondente operatore in AR.
+Ad eccezione del fatto che i \textbf{duplicati vengono mantenuti}, quindi la cardinalità di una proiezione coincide sempre con la cardinalità dell'operando, a meno che non diversamente specificato con la clausola \textbf{DISTINCT}
+\begin{center}
+    \includegraphics[width = 0.80\textwidth]{Images/170.PNG}
+\end{center}
+\begin{center}
+    \includegraphics[width = 0.80\textwidth]{Images/171.PNG}
+\end{center}
+Nel caso sopra, la semantica della selezione coincide \textit{in toto} con la \textbf{semantica} del corrispondete operatore in AR.
+La condizione è un'\textbf{espressione booleana} espressa allo stesso modo della condizione di selezione in AR. Sono previsti operatori di confronto aggiuntivi come \textbf{l'operatore like}:
+essa \textbf{seleziona stringhe di caratteri} e utilizza due caratteri speciali da inserire dentro le stringhe:
+\begin{itemize}
+    \item \_ indica un singolo carattere arbitrario
+    \item \% indica una stringa con un numero arbitrario di caratteri (da 0 a n caratteri, potenzialmente 0)
+\end{itemize}
+\begin{center}
+    \includegraphics[width = 0.80\textwidth]{Images/172.PNG}
+\end{center}
+
 
 \end{document}
+
