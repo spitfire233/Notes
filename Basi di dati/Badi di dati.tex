@@ -1264,5 +1264,386 @@ Essi possono anche coinvolgere più attributi:
 \begin{center}
     \includegraphics[width = 0.70\textwidth]{Images/86.PNG}
 \end{center}
+\section{Progettazione logica}
+La progettazione logica richiede di scegliere innanzitutto il modello dei dati (noi seguiremo il \textbf{modello relazionale}).
+Il suo obbiettivo è la \textbf{definizione di uno schema logico relazionale corrispondente allo schema E-R di partenza}.
+Suoi aspetti importanti sono:
+\begin{itemize}
+    \item \textbf{Semplificazione} dello schema per renderlo rappresentabile mediante il modello relazionale
+    \item \textbf{Ottimizzazione} per aumentare l'efficienza delle interrogazioni
+\end{itemize}
+Quindi l'obbiettivo della progettazione logica è "tradurre" lo schema concettuale in uno schema logico che rappresenti gli stessi dati in maniera \textbf{corretta} ed \textbf{efficiente}.
+Parlando in termini di dati di ingresso di uscita:
+\begin{itemize}
+    \item \textbf{Ingresso}:
+    \begin{itemize}
+        \item Schema concettuale
+        \item Informazioni sul carico applicativo
+        \item Modello logico
+    \end{itemize}
+    \item \textbf{Uscita}:
+    \begin{itemize}
+        \item Schema logico
+        \item Documentazione associata
+    \end{itemize}
+\end{itemize}
+\begin{center}
+    \includegraphics[width = 0.50\textwidth]{Images/87.PNG}
+\end{center}
+La progettazione logica tuttavia non si tratta di una pura e semplice traduzione.
+Alcuni aspetti \textbf{non sono direttamente rappresentabili}:
+\begin{itemize}
+    \item \textbf{Entità}: relazione del modello relazionale con gli stessi attributi
+    \item \textbf{Generalizzazione}: ???
+\end{itemize}
+È inoltre necessario considerare le prestazioni.
+\begin{center}
+    \includegraphics[width = 0.65\textwidth]{Images/88.PNG}
+\end{center}
+\subsection{Ristrutturazione dello schema E-R}
+Quando si effettua la ristrutturazione del modello E-R, si devono eliminare tutti i costrutti che non possono essere direttamente rappresentati nel modello logico (relazionale nel nostro caso).
+Bisogna quindi eliminare:
+\begin{itemize}
+    \item Gli \textbf{attributi multivalore}
+    \item Le \textbf{Generalizzazioni}
+\end{itemize}
+Inoltre è necessario:
+\begin{itemize}
+    \item Il partizionamento/accorpamento di entità e associazioni
+    \item La scelta degli identificatori primari
+    \item \textbf{L'analisi delle ridondanze} (non dovrebbero esserci)
+\end{itemize}
+\begin{center}
+    \includegraphics[width = 0.70\textwidth]{Images/89.PNG}
+\end{center}
+Le motivazioni per ristrutturare lo schema E-R sono:
+\begin{itemize}
+    \item Semplificare la traduzione
+    \item "Ottimizzare" le prestazioni
+\end{itemize}
+È necessario fare un'osservazione: uno schema E-R ristrutturato non è (più) uno schema concettuale nel senso stretto del termine.
+Per ottimizzare il risultato abbiamo bisogno di analizzare le prestazioni; tuttavia:
+\begin{itemize}
+    \item Le prestazioni non sono valutabili con precisione su uno schema concettuale
+    \item Dipendono dalle caratteristiche del DBMS
+    \item Bisogna conoscere il volume dei dati e le caratteristiche delle operazioni
+\end{itemize}
+\subsection{Carico applicativo}
+Quando analizziamo il carico applicativo consideriamo degli "indicatori" dei parametri che regolano le prestazioni:
+\begin{itemize}
+    \item \textbf{Tempo di esecuzione} delle operazioni di principale interesse: numero di istanze (di entità e relazioni) mediamente accedute durante l'esecuzione dell'operazione (accessi)
+    \item \textbf{Spazio di memoria} necessario per memorizzare i dati di interesse
+\end{itemize}
+Per valutare questi parametri bisogna conoscere (oltre allo schema dei dati):
+\begin{itemize}
+    \item \textbf{Il volume dei dati}:
+    \begin{itemize}
+        \item Numero di istanze previste di entità e relazioni
+        \item Dimensione di ciascun attributo
+    \end{itemize}
+    \item \textbf{Caratteristiche delle operazioni}:
+    \begin{itemize}
+        \item Tipo: interattiva o batch
+        \item Frequenza: numero medio di esecuzioni in un certo periodo
+        \item Dati coinvolti
+    \end{itemize}
+\end{itemize}
+Si noti che la valutazione sarà necessariamente approssimata, in quanto le prestazioni effettive della base di dati dipendono anche da parametri fisici, difficilmente prevedibili in questa fase (DBMS utilizzato, indici, \dots).
+\subsection{Schema di operazione}
+Lo \textbf{schema di operazione} descrive i dati coinvolti in un'operazione.
+Corrisponde al frammento dello schema E-R interessato all'operazione sul quale viene disegnato il cammino logico per accedere alle informazioni di interesse.
+\begin{center}
+    \includegraphics[width = 0.70\textwidth]{Images/90.PNG}
+\end{center}
+Vediamo questo ulteriore esempio:
+\begin{center}
+    \includegraphics[width = 0.70\textwidth]{Images/91.PNG}
+\end{center}
+Quindi per calcolare il numero di accessi a Turno e Autobus occorre conoscere il numero medio di turni (MT) per Autista.
+\subsection{Tavola degli accessi}
+Con lo schema di operazione si può fare una stima del costo di un'operazione contando il numero di accessi alle istanze di entità e relazioni.
+Il risultato può essere riassunto in una \textbf{tavola degli accessi}:
+\begin{center}
+    \includegraphics[width = 0.60\textwidth]{Images/92.PNG}
+\end{center}
+Vediamo degli esempi:
+\begin{center}
+    \includegraphics[width = 0.80\textwidth]{Images/93.PNG}
+\end{center}
+\begin{center}
+    \includegraphics[width = 0.80\textwidth]{Images/94.PNG}
+\end{center}
+Per costruire una tavola degli accessi avendo il modello E-R ci si deve basare su uno \textbf{schema di navigazione}:
+parte dello schema E-R interessata dall'operazione estesa con delle frecce che indicano in che modo l'operazione "naviga" i dati.
+\begin{center}
+    \includegraphics[width = 0.80\textwidth]{Images/95.PNG}
+\end{center}
+\subsection{Tavola dei volumi}
+\begin{center}
+    \includegraphics[width = 0.65\textwidth]{Images/96.PNG}
+\end{center}
+Una \textbf{tavola dei volumi} specifica il numero stimato di istanze per ogni entità (E) e associazione (R) dello schema.
+I valori sono necessariamente approssimati, ma indicativi.
+Il numero (medio) di partecipazione di una istanza di entità alle istanze di relazione dipende dalla cardinalità delle relazioni.
+Si noti che anche i valori \textbf{relativi al numero di istanze di entità e relazioni} nella tabella dei volumi sono influenzati:
+\begin{itemize}
+    \item Dalle cardinalità nello schema
+    \item Dal numero medio di volte che le istanze delle entità partecipano alle relazioni
+\end{itemize}
+La tavola dei volumi influenza anche la tavola degli accessi: il numero delle istanze si ricava dalla tavola dei volumi mediante semplici operazioni.
+\subsection{Attività della ristrutturazione}
+Le principali attività della ristrutturazione dello schema E-R sono:
+\begin{itemize}
+    \item Analisi delle ridondanze
+    \item Eliminazione delle generalizzazioni/gerarchie
+    \item Partizionamento/accorpamento di entità e relazioni
+    \item Eliminazione degli attributi multivalore
+    \item Scelta degli identificatori primari
+\end{itemize}
+\subsubsection{Analisi delle ridondanze}
+Una ridondanza in uno schema E-R è una informazione significativa ma derivabile da altre.
+In questa fase si decise se eliminare le ridondanze eventualmente presenti o mantenerle.
+Vediamo i pro e i contro:
+\begin{itemize}
+    \item \textbf{Vantaggi}:
+    \begin{itemize}
+        \item Semplificazione delle interrogazioni
+    \end{itemize}
+    \item \textbf{Svantaggi}:
+    \begin{itemize}
+        \item Appesantimento degli aggiornamenti
+        \item Maggiore occupazione di spazio
+    \end{itemize}
+\end{itemize}
+Vi sono due forme principali di ridondanza:
+\begin{itemize}
+    \item \textbf{Attributi derivabili} da altri attributi della stessa entità (o relazione) o da attributi di altre entità (o relazioni)
+    \item \textbf{Associazioni derivabili} dalla composizione di altre relazioni in presenza di cicli
+\end{itemize}
+In particolar per le associazioni derivabili, bisogna fare attenzione alla \textbf{semantica della relazione coinvolta nel ciclo}:
+\begin{center}
+    \includegraphics[width = 0.85\textwidth]{Images/97.PNG}
+\end{center}
+\begin{center}
+    \includegraphics[width = 0.85\textwidth]{Images/98.PNG}
+\end{center}
+Durante l'analisi delle ridondanze è utile capire \textbf{quanti accessi si fanno alle varie componenti dello schema E-R};
+durante questo processo si contano \textbf{doppi gli accessi in scrittura}.
+Da questa analisi si potrebbe evincere che \textbf{eliminare la ridondanza aumenterebbe il totale di accessi} che vengono fatti in un determinato periodo di tempo.
+\subsubsection{Eliminazione delle generalizzazioni/gerarchie}
+Il modello relazionale non può rappresentare direttamente le generalizzazioni.
+Entità e relazioni sono invece direttamente rappresentabili.
+\textbf{Si eliminano perciò le gerarchie, sostituendole con entità e relazioni}.
+Per farlo si hanno 3 modi di procedere:
+\begin{enumerate}
+    \item Accorpamento delle figlie della generalizzazione nel genitore
+    \item Accorpamento del genitore della generalizzazione nelle figlie
+    \item Sostituzione della generalizzazione con relazioni
+\end{enumerate}
+\textbf{Accorpamento delle figlie della generalizzazione nel genitore}: \newline
+\begin{center}
+    \includegraphics[width = 1\textwidth]{Images/99.PNG}
+\end{center}
+In questo approccio:
+\begin{itemize}
+    \item Le entità figlie sono \textbf{eliminate}
+    \item Gli attributi delle figlie sono \textbf{aggiunte al padre}
+    \item Si aggiunge un attributo per distinguere il \textbf{tipo} (quale figlia è - o nessuna)
+    \item Gli attributi che provengono da una figlia \textbf{possono essere nulli}
+    \item Le relazioni (es. $R_1$) che provengono da una sola figlia hanno cardinalità minima pari a \textbf{0}.
+\end{itemize}
+Vediamo i pro e i contro di questo approccio:
+\begin{itemize}
+    \item \textbf{Pro}: accesso contestuale agli attributi del padre e della figlia
+    \item \textbf{Contro}: si ha spreco di memoria per i valori nulli
+\end{itemize}
+\textbf{Accorpamento del genitore della generalizzazione nelle figlie}: \newline
+\begin{center}
+    \includegraphics[width = 1\textwidth]{Images/100.PNG}
+\end{center}
+In questo approccio:
+\begin{itemize}
+    \item L'entità padre è eliminata
+    \item Gli attributi, le associazioni e l'identificatore del padre sono \textbf{aggiunti alle figlie}
+    \item Ogni associazione definita sul padre genera una associazione \textbf{distinta} per ogni figlia
+\end{itemize}
+Vediamo i pro e i contro di questo approccio:
+\begin{itemize}
+    \item \textbf{Pro}: Migliore se si effettuano prevalentemente operazioni solo su istanze di una classe figlia. Non ci sono valori nulli
+    \item \textbf{Contro}: Possibile solo se la \textbf{generalizzazione è totale} (non si possono rappresentare istanze che non sono in nessuna delle classi figlie)
+\end{itemize}
+\textbf{Sostituzione della generalizzazione con relazioni}: \newline
+\begin{center}
+    \includegraphics[width = 1\textwidth]{Images/101.PNG}
+\end{center}
+In questo approccio:
+\begin{itemize}
+    \item Si introduce una relazione uno-a-uno fra l'entità padre e ciascuna entità figlia
+    \item Occorre inserire il vincolo che ogni istanza dell'entità padre può partecipare \textbf{solo ad una relazione di legame con le entità figlie}
+    \item Se la generalizzazione è totale, ogni istanza dell'entità padre \textbf{partecipa necessariamente} ad una (sola) delle relazioni di legame con le figlie
+\end{itemize}
+Vediamo i pro e i contro di questo approccio:
+\begin{itemize}
+    \item \textbf{Pro}:
+    \begin{itemize}
+        \item Conviene quando la generalizzazione \textbf{non è totale} e ci sono operazioni che fanno distinzione fra le entità padre e le entità figlie
+        \item Non è necessario introdurre valori nulli
+        \item Genera entità con pochi attributi (le tabelle corrispondenti sono più piccole più tuple possono essere gestite in memoria principale)
+    \end{itemize}
+    \item \textbf{Contro}: Si incrementa il numero degli accessi per mantenere la consistenza delle istanze rispetto ai vincoli introdotti
+\end{itemize}
+La scelta fra le alternative si può fare con un metodo simile a quello visto per l'analisi delle ridondanze (però non basato solamente sul numero di accessi).
+È possibile seguire alcune semplici \textbf{regole generali}:
+\begin{enumerate}
+    \item \textbf{Accorpamento delle figlie della generalizzazione nel padre} conviene se gli accessi al padre e alle figli sono \textbf{contestuali}
+    \item \textbf{Accorpamento del genitore della generalizzazione nelle figlie} conviene se gli accessi alle figlie sono distinti e solo se la generalizzazione è totale
+    \item \textbf{Sostituzione della generalizzazione con relazioni} conviene se gli accessi alle entità figlie sono separati dagli accessi al padre
+\end{enumerate}
+Sono anche possibili \textbf{soluzioni ibride}, soprattutto in gerarchie a più livelli.
+Diamo ulteriori criteri di scelta: \newline
+\textbf{Accorpamento nel padre}: Tecnica sempre applicabile; tuttavia è sconsigliato applicarla in presenza di elevato numero di relazioni e/o attributi provenienti dalle entità figlie (\textbf{necessita vincoli di integrità dei dati})
+\begin{center}
+    \includegraphics[width = 1\textwidth]{Images/102.PNG}
+\end{center}
+\textbf{Accorpamento nelle entità figlie}:
+\begin{center}
+    \includegraphics[width = 0.70\textwidth]{Images/103.PNG}
+\end{center}
+Tecnica sconsigliata per \textbf{generalizzazioni parziali}: vi è però la possibilità di trasformare la generalizzazione in \textbf{totale} aggiungendo un'ulteriore entità figlia di tipo \textbf{Altri}. \newline
+Tecnica non adatta per \textbf{generalizzazioni sovrapposte}: difficile gestione degli \textbf{identificatori duplicati} relativi alle \textbf{istanze comuni} a più entità figlie. \newline
+\textbf{Trasformazione in relazioni}: Soluzione più generale e sempre applicabile, \textbf{può essere dispendiosa per ricostruire l'informazione di partenza}
+\begin{center}
+    \includegraphics[width = 0.90\textwidth]{Images/104.PNG}
+\end{center}
+\subsubsection{Partizionamento/accorpmaento di entità e relazioni}
+Le ristrutturazioni vengono effettuate per rendere più efficienti le operazioni in base a un semplice principio.
+Gli accessi si riducono:
+\begin{itemize}
+    \item \textbf{Separando} gli attributi di un concetto che vengono acceduti \textbf{separatamente}
+    \item \textbf{Raggruppando} attributi di concetti diversi acceduti \textbf{insieme}
+\end{itemize}
+I casi principali nelle ristrutturazioni sono:
+\begin{itemize}
+    \item \textbf{Partizionamento verticale di entità}
+    \item \textbf{Partizionamento orizzontale di relazioni}
+    \item \textbf{Accorpamento di entità/relazioni}
+\end{itemize}
+\textbf{Partizionamento verticale di entità}:
+Supponiamo di avere la seguente entità:
+\begin{center}
+    \includegraphics[width = 0.70\textwidth]{Images/105.PNG}
+\end{center}
+Possiamo effettuare una partizione verticale dell'entità scorporando i dati lavorativi dai dati anagrafici e mettendoli in relazione fra loro:
+\begin{center}
+    \includegraphics[width = 0.70\textwidth]{Images/106.PNG}
+\end{center}
+\textbf{Accorpamento di entità}: Due entità \textbf{legate da una associazione} possono essere fuse in un'unica entità contenente gli attributi di entrambe quando le operazioni fanno sempre riferimento a tutti gli attributi delle due entità.
+In questo modo si risparmiano gli accessi per recuperare i dati attraverso la relazione che lega le due entità.
+Si effettuano per \textbf{associazioni uno-a-uno} (raramente per uno-a-molti dato che si generano ridondanze: gli attributi delle istanze della prima entità sono ripetuti in N tuple)
+\begin{center}
+    \includegraphics[width = 1\textwidth]{Images/107.PNG}
+\end{center}
+\textbf{Accorpamento/partizione di relazioni}: Supponiamo di avere il seguente schema E-R:
+\begin{center}
+    \includegraphics[width = 0.70\textwidth]{Images/108.PNG}
+\end{center}
+\newpage
+\noindent
+Possiamo partizionare la relazione in due relazioni differenti per rendere il concetto di associazione fra entità in tempi differenti:
+\begin{center}
+    \includegraphics[width = 0.70\textwidth]{Images/109.PNG}
+\end{center}
+\subsubsection{Eliminazione di attributi multivalore}
+Il modello relazionale non permette di rappresentare direttamente attributi multivalore.
+Quindi l'attributo multivalore diventa \textbf{1 entità + 1 relazione uno a molti}
+\begin{center}
+    \includegraphics[width = 0.80\textwidth]{Images/110.PNG}
+\end{center}
+o \textbf{1 entità + 1 relazione molti a molti}
+\begin{center}
+    \includegraphics[width = 0.80\textwidth]{Images/111.PNG}
+\end{center}
+\subsubsection{Scelta degli identificatori principali}
+La scelta di identificatori principali è indispensabile per la traduzione nel modello relazionale.
+Vi sono vari criteri per fare questa scelta:
+\begin{itemize}
+    \item Assenza di opzionalità (no valori nulli)
+    \item Semplicità (preferenza agli identificatori interni, dimensioni ridotte)
+    \item Utilizzo nelle operazioni più frequenti o importanti
+\end{itemize}
+E se nessuno degli identificatori soddisfa i requisiti visti? Allora si \textbf{introducono nuovi attributi} (codici) contenenti valori speciali generati appositamente per questo scopo.
+\subsection{Traduzione verso il modello relazionale}
+Dopo aver effettuato la ristrutturazione del modello E-R, si può procedere alla traduzione verso il modello relazionale.
+L'idea di base da seguire è:
+\begin{itemize}
+    \item Le entità diventano relazioni sugli stessi attributi
+    \item Le associazioni (ovvero le relazioni E-R) diventano relazioni sugli identificatori delle entità coinvolte (più gli attributi propri)
+\end{itemize}
+\subsubsection{Traduzione di entità}
+Una entità diviene una relazione definita sugli stessi attributi e con chiave uguale all'identificatore
+\begin{center}
+    \includegraphics[width = 1\textwidth]{Images/112.PNG}
+\end{center}
+\subsubsection{Traduzione di assocazioni}
+Ogni associazione è tradotta con una \textbf{relazione} con gli stessi attributi, cui si aggiungono gli \textbf{identificatori di tutte le entità che essa collega}.
+Gli identificatori delle entità collegate costituiscono una \textbf{superchiave}.
+La chiave dipende dalle \textbf{cardinalità massime delle entità nell'associazione}.
+Le cardinalità minime determinano, a seconda del tipo di traduzione effettuata, la presenza o meno di valori nulli (e quindi incidono su vincoli e occupazione inutile di memoria).
+Prima di vedere i vari casi, specifichiamo che \textbf{non è necessario mantenere chiave della relazione che traduce l'associazione gli stessi nomi delle chiavi delle relazioni referenziate}.
+Si possono infatti scegliere nomi più espressivi per gli attributi della chiave della relazione che rappresenta l'associazione.
+\newpage
+\noindent
+\textbf{Traduzione di relazioni binarie molti-a-molti}
+\begin{center}
+    \includegraphics[width = 0.90\textwidth]{Images/113.PNG}
+\end{center}
+\textbf{Traduzione di relazioni ricorsive}
+\begin{center}
+    \includegraphics[width = 0.90\textwidth]{Images/114.PNG}
+\end{center}
+In questo caso la ridenominazione è essenziale. \newline
+\textbf{Traduzione di relazione ternarie molti-a-molti}
+\begin{center}
+    \includegraphics[width = 0.90\textwidth]{Images/115.PNG}
+\end{center}
+\textbf{Traduzione di relazioni binarie uno-a-molti}
+\begin{center}
+    \includegraphics[width = 1\textwidth]{Images/116.PNG}
+\end{center}
+In questo caso particolare, la chiave per la relazione Contratto è solo l'identificatore dell'entità Giocatore perché la cardinalità verso la relazione è (1,1).
+Le relazioni Giocatore e Contratto hanno quindi la stessa chiave e possono essere fuse insieme.
+La soluzione resta valida anche se la cardinalità della relazione Contratto verso Giocatore è (0,1): si hanno giocatori con l'attributo NomeSquadra uguale a NULL (giocatori svincolati). \newline
+\textbf{Traduzione di relazioni con identificatore esterno}
+\begin{center}
+    \includegraphics[width = 1\textwidth]{Images/117.PNG}
+\end{center}
+Rappresentando l'identificatore esterno viene rappresentata anche la relazione fra le due entità.
+In caso di \textbf{identificatori esterni a cascata} si procede nel seguente modo:
+\begin{center}
+    \includegraphics[width = 1\textwidth]{Images/118.PNG}
+\end{center}
+\textbf{Traduzione di relazioni uno-a-uno}
+\begin{center}
+    \includegraphics[width = 1\textwidth]{Images/119.PNG}
+\end{center}
+La relazione è biunivoca, quindi può essere rappresentata in una qualsiasi delle relazioni che rappresentano l'entità.
+Si potrebbe anche definire un'unica relazione che fonde entrambe ma si perde la distinzione fra le due entità.
+\begin{center}
+    \includegraphics[width = 1\textwidth]{Images/120.PNG}
+\end{center}
+In questo caso la partecipazione della prima entità è opzionale.
+Rappresentare la relazione Direzione in Dipartimento piuttosto che in impiegato è preferibile perché nell'altro caso si avrebbero molti valori nulli.
+\begin{center}
+    \includegraphics[width = 1\textwidth]{Images/121.PNG}
+\end{center}
+In questo caso la partecipazione di entrambe le entità è opzionale.
+Questa soluzione ha il vantaggio di non presentare valori nulli sugli attributi.
+Occorre però introdurre una relazione in più.
+\subsection{Documentazione degli schemi logici}
+Si devono documentare i \textbf{vincoli di integrità referenziale}
+\begin{center}
+    \includegraphics[width = 0.80\textwidth]{Images/122.PNG}
+\end{center}
+Il diagramma è utile anche per visualizzare i \textbf{cammini di join}.
 
 \end{document}
