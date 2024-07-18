@@ -2321,9 +2321,226 @@ Sono eseguite:
 \end{itemize}
 \subsubsection{Insert}
 La INSERT ha la seguente sintassi:
-
-
-
-
+\begin{center}
+    \includegraphics[width = 1\textwidth]{Images/204.PNG}
+\end{center}
+L'inserimento deve seguire le seguenti regole:
+\begin{enumerate}
+    \item Se qualche attributo non è specificato, è inserito il valore \textbf{NULL}
+    \item Se è violato un vincolo di \textbf{NOT NULL}, l'INSERT è rifiutato
+    \item \textbf{L'ordinamento} degli attributi (se presente) e dei valori è significativo
+    \item Le due liste (Attributi, valori) devono avere lo stesso numero di elementi
+    \item Se la lista di attributi è omessa, si fa riferimento a tutti gli attributi della relazioni, secondo l'ordine in cui sono stati definiti
+    \item Se la lista di attributi non contiene tutti gli attribui della relazione, per gli altri viene inserto un \textbf{valore di default, o in assenza di questo, il valore NULL} (che deve essere permesso)
+\end{enumerate}
+\subsubsection{Delete}
+La DELETE ha la seguente sintassi:
+\begin{center}
+    \includegraphics[width = 0.60\textwidth]{Images/205.PNG}
+\end{center}
+Essa elimina le n-uple che soddisfano la condizione. Se la where è omessa, si intende "WHERE TRUE", \textbf{quindi vengono eliminate tutte le n-uple}.
+L'eliminazione può causare eliminazioni in altre relazioni, se ci sono vincoli di integrità referenziale ed è adottata una politica \textbf{CASCADE}.
+Vi è differenza tra l'usare DELETE e usare DROP:
+\begin{itemize}
+    \item \textbf{DELETE} elimina tutte le n-uple nella tabella, ed eventuali alte per la politica cascade, ma lascia immutato lo schema
+    \item \textbf{DROP TABLE <Table> CASCADE} elimina dallo schema della base di dati la relazione Studente e tutti gli schemi di relazione che fanno riferimento ad esso
+    \item \textbf{DROP TABLE <Table> RESTRICT} fallisce se vi sono tuple nell'istanza di relazione
+\end{itemize}
+\subsubsection{Modify}
+La MODIFY ha la seguente sintassi:
+\begin{center}
+    \includegraphics[width = 0.60\textwidth]{Images/206.PNG}
+\end{center}
+Modifica le n-uple che rispettano la (eventuale) condizione.
+Se non c'è la condizione, le modifica tutte.
+Il nuovo valore può essere:
+\begin{enumerate}
+    \item \textbf{Un espressione}, il risultato della valutazione di una espressione sugli attributi della tabella
+    \item \textbf{SELECT}, il risultato di un'interrogazione
+    \item \textbf{NULL}, il valore nullo
+    \item \textbf{DEFAULT} il valore di defautl
+\end{enumerate}
+Bisogna fare però attenzione:
+\begin{center}
+    \includegraphics[width = 0.70\textwidth]{Images/207.PNG}
+\end{center}
+Le due query in questo caso modificano insiemi di righe.
+L'esecuzione sequenziale delle due righe provoca, ad es., per un impiegato con stipendio = 30, \textbf{due aumenti, non uno}!
+Bisogna dunque prestare attenzione alla natura "set oriented" di SQL, la quale non permette di modificare le righe una alla volta, sulla base del loro valore corrente.
+Il questo caso particolare la soluzione è invertire l'ordine di esecuzione delle due query. In situazioni più complesse, la soluzione può richiedere l'integrazione di SQL con un linguaggio di programmazione ad alto livello di tipo procedurale.
+\subsection{CHECK}
+Possiamo usare \textbf{CHECK} per definire vincoli intrarelazionali di tabella o attributo
+La sua sintassi è:
+\begin{center}
+    \includegraphics[width = 0.30\textwidth]{Images/208.PNG}
+\end{center}
+Dove "Condizione" è espressa come la condizione della clausola WHERE, e quindi può contenere \textbf{subqueries}.
+La condizione che compare nella CHECK deve essere sempre verificata.
+La CHECK permette anche di esprimere tutti i vincoli predefiniti, ma in questi casi, rispetto ad essi, è meno naturale e comprensibile.
+In particolare, le subqueries nella clausola check sono previste dallo standard, ma non supportate dai vari DBMS e in particolare da MySQL.
+\subsection{Vincoli di integrità generici: asserzioni}
+Le asserzioni specificano vincoli a livello di schema.
+La loro sintassi è:
+\begin{center}
+    \includegraphics[width = 0.70\textwidth]{Images/209.PNG}
+\end{center}
+Le asserzioni sono previste dallo standard, ma supportate da pochissimi DBMS e in particolare NON da MySQL.
+\subsection{Espressioni aritmetiche}
+Le espressioni aritmetiche sono permesse nella target list dell'istruzione SELECT.
+Gli operatori aritmetici permessi sono: +, -, *, /. \newline
+Le priorità sono quelle standard: possono essere alterate con l'uso delle parentesi
+\begin{center}
+    \includegraphics[width = 0.40\textwidth]{Images/210.PNG}
+\end{center}
+\begin{center}
+    \includegraphics[width = 0.50\textwidth]{Images/211.PNG}
+\end{center}
+il campo risultate necessita di una \textbf{rinomina} per farne comprendere meglio la sintassi.
+\subsection{BETWEEN}
+Se vogliamo ottenere delle tuple il cui valore è compreso tra due valori, possiamo o scrivere la condizione
+usando l'operatore BETWEEN:
+\begin{center}
+    \includegraphics[width = 1\textwidth]{Images/212.PNG}
+\end{center}
+\subsection{Ordinamento del risultato}
+SQL permette di specificare un criterio di ordinamento delle righe.
+L'ordinamento può essere \textbf{alfabetico} o \textbf{numerico}.
+La clausola ORDER BY è inserita in fondo alla query.
+\begin{center}
+    \includegraphics[width = 1\textwidth]{Images/213.PNG}
+\end{center}
+\subsection{Operatori aggregati}
+Le espressioni aritmetiche, così come le condizioni, sono sempre valutate singolarmente \textbf{su una riga alla volta}.
+Se volessimo sapere ad esempio il numero di professori ordinari, come faremmo? Non potremmo!
+SQL mette a disposizione anche degli operatori, che non esistono in AR, che sono \textbf{valutati su insiemi di tuple}
+\subsubsection{COUNT}
+COUNT restituisce il numero di righe o il numero di valori distinti di un particolare attributo.
+La sua sintassi è:
+\begin{center}
+    \includegraphics[width = 0.80\textwidth]{Images/214.PNG}
+\end{center}
+Si applica a qualsiasi tipo di attributo, o lista di attributi.
+\subsubsection{MIN, MAX, AVG, SUM}
+\begin{center}
+    \includegraphics[width = 0.80\textwidth]{Images/215.PNG}
+\end{center}
+dove \textbf{operatoreAggregato} va sostituito con MIN, MAX, AVG, SUM.
+Essi rispettivamente restituiscono il Minimo, Massimo, la Media Aritmetica e la Somma dei valori selezionati.
+\begin{itemize}
+    \item AVG  e SUM si possono applicare solo a valori numerici
+    \item MIN e MAX si applicano ad attributi di tipo numerico e a stringhe
+\end{itemize}
+\subsubsection{Semantica degli operatori aggregati}
+Vengono valutati solo dopo \textbf{aver eseguito l'interrogazione di base},
+sull'insieme di n-uple prodotte dalla interrogazione di base.
+Quindi gli operatori aggregati non sono un meccanismo di selezione, come accade per gli attributi che compaiono nelle condizioni, ma descrivono piuttosto funzioni, che restituiscono un valore.
+\subsubsection{Operatori aggregati e valori nulli}
+COUNT si comporta rispetto ai valori nulli diversamente a seconda dei suoi argomenti:
+\begin{itemize}
+    \item \textbf{SELECT COUNT(*) \dots} ridà il numero di tuple
+    \item \textbf{SELECT COUNT(Attrs) \dots} ridà il numero di volte in cui Attrs non/non sono null
+    \item \textbf{SELECT COUNT(DISTINCT Attrs)\dots} Ridà il numero di valori distinti di/dei campo/i Attrs (senza i NULL) 
+\end{itemize}
+I valori nulli sono invece \textbf{omessi} ai fini del calcolo di media, massimo, minimo e somma
+\subsubsection{Clausola GROUP BY}
+Negli esempi visti fino ad ora, abbiamo applicato gli operatori aggregati a tutta la relazione.
+Tuttavia, possiamo applicarli anche a \textbf{partizioni delle relazioni}, cioè a gruppi di tuple.
+Si usa per questo scopo la clausola GROUP BY, che ha la seguente sintassi:
+\begin{center}
+    \includegraphics[width = 0.80\textwidth]{Images/216.PNG}
+\end{center}
+La clausola GROUP BY può essere usata \textbf{solo in presenza di operatori aggregati}.
+La semantica della clausola GROUP BY è la seguente:
+\begin{enumerate}
+    \item Esegui l'interrogazione base senza tener conto del GROUP BY e degli operatori aggregati
+    \item Raggruppa le righe che hanno stessi valori per gli attribui che compaiono nella lista Attributi della GROUP BY
+    \item Applica l'operatore aggregato a ciascun gruppo di righe
+\end{enumerate}
+Il raggruppamento \textbf{tiene conto anche dei NULL}!.
+Nel caso di uso di GROUP BY, nella target list della SELECT \textbf{non possono comparire colonne aggregate insieme a colonne aggregate!}
+Permettere ciò sarebbe violare la definizione di istanza del modello relazionale, in cui nelle n-uple non possono comparire multivalori.
+\begin{center}
+    \includegraphics[width = 0.80\textwidth]{Images/217.PNG}
+\end{center}
+\subsubsection{Clausola HAVING}
+Tramite la GROUP BY le righe di una tabella sono raggruppate in sottoinsiemi.
+Però, fino ad ora, non è stato possibili esprimere \textbf{condizioni su sottoinsiemi}.
+La clausola WHERE va necessariamente \textbf{indicata prima della clausola GROUP BY} e viene eseguita prima di essa; ci serve quindi una nuova clausola.
+La clausola HAVING permette di esprimere \textbf{condizioni sui gruppi}, applicate a ogni insieme di n-uple risultato della applicazione GROUP BY; essa ha sintassi:
+\begin{center}
+    \includegraphics[width = 0.70\textwidth]{Images/218.PNG}
+\end{center}
+\subsection{Interrogazioni nidificate (subqueries)}
+Le condizioni atomiche permettono sempre e soltanto di \textbf{confrontare valori elementari} (al massimo, di aggregati di gruppi di valori).
+È quindi utile estendere i confronti a sintassi del tipo:
+\begin{center}
+    \includegraphics[width = 0.70\textwidth]{Images/219.PNG}
+\end{center}
+In cui, come vedremo, possiamo confrontare valori elementari con il risultato di istruzioni SELECT.
+\begin{center}
+    \includegraphics[width = 0.90\textwidth]{Images/220.PNG}
+\end{center}
+\subsubsection{Subqueiries e predicati}
+Gli operatori di confronto semplici (=, <>, <, <=, >, >=) si possono usare solo per \textbf{subqueries che restituiscono un singolo valore} che si può usare come espressione scalare.
+Per usare predicati di \textbf{confronto con subqueries che possono restituire più di una riga} occorre usare le quantificazioni:
+\begin{itemize}
+    \item \textbf{ALL} oppure \textbf{ANY}
+    \item Predicato \textbf{[NOT] IN}
+\end{itemize}
+Il predicato \textbf{[NOT] EXISTS} è invece un \textbf{quantificatore esistenziale} che permette di verificare se la query restituisce o meno una tupla
+\begin{center}
+    \includegraphics[width = 0.90\textwidth]{Images/221.PNG}
+\end{center}
+\subsubsection{ALL e ANY}
+I quantificatori ALL e ANY estendono i normali operatori di confronto:
+\begin{itemize}
+    \item \textbf{ANY} specifica che la condizione è vera se il confronto è vero rispetto \textbf{ad almeno uno} degli elementi della lista. (es. WHERE ClasseStipendio > ANY(3, 5, 6))
+    \item \textbf{ALL} specifica che la condizione è vera se il confronto è vero rispetto a \textbf{tutti} gli elementi della lista (es. WHERE ClasseStipendio > ALL(3,5,6))
+\end{itemize}
+\subsubsection{IN e NOT IN}
+IN e NOT IN sono usati per selezionare righe che hanno (o non hanno) un \textbf{attributo che assume valori contenuti in una lista}:
+\begin{itemize}
+    \item \textbf{IN} ha valore VERO se il valore \textbf{compare} nell'insieme risultato della interrogazione (es. ClasseStipendio IN (3,5,6))
+    \item \textbf{NOT IN} ha valore VERO se il valore \textbf{non compare} (cioè è diverso da tutti i valori) nell'insieme risultato della interrogazione (es. ClasseStipendio NOT IN (3,5,6))
+\end{itemize}
+Si possono anche confrontare tuple e non solo singoli attributi, usando le parentesi:
+\begin{center}
+    \includegraphics[width = 0.90\textwidth]{Images/222.PNG}
+\end{center}
+\subsubsection{Subqueries e predicati: regole}
+Le regole per applicare predicati insieme a subqueries sono:
+\begin{itemize}
+    \item Il dominio dell'attributo della query esterna deve essere \textbf{compatibile} con l'attributo della query interna
+    \item Il \textbf{numero di attributi} deve essere compatibile con l'attributo della query interna
+\end{itemize}
+\begin{center}
+    \includegraphics[width = 0.80\textwidth]{Images/223.PNG}
+\end{center}
+\subsubsection{Quantitifazione esistenziale}
+Vi è un ulteriore tipo di condizione: \textbf{WHERE EXISTS (Sottoespressione)} \newline
+dove la sottoespressione è un'interrogazione SQL.
+Questa condizione restituisce il valore VERO se la interrogazione restituisce un risultato NON VUOTO, falso altrimenti.
+L'operatore esistenziale EXISTS/NOT EXISTS ha praticamente senso solo nel caso in cui la query interna faccia riferimento alla query esterna
+\begin{center}
+    \includegraphics[width = 0.90\textwidth]{Images/224.PNG}
+\end{center}
+\subsubsection{Semantica Top-Down}
+Quando in un blocco interno si fa riferimento a variabili definite in blocchi più esterni, \textbf{l'interrogazione nidificata viene valutata separatamente per ogni n-upla} prodotta nella valutazione della query esterna.
+Quindi per ogni n-upla di una query esterna si esegue il blocco più interno e poi si confronta.
+\subsubsection{Regole di visibilità}
+\begin{enumerate}
+    \item La visibilità delle variabili in SQL segue la seguente semplice regola: una variabile \textbf{è visibile nella query che l'ha definita o in una query nidificata in essa}
+    \item \textbf{Non è possibile fare riferimenti da blocchi esterni} a variabili definite in blocchi più interni, o da blocchi interni ad altri blocchi interni di pari livello
+    \item In un blocco si può invece fare riferimento a variabili definite in blocchi più esterni
+    \item Se un nome di variabile è usato più volte, si assume come riferimento la variabile "più vicina" dichiarata all'esterno
+\end{enumerate}
+\subsection{Viste}
+Possiamo creare viste, come in AR, mediante la seguente sintassi:
+\begin{center}
+    \includegraphics[width = 0.75\textwidth]{Images/225.PNG}
+\end{center}
+\begin{center}
+    \includegraphics[width = 1\textwidth]{Images/226.PNG}
+\end{center}
 \end{document}
 
