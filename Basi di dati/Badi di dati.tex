@@ -2077,8 +2077,252 @@ essa \textbf{seleziona stringhe di caratteri} e utilizza due caratteri speciali 
     \item \% indica una stringa con un numero arbitrario di caratteri (da 0 a n caratteri, potenzialmente 0)
 \end{itemize}
 \begin{center}
-    \includegraphics[width = 0.80\textwidth]{Images/172.PNG}
+    \includegraphics[width = 0.55\textwidth]{Images/172.PNG}
 \end{center}
+La gestione dei valori nulli avviene \textbf{esattamente come in AR}
+\begin{center}
+    \includegraphics[width = 0.75\textwidth]{Images/173.PNG}
+\end{center}
+\subsection{SQL-Data Definition Language}
+Gli aspetti di uno schema relazionale descrivibili con SQL-DDL sono:
+\begin{center}
+    \includegraphics[width = 0.65\textwidth]{Images/174.PNG}
+\end{center}
+\subsubsection{Creazioni di schemi}
+Per definire uno schema in SQL si utilizza questa sintassi:
+\begin{center}
+    \includegraphics[width = 0.55\textwidth]{Images/175.PNG}
+\end{center}
+AUTHORIZATION definisce il proprietario dello schema, colui che lo ha definito.
+\subsubsection{Creazione di tabelle}
+Per definire una tabella in SQL si utilizza:
+\begin{center}
+    \includegraphics[width = 0.70\textwidth]{Images/176.PNG}
+\end{center}
+L'istruzione \textbf{CREATE TABLE}:
+\begin{itemize}
+    \item Definisce uno schema di relazione e ne crea un'istanza vuota
+    \item Specifica attributi, domini e vincoli
+\end{itemize}
+Un esempio può essere:
+\begin{center}
+    \includegraphics[width = 0.65\textwidth]{Images/177.PNG}
+\end{center}
+\subsubsection{Creazione di un dominio di attributo}
+Vi sono due tipi di domini in SQL:
+\begin{itemize}
+    \item Domini \textbf{elementari}: domini predefiniti da SQL
+    \item Domini \textbf{definiti dall'utente} (semplici, ma riutilizzabili) 
+\end{itemize}
+\newpage
+\noindent
+I domini elementari predefiniti sono, per esempio:
+\begin{center}
+    \includegraphics[width = 1\textwidth]{Images/178.PNG}
+\end{center}
+Per definire un dominio si usa la seguente sintassi:
+\begin{center}
+    \includegraphics[width = 0.80\textwidth]{Images/179.PNG}
+\end{center}
+L'istruzione CREATE DOMAIn definisce un dominio (elementare) utilizzabile in definizioni di relazioni, anche con vincoli e valori di default.
+Vediamo un esempio:
+\begin{center}
+    \includegraphics[width = 0.60\textwidth]{Images/180.PNG}
+\end{center}
+Il comando crea \textbf{flessibilità} rispetto al solo utilizzo dei domini elementari.
+Se cambia qualche caratteristica di un dominio definito dall'utente, basta modificarla nella definizione ed è propagata a tutti i riferimenti.
+\subsubsection{Definizione di vincoli di integrità}
+Possiamo definire entrami i tipi di vincoli di integrità:
+\begin{itemize}
+    \item \textbf{Intra-relazionali}: proprietà sempre valida all'interno di una relazione
+    \item \textbf{Inter-relazionali}: proprietà sempre valida a più relazioni
+\end{itemize}
+\subsubsection{Vincoli di integrità intrarelazionali}
+I vincoli di integrità intrarelazionali che possiamo definire sono:
+\begin{itemize}
+    \item \textbf{NOT NULL}: Indica che il valore nullo non è ammesso per il dominio a cui è associato il vincolo
+    \item \textbf{UNIQUE}: Si applica a uno attributo (A) o ad un insieme di attributi (I). Impone che i valori dell'attributo o dell'insieme siano una \textbf{chiave}, cioè che tuple diverse abbiano valori diversi su A o I.
+    Fa eccezione il \textbf{valore nullo}: che si assume sempre diverso nelle diverse occorrenze. Vi sono due forme di questo vincolo:
+    \begin{itemize}
+        \item Nella definizione di un attributo, se forma da solo la chiave (es. Cognome CHAR(20) UNIQUE)
+        \item Come elemento separato, se definito su più attributi (Es. UNIQUE(Cognome, Nome)).
+    \end{itemize} 
+    Attenzione che:
+    \begin{center}
+        \includegraphics[width = 0.90\textwidth]{Images/181.PNG}
+    \end{center}
+    non hanno lo stesso effetto perché la seconda dichiarazione corrisponde a due comandi \textbf{distinti}.
+    \item \textbf{PRIMARY KEY}: Serve per specificare la \textbf{chiave primaria} (UNIQUE + NOT NULL). Può essere usata \textbf{una sola volta} in una tabella.
+    Anche in questo caso ci sono più forme per un attributo o più attributi la cui sintassi è identica ai casi per UNIQUE
+    \item \textbf{CHECK}: permette di definire sia vincoli intra che inter relazionali, lo vedremo più avanti
+\end{itemize}
+\subsubsection{Vincoli di integrità interrelazionali}
+I vincoli di integrità interrelazionali che possiamo definire sono:
+\begin{itemize}
+    \item \textbf{FOREIGN KEY e REFERENCES}: Vincoli di integrità referenziale (IR)
+    \item \textbf{CHECK}: Lo vedremo più avanti, prima necessario trattare le interrogazioni
+\end{itemize}
+I vincoli di integrità referenziale (IR) creano un legame tra i valori di n attributi della tabella corrente (detta \textbf{interna}) e i valori di n attributi di una seconda tabella (detta \textbf{esterna o Master o Principale}) di cui tipicamente costituiscono una chiave.
+Vi sono di nuovo due sintassi, simili a UNIQUE:
+\begin{itemize}
+    \item Per singoli attributi
+    \item Su più attributi
+\end{itemize}
+È inoltre possibile definire politiche di reazione alla \textbf{violazione}.
+\newpage
+\noindent
+Supponiamo di avere questo schema relazionale:
+\begin{center}
+    \includegraphics[width = 0.65\textwidth]{Images/182.PNG}
+\end{center}
+Per creare la tabella Infrazioni in modo che abbia i vincoli di integrità richiesti possiamo fare nel seguente modo:
+\begin{center}
+    \includegraphics[width = 0.70\textwidth]{Images/183.PNG}
+\end{center}
+Se viene eseguita una operazione di aggiornamento che porta alla violazione di un vincolo di integrità referenziale, lo stato della base di dati diventa non valido.
+Sono perciò definite un insieme di politiche per evitare che questo accada.
+Tali politiche vanno \textbf{dichiarate nella dichiarazione DDL dello schema}.
+\begin{center}
+    \includegraphics[width = 0.80\textwidth]{Images/184.PNG}
+\end{center}
+\begin{itemize}
+    \item \textbf{CASCADE}: L'operazione di modifica/cancellazione viene propagata alla tabella interna
+    \item \textbf{SET NULL}: NULL nella TI in entrambi i casi
+    \item \textbf{SET DEFAULT}: DEFAULT (cioè il valore definito come default nel DDL della tabella) nella TI in entrambi i casi
+    \item \textbf{NO ACTION}: Rifiutata in entrambi i casi
+\end{itemize}
+Le politiche di reazione possono essere definite in modo diverso per eventi di modifica/cancellazione:
+\begin{center}
+    \includegraphics[width = 0.60\textwidth]{Images/185.PNG}
+\end{center}
+\subsubsection{Modifiche degli schemi: ALTER}
+Possiamo modificare una tabella o un dominio una volta che essi è sono stati definiti:
+\begin{itemize}
+    \item \textbf{ALTER DOMAIN}, modifica domini (default, vincoli)
+    \item \textbf{ALTER TABLE}, modifica tabelle
+\end{itemize}
+In particolare, la sintassi di ALTER TABLE è:
+\begin{center}
+    \includegraphics[width = 1.20\textwidth]{Images/186.PNG}
+\end{center}
+\begin{center}
+    \includegraphics[width = 1.20\textwidth]{Images/187.PNG}
+\end{center}
+\begin{center}
+    \includegraphics[width = 1.20\textwidth]{Images/188.PNG}
+\end{center}
+\begin{center}
+    \includegraphics[width = 1.20\textwidth]{Images/189.PNG}
+\end{center}
+\newpage
+\subsubsection{Modifiche degli schemi: DROP}
+Possiamo cancellare un dominio o una tabella una volta che essi sono stati definiti:
+\begin{itemize}
+    \item \textbf{DROP DOMAIN}, cancellazione di un dominio (attributo)
+    \item \textbf{DROP TABLE}, cancellazione della tabella
+\end{itemize}
+Questi comandi hanno due opzioni:
+\begin{itemize}
+    \item \textbf{RESTRICT}, un oggetto (dominio, tabella) non è rimosso se non è vuoto
+    \item \textbf{CASCADE}, viene rimosso l'oggetto è tutto ciò che è coinvolto nella definizione dell'oggetto
+\end{itemize}
+\subsection{Operatori insiemistici}
+Gli \textbf{operatori insiemistici} si applicano a relazioni definite sullo \textbf{stesso numero di attributi}.
+A differenza dell'AR tuttavia, \textbf{l'ordine degli attributi è rilevante!}.
+La semantica degli operatori è identica: per uniformarsi alla teoria degli insiemi, i valori duplicati \textbf{sono esclusi di default anche in SQL}.
+\subsubsection{Union}:
+Produce l'unione delle righe di due tabelle, senza eventuali righe duplicate
+\begin{center}
+    \includegraphics[width = 0.70\textwidth]{Images/190.PNG}
+\end{center}
+\begin{center}
+    \includegraphics[width = 0.90\textwidth]{Images/191.PNG}
+\end{center}
+\newpage
+Il nome degli attributi della tabella risultato coincide con gli attributi della prima tabella nella query:
+\begin{center}
+    \includegraphics[width = 0.90\textwidth]{Images/192.PNG}
+\end{center}
+\subsubsection{Ridenominazione}
+Si possono fare ridenominazioni su attributi e \textbf{anche su relazioni} con la clausola \textbf{AS}
+\begin{center}
+    \includegraphics[width = 1\textwidth]{Images/193.PNG}
+\end{center}
+\begin{center}
+    \includegraphics[width = 1\textwidth]{Images/194.PNG}
+\end{center}
+Si può usare per ragioni di leggibilità.
+\newpage
+\subsubsection{Intersezione}
+Seppur definita da SQL, questa operazione \textbf{non è supportata d MySQL}
+\begin{center}
+    \includegraphics[width = 0.80\textwidth]{Images/195.PNG}
+\end{center}
+\subsubsection{Differenza}
+Seppur definita da SQL, questa operazione \textbf{non è supportata d MySQL}
+\begin{center}
+    \includegraphics[width = 0.80\textwidth]{Images/196.PNG}
+\end{center}
+\subsection{Join}
+Elencare più tabelle nella clausola FROM produce sempre il \textbf{prodotto cartesiano} tra le tabelle, a prescindere dall'insieme di attributi delle tabelle.
+Per ottenere una \textbf{join sensata} basta fare una selezione sul prodotto cartesiano (come in AR).
+Inseriamo la condizione di selezione normalmente nella clausola WHERE: così otteniamo il \textbf{theta-join}
+\begin{center}
+    \includegraphics[width = 1\textwidth]{Images/197.PNG}
+\end{center}
+Come si può vedere sopra, la clausola \textbf{PUNTO .} permette di specificare a che relazione appartiene un attributo (o anche una tabella a un database).
+Il predicato presente in WHERE è detto \textbf{predicato di join}, in quanto stabilisce il criterio con cui le tuple delle relazioni devono essere combinate.
+Vengono combinate solo le tuple che soddisfano il \textbf{criterio esplicitato}
+In SQL il \textbf{theta join ha sempre senso}, perché si combinano solo le tuple che hanno lo stesso valore per gli attributi specificati nella condizione di join.
+Il \textbf{Natural Join} è stato solo recentemente introdotto nei DBMS ma si ottiene con un costrutto dedicato.
+Vista la natura parzialmente dichiarativa di SQL, a differenza dell'AR, \textbf{non è possibile anticipare la selezione rispetto al JOIN}.
+Concetto importante per la join è la possibilità di \textbf{ridenominare le relazioni}:
+\begin{center}
+    \includegraphics[width = 1\textwidth]{Images/198.PNG}
+\end{center}
+\subsubsection{Il costrutto Join}
+Per rendere le queries più leggibili, possiamo usare il \textbf{costrutto JOIN di SQL} per specificare con quali tabelle e con quali criteri vogliamo effettuare la join.
+La sua sintassi è:
+\begin{center}
+    \includegraphics[width = 1\textwidth]{Images/199.PNG}
+\end{center}
+La condizione è quindi spostata nella FROM; nella WHERE rimangono le altri eventuali condizioni.
+Il costrutto Join permette inoltre di \textbf{specificare il tipo di join che si vuole effettuare}:
+\begin{itemize}
+    \item Di default, il costrutto Join esegue una \textbf{inner join}
+    \item È possibile specificare il \textbf{join esterno}
+    \item È anche possibile eseguire un \textbf{join naturale}
+\end{itemize}
+\begin{center}
+    \includegraphics[width = 0.90\textwidth]{Images/200.PNG}
+\end{center}
+\begin{center}
+    \includegraphics[width = 1.15\textwidth]{Images/201.PNG}
+\end{center}
+\begin{center}
+    \includegraphics[width = 1.10\textwidth]{Images/202.PNG}
+\end{center}
+\subsubsection{Self join}
+Per effettuare una self-join in SQL possiamo utilizzare la ridenominazione:
+\begin{center}
+    \includegraphics[width = 1\textwidth]{Images/203.PNG}
+\end{center}
+\subsection{Operazioni di aggiornamento}
+Le operazioni di aggiornamento di SQL sono:
+\begin{itemize}
+    \item \textbf{INSERT}: Inserisce nuove tuple
+    \item \textbf{DELETE}: Elimina tuple nelle tabelle
+    \item \textbf{UPDATE}: Modifica tuple
+\end{itemize}
+Sono eseguite:
+\begin{itemize}
+    \item Su \textbf{una o più n-uple} di una relazione $R_1$
+    \item \textbf{Sulla base di una condizione} che può coinvolgere anche altre relazioni $R_2, \dots, R_n$
+\end{itemize}
+\subsubsection{Insert}
+La INSERT ha la seguente sintassi:
+
+
 
 
 \end{document}
