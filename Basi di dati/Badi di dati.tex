@@ -321,7 +321,7 @@ Si possono identificare diverse figure durante l'intero ciclo di vita di una bas
 \begin{itemize}
     \item \textbf{Progettisti} e realizzatori di \textbf{DBMS}
     \item \textbf{Progettisti della base di dati} e amministratori della base di dati (\textbf{DBA})
-    \item \textbf{Progettisti} e programatori di \textbf{Applicazioni}
+    \item \textbf{Progettisti} e programmatori di \textbf{Applicazioni}
     \item \textbf{Utenti}
     \begin{itemize}
         \item Utenti \textbf{finali}(terminalisti): eseguono applicazioni predefinite(\textbf{transazioni})
@@ -355,7 +355,7 @@ L'approccio alla \textbf{rappresentazione dei dati tramite basi di dati} ha le s
     \item \textbf{Astrazione dei dati}: si usa un \textbf{modello dati} per nascondere dettagli e presentare all'utente una \textit{vista concettuale} del database
     \item \textbf{Supporto di viste multiple dei dati}: Ogni utente può usare una vista (view) differente del database, contente solo i dati di interesse per quell'utente
 \end{itemize}
-\section{Progettazione di unaa base di dati}
+\section{Progettazione di una base di dati}
 La \textbf{progettazione di basi di dati} è una delle attività del processo di sviluppo dei sistemi informativi e va quindi inquadrata in un contesto più generale: \textbf{il ciclo di vita dei sistemi informativi}.
 \subsection{Ciclo di vita dei sistemi informativi}
 Il ciclo di vita dei sistemi informativi è \textbf{l'insieme e sequenzializzazione delle attività svolte da analisti, progettisti, utenti nello sviluppo e nell'uso dei sistemi informativi}.
@@ -378,7 +378,7 @@ Possiamo anche rappresentare questo ciclo di vita come una spirale:
 \begin{center}
     \includegraphics[width = 0.85\textwidth]{Images/12.PNG}
 \end{center}
-\subsubsection{Progettazione}
+\subsection{Progettazione}
 La progettazione dei dati individua l'organizzazione e la struttura della base di dati.
 La progettazione delle applicazioni schematizza le operazioni sui dati e progetta il software applicativo.
 I dati hanno \textbf{un ruolo centrale} e grazie alla progettazione:
@@ -421,7 +421,7 @@ Ognuna delle fasi si basa su un \textbf{modello}, che permette di generare una r
     \item Schema logico
     \item Schema fisico
 \end{itemize}
-\subsubsection{Fase di progettazione concettuale}
+\subsection{Fase di progettazione concettuale}
 La fase diu progettazione concettuale traduce i requisiti del sistema informatico in una descrizione \textbf{formalizzata e integrata} delle esigenze aziendali, espressa in modo \textbf{indipendente} dalle scelte implementative (DBMS, SW e HW).
 Essa è:
 \begin{itemize}
@@ -429,7 +429,7 @@ Essa è:
     \item \textbf{Integrata}: la descrizione deve essere in grado di descrivere nella globalità l'ambiente analizzato
     \item \textbf{Indipendente dall'ambiente tecnologico}: la descrizione deve concentrarsi sui dati e sulle loro relazioni e non sulle scelte implementative
 \end{itemize}
-\subsubsection{Fase di progettazione logica}
+\subsection{Fase di progettazione logica}
 La progettazione logica consiste nella traduzione dello schema concettuale nel modello dei dati del DBMS.
 Il risultato è uno schema logico, espresso nel DDL del DBMS.
 In questa fase si considerano anche aspetti legati ai vincoli e all'efficienza.
@@ -438,11 +438,11 @@ La progettazione logica si articola in due sotto-fasi:
     \item \textbf{Ristrutturazione dello schema concettuale}
     \item \textbf{Traduzione verso il modello logico}
 \end{itemize}
-\subsubsection{Progettazione fisica}
+\subsection{Progettazione fisica}
 La progettazione fisica completa lo schema logico ottenuto con le specifiche proprie dell'hw/sw scelto.
 Il risultato è lo \textbf{schema fisico} che descrive le strutture di memorizzazione ed accesso ai dati.
-\subsubsection{Vantaggi della progettazione concettuale}
-La progettazione concettuale permette una descrizione dei dati indipendete degli aspetti tecnologici con un livello di astrazione intermedio fra utente e sistema.
+\subsection{Vantaggi della progettazione concettuale}
+La progettazione concettuale permette una descrizione dei dati indipendente degli aspetti tecnologici con un livello di astrazione intermedio fra utente e sistema.
 \textbf{Prevale l'aspetto intensionale}.
 Inoltre, essa utilizza una rappresentazione prevalentemente \textbf{grafica}, che migliora la comunicazione tra i progettisti, gli utenti e tutte le persone coinvolte nella realizzazione dell'applicazione.
 È inoltre utile per la \textbf{documentazione}.
@@ -685,7 +685,7 @@ La relazione IS-A si rappresenta nel diagramma dello schema concettuale nel segu
     \includegraphics[width = 0.50\textwidth]{Images/36.PNG}
 \end{center}
 \subsubsection{Ereditarietà su entità}
-La relazione IS-A implica il \textbf{principio di ereditarietà}: ongi proprietà dell'entità padre è anche una proprietà della sottoentità, e non si riporta esplicitamente nel diagramma.
+La relazione IS-A implica il \textbf{principio di ereditarietà}: ogni proprietà dell'entità padre è anche una proprietà della sottoentità, e non si riporta esplicitamente nel diagramma.
 L'entità figlia può avere ovviamente ulteriori proprietà.
 \subsection{Generalizzazione tra entità}
 Finora, abbiamo considerato la relazione IS-A che stabilisce che l'entità padre è più generale della sottoentità.
@@ -795,7 +795,7 @@ Per i requisti, possibili fonti sono:
     \end{itemize}
     \item \textbf{Modulistica}
 \end{itemize}
-Il reperimento dei requisiti è un 'attività difficile e non standardizzabile. L'attività di anlisi iniza con i primi requisiti raccolti e spesso indirizza verso altre acquisizioni.
+Il reperimento dei requisiti è un 'attività difficile e non standardizzabile. L'attività di analisi inizia con i primi requisiti raccolti e spesso indirizza verso altre acquisizioni.
 \begin{center}
     \includegraphics[width = 0.35\textwidth]{Images/44.PNG}
 \end{center}
@@ -839,7 +839,7 @@ Per scrivere correttamente i requisiti serve:
     \item \textbf{Rendere esplicito il riferimento fra termini}: In assenza di un contesto di riferimento alcuni termini possono risultare ambigui. Occorre rappresentare il riferimento fra i termini
     \item \textbf{Costruire un glossario dei termini (facoltativo)}: per ogni termine si indica una breve descrizione, i sinonimi e gli altri termini con cui esiste un legame logico. Facilita la comprensione e la precisazione dei termini
 \end{itemize}
-\subsection{Specifiche sulle operazione}
+\subsection{Specifiche sulle operazioni}
 Per scrivere le specifiche sulle operazioni occorre utilizzare la stessa terminologia utilizzata per le specifiche dei dati (glossario).
 Serve anche conoscere la frequenza con la quale le operazioni sono eseguite.
 \subsection{Dalle specifiche al modello E-R}
@@ -933,7 +933,7 @@ Vediamo i vantaggi e gli svantaggi dei vari approcci:
 \subsubsection{Strategia top-down}
 Vediamo quali sono le \textbf{primitive di trasformazione top-down}: esse operano su un singolo concetto trasformandolo in una struttura più complessa in grado di descrivere il concetto di partenza con maggior dettaglio:
 \begin{itemize}
-    \item \textbf{T1}: Una entità descirve due concetti diversi legati logicamente fra loro
+    \item \textbf{T1}: Una entità descrive due concetti diversi legati logicamente fra loro
     \begin{center}
         \includegraphics[width = 0.75\textwidth]{Images/57.PNG}
     \end{center}
@@ -1038,7 +1038,7 @@ Questo modello deve essere comprensibile a un elaboratore.
 Componente fondamentale di ogni modello sono i \textbf{meccanismi di strutturazione} (analogo dei \textbf{costruttori di tipo}).
 Ogni modello dei dati prevede alcuni costruttori che permettono di definire nuovi tipi sulla base di tipi predefiniti (elementari).
 \textbf{Il modello relazionare è il modello dati più diffuso}.
-Esso permette edi definire tipi per mezzo del costruttore \textbf{relazione} che permette di organizzxare i dati in insiemi di record a \textbf{struttura fissa}.
+Esso permette edi definire tipi per mezzo del costruttore \textbf{relazione} che permette di organizzare i dati in insiemi di record a \textbf{struttura fissa}.
 Una \textbf{relazione} è spesso rappresentata da una \textbf{tabella}:
 \begin{itemize}
     \item \textbf{Le righe} rappresentano specifici record
@@ -1714,7 +1714,7 @@ $$r_1 \; INT \; r_2$$
 \begin{center}
     \includegraphics[width = 1\textwidth]{Images/126.PNG}
 \end{center}
-\subsection{Differenza}
+\subsubsection{Differenza}
 L'operatore differenza in AR ha le seguenti sintassi:
 $$r_1 - r_2$$
 $$r_1 \; DIFF \; r_2$$
@@ -2358,7 +2358,7 @@ Il nuovo valore può essere:
     \item \textbf{Un espressione}, il risultato della valutazione di una espressione sugli attributi della tabella
     \item \textbf{SELECT}, il risultato di un'interrogazione
     \item \textbf{NULL}, il valore nullo
-    \item \textbf{DEFAULT} il valore di defautl
+    \item \textbf{DEFAULT} il valore di default
 \end{enumerate}
 Bisogna fare però attenzione:
 \begin{center}
