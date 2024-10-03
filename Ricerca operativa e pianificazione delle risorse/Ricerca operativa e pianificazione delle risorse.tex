@@ -1,0 +1,153 @@
+\documentclass[12pt]{article}
+
+\usepackage{booktabs}% http://ctan.org/pkg/booktabs
+\usepackage[utf8]{inputenc}
+\usepackage{changepage}
+\usepackage{pgfplots}
+\usepackage{amssymb}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{adjustbox}
+\usepackage{amsmath}
+\usepackage{mathtools}
+\usepackage{biblatex}
+\lstset{
+  language=Python,
+  numbers=left,
+  numberstyle=\tiny,
+  stepnumber=1,
+  numbersep=5pt,
+  tabsize=4,
+  basicstyle=\ttfamily,
+  columns=fullflexible,
+  keepspaces,
+}
+\hypersetup{
+    colorlinks,
+    citecolor=black,
+    filecolor=black,
+    linkcolor=black,
+    urlcolor=black
+}
+
+% Set page size and margins
+% Replace `letterpaper' with `a4paper' for UK/EU standard size
+\usepackage[letterpaper,top=2cm,bottom=2cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
+
+% Useful packages
+\usepackage{amsmath}
+\usepackage{mathtools}
+\usepackage{graphicx}
+\newenvironment{para}{\begin{adjustwidth}{13mm}{}}{\end{adjustwidth}}
+
+\newcommand\tab[1][1cm]{\hspace*{#1}}
+
+\newcommand{\tabitem}{\llap{\textbullet}}
+\newcommand{\Hsquare}{%
+\text{\fboxsep=-.2pt\fbox{\rule{0pt}{1ex}\rule{1ex}{0pt}}}%
+}
+
+\newtheorem{Definizione}{Definizione}[subsection]
+\newtheorem{Lemma}{Lemma}[subsection]
+\newtheorem{Teorema/Definizione}{Teorema/Definizione}[subsection]
+\newtheorem{Corollario}{Corollario}[subsection]
+\newtheorem{Teorema}{Teorema}[subsection]
+\newtheorem{Proposizione}{Proposizione}[subsection]
+\newtheorem{Notazione}{Notazione}[subsection]
+\newtheorem{Commento}{Commento}[subsection]
+\newtheorem{Dimostrazione}{Dimostrazione}[subsection]
+\newtheorem{Osservazione}{Osservazione}[subsection]
+\newtheorem{Nota}{Nota}[subsection]
+
+\title{Ricerca operativa e pianificazione delle risorse}
+\author{spitfire}
+\date{A.A. 2023-2024}
+\begin{document}
+\begin{figure}
+    \centering
+    \includegraphics[width=0.35\textwidth]{Images/Logo scienze bicocca.png}
+\end{figure}
+
+\vspace{10cm}
+\date{A.A. 2024-2025}
+
+
+\maketitle
+
+\newpage
+
+\tableofcontents
+\newpage
+
+\section{Prerequisiti di Algebra Lineare}
+\subsection{Matrici e vettori}
+Una matrice è una tabella contenente numeri.
+Se la tabella è costituita da $m$ righe e $n$ colonne si parla
+di una matrice  $m \times n$. 
+Una matrice viene detta \textbf{matrice quadrata} se il numero di righe
+e colonne coincidono. \newline
+Una matrice $1 \times m$ viene detto \textbf{vettore riga m-dimensionale} \newline
+Una matrice $m \times 1$ viene detto \textbf{vettore colonna m-dimensionale}. \newline
+La notazione maggiormente utilizzata per indicare una matrice è
+$$A = [a_{ij}]$$
+Con $a_{ij}$ elemento generico della i-esima riga e j-esima colonna della matrice $A$.
+Se $A = [a_{ij}]$ è una matrice $m \times n$, la matrice $n \times m$
+$$A^T=[a_{ij}]$$
+viene detta \textbf{matrice trasposta} della matrice $A$.
+
+Se $A = [a_{ik}]$ è una matrice $m \times p$ e $B = [b_{kj}]$ è una matrice $p \times n$ la loro
+\textbf{matrice prodotto} è $m \times n$ e definita come:
+$$A \cdot B = C = [c_{ij}] \; con \; c_{ij} = \sum_{k = 1}^{p} a_{ik} \cdot b_{kj}$$
+Date due matrici $m \times n, A = [a_{ij}]$ e $B = [b_{ij}]$, la loro \textbf{matrice somma} è definita come segue:
+$$A+B=C=[c_{ij}] \; con \; c_{ij} = a_{ij} + b_{ij}$$
+La \textbf{moltiplicazione} di una \textbf{matrice A per una costante $\alpha$} fornisce come risultato quanto segue:
+$$\alpha \cdot A = [\alpha \cdot a_{ij}]$$
+Siano $v_1, v_2, ..., v_n$ n vettori, riga o colonna; essi vengono detti
+\textbf{linearmente indipendenti} tra loro se, prendendo $n$ coefficienti $a_1, a_2, ..., a_n$ la seguente uguaglianza
+$$a_1 \cdot v_1 + a_2 \cdot v_2 + ... + a_n \cdot v_n = 0$$
+risulta verificata solo se $a_1 = a_2 = ... = a_n = 0$. \newline
+Al contrario, se esistono coefficienti $a_1, a_2, ..., a_n$ non tutti nulli per cui
+$$a_1 \cdot v_1 + a_2 \cdot v_2 + ... + a_n \cdot v_n = 0$$
+i vettori $v_1, v_2, ..., v_n$ sono detti \textbf{linearmente dipendenti}. \newline
+Un insieme di $n$ vettori ad $n$ dimensioni linearmente indipendenti costituisce una \textbf{base per uno spazio a n dimensioni}.
+Se un insieme di vettori $v_1, v_2, ..., v_n$ costituisce una base per uno spazio ad $n$ dimensioni, allora ogni vettore $x$ che appartiene
+a quello spazio è \textbf{combinazione lineare dei vettori della base}. \newline
+Una matrice quadrata $m \times m$ si dice \textbf{matrice singolare} se l'insieme degli $m$ vettori riga (o colonna), ottenuti considerando
+ogni riga (o colonna) come un vettore, è \textbf{linearmente dipendenti}.
+Se, viceversa, l'insieme degli $m$ vettori è linearmente indipendente, la matrice si dice \textbf{matrice non singolare}. \newline
+Una matrice quadrata $A = [a_{ij}]$ con $a_{ij} = 0$ per ogni $i \neq j$ viene detta \textbf{matrice diagonale}. \newline
+La matrice diagonale $A = [a_{ij}]$, con $a_{ii} = 1$ per ogni $i$ viene detta \textbf{matrice identità}, solitamente indicata con $I$.
+Se $A$ NON è una matrice singolare, allora esiste una matrice $A^{-1}$ detta \textbf{matrice inversa} della matrice $A$, tale per cui vale la
+seguente relazione di uguaglianza:
+$$A \cdot A^{-1} = A^{-1} \cdot A = I$$
+Il \textbf{determinante} di una matrice quadrata $A$ si indica con $det(A)$ ed è un numero (esiste solo per matrici quadrate), nel caso
+specifico di una matrice $2 \times 2$ si definisce come segue:
+$$det(A) = det\begin{pmatrix}
+    a_{11} & a_{12} \\
+    a_{21} & a_{22}
+\end{pmatrix} = a_{11} \cdot a_{22} - a_{12} \cdot a_{21}$$
+Il determinante di una matrice quadrata $A$ $m \times m$ si ottiene utilizzando la seguente regola ricorsiva, detta \textbf{formula di Laplace}:
+Se $A_{ij}$ è la matrice $(m-1) \times (m-1)$, ottenuta togliendo la i-esima riga e la j-esima colonna di A, il determinante di A risulta:
+$$det(A) = \sum_{j=1}^{m} (-1)^{i+j} \cdot a_{ij} \cdot det(A_{ij}) \; (formula \; per \; righe)$$
+$$det(A) = \sum_{i=1}^{m} (-1)^{i+j} \cdot a_{ij} \cdot det(A_{ij}) \; (formula \; per \; colonne)$$
+Se la matrice è singolare, allora $det(A) = 0$. \newline
+Una matrice quadrata $A$ ammette inversa se e solo se non è singolare.
+\subsection{Equazioni lineari}
+Un' \textbf{equazione lineare} nelle variabili $x_1, x_2, ..., x_n$ è un'equazione nella seguente forma:
+$$a_1 \cdot x_1 + a_2 \cdot x_2 + ... + a_n \cdot x_n = b$$
+dove $a_1, a_2, ..., a_n$ e $b$ sono delle costanti.
+Si dice \textbf{soluzione dell'equazione} un qualsiasi vettore $|y_1, y_2, ..., y_n| \in \mathbb{R}^n$ tale che:
+$$a_1 \cdot y_1 + a_2 \cdot y_2 + ... + a_n \cdot y_n = b$$
+Un \textbf{sistema di m equazioni lineari in n variabili} è definito come segue:
+$$\begin{cases}
+    a_{11} \cdot x_1 + a_{12} \cdot x_2 + ... + a_{1n} \cdot x_n = b_1 \\
+    a_{21} \cdot x_1 + a_{22} \cdot x_2 + ... + a_{2n} \cdot x_n = b_2 \\
+    ... \\
+    a_{m1} \cdot x_1 + a_{m2} \cdot x_2 + ... + a_{mn} \cdot x_n = b_m
+\end{cases}$$
+dove $a_{ij}$ e $b_{j}$, $i = 1,...,n$; $j = 1,...,m$ sono costanti.
+
+\end{document}
