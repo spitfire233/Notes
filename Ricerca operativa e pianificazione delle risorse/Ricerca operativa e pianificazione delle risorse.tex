@@ -105,6 +105,7 @@ Date due matrici $m \times n, A = [a_{ij}]$ e $B = [b_{ij}]$, la loro \textbf{ma
 $$A+B=C=[c_{ij}] \; con \; c_{ij} = a_{ij} + b_{ij}$$
 La \textbf{moltiplicazione} di una \textbf{matrice A per una costante $\alpha$} fornisce come risultato quanto segue:
 $$\alpha \cdot A = [\alpha \cdot a_{ij}]$$
+Questa moltiplicazione è \textbf{commutativa}. \newline
 Siano $v_1, v_2, ..., v_n$ n vettori, riga o colonna; essi vengono detti
 \textbf{linearmente indipendenti} tra loro se, prendendo $n$ coefficienti $a_1, a_2, ..., a_n$ la seguente uguaglianza
 $$a_1 \cdot v_1 + a_2 \cdot v_2 + ... + a_n \cdot v_n = 0$$
@@ -149,5 +150,111 @@ $$\begin{cases}
     a_{m1} \cdot x_1 + a_{m2} \cdot x_2 + ... + a_{mn} \cdot x_n = b_m
 \end{cases}$$
 dove $a_{ij}$ e $b_{j}$, $i = 1,...,n$; $j = 1,...,m$ sono costanti.
+Una \textbf{soluzione del sistema lineare} è un qualsiasi vettore $|y_1, y_2, ..., y_n| \in \mathbb{R}^n$ tale che le $m$ equazioni
+del sistema lineare siano contemporaneamente soddisfatte.
+Trovare le soluzioni del sistema lineare equivale a individuare il punto di intersezione tra le sue equazioni, ammesso che un tale punto esista. \newline
+Un sistema di equazioni lineari può essere:
+\begin{itemize}
+    \item \textbf{Consistente}: se ammette almeno una soluzione, in caso contrario viene detto \textbf{inconsistente}
+    \item \textbf{Determinato}: se costituito da un numero di equazioni uguale al numero di incognite $m = n$. Un tale sistema ha \textbf{una sola soluzione}
+    \item \textbf{Sovradeterminato}: se costituito da più equazione che incognite $m>n$. Un tale sistema è spesso, ma non sempre, inconsistente
+    \item \textbf{Sottodeterminato}: se costituito da meno equazioni che incognite $m<n$. Un tale sistema ammette infinite soluzioni
+\end{itemize}
+Consideriamo la forma matriciale del sistema costituito da $m$ equazioni lineari in $n$ incognite
+$$A \cdot x = b$$
+dove
+\begin{itemize}
+    \item $A$ è una matrice $m \times n$ (nota)
+    \item $x$ è un vettore colonna in $n$ dimensioni (incognito)
+    \item $b$ è un vettore colonna in $m$ dimensioni (noto)
+\end{itemize}
+Si definisce \textbf{rango della matrice A} come segue:
+\begin{itemize}
+    \item \textbf{Rango di riga}: numero massimo di righe linearmente indipendenti
+    \item \textbf{Rango di colonna}: numero massimo di colonne linearmente indipendenti
+\end{itemize}
+Se $rango \; di \; riga = rango \; di \; colonna$ allora $rk(A) \leq min(m, n)$ \newline
+Se $rk(A) = min (m, n)$, allora la matrice A viene detta \textbf{a rango pieno}. \newline
+Data la matrice dei coefficienti $A$, si dice \textbf{matrice aumentata} la matrice $C = A,b$ ottenuta
+dalla matrice $A$ aggiungendo come colonna aggiuntiva il vettore dei termini noti $b$.
+Avremo quanto segue:
+\begin{itemize}
+    \item $rk(C) > rk(A)$: Il sistema lineare non ammette soluzione
+    \item $rk(C) = rk(A)$: il sistema lineare ammette soluzione
+\end{itemize}
+Assumiamo $rk(C) = rk(A)$, allora:
+\begin{itemize}
+    \item Caso $m \geq n$
+    \begin{itemize}
+        \item Se $rk(A) = n$, allora il sistema ha una soluzione unica
+        \item Se $rk(A) < n$, allora il sistema ha infinite soluzioni
+    \end{itemize}
+    \item Caso $m < n$
+    \begin{itemize}
+        \item Se $rk(A) \leq m$, allora il sistema ha infinite soluzioni
+    \end{itemize}
+\end{itemize}
+Come si risolve un sistema di equazioni lineari? Abbiamo due metodi:
+\subsubsection{Metodo di eliminazione}
+Procediamo come segue:
+\begin{enumerate}
+    \item Selezionare una variabile, e risolvere una delle equazioni rispetto ad essa e eliminare
+    la variabile in questione dalle altre equazioni
+    \item Tralasciare l'equazione utilizzata nel passo di eliminazione e tornare al passo 1)
+    \item Applicare il processo di \textbf{Back-walk substitution}: dall'ultima equazione, tornare indietro e risolvere le restanti
+\end{enumerate}
+\subsubsection{Metodo di eliminazione di Gauss}
+Il metodo di eliminazione di Gauss è un metodo di eliminazione che utilizza solo le operazioni elementari su matrici, cioé:
+\begin{itemize}
+    \item Moltiplicare una riga per uno scalare non nullo
+    \item Sommare una riga moltiplicata per uno scalare non nullo con un'altra riga
+    \item Permutare le righe 
+\end{itemize}
+\begin{Teorema}
+    Applicare operazioni elementari a un sistema di equazioni lineari non cambia l'insieme delle sue soluzioni.
+\end{Teorema}
+\section{Prerequisiti di Analisi Matematica}
+\subsection{Funzioni di una variabile}
+Si dice \textbf{funzione} una terna $(A, B, f)$ con:
+\begin{itemize}
+    \item $A, B$ due insiemi non vuoti
+    \item $f$ una legge che ad ogni elemento $x \in A$ associa uno ed uno solo elemento $f(x) \in B$
+\end{itemize}
+dove:
+\begin{itemize}
+    \item $A$ è detto dominio della funzione $f$, anche indicato con $dom(f)$
+    \item $B$ è detto codominio della funzione $f$
+    \item Scriviamo $f: A \rightarrow B$ e $x \in dom(f) \rightarrow f(x)$, per indicare la legge che alla variabile indipendente $x$ associa la sua immagine $f(x)$
+\end{itemize}
+Data una funzione $f: A \rightarrow B$, se esiste, finito o meno, il limite:
+$$\lim_{h \rightarrow 0} \frac{f(x_0 + h) - f(x_0)}{h} = \frac{f(x) - f(x_0)}{x - x_0}$$
+esso viene chiamato \textbf{derivata della funzione f nel punto $x_0$} e viene indicato con
+$$f'(x_0) = \frac{d}{dx}f(x_0)$$
+Se $f'(x_0) \in \mathbb{R}$, allora $f$ si dice derivabile in $x_0$. \newline
+\newpage
+Riportiamo le derivate elementari:
+\begin{itemize}
+    \item Se $f(x) = c, \forall x \in \mathbb{R}$ allora $f'(x) = 0, \forall x \in \mathbb{R}$
+    \item Se $f(x) = x^n, n \in \mathbb{N}, n \geq 2$ allora $f'(x) = n \cdot x^{n-1}, \forall x \in \mathbb{R}$
+    \item Se $f(x) = \frac{1}{x}, \forall x \in \mathbb{R}^+$ allora $f'(x) = -\frac{1}{x^2}, \forall x \in \mathbb{R}^+$
+    \item Se $f(x) = log(x), x \in \mathbb{R}^+$ allora $f'(x) = \frac{1}{x}, \forall x \in \mathbb{R}^+$
+\end{itemize}
+Data una funzione $f: \mathbb{R} \rightarrow \mathbb{R}$ e un punto $x_0 \in \mathbb{R}$, allora
+\begin{itemize}
+    \item $f$ derivabile in $x_0 \Rightarrow f$ continua in $x_0$
+    \item $f$ continua in $x_0 \not\Rightarrow f$ derivabile in $x_0$
+\end{itemize}
+Se $f, g: \mathbb{R} \rightarrow \mathbb{R}$ sono derivabili in $x_0 \in \mathbb{R}$, allora
+\begin{itemize}
+    \item $\forall c \in \mathbb{R}$, la funzione $c \cdot f$ è derivabile in $x_0$ e $(c \cdot f)'(x_0) = c \cdot f'(x_0)$
+    \item La funzione $f + g$ è derivabile in $x_0$ e $(f+g)'(x_0) = f'(x_0) + g'(x_0)$
+\end{itemize}
+Se $f, g: \mathbb{R} \rightarrow \mathbb{R}$ sono derivabili in $x_0 \in \mathbb{R}$, allora anche la funzione $f \cdot g$ è derivabile
+in $x_0$ e si ha quanto segue
+$$(f \cdot g)'(x_0) = f'(x_0) \cdot g(x_0) + f(x_0) \cdot g'(x_0)$$
+Date due funzioni $f, g: \mathbb{R} \rightarrow \mathbb{R}$, con $f$ derivabile in $x_0 \in \mathbb{R}$ e $g$ derivabile in
+$f(x_0)$, allora $g \circ f$ è derivabile in $x_0$ e si ha quanto segue:
+$$(g \circ f)'(x_0) = g'(f(x_0)) \cdot f'(x_0)$$
+La derivata della \textbf{derivata prima $f'$} in $x_0 \in \mathbb{R}$ viene detta \textbf{derivata seconda} e indicata come $f''(x_0)$.
 
 \end{document}
