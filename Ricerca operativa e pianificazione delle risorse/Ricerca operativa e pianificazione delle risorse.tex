@@ -14,6 +14,7 @@
 \usepackage{amsmath}
 \usepackage{mathtools}
 \usepackage{biblatex}
+
 \lstset{
   language=Python,
   numbers=left,
@@ -383,6 +384,14 @@ Data la funzione in 2 variabili $f: \mathbb{R}^2 \rightarrow \mathbb{R}, f(x_1, 
 $f_{x_1, x_1} > 0$ e $det(H) > 0$ allora la funzione è \textbf{convessa}. Se la funzione è  convessa, allora ogni punto di minimo e di massimo sono
 \textbf{globali} poiché ammette solamente un punto dove il gradiente si annulla
 \section{Modelli nella Ricerca Operativa}
-
-
+Data una funzione
+$$f: \mathbb{R}^n \rightarrow \mathbb{R}$$
+la chiamiamo \textbf{funzione obbiettivo}.
+Un \textbf{problema di ottimizzazione} è formulabile come segue:
+\begin{equation}
+    \begin{array}{rrclcl}
+    \displaystyle \textrm{opt} & f(x)\\
+    \textrm{s.a.} & x \in X & X \subseteq \mathbb{R}^n
+    \end{array}
+    \end{equation}
 \end{document}
