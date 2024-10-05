@@ -388,10 +388,101 @@ Data una funzione
 $$f: \mathbb{R}^n \rightarrow \mathbb{R}$$
 la chiamiamo \textbf{funzione obbiettivo}.
 Un \textbf{problema di ottimizzazione} è formulabile come segue:
-\begin{equation}
+\begin{equation*}
     \begin{array}{rrclcl}
     \displaystyle \textrm{opt} & f(x)\\
     \textrm{s.a.} & x \in X & X \subseteq \mathbb{R}^n
     \end{array}
-    \end{equation}
+\end{equation*}
+$X$ è detta \textbf{regione ammissibile}, cioè l'insieme delle soluzioni $x$ ammissibili dal problema. Inoltre, $\textrm{opt} \in \{\textrm{min}, \textrm{max}\}$. \newline
+Se $\textrm{opt} = \textrm{min}$, allora abbiamo un \textbf{problema di minimizzazione}, altrimenti un \textbf{problema di massimizzazione}. \newline
+Le variabili che indicano i vincoli ai quali è soggetto il problema sono dette \textbf{variabili decisionali} e identificano una soluzione del problema. \newline
+Quindi, un problema di ottimizzazione consiste nel determinare, se esistono, uno o più punti di minimo/massimo $\textbf{x}^*$, assegnazione di valori alle variabili decisionali $\textbf{x}$, della funzione obbiettivo $f$ tra i punti
+\textbf{x} che appartengono alla regione ammissibile $X$.
+\begin{center}
+    \includegraphics[width = 1\textwidth]{Images/5.PNG}
+\end{center}
+In particolare, se alcune zone di $\mathbb{R}^n$ non sono ammissibili, si dice che non sono \textbf{eleggibili}. \newline
+Quando parliamo di ottimizzazione di una funzione obbiettivo possiamo avere diversi tipi di ottimizzazione: \newline 
+\textbf{Ottimizzazione NON vincolata}: la ricerca del/i punto/i di ottimo della funzione obbiettivo viene condotta su tutto lo spazio di definizione
+(quindi $X = \mathbb{R}^n)$ della/e variabile/i di decisione \newline
+\textbf{Ottimizzazione vincolata}: la ricerca del/i punto/i di ottimo della funzione obbiettivo viene condotta su un sottoinsieme proprio dello spazio di definizione
+(cioè $X \subset \mathbb{R}^n)$ della/e variabile/i di decisione
+\textbf{Ottimizzazione intera}: le variabili di decisione assumono solo valori interi (quindi $X = \mathbb{Z}^n)$ \newline
+\textbf{Ottimizzazione binaria}: Le variabili assumono solo valore 0 e 1 (quindi $X \in \{0,1\}^n$) \newline
+\textbf{Ottimizzazione mista}: Alcune variabili assumono valori interi mentre altre variabili assumono solo valori binari. \newline
+Se non specificato altrimenti, si deve intendere che \textbf{le variabili decisionali assumono valori reali}.
+\subsection{Programmazione matematica}
+Quando l'insieme $X$ delle soluzioni ammissibili di un problema di ottimizzazione viene espresso attraverso un sistema di equazione e disequazione, esso prende il nome di problema di
+\textbf{programmazione matematica} (PM).
+In questo caso un \textbf{vincolo} è un espressione del tipo:
+$$g_i(x) \begin{Bmatrix}
+    \geq \\
+    = \\
+    \leq
+\end{Bmatrix} 0$$
+Con $g_i: X \rightarrow \mathbb{R}$ funzione generica che lega tra loro le variabili decisionali.
+In generale, possiamo avere uno o più vincoli. \newline
+La \textbf{regione ammissibile} è quindi definita dall'insieme dei vincoli del problema, cioè:
+$$X = \left \{x \in \mathbb{R}^n \; con \; g_i(x) \begin{Bmatrix} \leq \\ = \\ \geq \end{Bmatrix}, i = 1,...,m \right \}$$
+Osserviamo, quindi, che abbiamo $m$ vincoli ed $n$ variabili. Inoltre
+\begin{itemize}
+    \item Se $x \in X$ allora $x$ è soluzione \textbf{ammissibile}
+    \item Se $x \not\in X$ allora $x$ \textbf{non è una soluzione ammissibile} (soluzione inammissibile)
+\end{itemize}
+In un problema di ottimizzazione, abbiamo le seguenti possibilità riguardo la regione ammissibile:
+\begin{itemize}
+    \item \textbf{Problema non ammissibile}: $X = \emptyset$ (regione ammissibile vuota, nessuna soluzione ammissibile, problema mal posto)
+    \item \textbf{Problema illimitato}, cioè:
+    \begin{itemize}
+        \item $\forall c \in \mathbb{R}, \exists x_c \in X | f(x_c) \leq c$ se $\textrm{opt} = \textrm{min}$ (illimitato inferiormente)
+        \item $\forall c \in \mathbb{R}, \exists x_c \in X | f(x_c) \geq c$ se $\textrm{opt} = \textrm{max}$ (illimitato superiormente)
+    \end{itemize}
+    \item \textbf{Problema con soluzione ottima unica}
+    \item \textbf{Problema con più di una soluzione ottima} (anche \textbf{infinite}): tutte le soluzione ottime hanno egual valore della funzione obbiettivo
+\end{itemize}
+\begin{center}
+    \includegraphics[width = 0.90\textwidth]{Images/6.PNG}
+\end{center}
+\subsection{Ottimi globali e ottimi locali}
+La risoluzione di un problema di programmazione matematica consiste nel trovare una soluzione ammissibile che sia un \textbf{ottimo globale},
+vale a dire un vettore $\textbf{x}^* \in X$ tale che:
+\begin{itemize}
+    \item $f(\textbf{x}^*) \leq f(x) \forall x \in X$ se $\textrm{opt} = \textrm{min}$
+    \item $f(\textbf{x}^*) \geq f(x) \forall x \in X$ se $\textrm{opt} = \textrm{max}$
+\end{itemize}
+\begin{Osservazione}
+    Un problema di ottimizzazione può avere:
+    \begin{itemize}
+        \item Più di un ottimo locale
+        \item Più di un ottimo globale
+    \end{itemize}
+\end{Osservazione}
+\begin{Osservazione}
+    Un punto di ottimo globale è anche di ottimo locale
+\end{Osservazione}
+\begin{Osservazione}
+    Nel caso di una funzione obbiettivo \textbf{convessa}, vi è un unico ottimo globale
+\end{Osservazione}
+Anche qui abbiamo diversi casi possibili:
+\begin{itemize}
+    \item \textbf{Programmazione lineare}: in questo caso ci troviamo davanti ad un problema con questa formulazione:
+    $$\textrm{opt} \; f(x) = \textbf{c}^T \textbf{x} \; (lineare)$$
+    La regione ammissibile è quindi formulabile in questo modo:
+    $$X = \left \{x \in \mathbb{R}^n \bigg | g_i(x) \begin{Bmatrix} \leq \\ = \\ \geq \end{Bmatrix}, i = 1,...,m \right \}$$
+    con $g_i(x) = \textbf{a}_j^T\textbf{x} - b_i$ vincoli \textbf{lineari}
+    \item \textbf{Programmazione Lineare Intera}: in questo caso ci troviamo davanti ad un problema con questa formulazione:
+    $$\textrm{opt} \; f(x) = \textbf{c}^T \textbf{x} \; (lineare)$$
+    La regione ammissibile è quindi formulabile in questo modo:
+    $$X = \left \{x \in \mathbb{Z}^n \bigg | g_i(x) \begin{Bmatrix} \leq \\ = \\ \geq \end{Bmatrix}, i = 1,...,m \right \}$$
+    con $g_i(x) = \textbf{a}_j^T\textbf{x} - b_i$ vincoli \textbf{lineari}
+    \item \textbf{Programmazione non lineare}: in questo caso ci troviamo davanti ad un problema con questa formulazione:
+    $$\textrm{opt} \; f(x) \; (lineare \; o \; non \; lineare)$$
+    La regione ammissibile è quindi formulabile in questo modo:
+    $$X = \left \{x \in \mathbb{R}^n \bigg | g_i(x) \begin{Bmatrix} \leq \\ = \\ \geq \end{Bmatrix}, i = 1,...,m \right \}$$
+    con $g_i(\textbf{x})$ vincoli \textbf{lineari} o \textbf{non lineari}. È importante notare come, in questo caso, almeno un vincolo o
+    la funzione obbiettivo sono NON lineari
+\end{itemize}
+\section{Programmazione lineare}
+
 \end{document}
