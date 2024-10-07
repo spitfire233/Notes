@@ -484,5 +484,116 @@ Anche qui abbiamo diversi casi possibili:
     la funzione obbiettivo sono NON lineari
 \end{itemize}
 \section{Programmazione lineare}
+La programmazione lineare (PL) è quella branca della ricerca operativa che si occupa di studiare algoritmi di risoluzione per problemi di ottimizzazione lineari.
+Un problema di programmazione lineare è strutturato come segue:
+$$\underset{\textbf{x} \in X}{\textrm{opt}}Z = \sum_{j=1}^{n} c_j \cdot x_j \; (Funzione \; obbiettivo \; Z \; con \; n, \; numero \; di \; variabili \; decisionali)$$
+$$\sum_{j=1}^n a_{ij} \cdot x_j \leq b_i, i = 1,...,m \; (Vincoli: \; regione \; ammissibile \; X \; con \; m, numero \; di \; vincoli)$$
+Con: \newline
+$x_j$ \textbf{variabili decisionali} \newline
+$\left. \begin{matrix}
+        c_j \; \textbf{coefficienti di costo} \\
+        a_{ij}\; \textbf{termini noti sinistri} \\
+        b_i \; \textbf{termini noti destri} \\
+\end{matrix}\right\}$ Parametri \newline
+Un problema di programmazione lineare si poggia sulle seguenti \textbf{assunzioni implicite}:
+\begin{itemize}
+    \item \textbf{Proporzionalità}: il contributo di ogni variabile decisionale, al valore della funzione obbiettivo, è proporzionale rispetto al valore assunto dalla variabile stessa
+    \item \textbf{Additività}: ogni funzione è la somma dei contributi delle variabili decisionali
+    \item \textbf{Continuità}: qualunque valore delle variabili decisionali in $\mathbb{R}^n$ è accettabile
+    \item \textbf{Certezza}: il valore assegnato ad ogni parametro è assunto essere noto o costante 
+\end{itemize}
+Vediamole nel dettaglio:
+\subsection{Assunzione di Proporzionalità}
+Il contributo di ogni attività al valore della \textbf{funzione obbiettivo} $Z$ è proporzionale al \textbf{livello dell'attività} $x_j$ secondo:
+$$Z = \sum_{j=1}^n c_j \cdot x_j$$
+Analogamente, il contributo di ogni attività al \textbf{vincolo "i"} è proporzionale al \textbf{livello di attività} $x_j$ secondo
+$$\sum_{j=1}^n a_{ij} \cdot x_j \leq b_i$$
+Vediamo un esempio:
+\begin{center}
+    \includegraphics[width = 0.40\textwidth]{Images/7.PNG}
+\end{center}
+\begin{center}
+    \includegraphics[width = 0.45\textwidth]{Images/8.PNG}
+\end{center}
+\subsection{Assunzione di additività}
+In un problema di programmazione lineare, il valore assunto da ogni funzione, sia essa \textbf{funzione obbiettivo} o vincolo, è dato dalla somma dei contributi individuali delle rispettive attività.
+Vediamo un esempio:
+\begin{center}
+    \includegraphics[width = 0.95\textwidth]{Images/9.PNG}
+\end{center}
+\subsection{Assunzione di continuità}
+Le variabili decisionali in un problema di programmazione lineare (PL) sono libere di assumere qualsiasi valore, inclusi valori non interi che soddisfino i vincoli funzionali ed i vincoli di non negatività.
+In altri termini le variabili decisionali sono continue.
+In alcune condizioni può accadere che le variabili decisionali non possano che assumere valori interi; in questi casi si parla di problema di programmazione lineare intera o a numeri interi.
+\subsection{Assunzione di certezza}
+Il valore assegnato ad ogni parametro di un problema di programmazione lineare è assunto essere noto con certezza e costante.
+\subsection{Soluzione grafica ad un problema di programmazione lineare}
+Per risolvere i problemi di programmazione lineare, possiamo adottare una \textbf{procedura grafica}, determinando i valori delle variabili decisionali
+$x_1, x_2$ che rispettano i vincoli, ed al tempo stesso rendono massimo il valore $Z$ della funzione obbiettivo.
+La \textbf{soluzione grafica} si compone di:
+\begin{itemize}
+    \item Disegno della regione ammissibile
+    \item Determinazione dell'ottimo
+\end{itemize}
+\subsubsection{Vincolo di uguaglianza}
+I vincoli $g_i(\textbf{x})$ possono essere:
+\begin{itemize}
+    \item \textbf{Rette}: $g_i(x) = 0$
+    \item \textbf{Semipiani}: $g_i(x) \leq 0$
+\end{itemize}
+Un vincolo del tipo $a_1 \cdot x_1 + a_2 \cdot x_2 = b$ è una \textbf{retta nel piano}.
+La retta è perpendicolare al vettore $\nu = (a_1, a_2)$. Abbiamo quindi i seguenti casi:
+\begin{center}
+    \includegraphics[width = 1\textwidth]{Images/10.PNG}
+\end{center}
+Come rappresentiamo però un semipiano?
+\begin{enumerate}
+    \item Disegniamo la retta associata $(a_1 \cdot x_1 + a_2 \cdot x_2 \leq b)$
+    \item Scegliamo un punto non appartenente a tale retta (torna comodo 0)
+    \begin{itemize}
+        \item Se il punto verifica la disuguaglianza allora scegliamo il semipiano che lo contiene
+        \item Altrimenti scegliamo l'altro semipiano
+    \end{itemize}
+\end{enumerate}
+\begin{center}
+    \includegraphics[width = 0.30\textwidth]{Images/11.PNG}
+\end{center}
+\subsubsection{Vincoli funzionali di $\leq$}
+In maniera generalizzata, possiamo pensare che un problema di programmazione lineare è formulato in questo modo:
+\begin{equation*}
+    \begin{array}{ll}
+    \displaystyle \textrm{opt} & \; Z = c_1 \cdot x_1 + c_2 \cdot x_2 +...+ c_n \cdot x_n\\
+    \textrm{s.a.} & a_{11} \cdot x_1 + a_{12} \cdot x_2 +...+ a_{1n} \cdot x_n \leq b_1 \\
+    \phantom{} & a_{21} \cdot x_1 + a_{22} \cdot x_2 +...+ a_{2n} \cdot x_n \leq b_2 \\
+    \phantom{} &... ... ... + ... ... ... + ... + ... ... ... \leq ... \\
+    \phantom{} & a_{m1} \cdot x_1 + a_{m2} \cdot x_2 +...+ a_{mn} \cdot x_n \leq b_m \\
+    \phantom{} &x_1 \geq 0, x_2 \geq 0, x_3 \geq 0 ..., x_m \geq 0
+    \end{array}
+\end{equation*}
+Con
+\begin{itemize}
+    \item $Z$ funzione obbiettivo
+    \item $\left. \begin{matrix*}[l]
+    a_{11} \cdot x_1 + a_{12} \cdot x_2 +...+ a_{1n} \cdot x_n \leq b_1 \\
+    a_{21} \cdot x_1 + a_{22} \cdot x_2 +...+ a_{2n} \cdot x_n \leq b_2 \\
+    ... ... ... + ... ... ... + ... + ... ... ... \leq ... \\
+    a_{m1} \cdot x_1 + a_{m2} \cdot x_2 +...+ a_{mn} \cdot x_n \leq b_m \\
+    \end{matrix*}\right\}$ Vincoli funzionali
+    \item $x_1 \geq 0, x_2 \geq 0, x_3 \geq 0 ..., x_m \geq 0$ vincoli di non negatività
+\end{itemize}
+In particolare quindi:
+\begin{itemize}
+    \item $Z =$ valore della misura di prestazione
+    \item $x_j =$ livello dell'attività j
+    \item $c_j =$ incremento del valore della misura di prestazione $Z$ corrispondente all'incremento di un'unità del valore dell'attività $x_j$
+    \item $b_i =$ quantità di risorsa "$i$" allocabile alle attività $x_j, j = 1,..,n$
+    \item $a_{ij} =$ quantità di risorsa "$i$" consumata da ogni unità di attività $x_j, j=1,...,n$
+\end{itemize}
+\subsubsection{Vincoli funzionali di $\geq$ e =}
+Generalizzando al caso con \textbf{$n$ variabili decisionali} ed \textbf{$m$ vincoli}, otteniamo la seguente formulazione di un \textbf{problema di programmazione lineare}: \newline
+\textbf{Funzione obbiettivo}:
+
+
+
 
 \end{document}
