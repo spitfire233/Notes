@@ -700,7 +700,27 @@ La funzione obbiettivo è:
 $$\min Z = 2 \cdot x_{F1 \rightarrow F2} + 4 \cdot x_{F1 \rightarrow DC} + 9 \cdot x_{F1 \rightarrow W1} + 3 \cdot x_{F2 \rightarrow DC} + x_{DC \rightarrow W2} + 3 \cdot x_{W1 \rightarrow W2} + 2 \cdot x_{W2 \rightarrow W1}$$
 Una volta calcolati i vincoli visti sopra, possiamo risolvere il problema di programmazione lineare.
 \subsection{Metodo del simplesso}
-
+Il metodo del simplesso è un algoritmo per la risoluzione dei problemi di programmazione lineare.
+Nel caso medio, il tempo computazionale dell'algoritmo è \textbf{lineare rispetto al numero di variabili}.
+Nel caso peggiore, invece, può risultare \textbf{esponenziale}.
+Esso è una procedura algebrica, tuttavia i suoi concetti base hanno radici geometriche.
+Consideriamo la seguente regione ammissibile:
+\begin{center}
+    \includegraphics[width = 0.55\textwidth]{Images/18.png}
+\end{center}
+I \textbf{vertici} si trovano all'intersezione di coppie di frontiere di vincoli.
+Per ogni problema di programmazione lineare con $n$ variabili decisionali, due vertici (soluzioni vertici)
+si dicono \textbf{adiacenti} se condividono $n-1$ frontiere di vincoli.
+Due vertici adiacenti sono collegati da un segmento che giace sull'intersezione delle frontiere dei vincoli condivisi.
+Questo segmento viene detto \textbf{spigolo} della regione ammissibile.
+\textbf{Non tutti i vertici tuttavia sono soluzioni del problema di programmazione lineare}; lo sono solamente quelli che giacciono sulla regione ammissibile.
+L'interesse per i vertici adiacenti sta nella seguente proprietà di cui godono: \newline
+\textbf{Test di ottimalità}: Si consideri ogni problema di programmazione lineare tale da ammettere almeno una soluzione ottimale.
+Se una soluzione vertice \textbf{non ammette} soluzioni vertice a lei adiacenti con valore della funzione obbiettivo $Z$ migliore, allora la soluzione in questione è \textbf{ottimale}.
+Come già detto, il metodo del simplesso è un \textbf{algoritmo} e quindi è formato da una serie di passi:
+\begin{enumerate}
+    \item 
+\end{enumerate}
 
 
 
