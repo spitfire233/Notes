@@ -591,7 +591,124 @@ In particolare quindi:
 \end{itemize}
 \subsubsection{Vincoli funzionali di $\geq$ e =}
 Generalizzando al caso con \textbf{$n$ variabili decisionali} ed \textbf{$m$ vincoli}, otteniamo la seguente formulazione di un \textbf{problema di programmazione lineare}: \newline
-\textbf{Funzione obbiettivo}:
+\textbf{Funzione obbiettivo}: $\textrm{opt}\; Z$ \newline
+\textbf{Vincoli}:
+\begin{equation*}
+    \begin{array}{ll}
+        a_{11} \cdot x_1 + a_{12} \cdot x_2 + ... + a_{1n} \cdot x_n \leq b_1 \\
+        a_{21} \cdot x_1 + a_{22} \cdot x_2 + ... + a_{2n} \cdot x_n \geq b_2 \\
+        ... \\
+        a_{n1} \cdot x_1 + a_{n2} \cdot x_2 + ... + a_{nm} \cdot x_n \leq b_n \\
+    \end{array}
+\end{equation*}
+In questo caso quindi, siamo nel caso per il quale \textbf{$x_2$ non è vincolata} da nessun valore.
+Inoltre, ogni vincolo di $\geq$ e $=$ può essere riscritto nella seguente forma:
+\begin{itemize}
+    \item $g_i(x) \geq b_i \rightarrow -g_i(x) \leq b_i$
+    \item $g_i(x) = b_i \rightarrow \begin{cases}
+        g_i(x) \geq b_i \\
+        g_i(x) \leq b_i
+    \end{cases}$
+\end{itemize}
+\subsubsection{Regione ammissibile}
+La regione ammissibile $X$ è data dal soddisfacimento dei vari vincoli (Rette e semipiani):
+$$X = \left \{\textbf{x} \in \mathbb{R}^n \middle | g_i(x) = \begin{Bmatrix}
+    \geq \\
+    = \\
+    \leq
+\end{Bmatrix}0, i=1,...,m \right \} \; con \; g_i(x) = \textbf{a}_i^T \textbf{x} - b_i$$ 
+dove $\textbf{a} \in \mathbb{R}^n, \textbf{b} \in \mathbb{R}^m$ \newline
+La regione ammissibile, da un punto di vista geometrico, corrisponde ad un \textbf{poliedro convesso in $\mathbb{R}^n$}.
+La regione ammissibile può essere \textbf{limitata} (\textbf{politopo}) o illimitata
+\begin{center}
+    \includegraphics[width = 0.65\textwidth]{Images/12.PNG}
+\end{center}
+Si possono verificare quattro soluzioni:
+\begin{itemize}
+    \item Il problema di programmazione lineare \textbf{ammette una sola soluzione ottima} in un \textbf{vertice del poligono convesso}
+    che delimita la regione ammissibile.
+    \item Il problema di programmazione lineare \textbf{ammette infinite soluzioni ottime} in un \textbf{lato del poligono convesso} che delimita la regione ammissibile
+    se la direzione di decrescita è perpendicolare ad un lato del poligono
+    \item Il problema di programmazione lineare \textbf{ammette infinite soluzioni} perché la regione ammissibile è illimitata e la funzione obbiettivo è illimitata superiormente (se è di massimizzazione)
+    o inferiormente (se di minimizzazione)
+    \item Il problema di programmazione lineare \textbf{non ammette soluzione} perché la regione ammissibile è vuota
+\end{itemize}
+Per risolvere quindi un problema di programmazione lineare graficamente dobbiamo quindi:
+\begin{enumerate}
+    \item Disegnare la regione ammissibile
+    \item Cercare di massimizzare (minimizzare) la soluzione, riportando ciò che troviamo sul grafico
+\end{enumerate}
+In particolare, per problemi in due variabili $x_1$ e $x_2$, il punto due può essere visto come segue:
+\begin{center}
+    \includegraphics[width = 0.85\textwidth]{Images/13.png}
+\end{center}
+Riportiamo la regione ammissibile nel piano 3D e troviamo dei valori per $x_1, x_2$ che diano lo stesso valore
+una volta sostituiti nella funzione obbiettivo (nell'immagine, abbiamo che i valori $x_1 = 0, x_2 = 5$ e $x_1 = 3, x_2 = 0$)
+\begin{center}
+    \includegraphics[width = 0.95\textwidth]{Images/14.png}
+\end{center}
+Continuando così, usiamo il piano creato dalla funzione obbiettivo nello spazio 3D per capire se stiamo uscendo dalla regione ammissibile o meno:
+\begin{center}
+    \includegraphics[width = 0.90\textwidth]{Images/15.png}
+\end{center}
+\begin{center}
+    \includegraphics[width = 0.90\textwidth]{Images/16.png}
+\end{center}
+\subsection{Minimum cost flow problem}
+Supponiamo di trovarci in questa situazione:
+l'azienda \textbf{distribution unlimited} produrrà un nuovo prodotto in \textbf{due fabbriche differenti},
+successivamente i prodotti verranno inviati a \textbf{due magazzini}, ogni fabbrica potrà spedire i propri prodotti ai due magazzini.
+La rete distributiva è mostrata di seguito:
+\begin{center}
+    \includegraphics[width = 0.55\textwidth]{Images/17.png}
+\end{center}
+Il problema consiste nel determinare quante unità di prodotto spedire dalle due fabbriche \textbf{$F1$} e \textbf{$F2$} ai due magazzini
+\textbf{$W1$} e \textbf{$W2$}, utilizzando anche il centro di distribuzione \textbf{$DC$}, con l'obbiettivo di \textbf{minimizzare i costi di spedizione}. \newline
+Questo tipi di problema prendono il nome di \textbf{Minimum cost flow problems}. Risolviamo l'esempio come segue: \newline
+Sette corsie di spedizione richiedono sette variabili decisionali:
+$$x_{F1 \rightarrow F2}, x_{F1 \rightarrow W1}, x_{F1 \rightarrow DC}$$
+$$x_{F2  \rightarrow DC}$$
+$$x_{DC \rightarrow W2}$$
+$$x_{W1 \rightarrow W2}$$
+$$x_{W2 \rightarrow W1}$$
+Troviamo i seguenti vincoli:
+\begin{itemize}
+    \item \textbf{Vincoli di non negatività}:
+    \begin{equation*}
+        \begin{array}{ll}
+            x_{F1 \rightarrow F2}, x_{F1 \rightarrow W1}, x_{F1 \rightarrow DC} \geq 0 \\
+            x_{F2  \rightarrow DC} \geq 0 \\
+            x_{DC \rightarrow W2} \geq 0 \\
+            x_{W1 \rightarrow W2} \geq 0  \\
+            x_{W2 \rightarrow W1} \geq 0
+        \end{array}
+    \end{equation*}
+    \item \textbf{Vincoli di capacità massima}
+    \begin{equation*}
+        \begin{array}{ll}
+            x_{F1 \rightarrow F2} \leq 10 \\
+            x_{DC \rightarrow W2} \leq 80
+        \end{array}
+    \end{equation*}
+    \item \textbf{Vincoli di conservazione del flusso}: $outflow - inflow = unita' necessarie$ \newline
+    Questo vincolo in sostanza impone che \textbf{la somma dei flussi entranti in ogni nodo deve essere pari al flusso in uscita dal nodo medesimo}
+\end{itemize}
+IL problema che desideriamo risolvere consiste nel determinare \textbf{quante unità di prodotto} spedire dalle due fabbriche $F1$ e $F2$ ai due magazzini
+$W1$ e $W2$, utilizzando anche il \textbf{centro di distribuzione DC}, con l'obbiettivo di minimizzare il costo di spedizione. Il \textbf{costo di spedizione per unità di prodotto}
+è indicato per ogni arco di spedizione.
+La funzione obbiettivo è:
+$$\min Z = 2 \cdot x_{F1 \rightarrow F2} + 4 \cdot x_{F1 \rightarrow DC} + 9 \cdot x_{F1 \rightarrow W1} + 3 \cdot x_{F2 \rightarrow DC} + x_{DC \rightarrow W2} + 3 \cdot x_{W1 \rightarrow W2} + 2 \cdot x_{W2 \rightarrow W1}$$
+Una volta calcolati i vincoli visti sopra, possiamo risolvere il problema di programmazione lineare.
+\subsection{Metodo del simplesso}
+
+
+
+
+
+
+
+
+
 
 
 
