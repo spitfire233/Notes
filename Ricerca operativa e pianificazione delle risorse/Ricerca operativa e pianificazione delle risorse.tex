@@ -717,10 +717,70 @@ Questo segmento viene detto \textbf{spigolo} della regione ammissibile.
 L'interesse per i vertici adiacenti sta nella seguente proprietà di cui godono: \newline
 \textbf{Test di ottimalità}: Si consideri ogni problema di programmazione lineare tale da ammettere almeno una soluzione ottimale.
 Se una soluzione vertice \textbf{non ammette} soluzioni vertice a lei adiacenti con valore della funzione obbiettivo $Z$ migliore, allora la soluzione in questione è \textbf{ottimale}.
+\begin{center}
+    \includegraphics[width = 0.60\textwidth]{Images/19.PNG}
+\end{center}
 Come già detto, il metodo del simplesso è un \textbf{algoritmo} e quindi è formato da una serie di passi:
 \begin{enumerate}
-    \item 
+    \item \textbf{Inizializzazione}: Scegliere una soluzione iniziale da cui partire; possiamo sceglierne una qualunque, quindi cerchiamo in modo che sia vantaggiosa e che non richieda molte computazioni per essere identificata
+    \item \textbf{Test di ottimalità}: valutiamo lo spostamento nei vertici adiacenti alla soluzione iniziale:
+    \begin{itemize}
+        \item Se \textbf{esiste almeno un vertice adiacente con valore della funzione obbiettivo $Z$ migliore di quello del vertice iniziale} allora ci spostiamo in quel vertice, purché esso appartenga alla regione ammissibile; in caso ci siano più vertici
+        con valore della funzione obbiettivo migliore rispetto a quello iniziale, \textbf{ci spostiamo in quello che ha il valore migliore}. Ripetiamo questo passo fino a quando non troviamo vertici adiacenti con valore della funzione obbiettivo migliore rispetto al vertice in cui ci troviamo
+        \item Se \textbf{non esiste almeno un vertice adiacente con valore della funzione obbiettivo $Z$ migliore di quello del vertice iniziale} allora quel vertice \textbf{è la soluzione ottimale del problema di programmazione lineare} 
+    \end{itemize}
 \end{enumerate}
+Il metodo del simplesso si basa su \textbf{sei concetti chiave}:
+\begin{itemize}
+    \item \textbf{Concetto chiave 1}: Il metodo del simplesso ispeziona solo soluzioni ammissibili corrispondenti a vertici.
+    \textbf{Per ogni problema di PL che ametta almeno una soluzione ottimale, trovarne una, richiede di trovare solamente il vertice ammissibile cui compete il miglior valore della funzione obbiettivo}(La sola restrizione è che il problema possegga vertici ammissibili. Ciò è garantito dal fatto che la regione ammissibile sia limitata).
+    Dato che il numero di soluzioni ammissibili è generalmente infinito, ridurre il numero di soluzioni da ispezionare ad un numero finito e piccolo è una semplificazione notevole.
+    \item \textbf{Concetto chiave 2}: Il metodo del simplesso è un algoritmo iterativo con la seguente struttura:
+    \begin{enumerate}
+        \item \textbf{Inizializzazione}: scelta di una soluzione
+        \item \textbf{Test di ottimalità}: la soluzione è ottimale?
+        \begin{itemize}
+            \item \textbf{NO}: torna ad 1) per trovare una soluzione migliore di quella corrente
+            \item \textbf{SI}: termina l'algoritmo
+        \end{itemize}
+    \end{enumerate}
+    \item \textbf{Concetto chiave 3}: Quando sia possibile, l'inizializzazione del metodo del simplesso seleziona l'origine (i valori di tutte le variabili di decisione vengono posti uguali a 0) come soluzione iniziale.
+    \textbf{Se vi sono molte variabili decisionali, tali da rendere difficile usare il metodo grafico per scegliere la soluzione iniziale, scegliere l'origine evita di ricorrere a procedure algebriche pr determinare la soluzione iniziale del metodo del simplesso}(La soluzione nulla potrebbe però essere una soluzione non ammissibile. Se questo accade, vengono usate procedure specifiche per la scelta della soluzione iniziale)
+    \item \textbf{Concetto chiave 4}: Dato un vertice, è più vantaggioso, in termini computazionali, acquisire informazioni sui vertici a lui adiacenti di quanto non sia per i vertici a lui non adiacenti. \textbf{Ad ogni iterazione, se l'algoritmo si sposta dal vertice corrente, verso un vertice con valore migliore della funzione obbiettivo, lo fa per muoversi in un vertice a lui adiacente. Nessuna altra soluzione viene considerata}.
+    Pertanto, l'intero cammino, che partendo dalla soluzione iniziale raggiunge quella ottimale, attraversa spigoli della regione ammissibile
+    \item \textbf{Concetto chiave 5}: A partire dal vertice corrente, il metodo del simplesso valuta i vertici ad esso adiacenti, ma non lo fa calcolando il valore della funzione obbiettivo per ognuno di essi.
+    \textbf{Il metodo del simplesso valuta e compara i tassi di miglioramento della funzione obbiettivo $Z$ lungo la direzione degli spigoli che conducono dal vertice corrente ai vertici adiacenti}.
+    Tra i vertici adiacenti con un tasso di miglioramento positivo per la funzione obbiettivo $Z$, il metodo del simplesso sceglie di muoversi lungo lo spigolo cui compete il massimo valore di incremento.
+    \textbf{Il vertice selezionato diviene il nuovo vertice corrente}
+    \item \textbf{Concetto chiave 6}: Il precedente concetto chiave descrive come il metodo del simplesso esamina gli spigoli che emanano dal vertice corrente.
+    \textbf{L'ispezione di uno spigolo consente di identificare rapidamente il tasso di miglioramento di $Z$ che si otterrebbe muovendosi lungo di esso verso la soluzione adiacente all'altro estremo}.
+    Un tasso di miglioramento positivo per $Z$ significa che il vertice adiacente è una soluzione migliore della soluzione corrente. Un tasso negativo implica che il vertice adiacente è una soluzione peggiore della soluzione corrente.
+    \textbf{Il TEST DI OTTIMALITÀ consiste nel verificare se esiste uno spigolo con tasso positivo di miglioramento. Se tale condizione non è soddisfatta allora la soluzione corrente è ottimale}
+\end{itemize}
+\subsubsection{Procedura algebrica}
+Fino ad ora abbiamo parlato dell'algoritmo del simplesso in termini geometrici.
+Comunque, l'algoritmo del simplesso usualmente viene eseguito sun un calcolatore, il quale è in grado di interpretare solo istruzioni algebriche.
+Pertanto, è necessario \textbf{tradurre la procedura geometrica in una procedura algebrica}.
+La procedura algebrica si basa sulla \textbf{risoluzione di un sistema di equazioni lineari}.
+Pertanto il primo passo da compiere per tradurre la procedura geometrica in procedura algebrica richiede di \textbf{tradurre i vincoli funzionali di disuguaglianza in vincoli funzionali di eguaglianza}.
+I \textbf{vincoli di non negatività vengono mantenuti invariati} in quanto la loro \textbf{trattazione} viene effettuata in maniera \textbf{separata}.
+Per convertire i vincoli di diseguaglianza in vincoli di uguaglianza, bisogna introdurre il concetto di \textbf{variabile slack}. \newline
+Una \textbf{variabile slack} è una variabile che indica la \textbf{la quantità che manca al termine sinistro di una disuguaglianza affinche questa sia verificata con il segno di uguaglianza}.
+Facciamo un esempio:
+\begin{center}
+    \includegraphics[width = 1\textwidth]{Images/20.PNG}
+\end{center}
+Introducendo una variabile slack per ognuno dei vincoli del problema di programmazione lineare in forma originale (\textbf{forma standard}) otteniamo una formulazione equivale detta:
+\textbf{Modello in forma aumentata}:
+\begin{center}
+    \includegraphics[width = 0.70\textwidth]{Images/21.PNG}
+\end{center}
+Se la \textbf{variabile slack di un vincolo assume valore zero}, allora la soluzione corrispondente giace sulla frontiera del vincolo della forma originale. (Il vincolo corrispondente della forma originale è verificato come uguaglianza). \newline
+Se la \textbf{variabile slack di un vincolo assume valore positivo}, la soluzione corrispondente appartiene al semipiano ammissibile individuato dalla frontiera del vincolo della forma originale, vale a dire la soluzione appartiene alla regione ammissibile (è interna alla regione ammissibile). \newline
+Se la \textbf{variabile slack di un vincolo assume valore negativo}, la soluzione corrispondente appartiene al semipiano non ammissibile della frontiera del vincolo della forma originale, vale a dire la soluzione non appartiene alla regione ammissibile. \newline
+Si definisce \textbf{SOLUZIONE AUMENTATA}, una soluzione del modello in forma originale (valori della variabili decisionali) che viene "aumentata" tramite i corrispondenti valori delle variabili slack \newline
+Si definisce \textbf{SOLUZIONE DI BASE} un vertice del modello in forma aumentata. Una soluzione di base può essere \textbf{ammissibile} o \textbf{non ammissibile}.
+Si dice \textbf{SOLUZIONE DI BASE AMMISSIBILE} una soluzione associata a un \textbf{vertice ammissibile}, che venga aumentata.
 
 
 
