@@ -757,7 +757,7 @@ Il metodo del simplesso si basa su \textbf{sei concetti chiave}:
     Un tasso di miglioramento positivo per $Z$ significa che il vertice adiacente è una soluzione migliore della soluzione corrente. Un tasso negativo implica che il vertice adiacente è una soluzione peggiore della soluzione corrente.
     \textbf{Il TEST DI OTTIMALITÀ consiste nel verificare se esiste uno spigolo con tasso positivo di miglioramento. Se tale condizione non è soddisfatta allora la soluzione corrente è ottimale}
 \end{itemize}
-\subsubsection{Procedura algebrica}
+\subsection{Procedura algebrica per il metodo del simplesso}
 Fino ad ora abbiamo parlato dell'algoritmo del simplesso in termini geometrici.
 Comunque, l'algoritmo del simplesso usualmente viene eseguito sun un calcolatore, il quale è in grado di interpretare solo istruzioni algebriche.
 Pertanto, è necessario \textbf{tradurre la procedura geometrica in una procedura algebrica}.
@@ -781,13 +781,81 @@ Se la \textbf{variabile slack di un vincolo assume valore negativo}, la soluzion
 Si definisce \textbf{SOLUZIONE AUMENTATA}, una soluzione del modello in forma originale (valori della variabili decisionali) che viene "aumentata" tramite i corrispondenti valori delle variabili slack \newline
 Si definisce \textbf{SOLUZIONE DI BASE} un vertice del modello in forma aumentata. Una soluzione di base può essere \textbf{ammissibile} o \textbf{non ammissibile}.
 Si dice \textbf{SOLUZIONE DI BASE AMMISSIBILE} una soluzione associata a un \textbf{vertice ammissibile}, che venga aumentata.
-
-
-
-
-
-
-
+\subsubsection{Variabili di base e non}
+I termini \textbf{soluzione di base} e \textbf{soluzione di base ammissibile} sono molto importanti ed è quindi necessario chiarirne le \textbf{proprietà algebriche}:
+per esempio, due variabili poste a 0 $x_1 = 0$ e $x_4 = 0$ vengono dette \textbf{variabili non di base}. Prendiamo il modello in forma aumentata sopra come esempio.
+La \textbf{soluzione del sistema lineare} per le 3 variabili restanti, dette \textbf{variabili di base} $x_2 = 6, x_3 = 4, x_5 = 6$ porta alla seguente \textbf{soluzione di base}:
+$$x_1 = 0, x_2 = 6, x_3 = 4, x_4 = 0, x_5 = 6$$
+Il modello in forma aumentata consiste di 5 variabili (2 decisionali e 3 slack) e di 3 equazioni.
+Abbiamo a disposizione quindi $2 = (5-3)$ \textbf{gradi di libertà} per risolvere il sistema lineare (il metodo del simplesso pone a zero il valore di due variabili, scelte arbitrariamente, per risolvere il sistema lineare). \newline
+Le \textbf{proprietà algebriche} delle \textbf{SOLUZIONI DI BASE} e delle \textbf{SOLUZIONI DI BASE AMMISSIBILI} sono descritte tramite le seguenti definizioni: \newline
+Una \textbf{SOLUZIONE DI BASE} gode delle seguenti proprietà:
+\begin{enumerate}
+    \item Una variabile può essere una \textbf{VARIABILE DI BASE} o una \textbf{VARIABILE NON DI BASE}
+    \item IL numero delle variabili di base eguaglia il numero dei vincoli funzionali (equazioni). Pertanto, il numero delle variabili non di base eguaglia il numero totale delle variabili meno il numero dei vincoli funzionali
+    \item Le variabili non di base vengono poste a zero
+    \item I valori delle variabili di base sono ottenuti come una risoluzione simultanea del sistema di equazioni lineari (vincoli funzionali in forma aumentata). L'insieme delle variabili di base viene spesso riferito con il termine di \textbf{BASE}
+    \item Se le variabili di base soddisfano i vincoli di non negatività, la \textbf{SOLUZIONE DI BASE} è una \textbf{SOLUZIONE AMMISSIBILE DI BASE}
+\end{enumerate}
+Così come certe coppie di vertici ammissibili sono tra loro adiacenti, le corrispondenti coppie di \textbf{soluzioni di base ammissibili} sono tra loro adiacenti: \newline
+Due \textbf{SOLUZIONI DI BASE AMMISSIBILI} sono adiacenti se sono caratterizzate dal condividere le stesse \textbf{VARIABILI NON DI BASE} eccetto una. Questo implica che tutte le loro \textbf{VARIABILI DI BASE} sono uguali eccetto una, anche se esse possono assumere valori differenti.
+Conseguentemente, muoversi dalla \textbf{SOLUZIONE DI BASE AMMISSIBILE} corrente ad una soluzione ad essa adiacente implica che una \textbf{VARIABILE NON DI BASE} divenga una \textbf{VARIABILE DI BASE} e che una \textbf{VARIABILE DI BASE} divenga una \textbf{VARIABILE NON DI BASE} (il che richiede di aggiustare i valori delle variabili di base per garantire che il sistema lineare di equazioni sia ancora soddisfatto).
+Sempre considerando la regione ammissibile sopra, possiamo quindi notare che:
+\begin{center}
+    \includegraphics[width = 0.60\textwidth]{Images/22.png}
+\end{center}
+Quando si considera il problema in forma aumentata, è vantaggioso \textbf{considerare e manipolare la funzione obbiettivo} insieme ai vincoli.
+Pertanto, prima di passare ad impiegare il metodo del simplesso, il problema deve essere riscritto in una forma equivalente che risulti adeguata.
+Tenendo sempre come esempio il modello in forma aumentata presente sopra, esso quindi diventa:
+\begin{center}
+    \includegraphics[width = 1\textwidth]{Images/23.png}
+\end{center}
+\subsubsection{Algoritmo del metodo del simplesso in forma algebrica}
+Colleghiamo l'aspetto algebrico a quello geometrico per il metodo del simplesso.
+L'\textbf{interpretazione geometrica} fa riferimento al \textbf{MODELLO IN FORMA STANDARD}. \newline
+L'\textbf{interpretazione algebrica} fa riferimento al \textbf{MODELLO IN FORMA AUMENTATA}.
+Presentiamo quindi l'algoritmo del metodo del simplesso in forma algebrica tenendo come esempio il modello presentato sopra:
+\begin{enumerate}
+    \item \textbf{INIZIALIZZAZIONE}: scegliere $x_1$ e $x_2$ come variabili non di base (perciò poste a valore nullo) per ottenere la soluzione iniziale di base ammissibile. Questo procedimento è giustificato dal \textbf{CONCETTO CHIAVE 3}
+    \item \textbf{TEST DI OTTIMALITÀ}: $x_3, x_4$ e $x_5$ non compaiono nelle funzione obbiettivo $Z$, per cui sono i coefficienti delle variabili non di base, $x_1$ e $x_2$, a determinare il \textbf{TASSO DI CRESCITA} di $Z$.
+    I \textbf{TASSI DI CRESCITA} sono rispettivamente 3 e 5, entrambi positivi, quindi la soluzione trovata sarà sicuramente \textbf{NON OTTIMALE}.
+\end{enumerate}
+Trattiamo inoltre come determinare la direzione di spostamento, assumendo di aver già trovato la soluzione di base iniziale:
+\begin{enumerate}
+    \item \textbf{DETERMINAZIONE DELLA DIREZIONE DI SPOSTAMENTO}: \newline aumentare il valore di una variabile non di base a partire da zero (modificano i valori delle variabili di base correnti per soddisfare le equazioni) equivale a spostarsi lungo uno degli spigoli che emanano dal corrente vertice ammissibile.
+    La scelta di quale variabile non di base incrementare è effettuata in base al \textbf{CONCETTO CHIAVE 4} e al \textbf{CONCETTO CHIAVE 5}. Nel nostro esempio, aumenteremo $x_2$ poiché il suo tasso di miglioramento in $Z$ è 5, il quale è migliore del tasso di miglioramento in $Z$ dell'altra variabile non di base $x_1$.
+    L'incremento del valore di questa variabile non di base, la fa divenire una variabile di base nella nuova soluzione di base; essa prende quindi il nome di \textbf{VARIABILE ENTRANTE}
+    \item \textbf{DETERMINAZIONE DELL'INCREMENTO}: determina di quanto aumentare il valore della variabile entrante in base (nel nostro caso, $x_2$). Incrementare il valore di $x_2$ fa incrementare il valore della funzione obbiettivo $Z$, pertanto desideriamo aumentare il più possibile il valore di $x_2$ evitando però di abbandonare la regione ammissibile.
+    Il soddisfacimento dei \textbf{vincoli} implica che se $x_2$ aumenta, mentre si mantiene il valore della variabile non di base $x_1$ uguale a zero, allora il valore di qualche altra variabile di base \textbf{deve variare}. L'ammissibilità richiede inoltre che \textbf{tutte le variabili siano non negative}. Le variabili non di base (inclusa quella entrante $x_2$) sono non negative, ma dobbiamo verificare quanto $x_2$ possa aumentare senza violare il vincolo di non negatività sulle variabili
+    di base $x_3, x_4, x_5$. Per farlo, applichiamo il \textbf{TEST DEL RAPPORTO MINIMO}: prendiamo in considerazione tutti i vincoli a cui è soggetta la funzione obbiettivo e \textbf{ricaviamo da essi il massimo valore che possiamo assegnare a $x_2$ che non porti a violare i vincoli di non negatività sulle altre variabili}. Questo valore sarà quindi il più piccolo trovato:
+    \begin{center}
+        \includegraphics[width = 0.60\textwidth]{Images/24.png}
+    \end{center}
+    Questo passo dell'algoritmo va quindi a determinare quale variabile di base diminuisce a zero per prima quando si incrementa il valore della \textbf{VARIABILE ENTRANTE} in base.
+    Diminuire il valore della variabile di base fino a raggiungere il valore zero trasforma questa variabile da variabile di base in variabile non di base nella nuova soluzione di base ammissibile.
+    Pertanto, questa variabile è chiamata \textbf{VARIABILE USCENTE} dalla base all'iterazione corrente. 
+    \item \textbf{DETERMINAZIONE DELLA NUOVA SOLUZIONE DI BASE}: Obbiettivo di questo passo è convertire il sistema lineare in una forma maggiormente vantaggiosa (forma adatta all'applicazione dell'\textbf{eliminazione Gaussiana}), al fine di applicare il test di ottimalità e (se necessario) di ottenere una nuova soluzione di base ammissibile.
+    Nel nostro esempio, i valori di $x_3$ e $x_5$ nella nuova soluzione di base ammissibile vengono ottenuti come risultato di questo processo. Consideriamo di nuovo l'esempio
+    Tenendo sempre come esempio il modello in forma aumentata presente sopra, esso quindi diventa:
+    \begin{center}
+        \includegraphics[width = 0.50\textwidth]{Images/25.png}
+    \end{center}
+    $x_2$ ha rimpiazzato $x_4$ come variabile di base nell'equazione (2). RIsolvere il sistema lineare rispetto a $Z, x_2, x_3, x_5$ richiede di applicare operazioni algebriche per \textbf{riprodurre il pattern $(0,0,1,0)$} di $x_4$ per $x_2$ (cioè fare in modo che il vettore colonna di $x_2$ diventi uguale al vettore colonna di $x_4$).
+    Possiamo usare due tipi di operazioni algebriche:
+    \begin{itemize}
+        \item Moltiplicare (dividere) un'equazione per una costante non nulla
+        \item Sommare (sottrarre) un multiplo di un'equazione per ottenere un'altra \newline equazione
+    \end{itemize}
+    \begin{center}
+        \includegraphics[width = 1\linewidth]{Images/26.png}
+    \end{center}
+    \begin{center}
+        \includegraphics[width = 1\linewidth]{Images/27.png}
+    \end{center}
+    Questo processo è detto \textbf{eliminazione di Gauss-Jordan}: ogni variabile di base viene eliminata da tutte le equazioni tranne una dove ha coefficiente 1
+\end{enumerate}
+Applichiamo questo procedimento fino a quando i coefficienti della funzione obbiettivo \textbf{sono tutti negativi}, cioè abbiamo solo tassi di miglioramenti negativi.
+La soluzione trovata in quel punto è la \textbf{soluzione ottimale}
 
 
 
