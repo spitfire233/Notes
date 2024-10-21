@@ -210,7 +210,7 @@ Ci sono due modi per implementare un comando:
 Spesso l'interprete riconosce \textbf{un vero e proprio linguaggio di programmazione} (es. Bash).
 \subsubsection{Interfaccia utente: le interfacce grafiche}
 \begin{center}
-    \includegraphics[width = 0.85\textwidth]{Images/7.PNG}
+    \includegraphics[width = 0.85\textwidth]{Images/7.png}
 \end{center}
 Le interfacce grafiche(GUI) sono di solito basate sulla metafora della scrivania, delle icone e delle cartelle (corrispondenti alle directory).
 Nate dalla ricerca presso lo Xerox PARC lab negli anni 70, vennero popolarizzate dai computer Apple Macintosh negli anni 80. Su Linux le più popolari sono KDE e Gnome.
@@ -470,5 +470,75 @@ Quando si crea un nuovo segmento, è necessario \textbf{impostarne la dimensione
 \end{center}
 Dove \textbf{fildes}, nel nostro caso, è il \textbf{file descriptor} del segmento di memoria e \textbf{length} sarà la dimensione
 che gli vogliamo dare (in byte).
-Infine, la funzione \textbf{mmap} mappa la memoria condivisa nello spazio 
+Infine, la funzione \textbf{mmap} mappa la memoria condivisa nello spazio:
+\begin{center}
+    \textit{void* mmap(void* addr, size\_t len, int prot, int flags, int flides, off\_t off);}
+\end{center}
+dove:
+\begin{itemize}
+    \item Il parametro \textbf{addr} è l'indirizzo di partenza dello spazio di memoria condivisa. Questo parametro viene in verità usato come
+    \textbf{SUGGERIMENTO} da parte del kernel del sistema operativo; ciò accade perché lo spazio di indirizzi indicato da addr e len \textbf{potrebbe essere già allocato}.
+    \item Il parametro \textbf{length} specifica la lunghezza (in byte) dello spazio di memoria allocato
+    \item Il paramtero \textbf{prot} indica quali operazioni sono permesse sulla regione di memoria; esso può assumere:
+    \begin{itemize}
+        \item \textbf{PROT\_READ}: I dati possono essere letti
+        \item \textbf{PROT\_WRITE}: I dati possono essere scritti
+        \item \textbf{PROT\_EXEC}: I dati possono essere eseguiti
+        \item \textbf{PROT\_NONE}: I dati non possono essere acceduti
+    \end{itemize}
+    \item Il paramtero \textbf{flag} fornisce ulteriori informazioni riguardo la gestione dei dati mappati sullo spazio di memoria. Esso può assumere:
+    \begin{itemize}
+        \item \textbf{MAP\_SHARED}: I cambiamenti sono condivisi
+        \item \textbf{MAP\_PRIVATE}: I cambiamenti sono privati
+        \item \textbf{MAP\_FIXED}: Quando questa flag è impostata, la regione di memoria allocata \textbf{parte esattamente da addr} al posto di usarlo come un suggerimento.
+    \end{itemize}
+    \item Il parametro \textbf{filedes} indica il file (o l'oggetto) che rappresenta lo spazio di memoria condivisa
+    \item Il parametro \textbf{off} indica l'offset nel file da dove inizia lo spazio di memoria condivisa
+\end{itemize}
+Un'esempio di chiamata può essere:
+\begin{center}
+    \textit{void* shm\_ptr = mmap(0, 4096, PROT\_WRITE, MAP\_SHARED, shm\_fd, 0)}
+\end{center}
+Da questo momento si può quindi usare il puntatore shm\_ptr ritornato da mmap per leggere/scrivere la memoria condivisa.
+\subsubsection{Pipe anonime in POSIX}
+Le pipe anonime in POSIX vengono create con la funzione \textit{pipe}, che ritorna due descrittori, uno per punto di lettura e uno per il punto di scrittura.
+Ipotizziamo quindi di avere un array \textit{int pd\_fd[2]}; la funzione \textit{pipe} ha la seguente firma:
+\begin{center}
+    \textit{pipe(int fildes[2])}
+\end{center}
+Con \textit{fildes[2]} l'array in cui verranno scritti i descrittori di lettura e scrittura (lettura nella cella 0 e scrittura nella cella 1). La funzione ritorna 0 se ha avuto successo, -1 altrimenti; in questo caso
+verrà impostata la flag \textit{ERRNO} per indicare l'errore e i descrittori NON verranno allocati all'interno di \textit{fildes[2]}. Un esempio di chiamata di \textit{pipe} è:
+\begin{center}
+    \textit{int res = pipe(p\_fd)}
+\end{center}
+Le funzioni \textit{read} e \textit{write} permettono rispettivamente di leggere e scrivere: \newline
+La funzione write ha la seguente firma:
+\begin{center}
+    \textit{ssize\_t write (int fildes, const void* buf, size\_t nbyte)}
+\end{center}
+Essa cercherà di scrivere \textit{nbyte} dal buffer puntato da \textit{buf} al file associato al file descriptor \textit{fildes}.
+La funzione ritorna il numero di byte effettivamente scritto, altrimenti -1.
+Una scrittura sulla pipe anonima d'esempio può essere quindi:
+\begin{center}
+    \textit{ssize\_t n\_wr = write(p\_fd[1], "Hello World!", 14);}
+\end{center}
+La funzione \textit{read} ha la seguente firma:
+\begin{center}
+    \textit{ssize\_t read(int fildes, void* buf, size\_t nbyte);}
+\end{center}
+La funzione cercherà di leggere \textit{nbyte} dal file associato al file descriptor \textit{fildes} e di porre ciò che ha letto
+nel buffer puntato da \textit{buf}. La funzione restituirà il numero di byte letti se ha avuto successo, -1 altrimenti.
+Un esempio di lettura dalla pipe anonima d'esempio può essere quindi:
+\begin{center}
+    \textit{char buffer[256];} \\
+    \textit{ssize\_t n\_rd = read(p\_fd[0], buffer, sizeof(buffer) - 1);}
+\end{center}
+\subsubsection{Named Pipes in POSIX}
+Le named pipes vengono anche chiamate \textbf{FIFO} nei sistemi POSIX. Per creare una FIFO, si utilizza l'API \textit{mkfifo}, che ha la seguente firma:
+\begin{center}
+    \textit{int mkfifo(const char *path, mode\_t mode);}
+\end{center}
+
+
+
 \end{document}
