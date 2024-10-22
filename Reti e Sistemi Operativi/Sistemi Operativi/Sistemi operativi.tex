@@ -538,7 +538,77 @@ Le named pipes vengono anche chiamate \textbf{FIFO} nei sistemi POSIX. Per crear
 \begin{center}
     \textit{int mkfifo(const char *path, mode\_t mode);}
 \end{center}
-
-
-
+La funzione andrà a creare un nuovo file speciale FIFO con nome dato dal percorso puntato da \textit{path}.
+I bit dei permessi del file saranno impostati come specificato in \textit{mode}.
+La funzione ritorna 0 se la creazione del file avviene con successo, -1 altrimenti.
+Un esempio di chiamata può quindi essere:
+\begin{center}
+    \textit{int res = mkfifo("/home/pietro/myfifo", 0640);}
+\end{center}
+La FIFO quindi potrà utilizzare come un normale file; in particolare possiamo aprirla tramite l'API \textit{open}:
+\begin{center}
+    \textit{int open(const char *path, int oflag, ...);}
+\end{center}
+La funzione quindi aprirà il file specificato in \textit{path}.
+Il parametro \textit{flag} deve obbligatoriamente assumere uno dei seguenti valori:
+\begin{itemize}
+    \item \textbf{O\_RDONLY}: il file viene aperto in modalità di sola lettura
+    \item \textbf{O\_WRONLY}: il file viene aperto in modalità di sola scrittura
+    \item \textbf{O\_RDWR}: Il fine viene aperto ed è possibile effettuare su di esso sia le operazioni di lettura che di scrittura
+\end{itemize}
+Inoltre è possibile specificare, in OR bitwise (|) con uno dei valori di \textit{flag} sopra (cioè viene fatto l'or bit a bit dei valori), le seguenti flag:
+\begin{itemize}
+    \item \textbf{O\_APPEND}: Il file viene aperto in "append mode", cioè ogni scrittura viene fatta alla fine del file
+    \item \textbf{O\_CLOEXEC}: Viene impostata, per questo file, la flag \textbf{FD\_CLOEXEC}, cioè il file verrà chiuso se un processo che lo gestisce usa una delle funzioni della famiglia \textit{exec} viene eseguita sul file
+    \item \textbf{O\_CLOFORK}: Viene impostata, per questo file, la flag \textbf{FD\_CLOFORK}, cioè il file verrà chiuso se un processo che lo gestisce effettua una \textit{fork()}
+    \item \textbf{O\_CREAT}: Se il \textbf{path} non esiste, lo crea come un file normale. (n.d.a Si faccia riferimento a \textit{man} o alla documentazione POSIX per una spiegazione più dettagliata)
+    \item \textbf{O\_DIRECTORY}: Se \textit{path} risolve a un file che NON è una directory, questa flag porta la funzione a fallire
+    \item \textbf{O\_EXCL}: Se \textbf{O\_CREAT} e \textbf{O\_EXCL} sono entrambe impostate, la funzione fallirà se il file già esiste. Se invece solo questa flag è impostata, il risultato è \textbf{indefinito}
+    \item \textbf{O\_TRUNC}: Se il file esiste ed è un file normale e il file è stato aperto con successo in modalità "sola scrittura" (flag ha valore \textit{O\_WRONLY}) oppure in è aperto in "modalità lettura e scrittura" (flag ha valore \textit{O\_RDWR}), allora tutti i contenuti del file verranno troncati (cioè cancellati) e la sua lunghezza verrà impostata a 0.
+\end{itemize}
+Quindi, un esempio di apertura di una FIFO può essere il seguente:
+\begin{center}
+    \textit{int fd = open("/home/pietro/myfifo", O\_RDONLY);}
+\end{center}
+Poiché una FIFO può essere utilizzata come un file normale, possiamo anche usare le API \textit{read} e \textit{write} viste prima per leggere e scrivere su di essa:
+\begin{center}
+    \textit{char buffer[256];} \\
+    \textit{ssize\_t n\_rd = read(fd, buffer, sizeof(buffer) - 1);}
+\end{center}
+Al termine dell'utilizzo, dobbiamo ricordarci di \textbf{chiudere la FIFO}; per farlo usiamo l'API \textbf{close}:
+\begin{center}
+    \textit{int close(int fildes)}
+\end{center}
+La funzione prende in input il file descriptor e lo chiude (cioè chiude il file).
+La funzione ritorna 0 se ha successo, -1 se invece fallisce. Per chiudere la FIFO che abbiamo presentato fino a qui come esempio,
+possiamo quindi procedere in questo modo:
+\begin{center}
+    \textit{close(fd);}
+\end{center}
+Per invece \textbf{eliminare} una FIFO, possiamo usare l'API \textbf{unlink}:
+\begin{center}
+    \textit{int unlink(const char* path)}
+\end{center}
+l'API, in generale, si comporta in maniera differente in base a \textbf{cosa viene specificato come valore di path}:
+\begin{itemize}
+    \item Se quel nome era \textbf{l'ultimo collegamento ad un file e nessun processo ha quel file aperto}, il file viene \textbf{eliminato} e lo spazio che stava usando viene reso disponibile per il riuso.
+    Se invece il file è ancora in uso da parte di un processo, esso rimarrà in memoria fino a quando \textbf{l'ultimo file descriptor che lo referenzia non viene chiuso}.
+    \item Se il nome specificato è un \textbf{link simbolico} (un collegamento), esso viene rimosso
+    \item Se il nome si riferisce ad una \textbf{Socket}, una \textbf{FIFO} o ad un \textbf{dispositivo}, allora il nome viene rimosso, ma i processi che lo stavano usando \textbf{possono continuare a farlo}
+\end{itemize} 
+La funzione ritorna 0 se ha successo, altrimenti -1. Per eliminare quindi una FIFO usando \textit{unlink}, possiamo procedere nel seguente modo:
+\begin{center}
+    \textit{unlink("/home/pietro/myfifo");}
+\end{center}
+\subsubsection{Segnali in POSIX}
+Possiamo inviare un segnale ad un processo utilizzando l'API \textit{kill}:
+\begin{center}
+    \textit{int kill(pid\_t pid, int sig)}
+\end{center}
+Dove \textit{pid} è l'ID del processo e \textit{sig} è il segnale che si vuole inviare.
+I segnali che si possono inviare sono definiti nella libreria \textbf{signal.h}.
+Un esempio di utilizzo può essere il seguente:
+\begin{center}
+    \textit{int ok = kill(1000, SIGERM);}
+\end{center}
 \end{document}
