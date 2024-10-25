@@ -611,4 +611,221 @@ Un esempio di utilizzo può essere il seguente:
 \begin{center}
     \textit{int ok = kill(1000, SIGERM);}
 \end{center}
+Per registrare una callback per un determinato segnale, possiamo usare l'API \textit{sigaction}:
+\begin{center}
+    \textit{int sigaction(int sig, const struct sigaction *restrict act, struct sigaction *restrict oact);}
+\end{center}
+In particolare, la funzione permette al processo chiamate di esaminare e/o specificare l'azione che deve essere associata ad un certo segnale.
+Il parametro \textit{sig} specifica il segnale, i cui valori accettabili sono definiti in \textbf{signal.h}. La \textbf{struttura} sigaction, usata per
+descrivere l'azione da intraprendere, è definita anch'essa in \textbf{signal.h} ed include almeno i seguenti membri:
+\begin{center}
+    \includegraphics[width = 0.55\textwidth]{Images/15.PNG}
+\end{center}
+Abbiamo poi comportamenti diversi a seconda del valore degli argomenti \textit{act} e \textit{oact}. Per quanto
+riguarda \textit{act} abbiamo:
+\begin{itemize}
+    \item Se il suo valore NON è un \textbf{puntatore a null}, esso punta ad una struttura che specifica l'azione da essere associata con il segnale specificato
+    \item Se il suo valore È un \textbf{puntatore a null}, la gestione dei segnali \textbf{rimane invariata} (rispetto alla gestione normale del S.O.)
+\end{itemize}
+Per quanta riguarda \textit{oact} invece abbiamo:
+\begin{itemize}
+    \item Se il suo valore NON è un \textbf{puntatore a null}, l'azione precedentemente associata al segnale è immagazzinate nella locazione puntata da \textit{oact}
+\end{itemize}
+L'API restituirà 0 se ha avuto successo, -1 altrimenti.
+Un esempio quindi di registrazione di una callback è il seguente:
+\begin{center}
+    \textit{struct sigaction act;} \\
+    \textit{sigemptyset(\textnormal{\&}act.sa\_mask); /* non bloccare gli altri segnali */} \\
+    \textit{act.sa\_flags = SA\_SIGINFO; /* callback in act.sa\_sigaction *()} \\
+    \textit{act.sa\_sigaction = sigterm\_handler; /* la callback */} \\
+    \textit{int ok = sigaction(SIGTERM, \textnormal{\&}act, NULL);}
+\end{center}
+\subsection{Multithreading}
+Fino ad ora abbiamo assunto che un processo abbia un singolo flusso di esecuzione sequenziale (ossia, un singolo processore virtuale).
+Se supponiamo che un processo possa avere \textbf{molti} processori virtuali, più istruzioni possono eseguire concorrentemente, e quindi il processo può avere più percorsi
+(\textbf{thread}) di esecuzione concorrenti.
+I thread di uno stesso processo condividono la memoria globale (data), la memoria contenente il codice (code) e le risorse ottenute dal sistema operativo (ad esempio i file aperti).
+Ogni thread di uno stesso processo però deve avere \textbf{proprio stack}, altrimenti le chiamate a subroutine di un thread interferirebbero con quello di un altro thread concorrente.
+\begin{center}
+    \includegraphics[width = 0.85\textwidth]{Images/16.PNG}
+\end{center}
+Le \textbf{librerie di un thread} sono le API fornite al programmatore per creare e gestire un thread.
+Le librerie più in uso sono \textbf{POSIX pthreads} e \textbf{Windows Threads}.
+\subsection{POSIX pthreads}
+La libreria \textbf{POSIX pthreads non sono un'implementazione}, ma una specifica (POSIX standard IEEE 1003.1c).
+Esse sono comuni nei sistemi Unix e Unix-like (BSD, Linux, MacOS).
+All'inizio di un processo, viene creato un singolo thread.
+Per creare un nuvo thread si utilizza l'API \textit{pthread\_create}, la quale ha la seguente firma:
+\begin{center}
+    \textit{pthread\_create(pthread\_t *restrict thread, const pthread\_attr\_t *restrict attr, void *(*start\_routine)(void*), void* restrict arg);}
+\end{center}
+L'API creerà un nuovo thread, con gli attributi specificati da \textit{attr}, all'interno del processo.
+Se \textit{attr} è NULL, gli attributi di default saranno usati. Se gli attributi specificati da \textit{attr} sono vengono modificati successivamente, gli attributi
+del thread creato non verranno modificati. Se l'esecuzione va a buon fine, l'API immagazzinerà l'ID del thread creato nella locazione specificata da \textit{thread}.
+Il parametro \textit{start\_routine} indica \textbf{la funzione che il thread andrà ad eseguire}, passandogli \textbf{\textit{arg} come suo solo parametro}. Il thread continuerà ad eseguire fino a quando la funzione che sta eseguendo
+non ritorna. La funzione \textit{pthread\_create} ritornerà 0 se ha successo, altrimenti verrà ritornato un numero diverso da 0 per indicare l'avvenimento di un errore.
+Per invece attendere la fine dell'esecuzione di un thread si utilizza l'API \textit{pthread\_join}, la quale ha la seguente firma:
+\begin{center}
+    \textit{int pthread\_join(pthread\_t thread, void ** valure\_ptr);}
+\end{center}
+L'API \textbf{sospenderà} l'esecuzione del thread chiamante fino a quando il thread obbiettivo (specificato nel parametro \textit{thread}) termina, a meno che il thread obbiettivo non sia già terminato.
+Quando l'API ritorna con successo con un valore di \textit{value\_ptr} non NILL, il valore passato a \textit{pthread\_exit()} (API chiamata per cancellare un thread) dal thread terminante sarà reso disponibile
+nella locazione referenziata da \textit{value\_ptr}.
+L'API ritornerà 0 se la funzione ha successo, altrimenti sarà ritornato un numero diverso da 0 che indica l'errore.
+Un esempio di utilizzo di queste due API può essere il seguente:
+\begin{center}
+    \textit{void* thread\_code(void* name) {...}} \\
+    \textit{...} \\
+    \textit{phtread\_id tid1, tid2;} \\
+    \textit{int ok1 = pthread\_create(\textnormal{\&}td1, NULL, thread\_code, "thread 1);} \\
+    \textit{int ok2 = pthread\_create(\textnormal{\&}td2, NULL, thread\_code, "thread 2);} \\
+    \textit{...} \\
+    \textit{void *ret1, *ret2;} \\
+    \textit{ok1 = pthread\_join(tid1, \textnormal{\&}ret1);} \\
+    \textit{ok2 = pthread\_join(tid2, \textnormal{\&}ret2);}
+\end{center}
+\newpage
+\subsubsection{Comportamento rispetto alle chiamate di sistema fork() ed exec()}
+Una \textit{fork()} dovrebbe duplicare solo il thread chiamante o tutti i thread? Alcuni sistemi operativi Unix-like hanno
+\textbf{diverse \textit{fork()}}.\newline
+\textit{exec()} invocata da un thread che effetto ha sugli altri thread? Di solito \textbf{termina tutti i thread del processo} precedentemente
+all'esecuzione.
+\subsubsection{Gestione dei segnali}
+Quando un processo è single-threaded, un segnale interrompe l'unico thread del processo.
+Quando vi sono più thread, quale thread riceve il segnale? Vi sono diversi soluzioni:
+\begin{itemize}
+    \item Il thread a cui si applica il segnale (ad es. il segnale \textit{SIGSEGV} viene inviato al thread che ha generato il segmentation fault)
+    \item Ogni thread del processo
+    \item Alcuni thread del processo
+    \item Un thread speciale del processo deputato esclusivamente alla ricezione dei segnali
+\end{itemize}
+\subsubsection{Cancellazione dei thread}
+L'operazione di cancellazione di un thread determina la terminazione prematura del thread.
+Può essere invocata anche da un altro thread.
+Vi sono due approcci per la cancellazione:
+\begin{itemize}
+    \item \textbf{Cancellazione asincrona}: il thread che riceve la cancellazione viene terminato immediatamente
+    \item \textbf{Cancellazione differita}: un thread che supporta la cancellazione differita deve controllare periodicamente se esiste una richiesta di cancellazione pendente, e in tal caso terminare la propria esecuzione
+\end{itemize}
+Questi due approcci hanno i seguenti vantaggi:
+\begin{itemize}
+    \item \textbf{Cancellazione differita}: dal momento che un thread controlla il momento della propria cancellazione, può effettuare una terminazione ordinata
+    \item \textbf{Cancellazione asincrona}: nessuna necessità di controllare periodicamente se ci sono richieste di cancellazione pendenti
+\end{itemize}
+Nei \textbf{POSIX pthreads} si può attivare/disattivare la cancellazione, ed avere sia cancellazione differita (default) che asincrona.
+Se la cancellazione è inattiva, le richieste di cancellazione rimangono in attesa fino a quando (se) è attivata.
+In caso di \textbf{cancellazione differita}, questa avviene solo quando l'esecuzione del thread raggiunge un punto di cancellazione (di solito una chiamata di sistema bloccante).
+Il thread può aggiungere un punto di cancellazione controllando l'esistenza di richieste di cancellazione con la funzione \textit{pthread\_testcancel()}.
+Presentiamo un esempio:
+\begin{center}
+    \includegraphics[width = 0.95\textwidth]{Images/17.png}
+\end{center}
+\subsubsection{Dati locali dei thread}
+In alcuni casi è utile assegnare ad un thread dei dati locali (\textbf{thread local storage, TLS}) non condivisi con gli altri thread dello stesso processo.
+La TLS è diversa dalle variabili locali (ad es. è visibile a tutte le funzioni). Essa è simile ai dati \textit{static} del linguaggio C, ma unica per ciascun thread. È utile quando il programma non ha un controllo
+diretto sul momento di creazione dei thread (es. quando si usano i thread pools). In POSIX, i dati locali dei thread si possono creare utilizzando le funzioni:
+\begin{itemize}
+    \item \textbf{\textit{pthread\_key\_create(...)}}: crea un oggetto opaco di tipo \textit{pthread\_key\_t}, che può essere usato da tutti i thread per identificare un dato locale
+    \item \textbf{\textit{pthread\_set\_specific(...)}}: permette di associare ad una \textit{pthread\_key\_t} un valore di tipo \textit{void*}
+    \item \textbf{\textit{pthread\_getspecific(...)}}: permette di richiamare un oggetto \textit{pthread\_key\_t} data la chiave
+\end{itemize} 
+Ogni thread pul associare ad una stessa chiave il proprio distinto valore locale (e successivamente richiamarlo).
+
+\section{Gestione della memoria: i servizi}
+Perché un programma possa andare in esecuzione esso deve avere a disposizione:
+\begin{itemize}
+    \item Il processore, per eseguire il codice
+    \item La memoria centrale, per memorizzare il codice e i dati sul quale il codice opera
+\end{itemize}
+Solo nei sistemi operativi più semplici un solo programma alla volta è in memoria: nei moderni sistemi operativi molti programmi sono contemporaneamente in memoria in uno stesso istante.
+Secondo la terminologia precedentemente introdotta: più immagini di più processi sono presenti contemporaneamente nella memoria centrale.
+Il sistema operativo deve, pertanto, allocare porzioni di memoria centrale ai diversi processi in funzione delle necessità di tali processi.
+\subsection{Lo spazio di indirizzamento}
+Ogni processo ha disposizione uno spazio di indirizzamento che può usare per le proprie operazioni.
+\begin{center}
+    \includegraphics[width = 0.35\textwidth]{Images/18.png}
+\end{center}
+Nei primi sistemi operativi, tale spazio di indirizzamento era il range di indirizzi di memoria centrale che veniva assegnato al processo:
+ad esempio, se l'immagine di un certo processo avesse avuto dimensione 1 MB e fosse stata caricata in memoria centrale dall'indirizzo 001B:000... il suo spazio di indirizzamento sarebbe
+stato 001B:0000 - 002B:0000. Questo però non permette di caricare lo stesso programma in zone diverse della memoria!
+\subsection{Associazione degli indirizzi}
+In presenza di molti programmi in memoria, il sistema operativo di regola carica uno stesso programma, in momenti diversi, in diverse aree di memoria (dove trova spazio).
+Come fa, pertanto, un'istruzione macchina di un programma afar riferimento ad una certa locazione di memoria, se il suo indirizzo non è noto a priori, ma dipende da dove il programma viene caricato?
+Una prima possibilità è che il compilatore produca codice indipendente dalla posizione, ossia \textbf{position-independent code (PIC)}, ossia codice macchina che usi solo indirizzi di memoria \textbf{relativi}, e che quindi
+funzioni correttamente in qualsiasi locazione di memoria venga caricato. Una seconda possibilità è produrre codice dipendente dalla posizione e tradurre gli indirizzi dipendenti dalla posizione negli indirizzi corretti.
+Questa operazione di "traduzione" è detta di \textbf{associazione (binding) degli indirizzi}.
+\subsubsection{Loader e Linker}
+Un programma sorgente è compilato in un file oggetto che deve poter essere caricato a partire da qualsiasi locazione di memoria fisica (\textbf{file oggetto rilocabile}).
+I \textbf{linker}, o linkage editor, combinano più file oggetto (diversi file sorgente + librerie) per formare un file eseguibile. I \textbf{loader} si occupano di caricare in memoria i file eseguibili nel momento
+on cui devono essere eseguiti. Inoltre, i loader (o ulteriori linker dinamici) effettuano il linking delle \textbf{librerie dinamiche}
+\begin{center}
+    \includegraphics[width = 0.55\textwidth]{Images/19.png}
+\end{center}
+\subsubsection{Librerie dinamiche}
+Nei sistemi operativi odierni, non tutto il linking viene fatto a compile time: le librerie dinamiche vengono collegate a quando il programma \textbf{caricato o durante l'esecuzione del programma stesso}.
+Il vantaggio delle librerie dinamiche è che queste possono essere condivise tra diversi programmi, riducendo le dimensioni dei programmi stessi e risparmiando memoria.
+\subsubsection{Varianti nell'associazione degli indirizzi}
+L'associazione degli indirizzi può essere fatta in tre momenti diversi:
+\begin{itemize}
+    \item \textbf{In compilazione}: il linker, a partire dall'indirizzo di caricamento, effettua il binding e genera \textbf{codice assoluto}
+    \item \textbf{In caricamento}: il linker genera \textbf{codice rilocabile} e il loader, a partire dall'indirizzo di caricamento, effettua il binding al momento del caricamento in memoria del codice
+    \item \textbf{In esecuzione}: il binding viene effettuato dall'hardware dinamicamente mentre il codice viene eseguito
+\end{itemize}
+Questi approcci hanno sia \textbf{vantaggi e svantaggi}:
+\begin{itemize}
+    \item \textbf{In compilazione}: soluzione semplice, ma se cambia l'indirizzo di caricamento il codice va ricompilato (si possono, ad esempio, avere $n$ versioni per $n$ diversi indirizzi di caricamento)
+    \item \textbf{In caricamento}: permette di variare liberamente l'indirizzo di caricamento da esecuzione ad esecuzione, ma è una soluzione lenta che non permette di rilocare (spostare) l'immagine di un processo durante la sua
+    esecuzione; inoltre l'eseguibile deve contenere delle opportune tabelle che indichino le istruzioni macchina da modificare
+    \item \textbf{In esecuzione}: soluzione rapida che permette di rilocare l'immagine di un processo anche durante la sua esecuzione, e di proteggere la memoria centrale non assegnata ad un processo, ma richiede il supporto dell'hardware
+\end{itemize}
+Il binding in esecuzione è quello di fatto usato in tutti i sistemi operativi moderni; il binding in compilazione è usato per \textbf{alcuni eseguibili speciali, come il kernel}, di cui si sa a priori l'indirizzo di caricamento.
+\subsection{Spazio di indirizzamento virtuale}
+Nei sistemi operativi moderni, ogni processo ha uno \textbf{spazio di indirizzamento virtuale}, o \textbf{virtual address space (VAS)} indipendente dagli indirizzi fisici della memoria centrale nella quale l'immagine è caricata.
+\begin{center}
+    \includegraphics[width = 0.35\textwidth]{Images/20.png}
+\end{center}
+\begin{center}
+    \includegraphics[width = 0.35\textwidth]{Images/21.png}
+\end{center}
+\noindent
+Tale spazio di indirizzamento si estende dall'indirizzo 0 al massimo indirizzo consentito dall'architettura del processo.
+Delle \textbf{tecniche di associazione degli indirizzi in esecuzione} fanno corrispondere lo spazio di indirizzamento virtuale del processo
+con la regione (o le regioni) di memoria centrale che la sua immagine occupa.
+Lo spazio di indirizzamento virtuale di un processo è di regola \textbf{molto più ampio della memoria centrale}.
+Questo implica che buona parte dello spazio di indirizzamento virtuale \textbf{non è utilizzabile dal processo} perché non è associato a nessuna regione di memoria
+centrale. Tale parte inutilizzabile è di solito compresa tra stack e heap. Stack e heap possono essere dinamicamente estesi e ridotti (automaticamente lo stack, attraverso le API lo heap).
+\subsubsection{Librerie dinamiche}
+Le librerie dinamiche vengono caricate nella zona tra stack e heap. Dal momento che possono essere caricate in qualsiasi posizione nel VAS, devono essere \textbf{compilate come PIC}.
+\begin{center}
+    \includegraphics[width = 0.35\textwidth]{Images/22.png}
+\end{center}
+\subsubsection{Memory mapping}
+\begin{center}
+    \includegraphics[width = 0.35\textwidth]{Images/23.png}
+\end{center}
+In generale, i sistemi operativi mettono a disposizione API per mappare una regione inutilizzabile del VAS su memoria centrale, così che diventi utilizzabile.
+Esistono anche API che permettono di mappare una regione del VAS sul contenuto di un file (file mappati in memoria).
+In tal modo l'accesso al file può avvenire utilizzando le istruzioni macchina per accedere alla memoria, anziché le API del filesystem.
+\subsection{Le API POSIX per la gestione della memoria}
+Di norma non dobbiamo usare le API per gestire stack e heap:
+\begin{itemize}
+    \item Lo stack è gestito automaticamente dal sistema operativo, non tramite API
+    \item Lo heap è gestito di norma dal supporto runtime del linguaggio (new in C++) o dalla sua libreria (malloc in C), che \textbf{invocano API} per ridurre/espandere lo heap in funzione
+    delle necessità del processo
+\end{itemize}
+Perché allora ci interessa sapere quali sono le API per la gestione della memoria?
+\begin{itemize}
+    \item Ci permettono di avere regioni di memoria con \textbf{permessi particolari} (sola lettura, eseguibili...)
+    \item Ci permettono di implementare componenti quali allocatori di memoria, compilatori just-in-time,... qualora volessimo implementare il nostro nuovo linguaggio di programmazione
+    \item Ci permettono di utilizzare i file mappati in memoria e la memoria condivisa
+\end{itemize}
+Le API Unix legacy per cambiare la dimensione del segmento dati (che nello standard POSIX comprende le regioni data e heap) sono \textit{brk} e \textit{sbrk}.
+Tali API sono deprecate in favore dell'API \textit{mmap} (già presentata in questi appunti), e incompatibili con questa (ma esistono ancora in diversi OS, ad esempio Linux).
+L'API mmap permette di mappare una regione ancora non utilizzata del VAS su:
+\begin{itemize}
+    \item \textbf{Memoria centrale}
+    \item \textbf{Un file} (che viene mappato in memoria)
+    \item \textbf{Memoria condivisa}
+\end{itemize}
+
 \end{document}
