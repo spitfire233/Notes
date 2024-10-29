@@ -855,10 +855,199 @@ Trattiamo inoltre come determinare la direzione di spostamento, assumendo di ave
     Questo processo è detto \textbf{eliminazione di Gauss-Jordan}: ogni variabile di base viene eliminata da tutte le equazioni tranne una dove ha coefficiente 1
 \end{enumerate}
 Applichiamo questo procedimento fino a quando i coefficienti della funzione obbiettivo \textbf{sono tutti negativi}, cioè abbiamo solo tassi di miglioramenti negativi.
-La soluzione trovata in quel punto è la \textbf{soluzione ottimale}
-
-
-
-
+La soluzione trovata in quel punto è la \textbf{soluzione ottimale}.
+\subsection{Procedura tabellare per il metodo del simplesso}
+La forma algebrica è la migliore per comprendere la logica sottostante il metodo del simplesso.
+Comunque, la forma algebrica non è la più adeguata per effettuare le computazioni che abbiamo mostrato in precedenza, molto meglio in questo caso utilizzare la \textbf{forma tabellare} che
+registra solo l'informazione essenziale:
+\begin{itemize}
+    \item Coefficienti delle variabili
+    \item Termini noti delle equazioni
+    \item Variabili di base per ogni equazione
+\end{itemize}
+La \textbf{forma tabellare} evita di memorizzare i simboli delle variabili in ogni equazione, ma cosa ancor più importante è rappresentata dal fatto che, è possibile evidenziare i numeri che sono coinvolti nelle computazioni ed è possibile memorizzare in modo
+compatto tali numeri. La tabella da utilizzare ha la seguente struttura:
+\begin{center}
+    \includegraphics[width = 1\textwidth]{Images/28.png}
+\end{center}
+La tabella sopra è stata riempita \textbf{basandosi sull'esempio presentato fino ad ora}. Vediamo, sempre utilizzando questo esempio, tutti i passi del metodo del simplesso svolti con la forma tabellare:
+\begin{itemize}
+    \item \textbf{INIZIALIZZAZIONE}: Assumendo che il problema sia in forma standard, si procede come segue:
+    \begin{itemize}
+        \item Aggiungere le variabili slack
+        \item Selezionare le variabili di decisione da porre a 0 (non di base)
+        \item Selezionare le variabili slack come variabili di base
+    \end{itemize}
+    \begin{center}
+        \vspace{-0.3cm}
+        \includegraphics[width = 1\linewidth]{Images/29.png}
+        \vspace{-1cm}
+    \end{center}
+    La parte della tabella che comprende le colonne dei valori di $Z, x_1, ..., x_5$ e dei termini noti viene detto \textbf{tableau}.
+    Ricordiamo che, in questo caso, le variabili non di base sono $x_1$ e $x_2$ e che la soluzione di base ammissibile è $(0, 0, 4, 12, 8)$
+    \item \textbf{TEST DI OTTIMALITÀ}: La \textbf{soluzione di base ammissibile corrente} è ottimale solo se tutti i \textbf{coefficienti della riga (0)} sono non negativi.
+    Se questo è il caso, ci si arresta, altrimenti si effettua un'iterazione per ottenere una nuova soluzione di base ammissibile, il che implica che una variabile non di base venga trasformata in una variabile di base (passo 1)
+    e viceversa (passo 2), per poi ottenere una nuova soluzione (passo 3).
+    Vediamo i vari passi da effettuare in caso ci troviamo nella situazione in cui la soluzione non è ottimale:
+    \begin{itemize}
+        \item \textbf{ITERAZIONE: PASSO 1}: Identificare la \textbf{variabile entrante in base} (selezionandola tra quelle non di base) come quella cui corrisponde il \textbf{minimo coefficiente negativo nell'equazione (0)}.
+        La colonna corrispondente viene denominata \textbf{colonna pivot}.
+        \begin{center}
+            \includegraphics[width = 1\linewidth]{Images/30.png}
+            \vspace{-0.7cm}
+        \end{center}
+        In questo caso, la variabile entrante sarà $x_2$.
+        \item \textbf{ITERAZIONE: PASSO 2}: Determinate la \textbf{variabile di base uscente} tramite il \textbf{test del rapporto minimo}:
+        \begin{enumerate}
+            \item Selezionare i coefficienti strettamente positivi della colonna pivot
+            \item Dividere i termini noti per questi coefficienti (riga omologa)
+            \item Selezionare la riga cui corrisponde il più piccolo rapporto calcolato nel punto 2
+            \item La variabile di quella riga è la variabile di base uscente, rimpiazzarla con la variabile entrante
+        \end{enumerate}
+        \begin{center}
+            \includegraphics[width = 1\linewidth]{Images/31.png}
+        \end{center}
+        \item \textbf{ITERAZIONE: PASSO 3}: Determinare la nuova \textbf{soluzione di base} applicando operazioni che consentano l'uso dell'\textbf{eliminazione Gaussiana}.
+        \begin{enumerate}
+            \item Dividere la \textbf{riga pivot} per il \textbf{numero pivot}, ottenendo un nuovo \textbf{numero pivot} ed una nuova \textbf{riga pivot}
+            \item Ad ogni altra riga (inclusa la riga 0) che abbia coefficiente negativo nella colonna pivot, sommare a questa riga il prodotto del valore assoluto del coefficiente per la nuova riga pivot
+            \item Ad ogni altra riga (inclusa la riga 0) che abbia coefficiente positivo nella colonna pivot, sottrarre a questa riga il prodotto del valore assoluto del coefficiente per la nuova riga pivot
+        \end{enumerate}
+        \begin{center}
+            \includegraphics[width = 0.87\textwidth]{Images/32.png}
+        \end{center}
+        \item \textbf{TEST DI OTTIMALITÀ}: Controlliamo che la nuova riga 0 abbia tutti coefficienti non negativi; se è questo il caso ci fermiamo, altrimenti effettuiamo una nuova iterazione dell'algoritmo
+    \end{itemize}
+\end{itemize}
+\newpage
+\subsection{Tie Breaking}
+Fino ad ora non abbiamo detto nulla in relazioni a situazioni nelle quali le regole adottate non portino a decisioni univoche, a causa di casi multipli o di ambiguità di vario genere.
+I casi possibili, che tratteremo, sono i seguenti:
+\begin{itemize}
+    \item Alternative multiple per la variabile entrante in base
+    \item Alternative multiple per la variabile uscente dalla base
+    \item Mancanza di uan variabile uscente (funzione obbiettivo illimitata)
+    \item Molteplici soluzioni ottimali
+\end{itemize}
+\subsubsection{Variabile entrante}
+Il \textbf{passo 1} di ogni iterazione del \textbf{metodo del simplesso} sceglie come variabile entrante in base, la variabile non dib ase cui corrisponde il minimo valore (negativo) del coefficiente nell'equazione (0).
+Supponiamo che due o più variabili non di base abbiano lo stesso valore minimo (negativo) per i rispettivi coefficienti dell'equazione (0). La scelta di quale variabile debba entrare in base può essere effettuata arbitrariamente.
+La soluzione ottimale verrò comunque ottenuta, indipendentemente dalla variabile scelta come variabile entrante in base, e non sono disponibili metodi per prevedere quale scelta condurrà più rapidamente alla soluzione ottimale.
+\subsubsection{Variabile uscente}
+Supponiamo che al \textbf{passo 2 dell'algoritmo del simplesso} due o più variabili di base competano per uscire di base. \textbf{Fa differenza quale variabile viene scelta per uscire di base?}
+\textbf{Assolutamente si}, è la fa in termini molto critici in base alla seguente catena di eventi:
+\begin{itemize}
+    \item Quando il valore della variabile di entrante viene aumentato, le variabili di base che sono selezionabili come variabili uscenti dalla base, raggiungono contemporaneamente il valore zero. Pertanto, le nuove variabili non selezionate come variabili uscenti avranno comunque
+    un valore nullo nella nuova soluzione di base (una variabile di base che assume valore nullo è detta \textbf{variabile degenere})
+    \item Se una \textbf{variabile degenere} mantiene il proprio valore nullo sino ad un'iterazione successiva, dove viene selezionata come variabile uscente, la corrispondente variabile entrante in base deve rimanere nulla (dato che non può essere aumentata senza far assumere un valore negativo alla variabile uscente).
+    Pertanto il valore della funzione obbiettivo $Z$ resta invariato
+    \item Se il valore della funzione obbiettivo $Z$ resta costante invece di aumentare ad ogni iterazione, il \textbf{metodo del simplesso potrebbe entrare in loop}, ripetendo la medesima sequenza di soluzioni senza raggiungere la soluzione ottimale. Sono stati prodotto esempi sintetici che mostrano come il metodo del simplesso venga
+    \textbf{intrappolato in un loop perpetuo}. Tuttavia questo accade raramente e sono state sviluppate strategie apposite per controllare questa \textbf{situazione patologica}
+\end{itemize}
+\subsubsection{Nesuna variabile uscente}
+Il \textbf{passo 2} di ogni iterazione del metodo del simplesso può portare ad un'ulteriore esito che non abbiano ancora discusso, vale a dire che nessuna variabile di base si qualifichi come variabile uscente di base (la stessa cosa non può accadere al \textbf{passo 1}, in quanto il test di ottimalità arresterebbe l'algoritmo).
+Tale situazione si verifica se il valore della variabile entrante può essere aumentato illimitatamente senza implicare che il valore di almeno una variabile di base divenga negativo.
+Nella \textbf{forma tabellare} significa che ogni coefficiente della \textbf{colonna pivot} (esclusa la riga 0) assume valore non positivo.
+Il tableau quindi si può interpretare in questo modo: i vincoli non impediscono che il valore della funzione obbiettivo $Z$ cresca illimitatamente, pertanto il metodo del simplesso si arresta segnalando che il \textbf{valore della funzione obbiettivo $Z$ è illimitato}.
+\subsubsection{Molteplici soluzioni ottimali}
+Precedentemente, quando abbiamo introdotto il concetto di \textbf{SOLUZIONE OTTIMALE}, abbiamo precisato che \textbf{un problema di programmazione lineare può avere più di una soluzione ottimale}.
+Quindi:
+\begin{itemize}
+    \item Ogni problema di PL che ammetta soluziono ottimali multiple (con regione ammissibile limitata) ha almeno \textbf{due vertici ammissibili} che sono \textbf{ottimali}
+    \item Ogni soluzione ottimale è \textbf{combinazione convessa} di questi vertici ammissibili ottimali, cioè ogni soluzione è \textbf{esprimibile tramite una combinazione lineare del tipo}:
+    $$\lambda_1 \boldsymbol{v_1} + \lambda_2 \boldsymbol{v_2}$$
+    con $\boldsymbol{v_1}, \boldsymbol{v_2}$ i vertici ottimali e $\lambda_1 + \lambda_2 = 1$
+    \item Di conseguenza, nella forma aumentata del problema di PL, \textbf{ogni soluzione ottimale risulta essere una combinazione convessa delle soluzioni di base ammissibili ottimali}.
+\end{itemize}
+Il metodo del simplesso si arresta automaticamente non appena individua una soluzione di base ottimale.
+Comunque, in molte applicazioni di PL, sussistono fattori non tangibili, non inclusi nel modello di PL, sfruttabili per scegliere adeguatamente tra le soluzioni ottimali alternative. In questo caso, le soluzioni alternative devono essere comunque individuate.
+Come menzionato, questo richiede di trovare tutte le altre soluzioni di base ottimali, e quindi ogni soluzione ottimale sarà calcolabile come combinazione convessa di tali soluzioni ottimali di base.
+Una volta che il metodo del simplesso ha individuato una soluzione di base ottimale, è possibile identificare se ne esistono altre, ed in caso affermativo, trovarle come segue: se un problema ha più di una soluzione di base ottimale,
+almeno \textbf{una delle variabili non di base ha un coefficiente nullo nella riga (0)}, il che implica che incrementare il valore di una qualsiasi di tali variabili \textbf{non cambia il valore della funzione obbiettivo $Z$}. Pertanto, queste altre
+soluzioni di base ottimali sono identificabili (se necessario) effettuando ulteriori iterazioni del metodo del simplesso, scegliendo ogni volta una variabile non di base con coefficiente nullo come variabile entrante.
+\subsection{Forme alternative}
+Sino ad ora abbiamo presentato come applicare il metodo del simplesso assumendo che il problema di PL da risolvere fosse in \textbf{FORMA STANDARD}, cioè:
+\begin{itemize}
+    \item Problema di massimizzazione
+    \item Vincoli di $\leq$
+    \item Variabili di decisione non negative
+\end{itemize}
+Ora mostriamo come ricondurre un problema di PL in forma generica nel corrispondente problema in forma standard.
+Tale trasformazione avverrà nella fase di inizializzazione, consentendo di applicare il metodo del simplesso esattamente come mostrato per la risoluzione della forma standard.
+Consideriamo il seguente problema di programmazione lineare:
+\begin{equation*}
+    \begin{array}{ll}
+        \displaystyle \textrm{min} & \; Z = -2 \cdot x_1 + 3 \cdot x_2\\
+        \textrm{s.a.} & x_1 + x_2 = 7\\
+        \phantom{} & x_1 - 2 \cdot x_2 \leq 4\\
+        \phantom{} & x_1 \geq 0 \\
+    \end{array}
+\end{equation*}
+Notiamo che:
+\begin{itemize}
+    \item È un problema di minimizzazione e non di massimizzazione
+    \item C'è un vincolo di $=$
+    \item Manca un vincolo di non negatività per $x_2$
+\end{itemize}
+Come facciamo a trasformarlo in un problema di PL in forma standard?
+Per trasformare il problema di minimizzazione in un problema di massimizzazione, applichiamo la seguente formula:
+$$\textrm{min} \; Z = -\textrm(max)\;(-Z)$$
+Moltiplichiamo quindi la funzione obbiettivo per $-1$, ottenendo:
+\begin{equation*}
+    \begin{array}{ll}
+        \displaystyle \textrm{max} & \; Z = 2 \cdot x_1 - 3 \cdot x_2\\
+        \textrm{s.a.} & x_1 + x_2 = 7\\
+        \phantom{} & x_1 - 2 \cdot x_2 \leq 4\\
+        \phantom{} & x_1 \geq 0 \\
+    \end{array}
+\end{equation*}
+Come facciamo a risolvere l'assenza del vincolo di \textbf{non negatività} per $x_2$?
+Rimpiazziamo $x_2$ con \textbf{due variabili non negative} $x_2'$ e $x_2''$ con $x_2 = x_2' - x_2''$, ottenendo:
+\begin{equation*}
+    \begin{array}{ll}
+        \displaystyle \textrm{max} & \; Z = 2 \cdot x_1 - 3 \cdot x_2' + 3\cdot x_2''\\
+        \textrm{s.a.} & x_1 + x_2' - x_2''= 7\\
+        \phantom{} & x_1 - 2 \cdot x_2' + 2 \cdot x_2'' \leq 4\\
+        \phantom{} & x_1, x_2', x_2'' \geq 0 \\
+    \end{array}
+\end{equation*}
+Come facciamo a trasformare un vincolo di $=$? Questo tipo di vincoli \textbf{possono essere sostituiti da due vincoli, uno di $\geq$ ed uno di $\leq$}.
+Quindi otteniamo:
+\begin{equation*}
+    \begin{array}{ll}
+        \displaystyle \textrm{max} & \; Z = 2 \cdot x_1 - 3 \cdot x_2' + 3\cdot x_2''\\
+        \textrm{s.a.} & x_1 + x_2' - x_2'' \leq 7\\
+        \phantom{} & x_1 + x_2' - x_2 '' \geq 7 \\
+        \phantom{} & x_1 - 2 \cdot x_2' + 2 \cdot x_2'' \leq 4\\
+        \phantom{} & x_1, x_2', x_2'' \geq 0 \\
+    \end{array}
+\end{equation*}
+Moltiplichiamo per $-1$ il vincolo di $\geq$ e trasformiamolo in un vincolo di $\leq$:
+\begin{equation*}
+    \begin{array}{ll}
+        \displaystyle \textrm{max} & \; Z = 2 \cdot x_1 - 3 \cdot x_2' + 3\cdot x_2''\\
+        \textrm{s.a.} & x_1 + x_2' - x_2''\leq 7\\
+        \phantom{} & -x_1 - x_2' + x_2 '' \leq 7 \\
+        \phantom{} & x_1 - 2 \cdot x_2' + 2\cdot x_2'' \leq 4\\
+        \phantom{} & x_1, x_2', x_2'' \geq 0 \\
+    \end{array}
+\end{equation*}
+Infine, rinominiamo le variabili per \textbf{consistenza notazionale}, ottenendo:
+\begin{equation*}
+    \begin{array}{ll}
+        \displaystyle \textrm{max} & \; Z = 2 \cdot x_1 - 3 \cdot x_2 + 3\cdot x_3\\
+        \textrm{s.a.} & x_1 + x_2 - x_3 \leq 7\\
+        \phantom{} & -x_1 - x_2 + x_3 \leq 7 \\
+        \phantom{} & x_1 - 2 \cdot x_2 + 2 \cdot x_3 \leq 4\\
+        \phantom{} & x_1, x_2, x_3 \geq 0 \\
+    \end{array}
+\end{equation*}
+È sempre possibile convertire un problema di PL in forma standard. Riportiamo la seguente tabelle riassuntiva:
+\begin{center}
+    \includegraphics[width = 1\linewidth]{Images/33.png}
+\end{center}
+\begin{center}
+    \includegraphics[width = 1\linewidth]{Images/34.png}
+\end{center}
 
 \end{document}
