@@ -868,7 +868,7 @@ registra solo l'informazione essenziale:
 La \textbf{forma tabellare} evita di memorizzare i simboli delle variabili in ogni equazione, ma cosa ancor più importante è rappresentata dal fatto che, è possibile evidenziare i numeri che sono coinvolti nelle computazioni ed è possibile memorizzare in modo
 compatto tali numeri. La tabella da utilizzare ha la seguente struttura:
 \begin{center}
-    \includegraphics[width = 1\textwidth]{Images/28.png}
+    \includegraphics[width = 1\textwidth]{Images/28.PNG}
 \end{center}
 La tabella sopra è stata riempita \textbf{basandosi sull'esempio presentato fino ad ora}. Vediamo, sempre utilizzando questo esempio, tutti i passi del metodo del simplesso svolti con la forma tabellare:
 \begin{itemize}
@@ -880,7 +880,7 @@ La tabella sopra è stata riempita \textbf{basandosi sull'esempio presentato fin
     \end{itemize}
     \begin{center}
         \vspace{-0.3cm}
-        \includegraphics[width = 1\linewidth]{Images/29.png}
+        \includegraphics[width = 1\linewidth]{Images/29.PNG}
         \vspace{-1cm}
     \end{center}
     La parte della tabella che comprende le colonne dei valori di $Z, x_1, ..., x_5$ e dei termini noti viene detto \textbf{tableau}.
@@ -893,7 +893,7 @@ La tabella sopra è stata riempita \textbf{basandosi sull'esempio presentato fin
         \item \textbf{ITERAZIONE: PASSO 1}: Identificare la \textbf{variabile entrante in base} (selezionandola tra quelle non di base) come quella cui corrisponde il \textbf{minimo coefficiente negativo nell'equazione (0)}.
         La colonna corrispondente viene denominata \textbf{colonna pivot}.
         \begin{center}
-            \includegraphics[width = 1\linewidth]{Images/30.png}
+            \includegraphics[width = 1\linewidth]{Images/30.PNG}
             \vspace{-0.7cm}
         \end{center}
         In questo caso, la variabile entrante sarà $x_2$.
@@ -905,7 +905,7 @@ La tabella sopra è stata riempita \textbf{basandosi sull'esempio presentato fin
             \item La variabile di quella riga è la variabile di base uscente, rimpiazzarla con la variabile entrante
         \end{enumerate}
         \begin{center}
-            \includegraphics[width = 1\linewidth]{Images/31.png}
+            \includegraphics[width = 1\linewidth]{Images/31.PNG}
         \end{center}
         \item \textbf{ITERAZIONE: PASSO 3}: Determinare la nuova \textbf{soluzione di base} applicando operazioni che consentano l'uso dell'\textbf{eliminazione Gaussiana}.
         \begin{enumerate}
@@ -914,7 +914,7 @@ La tabella sopra è stata riempita \textbf{basandosi sull'esempio presentato fin
             \item Ad ogni altra riga (inclusa la riga 0) che abbia coefficiente positivo nella colonna pivot, sottrarre a questa riga il prodotto del valore assoluto del coefficiente per la nuova riga pivot
         \end{enumerate}
         \begin{center}
-            \includegraphics[width = 0.87\textwidth]{Images/32.png}
+            \includegraphics[width = 0.87\textwidth]{Images/32.PNG}
         \end{center}
         \item \textbf{TEST DI OTTIMALITÀ}: Controlliamo che la nuova riga 0 abbia tutti coefficienti non negativi; se è questo il caso ci fermiamo, altrimenti effettuiamo una nuova iterazione dell'algoritmo
     \end{itemize}
@@ -1042,12 +1042,179 @@ Infine, rinominiamo le variabili per \textbf{consistenza notazionale}, ottenendo
         \phantom{} & x_1, x_2, x_3 \geq 0 \\
     \end{array}
 \end{equation*}
-È sempre possibile convertire un problema di PL in forma standard. Riportiamo la seguente tabelle riassuntiva:
+È sempre possibile convertire un problema di PL in forma standard. Tuttavia c'è da fare un osservazione:
+quando moltiplichiamo un vincolo di $\geq$ per $-1$ per trasformarlo in un vincolo $\leq$, dobbiamo stare attenti
+che il termine noto \textbf{non diventi negativo}; infatti il metodo del simplesso richiede che i termini noti siano
+tutti non negativi. In questo caso, per evitare di effettuare passaggi in più, possiamo tenere il problema in forma non standard
+e trasformarlo direttamente in forma aumentata, trasformando i vincoli nel seguente modo:
+\begin{itemize}
+    \item Per i vincoli di $\geq$ sottraiamo una \textbf{variabile di surplus}
+    \item Per i vincoli di $\leq$ sommiamo una \textbf{variabile di slack}
+\end{itemize}
 \begin{center}
-    \includegraphics[width = 1\linewidth]{Images/33.png}
+    \includegraphics[width = 1\linewidth]{Images/34.PNG}
 \end{center}
+\subsection{Metodo delle 2 fasi}
+Consideriamo un problema di programmazione lineare.
+Ci possono essere dei casi dove la soluzione nulla \textbf{NON è una soluzione di base ammissibile per il problema considerato}: in particolare,
+ciò si può notare dall'\textbf{assenza di una sottomatrice identità all'intendo della matrice dei coefficienti dei vincoli funzionali}.
+Per applicare il metodo del simplesso dobbiamo quindi \textbf{calcolare una soluzione di base ammissibile iniziale}.
+Per farlo usiamo la forma tabellare e applichiamo il \textbf{metodo delle 2 fasi}:
+\begin{enumerate}
+    \item \textbf{Aggiunta di variabili artificiali}: Aggiungiamo delle variabili artificiali in modo da ottenere una sottomatrice identità nella matrice dei
+    coefficienti dei vincoli funzionali; questa sottomatrice identificherà i \textbf{termini da mettere in base}
+    \item \textbf{Problema ausiliario (1° fase del simplesso)}: Il metodo delle due fasi prevede la risoluzione di un problema ausiliario che consiste nella minimizzazione
+    della somma delle variabili artificiali introdotte; questo problema ausiliario mantiene i vincoli funzionali del problema originale. Risolviamo questo
+    problema con il metodo del simplesso per trovare la soluzione di base ammissibile da cui partire per risolvere il problema originale. Possiamo ritrovarci nei seguenti casi:
+    \begin{itemize}
+        \item Il problema ausiliario ha \textbf{ottimo uguale a 0}:
+        \begin{itemize}
+            \item \textbf{Non ci sono variabili artificiali in base}: togliamo le colonne relative alle variabili artificiali e, tenendo i valori ottenuti nell'ultimo tableau del problema ausiliario,
+            riportiamo la funzione obbiettivo originale nella riga 0 del tableau. Risolviamo quindi il tableau ottenuto applicando il metodo del simplesso
+            \item \textbf{Ci sono variabili artificiali in base}: Si devono portare fuori dalla base, poi si procede come sopra
+        \end{itemize}
+        \item Il problema ausiliario ha \textbf{ottimo diverso da 0}: Il problema originale non ha soluzioni
+    \end{itemize}
+\end{enumerate}
+\subsection{Teoria del simplesso}
+Fino ad ora abbiamo utilizzato un esempio specifico per introdurre il concetto di \textbf{vertice ammissibile} e per chiarire il ruolo che gioca
+nel \textbf{metodo del simplesso}. Nello specifico, abbiamo fornito un'interpretazione geometrica e una corrispondente interpretazione algebrica del metodo del simplesso.
+Come facciamo tuttavia a \textbf{generalizzare} questi concetti nel caso di problemi di programmazione lineare con un maggior numero di variabili decisionali e con un maggior numero di vincoli?
+È intuitivo pensare che le \textbf{soluzioni ottimali} di un problema di programmazione lineare giacciano \textbf{sulla frontiera della regione ammissibile}, ed infatti ciò corrisponde al vero.
+A causa del fatto che la frontiera è un concetto geometrico, la prima definizione che forniamo mira a chiarire come identificare algebricamente la frontiera per una data regione ammissibile.
+\textbf{L'equazione della frontiera di un vincolo viene ricavata con le seguenti sostituzioni}:
+\begin{itemize}
+    \item $\leq \rightarrow =$
+    \item $\geq \rightarrow =$ 
+\end{itemize}
+\textbf{L'equazione della frontiera di un vincolo funzionale è}:
+$$a_{i1} \cdot x_1 + a_{i2} \cdot x_2 + ... + a_{in} \cdot x_n = b_i$$
+mentre per un \textbf{vincolo di non negatività} abbiamo $x_j = 0$.
+Ogni equazione definisce una \textbf{figura geometrica "piatta"}, che prende il nome di \textbf{IPERPIANO} nello spazio \textbf{n-dimensionale}, l'analogo di una retta nello spazio
+2-dimensionale e di un piano nello spazio 3-dimensionale.
+\begin{itemize}
+    \item Quando il vincolo è di $\leq$ o di $\geq$, l'iperpiano separa i punti che verificano il vincolo da quelli che lo violano
+    \item Quando il vincolo è di $=$, solo i punti che giacciono sull'iperpiano verificano il vincolo
+\end{itemize}
+La \textbf{frontiera della regione ammissibile} contiene solo quelle soluzioni ammissibili che soddisfano una o più equazioni di frontiera.
+Geometricamente, \textbf{ogni punto sulla frontiera della regione ammissibile giace su uno o più iperpiani definiti dalle rispettive equazioni di frontiera}.
 \begin{center}
-    \includegraphics[width = 1\linewidth]{Images/34.png}
+    \includegraphics[width = 0.60\linewidth]{Images/35.png}
 \end{center}
+Un \textbf{vertice ammissibile} è una soluzione ammissibile che non giace su un segmento che connette altre due soluzioni ammissibili.
+Una soluzione che giace su un segmento che collega due altre soluzioni ammissibili \textbf{non è un vertice ammissibile}. prendendo l'esempio sopra quindi:
+\begin{itemize}
+    \item $(2,3)$ \textbf{non è un vertice ammissibile}, giace sul segmento che collega $(0,3)$ e $(4,3)$
+    \item $(0,3)$ \textbf{non è un vertice ammissibile}, giace sul segmento che collega $(0,0)$ e $(0,6)$
+    \item $(0,0)$ \textbf{è un vertice ammissibile}, non esistono due soluzioni ammissibili tali per cui $(0,0)$ giaccia sul segmento che collega tra loro tali soluzioni ammissibili
+\end{itemize}
+Se il numero di variabili di decisione è 2 o 3, la definizione di vertice ammissibile che abbiamo appena fornito non è particolarmente efficace per identificare tali soluzioni.
+Pertanto, si dimostrerà più utile interpretare queste soluzioni in termini algebrici. In ogni problmea di programmazione lineare con 2 ($n = 2$) variabili di decisione, ogni vertice ammissibile giace all'intersezione
+di 2 ($n = 2$) vincoli, vale a dire che ogni vertice ammissibile è la soluzione di un sistema lineare di 2 equazioni di frontiera.
+In ogni problema di programmazione lineare con $n$ variabili di decisione, \textbf{ogni vertice ammissibile giace all'intersezione di $n$ frontiere di altrettanti vincoli}, vale a dire ogni vertice è la soluzione simultanea
+di un sistema di \textbf{$n equazioni$}, ognuna rappresentante la frontiera di uno degli $n$ vincoli.
+Comunque, \textbf{questo non significa che ogni insieme di $n$ equazioni di frontiera, comunque scelte tra gli $n+m$ vincoli} ($n$ vincoli di non negatività ed $m$ vincoli funzionali), \textbf{determini un vertice ammissibile}.
+In particolare, la soluzione simultanea di un tale sistema lineare potrebbe violare uno più degli $m$ vincoli che non sono stati selezionati per definire il sistema lineare, nel qual caso il vertice individuato sarebbe un \textbf{VERTICE NON AMMISSIBILE}.
+Inoltre, \textbf{un sistema di $n$ equazioni potrebbe non ammettere soluzioni}, tuttavia sistemi di questo tipo non sono di interesse.
+Ultima possibilità è che \textbf{esistano soluzioni multiple dovute a equazioni ridondanti}. Il simplesso gestisce per noi queste situazioni.
+È anche possibile che \textbf{più di un sistema costituito da $n$ equazioni abbia il medesimo vertice come soluzione}.
+\subsubsection{Vertici ammissibili adiacenti}
+Precedentemente abbiamo detto che, quando si ignorano le \textbf{variabili di slack e di surplus}, ogni iterazione dell'algoritmo del simplesso equivale allo spostamento dal corrente vertice ammissibile a un vertice ammissibile a lui adiacente.
+È normale quindi porsi le seguenti domande:
+\begin{itemize}
+    \item Che \textbf{cammino} segue il metodo del simplesso?
+    \item Cosa è un \textbf{vertice ammissibile adiacente}?
+\end{itemize}
+Partiamo con l'affrontare queste domande dal punto di vista geometrico:
+consideriamo il seguente esempio con 2 variabili decisionali:
+\begin{center}
+    \includegraphics[width = 0.50\linewidth]{Images/36.png}
+\end{center}
+la frontiera della regione ammissibile è determinata dai sui \textbf{spigoli}.
+Da ogni vertice ammissibile emanano due spigoli che conducono ai vertici a lui adiacenti.
+Il cammino seguito dal metodo del simplesso, nel caso in cui si parta dal vertice ammissibile (0,0), è mostrato nella
+figura ($1 \rightarrow 2 \rightarrow 3$). Ogni movimento porta ad un vertice ammissibile adiacente, implicando un \textbf{solo cambio nel sistema di equazioni}
+\begin{center}
+    \includegraphics[width = 0.50\linewidth]{Images/37.png}
+\end{center}
+Nel caso in cui $n = 3$, le cose diventano un poco più complesse. Consideriamo il seguente esempio:
+\begin{center}
+    \includegraphics[width = 0.60\linewidth]{Images/38.png}
+\end{center}
+Come possiamo notare:
+\begin{itemize}
+    \item La \textbf{regione ammissibile} non è più un poligono come nel caso $n = 2$ ma è invece un \textbf{poliedro}
+    \item Le \textbf{equazioni di frontiera} sono \textbf{piani} e non più \textbf{rette} come nel caso $n = 2$
+    \item Ogni vertice ammissibile giace all'intersezione di 3 equazioni di frontiera, verificando anche i vincoli restanti
+    \item Le intersezioni che non soddisfano uno o più dei restanti vincoli individuano \textbf{vertici non ammissibili}
+\end{itemize}
+\begin{center}
+    \includegraphics[width = 0.60\linewidth]{Images/39.png}
+\end{center}
+Facciamo un esempio di \textbf{cammino del metodo del simplesso}: supponiamo di partire dal vertice $(2, 4, 3)$ e che l'algoritmo
+ci porti a spostarsi nel vertice $(4, 2, 4)$.
+\begin{center}
+    \includegraphics[width = 0.60\linewidth]{Images/40.png}
+\end{center}
+\noindent Il vertice $(2, 4, 3)$ giace all'intersezione delle seguenti equazioni di frontiera:
+\begin{equation*}
+    \begin{cases}
+        x_2 = 4 \\
+        x_1 + x_2 = 6 \\
+        -x_1 + 2 \cdot_x3 = 4
+    \end{cases}
+\end{equation*}
+\begin{center}
+    \includegraphics[width = 0.60\linewidth]{Images/41.png}
+\end{center}
+\noindent I $(2, 4, 3)$ e $(4, 2, 4)$ sono \textbf{vertici adiacenti}. Per $n=3$ tutti gli \textbf{spigoli della regione ammissibile} sono formati analogamente,
+come intersezione di coppie di equazioni di frontiera.
+\begin{center}
+    \includegraphics[width = 0.60\linewidth]{Images/42.png}
+\end{center}
+Per il vertice ammissibile $(2, 4, 3)$ abbiamo tre modi di rimuovere un'equazione delle tre sopra riportate.
+Ogni modo porta ad un vertice adiacente differente
+\begin{center}
+    \includegraphics[width = 0.60\linewidth]{Images/43.png}
+\end{center}
+Se $n>3$, i concetti esposti generalizzano, eccezion fatta per le frontiere dei vincoli che ora sono \textbf{iperpiani} al posto di \textbf{piani} come nel caso $n = 3$.
+Dato un problema di programmazione lineare con $n$ \textbf{variabili decisionali e regione ammissibile limitata} avremo che:
+\begin{itemize}
+    \item \textbf{Un vertice ammissibile giace all'intersezione di $n$ equazioni di frontiera} (e soddisfa anche i restanti vincoli)
+    \item \textbf{Uno spiglo della regione ammissibile è un segmento che giace all'intersezione di $n-1$ equazioni di frontiera}, dove ogni vertice stremo giace su un'equazione di frontiera addizionale (tale che gli estremi siano vertici ammissibili)
+    \item \textbf{Due vertici ammissibili sono adiacenti se il segmento che li collega è uno spigolo della regione ammissibile}
+    \item \textbf{Da ogni vertice ammissibile emanano $n$ spigoli, ognuno conduce ad uno degli $n$ vertici ammissibili adiacenti}
+    \item \textbf{Ogni iterazione del metodo del simplesso si sposta dal corrente vertice ammissibile ad un vertice ammissibile adiacente muovendosi su questi spigoli}
+\end{itemize}
+Passando all'interpretazione \textbf{algebrica} avremo che \textbf{l'intersezione delle equazioni di frontiera equivale alla loro risoluzione simultanea in termini del corrispondente sistema lineare}.
+Alcune implicazioni di quanto abbiamo appena presentato sono:
+\begin{itemize}
+    \item Quando il metodo del simplesso \textbf{sceglie la variabile entrante in base}, l'interpretazione geometrica è che il metodo del simplesso stia \textbf{scegliendo uno degli spigoli che emanano dal vertice ammissibile corrente}
+    \item \textbf{Aumentare il valore della variabile entrante in base}, a partire dal valore zero, e contemporaneamente variare il valore delle restanti variabili di base, \textbf{corrisponde a muoversi lungo lo spigolo scelto}
+    \item Il valore di un adelle variabili di base correnti, in particolare la \textbf{variabile uscente dalla base}, viene ridotto fino a raggiungere il valore zero, il che significa che il \textbf{raggiungimento della frontiera del vincolo} che si trova all'altro \textbf{estremo dello spigolo} della regione ammissibile
+\end{itemize}
+\subsubsection{Proprietà dei vertici ammissibili}
+In un problema di programmazione lineare che abbia soluzioni ammissibili e con regione ammissibile limitata, i vertici ammissibili hanno le seguenti proprietà:
+\begin{itemize}
+    \item \textbf{PROPRIETÀ 1}:
+    \begin{itemize}
+        \item Se esiste solo una soluzione ottimale, allora questa è un \textbf{vertice ammissibile}. In ogni problema che ammette una sola soluzione ottimale, è sempre possibile far aumentare il valore della funzione obbiettivo fino a che non si raggiunga un vertice (la soluzione ottimale) della regione ammissibile.
+        \item Se esistono soluzioni ottime multiple (e la regione ammissibile è limitata), allora \textbf{almeno due di queste soluzioni sono vertici ammissibili tra loro adiacenti}. Nel caso di $n = 2$, la risoluzione grafica consisterebbe nel far aumentare la funzione obbiettivo sino a farla sovrapporre con il segmento (spigolo) che connette due vertici ammissibili.
+        Lo stesso accadrebbe nel caso di più variabili di decisione, tranne che in questo caso la funzione obbiettivo sarebbe associata ad un iperpiano che verrebbe fatto aumentare sino a toccare lo(gli) spigolo(i) tali da collegare vertici ammissibili adiacenti. Come conseguenza, \textbf{tutte le soluzioni ottimali sono ottenibili come media pesata dei vertici ammissibili ottimali}
+    \end{itemize}
+    \item \textbf{PROPRIETÀ 2}: Ogni vertice ammissibile è soluzione di un sistema lineare formato da $n$ equazioni scelte tra $m+n$ vincoli ($n$ vincoli di non negatività ed $m$ vincoli funzionali).
+    Il numero di combinazioni di $m+n$ vincoli, presi a gruppi di $n$, è pari a:
+    $$\binom{m+n}{n} = \frac{(m+n)!}{m!n!}$$
+    che è un numero finito. Questa quantità rappresenta un \textbf{limite superiore al numero di vertici ammissibili}.
+    \item \textbf{PROPRIETÀ 3}: Se un vertice ammissibile non ha vertii ammissibili a lui adiacenti che coincidono con soluzioni con valore migliore della funzione obbiettivo $Z$, allora non esistono soluzioni ottimali migliori di quella che coincide con il vertice ammissibile in esame.
+    Pertanto, un tal vertice, in base alla \textbf{PROPRIETÀ 1}, è garantito coincidere con una soluzione ottimale, e questo semplicemente assumendo che il problema di PL considerato ammetta almeno una soluzione ottimale, il che è garantito se si assume che il problema di PL abbia soluzione ammissibile e la sua regione ammissibile sia limitata.
+    La motivazione base per la quale questa proprietà è sempre valida in un problema di PL è che \textbf{la regione ammissibile è sempre un INSIEME CONVESSO}:
+    \begin{itemize}
+        \item Un \textbf{insieme} viene detto \textbf{convesso} se è una collezione di punti tali che, per ogni coppia di punti appartenenti alla collezione, l'intero segmento che collega la coppia di punti appartiene anch'esso alla collezione.
+    \end{itemize}
+    Nel caso di un problema di PL con due variabili decisionali, la \textbf{proprietà di convessità} significa che l'angolo interno alla regione ammissibile misurato in ogni vertice ammissibile è \textbf{minore di 180°}.
+\end{itemize}
+
+
 
 \end{document}
