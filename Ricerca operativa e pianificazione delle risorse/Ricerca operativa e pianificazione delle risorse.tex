@@ -205,7 +205,7 @@ Procediamo come segue:
     \item Applicare il processo di \textbf{Back-walk substitution}: dall'ultima equazione, tornare indietro e risolvere le restanti
 \end{enumerate}
 \subsubsection{Metodo di eliminazione di Gauss}
-Il metodo di eliminazione di Gauss è un metodo di eliminazione che utilizza solo le operazioni elementari su matrici, cioé:
+Il metodo di eliminazione di Gauss è un metodo di eliminazione che utilizza solo le operazioni elementari su matrici, cioè:
 \begin{itemize}
     \item Moltiplicare una riga per uno scalare non nullo
     \item Sommare una riga moltiplicata per uno scalare non nullo con un'altra riga
@@ -733,7 +733,7 @@ Come già detto, il metodo del simplesso è un \textbf{algoritmo} e quindi è fo
 Il metodo del simplesso si basa su \textbf{sei concetti chiave}:
 \begin{itemize}
     \item \textbf{Concetto chiave 1}: Il metodo del simplesso ispeziona solo soluzioni ammissibili corrispondenti a vertici.
-    \textbf{Per ogni problema di PL che ametta almeno una soluzione ottimale, trovarne una, richiede di trovare solamente il vertice ammissibile cui compete il miglior valore della funzione obbiettivo}(La sola restrizione è che il problema possegga vertici ammissibili. Ciò è garantito dal fatto che la regione ammissibile sia limitata).
+    \textbf{Per ogni problema di PL che ammetta almeno una soluzione ottimale, trovarne una, richiede di trovare solamente il vertice ammissibile cui compete il miglior valore della funzione obbiettivo}(La sola restrizione è che il problema possegga vertici ammissibili. Ciò è garantito dal fatto che la regione ammissibile sia limitata).
     Dato che il numero di soluzioni ammissibili è generalmente infinito, ridurre il numero di soluzioni da ispezionare ad un numero finito e piccolo è una semplificazione notevole.
     \item \textbf{Concetto chiave 2}: Il metodo del simplesso è un algoritmo iterativo con la seguente struttura:
     \begin{enumerate}
@@ -1109,7 +1109,7 @@ Una soluzione che giace su un segmento che collega due altre soluzioni ammissibi
     \item $(0,0)$ \textbf{è un vertice ammissibile}, non esistono due soluzioni ammissibili tali per cui $(0,0)$ giaccia sul segmento che collega tra loro tali soluzioni ammissibili
 \end{itemize}
 Se il numero di variabili di decisione è 2 o 3, la definizione di vertice ammissibile che abbiamo appena fornito non è particolarmente efficace per identificare tali soluzioni.
-Pertanto, si dimostrerà più utile interpretare queste soluzioni in termini algebrici. In ogni problmea di programmazione lineare con 2 ($n = 2$) variabili di decisione, ogni vertice ammissibile giace all'intersezione
+Pertanto, si dimostrerà più utile interpretare queste soluzioni in termini algebrici. In ogni problema di programmazione lineare con 2 ($n = 2$) variabili di decisione, ogni vertice ammissibile giace all'intersezione
 di 2 ($n = 2$) vincoli, vale a dire che ogni vertice ammissibile è la soluzione di un sistema lineare di 2 equazioni di frontiera.
 In ogni problema di programmazione lineare con $n$ variabili di decisione, \textbf{ogni vertice ammissibile giace all'intersezione di $n$ frontiere di altrettanti vincoli}, vale a dire ogni vertice è la soluzione simultanea
 di un sistema di \textbf{$n equazioni$}, ognuna rappresentante la frontiera di uno degli $n$ vincoli.
@@ -1181,7 +1181,7 @@ Se $n>3$, i concetti esposti generalizzano, eccezion fatta per le frontiere dei 
 Dato un problema di programmazione lineare con $n$ \textbf{variabili decisionali e regione ammissibile limitata} avremo che:
 \begin{itemize}
     \item \textbf{Un vertice ammissibile giace all'intersezione di $n$ equazioni di frontiera} (e soddisfa anche i restanti vincoli)
-    \item \textbf{Uno spiglo della regione ammissibile è un segmento che giace all'intersezione di $n-1$ equazioni di frontiera}, dove ogni vertice stremo giace su un'equazione di frontiera addizionale (tale che gli estremi siano vertici ammissibili)
+    \item \textbf{Uno spigolo della regione ammissibile è un segmento che giace all'intersezione di $n-1$ equazioni di frontiera}, dove ogni vertice stremo giace su un'equazione di frontiera addizionale (tale che gli estremi siano vertici ammissibili)
     \item \textbf{Due vertici ammissibili sono adiacenti se il segmento che li collega è uno spigolo della regione ammissibile}
     \item \textbf{Da ogni vertice ammissibile emanano $n$ spigoli, ognuno conduce ad uno degli $n$ vertici ammissibili adiacenti}
     \item \textbf{Ogni iterazione del metodo del simplesso si sposta dal corrente vertice ammissibile ad un vertice ammissibile adiacente muovendosi su questi spigoli}
@@ -1191,7 +1191,7 @@ Alcune implicazioni di quanto abbiamo appena presentato sono:
 \begin{itemize}
     \item Quando il metodo del simplesso \textbf{sceglie la variabile entrante in base}, l'interpretazione geometrica è che il metodo del simplesso stia \textbf{scegliendo uno degli spigoli che emanano dal vertice ammissibile corrente}
     \item \textbf{Aumentare il valore della variabile entrante in base}, a partire dal valore zero, e contemporaneamente variare il valore delle restanti variabili di base, \textbf{corrisponde a muoversi lungo lo spigolo scelto}
-    \item Il valore di un adelle variabili di base correnti, in particolare la \textbf{variabile uscente dalla base}, viene ridotto fino a raggiungere il valore zero, il che significa che il \textbf{raggiungimento della frontiera del vincolo} che si trova all'altro \textbf{estremo dello spigolo} della regione ammissibile
+    \item Il valore di una delle variabili di base correnti, in particolare la \textbf{variabile uscente dalla base}, viene ridotto fino a raggiungere il valore zero, il che significa che il \textbf{raggiungimento della frontiera del vincolo} che si trova all'altro \textbf{estremo dello spigolo} della regione ammissibile
 \end{itemize}
 \subsubsection{Proprietà dei vertici ammissibili}
 In un problema di programmazione lineare che abbia soluzioni ammissibili e con regione ammissibile limitata, i vertici ammissibili hanno le seguenti proprietà:
@@ -1206,7 +1206,7 @@ In un problema di programmazione lineare che abbia soluzioni ammissibili e con r
     Il numero di combinazioni di $m+n$ vincoli, presi a gruppi di $n$, è pari a:
     $$\binom{m+n}{n} = \frac{(m+n)!}{m!n!}$$
     che è un numero finito. Questa quantità rappresenta un \textbf{limite superiore al numero di vertici ammissibili}.
-    \item \textbf{PROPRIETÀ 3}: Se un vertice ammissibile non ha vertii ammissibili a lui adiacenti che coincidono con soluzioni con valore migliore della funzione obbiettivo $Z$, allora non esistono soluzioni ottimali migliori di quella che coincide con il vertice ammissibile in esame.
+    \item \textbf{PROPRIETÀ 3}: Se un vertice ammissibile non ha vertici ammissibili a lui adiacenti che coincidono con soluzioni con valore migliore della funzione obbiettivo $Z$, allora non esistono soluzioni ottimali migliori di quella che coincide con il vertice ammissibile in esame.
     Pertanto, un tal vertice, in base alla \textbf{PROPRIETÀ 1}, è garantito coincidere con una soluzione ottimale, e questo semplicemente assumendo che il problema di PL considerato ammetta almeno una soluzione ottimale, il che è garantito se si assume che il problema di PL abbia soluzione ammissibile e la sua regione ammissibile sia limitata.
     La motivazione base per la quale questa proprietà è sempre valida in un problema di PL è che \textbf{la regione ammissibile è sempre un INSIEME CONVESSO}:
     \begin{itemize}
@@ -1216,7 +1216,7 @@ In un problema di programmazione lineare che abbia soluzioni ammissibili e con r
 \end{itemize}
 \subsection{Teoria della dualità}
 Uno degli sviluppi più importanti della programmazione lineare è il concetto di \textbf{dualità} insieme alle sue importanti ramificazioni.
-Questi svziluppi hanno rivelato che ogni problema di programmazione lineare ha associato un'altro problema di programmazione lineare chiamato \textbf{DUALE}.
+Questi sviluppi hanno rivelato che ogni problema di programmazione lineare ha associato un'altro problema di programmazione lineare chiamato \textbf{DUALE}.
 Le relazioni esistenti tra il \textbf{PROBLEMA DUALE} ed il problema originale, chiamato \textbf{PROBLEMA PRIMALE}, si dimostrano utili da diversi punti di vista.
 Per esempio, mostreremo in seguito che i \textbf{prezzi ombra} sono forniti dalla \textbf{soluzione ottimale del problema duale}.
 Uno degli utilizzi più importanti della teoria della dualità è relativo a interpretazione e implementazione dell'\textbf{analisi di sensitività}.
@@ -1224,6 +1224,346 @@ L'analisi si sensitività è una componente molto importante in ogni studio che 
 Infatti, molti dei parametri utilizzati nel modello originale non sono altro che stime di condizioni che si realizzeranno in condizioni future, e pertanto è necessario studiare quale sia l'effetto
 sulla soluzione ottimale nel caso in cui alla prova dei fatti si realizzino condizioni differenti da quelle ipotizzate.
 Inoltre, i valori di alcuni parametri (come ad esempio le quantità di risorse rese disponibili) dipendono da decisioni manageriali, in questo caso la scelta del valore dei parametri può rappresentare la questione principale da investigare tramite l'analisi della sensitività.
-
+Vediamo quindi quali sono le relazioni tra problema primale e problema duale:
+\begin{center}
+    \noindent
+    \makebox[\textwidth]{\includegraphics[width = 0.80\paperwidth]{Images/44.png}}
+\end{center}
+Per enfatizzare il parallelismo tra Primale e Duale, procediamo in forma matriciale:
+il problema primale si può descrivere nel seguente modo:
+\begin{equation*}
+    \begin{array}{ll}
+        \displaystyle \textrm{max} & \; Z = \boldsymbol{c}\boldsymbol{x}\\
+        \textrm{s.a.} & \boldsymbol{A}\boldsymbol{x} \leq \boldsymbol{b}\\
+        \phantom{} & \boldsymbol{x} \geq 0 \\
+    \end{array}
+\end{equation*}
+Con $\boldsymbol{c} = [c_1, c_2, ..., c_n]$, $\boldsymbol{x} = \begin{bmatrix}
+    x_1 \\
+    x_2 \\
+    \vdots \\
+    x_n
+\end{bmatrix}$ e $A = [a_{ij}]$ è la matrice $m \times n$ dei coefficienti tecnologici.
+Il problema duale corrispondente può essere quindi descritto nel seguente modo:
+\begin{equation*}
+    \begin{array}{ll}
+        \displaystyle \textrm{min} & \; W = \boldsymbol{y}\boldsymbol{b}\\
+        \textrm{s.a.} & \boldsymbol{y}\boldsymbol{A} \geq \boldsymbol{c}\\
+        \phantom{} & \boldsymbol{y} \geq 0 \\
+    \end{array}
+\end{equation*}
+con $y = [y_1, y_2, ..., y_m]$ e $\boldsymbol{b} = \begin{bmatrix}
+    b_1 \\
+    b_2 \\
+    \vdots \\
+    b_m
+\end{bmatrix}$. \newline
+Facciamo un esempio:
+\begin{center}
+    \vspace{-0.2cm}
+    \makebox[\textwidth]{\includegraphics[width = 0.90\paperwidth]{Images/45.png}}
+\end{center}
+\newpage \noindent
+La relazione tra primale e duale si può tradurre anche in \textbf{forma tabellare}:
+\begin{center}
+    \includegraphics[width = 0.80\linewidth]{Images/46.png}
+\end{center}
+\subsubsection{Origine del duale}
+Il contenuto della riga (0) del tableau, in corrispondenza di una generica iterazione del \textbf{metodo del simplesso} applicato al \textbf{problema primale}, è riportato di seguito:
+\begin{center}
+    \makebox[\textwidth]{\includegraphics[width = 0.80\paperwidth]{Images/47.png}}
+\end{center}
+Si osservi che per i coefficienti di $x_1, x_2, ..., x_n$ con $\boldsymbol{z} = (z_1, z_2, ..., z_n)$ indichiamo con $-\boldsymbol{c}$ il vettore che il metodo del simplesso
+ha sommato ai coefficienti iniziali per ottenere il tableau corrente.
+Similmente dato che i coefficienti iniziali di $x_{n+1}, x_{n+2}, ..., x_{n+m}$ nella riga (0) sono tutti 0 nel tableau iniziale,
+$\boldsymbol{y} = (y_1, y_2, ..., y_m)$ indica il vettore che il metodo del simplesso ha sommato a tali coefficienti.
+Si può dimostrare che valgono le seguenti relazioni:
+$$W = \boldsymbol{y}\boldsymbol{b} = \sum_{i=1}^m b_i \cdot y_i$$
+$$\boldsymbol{z} = \boldsymbol{y}\boldsymbol{A} \Rightarrow z_j = \sum_{i=1}^m a_{ij} \cdot y_i, j = 1,2,...,n$$
+Facciamo un esempio per chiarire il concetto: prendiamo in considerazione il seguente problema di PL:
+\begin{equation*}
+    \begin{array}{ll}
+        \displaystyle \textrm{max} & \; Z = 3 \cdot x_1 + 5 \cdot x_2\\
+        \textrm{s.a.} & x_1 \leq 4\\
+        \phantom{} & 2 \cdot x_2 \leq 12\\
+        \phantom{} & 3 \cdot x_1 + 2 \cdot x_2 \leq 18 \\
+        \phantom{} & x_1,x_2 \geq 0
+    \end{array}
+\end{equation*}
+Poiché il problema duale è esprimibile nel seguente modo:
+\begin{equation*}
+    \begin{array}{ll}
+        \displaystyle \textrm{min} & \; W = \sum_{i=1}^m b_i \cdot y_i\\
+        \textrm{s.a.} & \sum_{i=1}^m a_{ij} \cdot y_i \geq c_j, j= 1,...,n\\
+        \phantom{} & y_i \geq 0, i=1,...,m
+    \end{array}
+\end{equation*}
+Allora la \textbf{funzione obbiettivo del problema duale} è:
+$$W = 4 \cdot y_1 + 12 \cdot y_2 + 18 \cdot y_3$$
+I termini sinistri dei \textbf{vincoli del problema duale} si ottengono guardando i vincoli del problema primale "colonna per colonna":
+$$z_1 = y_1 + 3 \cdot y_3$$
+$$z_2 = 2 \cdot y_2 + 2 \cdot y_3$$
+Pertanto, sottraendo i termini noti a destra dei vincoli di $\geq$, in questo caso $c_1 = 3$ e $c_2 =5$, allora
+$(z_1 - c_1)$ e $(z_2 - c_2)$ sono interpretabili come \textbf{variabili di surplus} di questi vincoli funzionali, e risultano:
+$$z_1 - c_1 = y_i + 3 \cdot y_3 - c_1$$
+$$z_2 - c_2 = 2 \cdot y_2 + 2 \cdot y_3 - c_2$$
+Esprimiamo ora, in termini simbolici, cosa cerca di ottenere il metodo del simplesso dal punto di vista del \textbf{test di ottimalità}. Il 
+\textbf{metodo del simplesso}
+\begin{itemize}
+    \item Cerca un insieme di variabili di base, e la corrispondente soluzione ammissibile di base, tale che tutti i coefficienti della riga (0) siano non negativi
+    \item Termina restituendo questa come soluzione ottimale
+\end{itemize}
+Adottando la notazione della tabella sopra, l'obbiettivo inseguito dal metodo del simplesso è esprimibile come segue:
+\begin{center}
+    \includegraphics[width = 0.45\linewidth]{Images/48.png}
+\end{center}
+Sostituendo:
+$$z_j = \sum_{i=1}^{m} a_{ij} \cdot y_i$$
+in
+$$z_j - c_j \geq 0, j = 1,...,n$$
+$$y_i \geq 0, i = 1,...,m$$
+e ricordando che
+$$W = \sum_{i=1}^{m} b_i \cdot y_i$$
+la condizione di ottimalità indica che il metodo del simplesso cerca i valori $y_1, y_2, ..., y_m$ tali che
+$$W = \sum_{i=1}^{m} b_i \cdot y_i$$
+$$\sum_{i=1}^{m} a_{ij} \cdot y_i \geq c_j, j= 1,...,n$$
+$$y_i \geq 0, i = 1,...,m$$
+Fatta eccezione per la mancanza del tipo di obbiettivo da ottimizzare per $W$, questo problema è \textbf{esattamente il problema duale}:
+\begin{equation*}
+    \begin{array}{ll}
+        \displaystyle \textrm{min} & \; W = \sum_{i=1}^m b_i \cdot y_i\\
+        \textrm{s.a.} & \sum_{i=1}^m a_{ij} \cdot y_i \geq c_j, j= 1,...,n\\
+        \phantom{} & y_i \geq 0, i=1,...,m
+    \end{array}
+\end{equation*}
+Per completare la formulazione, dovremmo mostrare come determinare il tipo di obbiettivo per $W$, cosa che affronteremo successivamente.
+Il problema duale può allora essere visto come una diversa formulazione, in termini di PL, di quello che è l'obbiettivo del metodo del simplesso, vale a dire,
+ottenere una soluzione del problema primale che soddisfi il test di ottimalità:
+\begin{itemize}
+    \item Prima di ottenere una soluzione del problema primale che soddisfi il test di ottimalità, il vettore riga $\boldsymbol{y}$ della riga (0) (coefficienti delle variabili di slack) del tableau corrente
+    deve essere inammissibile per il problema duale ($y_1 < 0$ per qualche $i$)
+    \item Ottenuta una soluzione del problema primale che soddisfi il test di ottimalità, il corrispondente vettore $\boldsymbol{y}$ della riga (0) deve essere una soluzione ottimale $\boldsymbol{y}^*$ per il problema duale,
+    in quanto soluzione ammissibile che ottiene il minimo valore della funzione obbiettivo $W$
+\end{itemize}
+La soluzione ottimale $\boldsymbol{y}^* = (y_1^*, y_2^*, ..., y_m^*)$ fornisce i \textbf{prezzi ombra} del problema primale. Inoltre, il valore ottimale di $W$ \textbf{è il valore ottimale di $Z$}, pertanto i valori ottimali delle due funzioni obbiettivo,
+primale e duale, \textbf{sono uguali}. Questo implica che $\boldsymbol{c}\boldsymbol{x} \leq \boldsymbol{y}\boldsymbol{b}$, per ogni $\boldsymbol{x}$ e $\boldsymbol{y}$ che siano ammissibili rispettivamente per il primale e per il duale.
+\subsubsection{Relazione primale-duale}
+Formalizziamo le relazioni Primale-Duale:
+\begin{itemize}
+    \item \textbf{Proprietà di dualità debole}: se $\boldsymbol{x}$ è una soluzione ammissibile per il problema primale e $\boldsymbol{y}$ è una soluzione ammissibile per il corrispondente problema duale, allora vale la seguente disuguaglianza:
+    $$\boldsymbol{c}\boldsymbol{x} \leq \boldsymbol{y}\boldsymbol{b}$$
+    \item \textbf{Proprietà di dualità forte}: se $\boldsymbol{x}^*$ è una soluzione ottimale per il problema primale e $\boldsymbol{y}^*$ è una soluzione ottimale per il corrispondente problema duale, allora vale la seguente uguaglianza:
+    $$\boldsymbol{c}\boldsymbol{x}^* = \boldsymbol{y}^*\boldsymbol{b}$$
+\end{itemize}
+Queste due proprietà, se considerate insieme, implicano che la diseguaglianza vale per le soluzioni ammissibili se una o entrambe non sono ottimali per i corrispondenti problemi,
+l'uguaglianza vale solo se entrambe sono soluzioni ottimali.
+La \textbf{proprietà di dualità debole} descrive la relazione esistente tra ogni coppia di soluzioni, una del primale ed una del duale, nel caso in cui entrambe siano ammissibili per i rispettivi problemi.
+Ad ogni iterazione, il metodo del simplesso trova una specifica coppia di soluzioni per i due problemi, dove la soluzione del primale è ammissibile mentre quella del duale non è ammissibile, fatta eccezione per l'ultima iterazione, quella che vede l'arresto del metodo del simplesso.
+La proprietà che enunciamo di seguito descrive situazione e relazione tra coppie di soluzioni, primale/duale:
+\begin{itemize}
+    \item \textbf{Proprietà delle soluzioni complementari}: ad ogni iterazione, il metodo del simplesso identifica simultaneamente una soluzione vertice ammissibile $\boldsymbol{x}$ per il problema primale
+    e una soluzione complementare $\boldsymbol{y}$ per il problema duale (reperibile nella riga (0), i coefficienti delle variabili di slack), dove
+    $$\boldsymbol{c}\boldsymbol{x} = \boldsymbol{y}\boldsymbol{b}$$
+    Se $\boldsymbol{x}$ non è ottimale per il problema primale, allora $\boldsymbol{y}$ non è ammissibile per il problema duale
+    \item \textbf{Proprietà delle soluzioni ottimale complementari}: all'iterazione finale, il metodo del simplesso identifica simultaneamente una soluzione ottimale $\boldsymbol{x}^*$ per il problema primale e una soluzione
+    ottimale complementare $\boldsymbol{y}^*$ per il problema duale (reperibile nella riga (0), i coefficienti delle variabili di slack), dove
+    $$\boldsymbol{c}\boldsymbol{x}^* = \boldsymbol{y}^*\boldsymbol{b}$$
+\end{itemize}
+Le componenti $y_i^*$ sono i \textbf{PREZZI OMBRA DEL PROBLEMA PRIMALE}.
+Un'altra proprietà interessante è la seguente:
+\begin{itemize}
+    \item \textbf{Proprietà di simmetria}: per ogni problema primale e relativo problema duale, tutte le relazioni tra loro debbono essere simmetriche in quanto, come vedremo successivamente, il problema duale del problema duale è il problema primale
+\end{itemize}
+Questo significa che le proprietà di dualità debole, di dualità forte, di soluzioni complementari, di soluzioni ottime complementari, sono valide sia per il problema primale che il corrispondete problema duale.
+Sino ad ora, abbiamo focalizzato l'attenzione alle relazioni tra soluzioni ammissibili o ottimali del problema primale e le corrispondenti soluzioni del problema duale.
+Comunque, è possibile che il problema primale (duale) non abbia soluzioni ammissibili o abbia soluzioni ammissibili ma non soluzioni ottimali (funzione obbiettivo illimitata).
+L'ultima proprietà che presentiamo, riassume le relazioni primale-duale in tutti i casi possibili:
+\begin{itemize}
+    \item \textbf{TEOREMA DI DUALITÀ}: le sole relazioni possibili tra problema primale e duale sono le seguenti:
+    \begin{enumerate}
+        \item Se un problema ha \textbf{soluzioni ammissibili} e \textbf{funzioni obbiettivo limitata} (pertanto tale da avere soluzione ottimale), allora la stessa cosa vale per il problema duale, per cui sia la proprietà debole della dualità che la proprietà forte della dualità sono applicabili
+        \item Se un problema ha \textbf{soluzioni ammissibili} e \textbf{funzione obbiettivo illimitata} (pertanto tale da non avere soluzione ottimale), allora l'altro problema non ha soluzioni ammissibili
+        \item Se un problema \textbf{non ha soluzioni ammissibili}, allora l'altro problema o non ha soluzioni ammissibili o ha una funzione obbiettivo illimitata
+    \end{enumerate}
+\end{itemize}
+\subsubsection{Interpretazione del duale}
+L'interpretazione economica della dualità è basata sull'interpretazione del problema primale in \textbf{forma standard} che abbiamo presentato precedentemente e che riportiamo di seguito per comodità:
+\begin{itemize}
+    \item $Z =$ valore della misura di prestazione
+    \item $x_j =$ livello di attività $"j"$
+    \item $c_j =$ incremento del valore della misura di prestazione $Z$ corrispondente all'incremento di un'unità del valore dell'attività $x_j$
+    \item $b_i =$ quantità di risorsa $"i"$ allocabile alle attività $x_j, j = 1,...,n$
+    \item $a_{ij} =$ quantità di risorsa $"i"$ consumata da ogni unità di attività $x_j, j = 1,...,n$
+\end{itemize}
+Il problema di programmazione lineare è quindi formulabile come:
+\begin{equation*}
+    \begin{array}{ll}
+    \displaystyle \textrm{max} & \; Z = c_1 \cdot x_1 + c_2 \cdot x_2 +...+ c_n \cdot x_n\\
+    \textrm{s.a.} & a_{11} \cdot x_1 + a_{12} \cdot x_2 +...+ a_{1n} \cdot x_n \leq b_1 \\
+    \phantom{} & a_{21} \cdot x_1 + a_{22} \cdot x_2 +...+ a_{2n} \cdot x_n \leq b_2 \\
+    \phantom{} &... ... ... + ... ... ... + ... + ... ... ... \leq ... \\
+    \phantom{} & a_{m1} \cdot x_1 + a_{m2} \cdot x_2 +...+ a_{mn} \cdot x_n \leq b_m \\
+    \phantom{} &x_1 \geq 0, x_2 \geq 0, x_3 \geq 0 ..., x_m \geq 0
+    \end{array}
+\end{equation*}
+Per mostrare come l'interpretazione del primale conduca all'interpretazione economica del duale, osserviamo che il valore di $W$ è uguale al valore del profitto totale $Z$, ($W = Z$), (\textbf{PROPRIETÀ DELLE SOLUZIONI COMPLEMENTARI})
+ad ogni iterazione corrente del metodo del simplesso.
+Siccome $W = b_1 \cdot y_1 + b_2 \cdot y_2 + ... + b_m \cdot y_m$, ogni $b_i \cdot y_i$ è interpretabile come contributo corrente al profitto
+$Z = W$ se $b_i$ unità di risorse $"i"$ sono rese disponibili per il primale. Pertanto \textbf{la variabile duale $y_i$ è interpretata come il contributo al profitto per unità di risorsa $"i"$, quando il corrente insieme di variabili di base viene utilizzato per ricavare la soluzione del primale}.
+In altri termini, i valori $y_i$ (o $y_i^*$ nel caso di soluzione ottimale) sono i \textbf{PREZZI OMBRA}.
+Consideriamo il problema che abbiamo presentato come esempio fino ad ora: 
+\begin{center}
+    \includegraphics[width = 1\linewidth]{Images/49.png}
+\end{center}
+\noindent
+all'iterazione $2$ il metodo del simplesso trova la soluzione ottimale, e trova allo stesso tempo il valore ottimale delle variabili duali
+$\underbrace{y_1^* = 0, y_2^* = \frac{3}{2}, y_3^* = 1}_{\textrm{Prezzi ombra}}$.
+Essi indicano che aumentando individualmente ogni termine $b_i$ di un'unità (1), il valore ottimale della funzione obbiettivo (profitto) aumenta di $y_i^*$.
+Pertanto, $y_i^*$ è interpretabile come \textbf{contributo al profitto per unità di risorsa $"i"$ se si utilizza la soluzione ottimale}.
+Questa interpretazione delle variabili duali porta ad una conseguente interpretazione dell'intero problema duale. Nello specifico, dato che ogni unità di attività $"j"$ del problema
+primale consuma $a_{ij}$ unità della risorsa "i", allora $\sum_{i=1}^m a_{ij} \cdot y_i$ è interpretabile come \textbf{il contributo corrente al profitto}, del mix di risorse che verrebbero consumate,
+\textbf{se un'unità (1) di attività "j" venisse utilizzata ($j = 1, 2, ..., n$)}.
+Per ogni attività $"j"$, lo stesso mix di risorse può probabilmente essere utilizzato in modi differenti, ma nessun utilizzo alternativo che risulti meno "profittevole" di 1 unità dell'attività "$j$" dovrebbe essere
+considerato come potenziale alternativa. Dato che $c_j$ è interpretato come il \textbf{profitto unitario per l'attivita $"j"$}, allora ogni \textbf{vincolo funzionale del problema duale} viene interpretato come segue:
+$\sum_{i=1}^{m} a_{ij} \cdot y_i \geq c_j$; dice che il contributo effettivo al profitto del mix di risorse deve essere almeno pari a quello che si otterrebbe nel caso di un'unità (1) di attività $"j"$; altrimenti, saremmo
+nelle condizioni non utilizzare al meglio quelle risorse.
+Per il problema presentato come esempio, i profitti unitari sono $c_1 =3$ e $c_2 = 5$, pertanto i vincoli funzionali del duale, interpretabili come sopra, sono
+$$y_1 + 3 \cdot y_3 \geq 3$$
+$$2 \cdot y_2 + 2 \cdot y_2 \geq 5$$
+In modo similare, \textbf{l'interpretazione dei vincoli di non negatività} è enunciabile come segue:
+$y_i \geq 0$; indica che il \textbf{contributo al profitto della risorsa $"i" (i = 1, 2, ..., m)$ deve essere non negativo}: altrimenti, risulterebbe meglio \textbf{non utilizzare la risorsa $"i"$}.
+L'obbiettivo:
+$$\textrm{min} \; W = \sum_{i=1}^{m}b_i \cdot y_i$$
+può essere interpretato come la \textbf{minimizzazione del valore implicito di tutte le risorse consumate dalle attività}. Per il problema d'esempio, il valore implicito totale delle risorse consumate dai due prodotti è pari a
+$$W = 4 \cdot y_1 + 12 \cdot y_2 + 18 \cdot y_3$$
+\subsubsection{Proprietà delle soluzioni di base complementari}
+La prima relazione primale-duale che presentiamo estende la \textbf{proprietà delle soluzioni complementari}, introdotta precedentemente, alla \textbf{forma aumentata} del problema primale e del problema duale e successivamente ad \textbf{ogni soluzione di base}
+(ammissibile o meno) del problema primale.
+\begin{itemize}
+    \item \textbf{PROPRIETÀ DELLE SOLUZIONI DI BASE COMPLEMENTARI}: ogni soluzione di base del primale ha una soluzione di base complementare nel problema duale, in modo tale che i rispettivi valori delle funzioni obbiettivo $Z$ e $W$ \textbf{siano uguali}.
+    Data la riga (0) del tableau del simplesso per la soluzione di base primale, la soluzione di base complementare del duale $(\boldsymbol{y},\boldsymbol{z} - \boldsymbol{c})$ viene ricavata come di seguito:
+    \begin{center}
+        \includegraphics[width = 1\linewidth]{Images/50.png}
+    \end{center}
+\end{itemize}
+\subsubsection{Proprietà di complenetary slackness}
+La prossima proprietà mostra come identificare quali siano le variabili di base e quali siano le variabili non di base a partire da un soluzione di base complementare.
+\begin{itemize}
+    \item \textbf{PROPRIETÀ DI COMPLEMENTARY SLACKNESS}: data l'associazione tra variabili riporta nella seguente tabella 
+    \begin{center}
+        \includegraphics[width = 1\linewidth]{Images/51.png}
+    \end{center}
+    le variabili della soluzione di base del primale e la soluzione di base complementare del duale soddisfano la relazione di \textbf{complementary slackness} mostrata nella tabella qui sotto
+    \begin{center}
+        \includegraphics[width = 0.60\linewidth]{Images/52.png}
+    \end{center}
+    Inoltre, questa relazione \textbf{è simmetrica}, facendo in modo che due soluzioni di base siano \textbf{reciprocamente complementari}.
+\end{itemize}
+Utilizziamo il problema d'esempio per mostrare le due proprietà fino a qui presentate:
+ricordiamo che il problema primale è:
+\begin{equation*}
+    \begin{array}{ll}
+        \displaystyle \textrm{max} & \; Z = 3 \cdot x_1 + 5 \cdot x_2\\
+        \textrm{s.a.} & x_1 \leq 4\\
+        \phantom{} & 2 \cdot x_2 \leq 12\\
+        \phantom{} & 3 \cdot x_1 + 2 \cdot x_2 \leq 18 \\
+        \phantom{} & x_1,x_2 \geq 0
+    \end{array}
+\end{equation*}
+quindi il suo problema duale è:
+\begin{equation*}
+    \begin{array}{ll}
+        \displaystyle \textrm{min} & \; W = 4 \cdot y_1 + 12 \cdot y_2 + 18 \cdot y_3\\
+        \textrm{s.a.} & y_1 + 3 \cdot y_3 \geq 3\\
+        \phantom{} & 2 \cdot y_2 + 2 \cdot y_3 \geq 5\\
+        \phantom{} & y_1,y_2, y_3 \geq 0
+    \end{array}
+\end{equation*}
+Consideriamo la seguente tabella:
+\begin{center}
+    \includegraphics[width = 1\linewidth]{Images/53.png}
+\end{center}
+Le 8 soluzioni di base (5 ammissibili e 3 inammissibili) del problema primale sono mostrare a destra,
+pertanto il corrispettivo problema duale deve avere 8 soluzioni di base, ognuna complementare ad una delle soluzioni di base primali.
+Per ogni soluzione di base del primale, la \textbf{proprietà di complementary slackness} può essere usata per identificare le variabili di base
+e quelle non di base della sua soluzione di base complementare, in modo tale che la soluzione complementare risolva il seguente sistema di equazioni:
+$$z_j - c_j = \sum_{i=1}^{m} a_{ij} \cdot y_i - c_j, j = 1, 2, ..., n$$
+\noindent 
+la tabella sopra mostra le soluzioni di base ammissibili trovate applicando il metodo del simplesso al problema primale.
+\subsubsection{Relazioni tra soluzioni di base complementari}
+Estendiamo ora la \textbf{proprietà delle soluzioni ottimali complementari} alla \textbf{forma aumentata} dei due problemi (primale/duale).
+\begin{itemize}
+    \item \textbf{PROPRIETÀ DELLE SOLUZIONI OTTIMALI COMPLEMENTARI}: una soluzione di base ottimale $\boldsymbol{x}^*$ del problema primale ha una soluzione
+    di base ottimale complementare del duale, tale che i valori delle rispettive funzioni obbiettivo ($Z$ e $W$) \textbf{sono identici} ($Z = W$). Data la riga (0) del
+    tableau del metodo del simplesso, corrispondente alla soluzione ottimale del primale $\boldsymbol{x}^*$, la soluzione ottimale complementare del duale
+    $(\boldsymbol{y}, \boldsymbol{z}^* - \boldsymbol{c})$ viene ricavata come mostrato nella tabella sottostante:
+    \begin{center}
+        \includegraphics[width = 1\linewidth]{Images/54.png}
+    \end{center}
+\end{itemize}
+Analizziamo nel dettaglio il ragionamento sottostante a questa proprietà: notiamo che la soluzione duale $(\boldsymbol{y}^*, \boldsymbol{z}^* - \boldsymbol{c})$ deve essere ammissibile per il duale
+in quanto la \textbf{condizione di ottimalità di $\boldsymbol{x}^*$ per il primale} impone che tutte le variabili duali (incluse le variabili surplus) siano non negative.
+Dato che questa soluzione $(\boldsymbol{y}^*, \boldsymbol{z}^* - \boldsymbol{c})$ è ammissibile, deve essere ottimale per il duale in forma della \textbf{proprietà di dualità debole}.
+Le soluzioni di base sono classificabili in base al fatto che soddisfino o meno ciascuna delle seguenti condizioni:
+\begin{itemize}
+    \item \textbf{CONDIZIONE DI AMMISSIBILITÀ}: vale a dire se tutte le variabili (incluse le variabili di slack della soluzione aumentata) sono non negative
+    \item \textbf{CONDIZIONE DI OTTIMALITÀ}: vale a dire se i coefficienti nella riga (0) (tutte le variabili della soluzione di base complementare) sono non negativi
+\end{itemize}
+I nomi che useremo per i differenti tipi di soluzioni di base sono riassunti nella tabella seguente:
+\begin{center}
+    \includegraphics[width = 1\linewidth]{Images/55.png}
+\end{center}
+Le relazioni tra le soluzioni di base complementari vengono riassunte qui sotto:
+\begin{center}
+    \includegraphics[width = 1\linewidth]{Images/56.png}
+\end{center}
+\newpage \noindent
+I possibili valori delle funzioni obbiettivo ($Z = W$) per le prime tre coppie di esiti della tabella sopra sono illustrati qui sotto:
+\begin{center}
+    \includegraphics[width = 0.80\linewidth]{Images/57.png}
+\end{center}
+Nella figura soprastante è possibile constatare che il mentre il \textbf{metodo del simplesso} visita soluzioni di base \textbf{sub-ottimali}, cercando di trovare la soluzione ottimale del problema primale,
+indirettamente è come se \textbf{visitasse soluzioni complementari super-ottimali}, cercando di ottenere una soluzione ammissibile per il problema duale. In alcuni casi può essere vantaggioso o necessario \textbf{lavorare direttamente con soluzioni di base super-ottimali},
+cercando di ottenere l'ammissibilità del problema primale, questo è l'approccio seguito dal \textbf{metodo del simplesso duale} che tuttavia non tratteremo.
+Nella tabella che mostrava le relazioni tra soluzioni di base complementari, le due ultime colonne introducono altrettanti termini comuni che vengono utilizzati per descrivere una \textbf{COPPIA DI SOLUZIONI DI BASE COMPLEMENTARI}, che vengono dette:
+\begin{itemize}
+    \item \textbf{PRIMALE AMMISSIBILE}: se la soluzione di base primale è ammissibile per il primale
+    \item \textbf{DUALE AMMISSIBILE}: se la soluzione di base complementare del duale è ammissibile per il duale
+\end{itemize}
+Utilizzando questa terminologia, il metodo del simplesso visita soluzioni \textbf{PRIMALI AMMISSIBILI}, cercando di ottenere l'ammissibilità del duale.
+Quanto questo viene ottenuto, le due soluzioni di base complementari sono ottimali per i rispettivi problemi.
+\subsubsection{Adattamento ad altre forme primali}
+Fino ad ora abbiamo implicitamente assunto che il problema primale fosse in forma standard. Comunque, ad ogni problema di PL, in qualunque forma sia, corrisponde una forma duale.
+Abbiamo già visto come ogni problema di programmazione lineare possa essere ricondotto alla corrispondente forma standard. Pertanto, è sempre possibile trasformare un problema dalla forma
+\textbf{forma non standard} alla corrispondente \textbf{forma standard}. Ottenuta la forma standard è poi possibile ottenere il problema duale del problema in tale forma.
+Dato che ogni coppia di problemi primale/duale è convertibile come mostrato sotto:
+\begin{center}
+    \includegraphics[width = 0.60\linewidth]{Images/58.png}
+\end{center}
+questo implica che il \textbf{il duale del problema duale è il problema primale}. Pertanto, tutte le relazioni esistenti tra un problema primale e il relativo problema duale devono essere
+simmetriche (\textbf{PROPRIETÀ DI SIMMETRIA}, che ora diviene chiaro perché sia valida).
+Una prima conseguenza della \textbf{PROPRIETÀ DI SIMMETRIA} è che tutte le affermazioni fatte nelle lezioni precedenti circa le relazioni tra problema duale e problema primale sono valide anche dal problema
+primale al problema duale. Inoltre, diviene chiaro come non abbia senso preoccuparsi di quale problema venga chiamato primale e quale problema venga chiamato duale.
+Tipicamente si usa la convenzione che il problema formulato per rappresentare il problema che desideriamo risolvere viene chiamato problema primale, indipendentemente dalla sua forma.
+Abbiamo appena mostrato come trasformare un problema primale in forma non standard nel corrispondente problema duale in forma standard. Tuttavia, nella forma non standard del problema primale
+\textbf{non erano presenti vincoli di eguaglianza o variabili decisionali non vincolate in segno}.
+Effettivamente, per queste due particolari forme (vincoli di eguaglianza o variabili decisionali non vincolate in segno) esiste una scorciatoia: il \textbf{metodo SOB}.
+\newpage
+\subsubsection{Metodo Sensible-Odd-Bizarre}
+Il \textbf{metodo SOB (Sensibile-Odd-Bizarre)} è descrivibile come segue:
+\begin{enumerate}
+    \item Se il problema è formulato in termini di \textbf{massimizzazione} o \textbf{minimizzazione}, il problema duale sarà automaticamente nell'altra forma. ($min \rightarrow max, max \rightarrow min$)
+    \item Etichettare le diverse forme di \textbf{vincoli funzionali ed i vincoli sulle singole variabili decisionali del primale} come \textbf{Sensible, Odd e Bizarre}, in accordo alla tabella sotto riportata
+    \begin{center}
+        \includegraphics[width = 0.60\linewidth]{Images/59.png}
+    \end{center}
+    L'etichettature dei vincoli funzionali dipende dal tipo di problema (max o min).
+    \item Per ogni \textbf{vincolo su una variabile di decisione del problema duale}, utilizzare la forma che ha medesima etichetta del \textbf{vincolo funzionale per il problema primale} corrispondente
+    a questa variabile duale secondo la tabella qui sotto:
+    \begin{center}
+        \includegraphics[width = 0.60\linewidth]{Images/60.png}
+    \end{center}
+    \item Per ogni \textbf{vincolo funzionale del problema duale}, utilizzare la forma che ha la stessa etichetta del \textbf{vincolo della corrispondente variabile di decisione del problema primale} (tabella sopra)
+\end{enumerate}
 
 \end{document}
