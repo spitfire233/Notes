@@ -473,27 +473,27 @@ Dove \textbf{fildes}, nel nostro caso, è il \textbf{file descriptor} del segmen
 che gli vogliamo dare (in byte).
 Infine, la funzione \textbf{mmap} mappa la memoria condivisa nello spazio:
 \begin{center}
-    \textit{void* mmap(void* addr, size\_t len, int prot, int flags, int flides, off\_t off);}
+    \textit{void* mmap(void* addr, size\_t len, int prot, int flags, int fildes, off\_t off);}
 \end{center}
 dove:
 \begin{itemize}
     \item Il parametro \textbf{addr} è l'indirizzo di partenza dello spazio di memoria condivisa. Questo parametro viene in verità usato come
     \textbf{SUGGERIMENTO} da parte del kernel del sistema operativo; ciò accade perché lo spazio di indirizzi indicato da addr e len \textbf{potrebbe essere già allocato}.
     \item Il parametro \textbf{length} specifica la lunghezza (in byte) dello spazio di memoria allocato
-    \item Il paramtero \textbf{prot} indica quali operazioni sono permesse sulla regione di memoria; esso può assumere:
+    \item Il parametro \textbf{prot} indica quali operazioni sono permesse sulla regione di memoria; esso può assumere:
     \begin{itemize}
         \item \textbf{PROT\_READ}: I dati possono essere letti
         \item \textbf{PROT\_WRITE}: I dati possono essere scritti
         \item \textbf{PROT\_EXEC}: I dati possono essere eseguiti
         \item \textbf{PROT\_NONE}: I dati non possono essere acceduti
     \end{itemize}
-    \item Il paramtero \textbf{flag} fornisce ulteriori informazioni riguardo la gestione dei dati mappati sullo spazio di memoria. Esso può assumere:
+    \item Il parametro \textbf{flag} fornisce ulteriori informazioni riguardo la gestione dei dati mappati sullo spazio di memoria. Esso può assumere:
     \begin{itemize}
         \item \textbf{MAP\_SHARED}: I cambiamenti sono condivisi
         \item \textbf{MAP\_PRIVATE}: I cambiamenti sono privati
         \item \textbf{MAP\_FIXED}: Quando questa flag è impostata, la regione di memoria allocata \textbf{parte esattamente da addr} al posto di usarlo come un suggerimento.
     \end{itemize}
-    \item Il parametro \textbf{filedes} indica il file (o l'oggetto) che rappresenta lo spazio di memoria condivisa
+    \item Il parametro \textbf{fildes} indica il file (o l'oggetto) che rappresenta lo spazio di memoria condivisa
     \item Il parametro \textbf{off} indica l'offset nel file da dove inizia lo spazio di memoria condivisa
 \end{itemize}
 Un'esempio di chiamata può essere:
@@ -610,7 +610,7 @@ Dove \textit{pid} è l'ID del processo e \textit{sig} è il segnale che si vuole
 I segnali che si possono inviare sono definiti nella libreria \textbf{signal.h}.
 Un esempio di utilizzo può essere il seguente:
 \begin{center}
-    \textit{int ok = kill(1000, SIGERM);}
+    \textit{int ok = kill(1000, SIGTERM);}
 \end{center}
 Per registrare una callback per un determinato segnale, possiamo usare l'API \textit{sigaction}:
 \begin{center}
@@ -656,7 +656,7 @@ Le librerie più in uso sono \textbf{POSIX pthreads} e \textbf{Windows Threads}.
 La libreria \textbf{POSIX pthreads non sono un'implementazione}, ma una specifica (POSIX standard IEEE 1003.1c).
 Esse sono comuni nei sistemi Unix e Unix-like (BSD, Linux, MacOS).
 All'inizio di un processo, viene creato un singolo thread.
-Per creare un nuvo thread si utilizza l'API \textit{pthread\_create}, la quale ha la seguente firma:
+Per creare un nuovo thread si utilizza l'API \textit{pthread\_create}, la quale ha la seguente firma:
 \begin{center}
     \textit{pthread\_create(pthread\_t *restrict thread, const pthread\_attr\_t *restrict attr, void *(*start\_routine)(void*), void* restrict arg);}
 \end{center}
@@ -667,7 +667,7 @@ Il parametro \textit{start\_routine} indica \textbf{la funzione che il thread an
 non ritorna. La funzione \textit{pthread\_create} ritornerà 0 se ha successo, altrimenti verrà ritornato un numero diverso da 0 per indicare l'avvenimento di un errore.
 Per invece attendere la fine dell'esecuzione di un thread si utilizza l'API \textit{pthread\_join}, la quale ha la seguente firma:
 \begin{center}
-    \textit{int pthread\_join(pthread\_t thread, void ** valure\_ptr);}
+    \textit{int pthread\_join(pthread\_t thread, void ** value\_ptr);}
 \end{center}
 L'API \textbf{sospenderà} l'esecuzione del thread chiamante fino a quando il thread obbiettivo (specificato nel parametro \textit{thread}) termina, a meno che il thread obbiettivo non sia già terminato.
 Quando l'API ritorna con successo con un valore di \textit{value\_ptr} non NILL, il valore passato a \textit{pthread\_exit()} (API chiamata per cancellare un thread) dal thread terminante sarà reso disponibile
@@ -677,7 +677,7 @@ Un esempio di utilizzo di queste due API può essere il seguente:
 \begin{center}
     \textit{void* thread\_code(void* name) {...}} \\
     \textit{...} \\
-    \textit{phtread\_id tid1, tid2;} \\
+    \textit{pthread\_id tid1, tid2;} \\
     \textit{int ok1 = pthread\_create(\textnormal{\&}td1, NULL, thread\_code, "thread 1);} \\
     \textit{int ok2 = pthread\_create(\textnormal{\&}td2, NULL, thread\_code, "thread 2);} \\
     \textit{...} \\
@@ -980,7 +980,7 @@ Il vantaggio di questa struttura è la \textbf{semplicità}, tuttavia ha diversi
 \end{center}
 Nella struttura a due livelli, la directory principale \textbf{contiene delle sottodirectory, una per ogni utente}.
 La sottodirectory utente contiene i \textbf{file dell'utente}; utenti diversi possono quindi dare \textbf{lo stesso nome a file diversi}.
-Occore quindi usare dei \textbf{nomi di percorso (path name)} per identificare un file univocamente:
+Occorre quindi usare dei \textbf{nomi di percorso (path name)} per identificare un file univocamente:
 \begin{itemize}
     \item \textit{/user2/data} (separatori Unix-like)
     \item \textit{\textbackslash user2 \textbackslash data} (separatori Windows like)
@@ -1143,7 +1143,7 @@ In POSIX, i lock sui file sono \textbf{consultivi}. Il lock su un file si può e
     \textit{int fcntl(int fildes, int cmd, ...);}
 \end{center}
 Essa ha parecchie funzionalità, quindi qui ci concentreremo solo su quelle necessarie per effettuare un lock.
-Occorre specificare il tipo di lock utilizzando una \textbf{struct flock}. Se si vuole effetutare un lock su un file puntato da \textit{fildes}, l'argomento di \textit{cmd} dovrà essere
+Occorre specificare il tipo di lock utilizzando una \textbf{struct flock}. Se si vuole effettuare un lock su un file puntato da \textit{fildes}, l'argomento di \textit{cmd} dovrà essere
 \textit{F\_SETLK}. Vediamo un esempio:
 \begin{center}
     \textit{struct flock fl;} \\
@@ -1212,7 +1212,7 @@ Per cambiare il proprietario eil gruppo di un file possiamo usare la funzione \t
     \textit{int chown(const char *path, uid\_t owner, gid\_t group);}
 \end{center}
 La funzione imposterà per il file in \textit{path} \textit{owner} come nuovo proprietario del file e \textit{group} come nuovo gruppo di appartenenza.
-La funzone ritorna 0 se ha successo, -1 altrimenti.
+La funzione ritorna 0 se ha successo, -1 altrimenti.
 Facciamo un esempio:
 \begin{center}
     \textit{uid\_t owner = ...; // Un nuovo proprietario} \\
@@ -1226,7 +1226,7 @@ Per cambiare i diritti di lettura/scrittura/esecuzione, possiamo usare la funzio
 La funzione imposterà i nuovi bit di permesso per il file in \textit{path} a \textit{mode}, la quale può essere
 descritta con le flag viste fino ad ora per \textit{mode}, concatenate con un bitwise inclusive OR. Facciamo un esempio:
 \begin{center}
-    \textit{int ok = chmdo("/home/pietro/baz", S\_IRUSR | S\_IRGRP);}
+    \textit{int ok = chmod("/home/pietro/baz", S\_IRUSR | S\_IRGRP);}
 \end{center}
 la funzione ritornerà 0 se ha successo, -1 altrimenti.
 \end{document}
