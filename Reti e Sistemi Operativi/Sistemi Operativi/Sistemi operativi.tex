@@ -827,5 +827,31 @@ L'API mmap permette di mappare una regione ancora non utilizzata del VAS su:
     \item \textbf{Un file} (che viene mappato in memoria)
     \item \textbf{Memoria condivisa}
 \end{itemize}
+Vediamo un'ulteriore API per la gestione della memoria: \textit{msync}:
+\begin{center}
+    \textit{int msync(void* addr, size\_t len, int flags);}
+\end{center}
+L'API andrà a scrivere sul filesystem tutti i dati modificati in un file mappato in memoria 
+da \textit{mmap}. Senza l'uso di questa funzione, non c'è garanzia che i cambiamenti scritti sul file
+in memoria vengano mantenuti. Per essere più precisi, la parte del file che corrisponde all'area di memoria che
+inizia a \textit{addr} e avente lunghezza \textit{len} viene aggiornata. L'attributo flag può avere i seguenti valori:
+\begin{itemize}
+    \item \textbf{MS\_ASYNC}: La scrittura delle modifiche viene effettuata in maniera asincrona
+    \item \textbf{MS\_SYNC}: La scrittura delle modifiche viene effettuata in maniera sincrona
+    \item \textbf{MS\_INVALIDATE}: Viene richiesto di invalidare altra mappature dello stesso file, così che possano essere aggiornate con i valori appena scritti
+\end{itemize}
+Queste flag sono definite in \textit{<sys/mman.h>} e possono essere combinate con un \textbf{bitwise-inclusive OR} (|).
+La funzione ritorna 0 se ha successo, -1 altrimenti.
+Vediamo un esempio di utilizzo di queste API:
+\begin{center}
+    \textit{// Mappiamo 4 KB di memoria a partire dall'indirizzo virtuale 0xa0000000} \\
+    \textit{void* ptr = mmap(0xa0000000, 4096, PROT\_READ | PROT\_WRITE, MAP\_ANONYMOUS, 0, 0);} \\
+    \textit{// Per mappare, a partire dall'indirizzo virtuale 0xb0000000, 8192 bytes del file /usr/foo a partire dal byte 100 scriviamo:} \\
+    \textit{int fd = open("/usr/foo", O\_RDWR);} \\
+    \textit{void* ptr = mmap(0xb0000000, 8192, PROT\_READ | PROT\_WRITE, MAP\_PRIVATE, fd, 100);} \\
+    \textit{// Per sincronizzare le modifiche in memoria con il file, scriviamo:} \\
+    \textit{int ok = msync(0xb0000000, 8192, MS\_SYNC|MS\_INVALIDATE);}
+\end{center}
+\section{Filesystem: i servizi}
 
 \end{document}
