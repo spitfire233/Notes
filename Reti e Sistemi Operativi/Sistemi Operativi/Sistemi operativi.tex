@@ -14,6 +14,7 @@
 \usepackage{amsmath}
 \usepackage{mathtools}
 \usepackage{biblatex}
+\usepackage{float}
 \lstset{
   language=Python,
   numbers=left,
@@ -852,6 +853,380 @@ Vediamo un esempio di utilizzo di queste API:
     \textit{// Per sincronizzare le modifiche in memoria con il file, scriviamo:} \\
     \textit{int ok = msync(0xb0000000, 8192, MS\_SYNC|MS\_INVALIDATE);}
 \end{center}
-\section{Filesystem: i servizi}
-
+\section{File system: i servizi}
+Il \textbf{file system} è il modo attraverso il quale il sistema operativo memorizza in linea i dati e i programmi.
+Esso è costituito da:
+\begin{itemize}
+    \item Un insieme di file
+    \item Una struttura delle directory, che organizza i file
+\end{itemize}
+Un \textbf{file} è una unità di memorizzazione logica, un insieme di informazioni correlate, registrare in memoria secondaria, alle quali è \textbf{stato dato un nome}.
+Un file a sua volta è costituito da una \textbf{sequenza di record, righe, bit o byte}, il cui significato è definito dal creatore del file.
+Un file possiede i seguenti attributi:
+\begin{itemize}
+    \item \textbf{Nome}: è di solito l'unica informazione in forma umanamente leggibile
+    \item \textbf{Identificatore}: un'etichetta unica fornita dal file system per distinguere i file
+    \item \textbf{Tipo}: tpo di dati contenuti nel file (alcuni S.O. non hanno questo attributo)
+    \item \textbf{Locazione}: dispositivo di memoria secondaria e posizione nel dispositivo dove l'informazione del file è memorizzata
+    \item \textbf{Dimensione}: in byte, parole, record, ...
+    \item \textbf{Protezione}: informazione di controllo accessi
+    \item \textbf{Ora, data e utente} che ha creato, letto o modificato per ultimo il file
+    \item \textbf{Attributi estesi}: checksum, codifica caratteri, applicazioni correlate ecc...
+\end{itemize}
+Le informazioni sul file sono memorizzate nelle \textbf{directory}.
+\subsection{Operazioni dei processi sui file}
+I processi possono effettuare le seguenti operazioni sui file:
+\begin{itemize}
+    \item \textbf{Creazione}: viene riservato spazio nel file system per i dati, e viene aggiunto un elemento nella directory
+    \item \textbf{Apertura}: effettuata prima dell'utilizzo del file
+    \item \textbf{Lettura}: a partire dalla posizione determinata da un puntatore di lettura
+    \item \textbf{Scrittura}: a partire dalla posizione determinata da un puntatore di scrittura (di solito coincide con il puntatore di lettura)
+    \item \textbf{Riposizionamento (seek)}: spostamento del puntatore all'interno del file
+    \item \textbf{Chiusura}: effettuata alla fine dell'utilizzo del file
+    \item \textbf{Cancellazione e troncamento}: il troncamento canella i dati \textbf{ma non il file} con i suoi attributi
+\end{itemize}
+\subsection{Lock dei file}
+Uno stesso file può essere aperto \textbf{contemporaneamente da più processi che operano in concorrenza}.
+Alcuni sistemi operativi permettono di associare ai file (o a porzioni di esso) dei \textbf{lock} per coordinare i processi che operano sullo stesso file.
+Vi sono due tipi di lock:
+\begin{itemize}
+    \item \textbf{Lock condiviso}: detto anche \textbf{lock di lettura}; più processi possono acquisirlo, proibisce l'acquisizione di un lock esclusivo
+    \item \textbf{Lock esclusivo}: detto anche \textbf{lock di scrittura}; solo un processo alla volta può acquisirlo, proibisce l'acquisizione di un lock condiviso
+\end{itemize}
+Altre possibilità sono:
+\begin{itemize}
+    \item \textbf{Lock obbligatori (mandatory)}: il sistema operativo proibisce l'accesso al file ai processi che \textbf{non detengono il lock}
+    \item \textbf{Lock consultivi (advisory)}: il sistema operativo \textbf{offre il lock} ma non regola l'accesso al file: sono i processi che devono evitare di accedere al file se non hanno il lock
+\end{itemize}
+I sistemi \textbf{Windows} adottano i lock obbligatori, i sistemi \textbf{Unix-life} i lock consultivi.
+\subsection{Tipi di file}
+Vi sono principalmente due tipi di file:
+\begin{itemize}
+    \item Dati (numerici, testo, binari)
+    \item Programmi
+\end{itemize}
+Il sistema operativo può essere più o meno consapevole del tipo di file, \textbf{ma deve almeno riconoscere il tipo di file eseguibile}.
+Possibili tecniche per riconoscere il tipo di file sono:
+\begin{itemize}
+    \item Schema del nome (nome.estensione)
+    \item Attributi nel file (ad esempio in macOS, viene registrato il programma che ha creato il file)
+    \item "Magic Number" all'inizio del file (ad esempio la "shebang" magic cookie ("\#!") all'inizio degli script Unix)
+\end{itemize}
+\subsection{Struttura dei file}
+I file possono avere o meno una struttura ben definita; alcune possibilità sono:
+\begin{itemize}
+    \item Nessuna struttura (ad esempio, nei sistemi Unix-like un file è una sequenza di byte)
+    \item \textbf{Sequenza di record} (righe di testo o record binari, a struttura e lunghezza fissa o variabile)
+    \item \textbf{Strutture più complesse e standardizzate}, sopratutto per i file eseguibili (formato PE in Windows, a.out ed ELF nei sistemi Unix-like, Mach-O in macOS)
+\end{itemize}
+Più il sistema operativo supporta direttamente diverse strutture di file, \textbf{più diventa complesso}.
+Inoltre se il sistema operativo è troppo "rigido" sulle possibili strutture, potrebbe non supportare nuovi tipi, o tipi \textbf{ibridi}.
+\subsection{Metodi di accesso a file}
+Vediamo ora quali possono essere i principali metodi di accesso ad un file
+\subsubsection{Accesso sequenziale}
+In questo tipo di accesso, il file \textbf{è una sequenza di record a lunghezza fissa}
+\begin{center}
+    \includegraphics[width = 0.50\linewidth]{Images/24.png}
+\end{center}
+Le operazioni disponibili in questo caso sono:
+\begin{itemize}
+    \item \textit{read\_next()} e \textit{write\_next()} leggono/scrivono il successivo record dalla posizione corrente
+    \item Operazione di \textbf{riavvolgimento}
+\end{itemize}
+\subsubsection{Accesso diretto}
+In questo tipo di accesso, abbiamo a disposizione le seguenti operazioni:
+\begin{itemize}
+    \item Operazioni \textit{read(n)} e \textit{write(n)} per accedere direttamente all'n-esimo record
+    \item Alternativamente, possiamo usare \textit{read\_next(), write\_next()} e \textit{position(n)}
+\end{itemize}
+\subsubsection{Accesso indicizzato}
+In alcuni sistemi operativi, ad esempio quelli per mainframe IBM, i file possono essere \textbf{sequenze di record ordinate secondo un determinato campo chiave del record}.
+In tali sistemi, l'accesso può essere basato \textbf{sulla chiave}, e il sistema operativo mantiene un indice per velocizzare l'accesso. Esempio è \textbf{l'accesso ISAM} (Indexed Sequential Access Method) nei sistemi IBM,
+file systems \textbf{Files-11} prodotto da Digital per il sistema operativo OpenVMS (offre tutti e tre i tipi di accesso su record a lunghezza fissa o variabile).
+\subsection{Directories}
+Una \textbf{directory} è, in pratica, un elenco di file presenti nel file system.
+Più formalmente, \textbf{è una tabella} che permette di associare il nome di un file ai dati (e metadati) contenuti nel file stesso.
+Sia i file che le directory risiedono sul disco: deve esservi \textbf{almeno una directory nel file system} (altrimenti non sarebbe possibile ritrovare i file!)
+I processi possono effettuare le seguenti operazioni sulle directory:
+\begin{itemize}
+    \item \textbf{Creazione} di un file in una directory
+    \item \textbf{Cancellazione} di un file in una directory
+    \item \textbf{Ridenominazione} di un file o \textbf{spostamento} da una directory ad un'altra
+    \item \textbf{Elenco} dei file in una directory
+    \item \textbf{Ricerca} di un file: basata sul nome, o suno schema di possibili nomi
+    \item \textbf{Attraversamento} del file system, ad esempio per effettuare un backup
+\end{itemize}
+Le directories possono avere diversi tipi di struttura:
+\begin{itemize}
+    \item Ad un livello
+    \item A due livelli
+    \item Ad albero
+    \item A grafo aciclico
+    \item A grafo generale
+\end{itemize}
+\subsubsection{Struttra delle directory ad un livello}
+\begin{center}
+    \includegraphics[width = 0.60\linewidth]{Images/25.png}
+\end{center}
+Nella struttura ad un livello, \textbf{esiste una sola directory per tutti i file}.
+Il vantaggio di questa struttura è la \textbf{semplicità}, tuttavia ha diversi svantaggi:
+\begin{itemize}
+    \item Difficoltà nel nominare i file quando sono molti
+    \item Difficoltà nel raggruppare i file per utenti diversi
+\end{itemize}
+\subsubsection{Struttura delle directory a due livelli}
+\begin{center}
+    \includegraphics[width = 0.70\linewidth]{Images/26.png}
+\end{center}
+Nella struttura a due livelli, la directory principale \textbf{contiene delle sottodirectory, una per ogni utente}.
+La sottodirectory utente contiene i \textbf{file dell'utente}; utenti diversi possono quindi dare \textbf{lo stesso nome a file diversi}.
+Occore quindi usare dei \textbf{nomi di percorso (path name)} per identificare un file univocamente:
+\begin{itemize}
+    \item \textit{/user2/data} (separatori Unix-like)
+    \item \textit{\textbackslash user2 \textbackslash data} (separatori Windows like)
+    \item \textit{>user2>data} (separatori MULTICS-like)
+\end{itemize}
+I file di sistema sono di solito posti \textbf{in una o più directory speciali}, e occorre che il sistema conosca un \textbf{percorso di ricerca} per trovarli.
+\subsubsection{Struttura delle directory ad albero}
+\begin{center}
+    \includegraphics[width = 0.60\linewidth]{Images/27.png}
+\end{center}
+Nella struttura ad albero, ogni directory \textbf{contiene ricorsivamente files e altre directory}. Questa struttura quindi
+permette agli utenti di \textbf{raggruppare i propri file}. Per semplificare l'accesso, ad ogni programma è assegnata una \textbf{directory corrente}, dalla quale si possono specificare
+\textbf{path relativi}
+\begin{itemize}
+    \item Esempio: se la directory corrente è \textit{/programs/mail}, un path relativo potrebbe essere \textit{prt/first}
+\end{itemize}
+In questo caso, come avviene la cancellazione della directory?
+\begin{itemize}
+    \item Con la directory \textbf{cancello tutto il suo contenuto}
+    \item Oppure permetto di cancellare una directory \textbf{solo se è vuota}. Questa soluzione è la più sicura
+\end{itemize}
+\subsubsection{Struttra delle directory a grafo aciclico}
+\begin{center}
+    \includegraphics[width = 0.50\linewidth]{Images/28.png}
+\end{center}
+La struttura a grafo aciclico \textbf{permette l'aliasing} (più di un nome per lo stesso file).
+Cosa succede però se \textbf{cancello un file/directory con un alias?}
+\begin{itemize}
+    \item \textbf{Hard links}: duplicazione voci di directory; viene introdotto un \textbf{contatore} ai riferimenti, quando è a zero viene \textbf{cancellato il file}
+    \item \textbf{Link simbolici}: riferimenti simbolici ad un \textbf{path assoluto}, quando questo è cancellato restano \textbf{dangling}; non sono aggiunti al contatore dei riferimenti
+\end{itemize}
+Questo tipo di struttura delle directory introduce anche un \textbf{problema di attraversamento del file system}.
+\subsubsection{Struttura delle directory a grafo generico}
+\begin{center}
+    \includegraphics[width = 0.60\linewidth]{Images/29.png}
+\end{center}
+In questa struttura, vi è la possibilità di \textbf{hard links anche a directory a livelli superiori}, persino che contengono \textbf{ricorsivamente il link stesso}.
+Per determinare se un file non è più referenziato, \textbf{un contatore al numero di riferimenti non basta più} ma occorre un autentico algoritmo di \textbf{garbage collection}.
+Attraversare il file system in questo tipo di struttura diventa quindi ancora più complesso.
+\subsection{Protezione}
+Le informazioni devono essere preservate dai danni fisici (affidabilità) e dagli accessi impropri (protezione).
+Un sistema multiutente permette un \textbf{accesso controllato ai file} di un certo utente da parte degli altri utenti.
+Le operazioni controllabili sono:
+\begin{itemize}
+    \item Lettura
+    \item Scrittura
+    \item Esecuzione
+    \item Aggiunta (scrittura in coda ad un file)
+    \item Cancellazione
+    \item Elencazione (elenco del contenuto di una directory)
+\end{itemize}
+\subsubsection{Liste di controllo degli accessi}
+L'idea questo tipo di protezione è la seguente:
+\begin{itemize}
+    \item Ad ogni file/directory è associata una \textbf{lista di controllo degli accessi} (access control list, ACL)
+    \item l'ACL specifica gli utenti \textbf{che possono accedere al file/directory}, con i relativi permessi di accesso
+    \item Il file system controlla l'ACL prima di ogni accesso al file
+\end{itemize}
+Il \textbf{principale svantaggio} di questo approccio è che le ACL \textbf{possono diventare molto lunghe}.
+Nei sistemi Unix-like, l'approccio usato è \textbf{raggruppare gli utenti in classi distinte}:
+\begin{itemize}
+    \item \textbf{Proprietario}: l'utente che possiede il file/directory
+    \item \textbf{Gruppo}: il gruppo di utenti che condivide il file/directory
+    \item \textbf{Pubblico}: tutti gli altri utenti
+\end{itemize}
+Facciamo un esempio:
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|c|c|ccc|}
+    \hline
+    Gruppo       & Bit di permesso (base 10) & \multicolumn{1}{c|}{r} & \multicolumn{1}{c|}{w} & x \\ \hline
+    Proprietario & 7                         & 1                      & 1                      & 1 \\
+    Gruppo       & 6                         & 1                      & 1                      & 0 \\
+    Pubblico     & 4                         & 1                      & 0                      & 0 \\ \hline
+    \end{tabular}
+\end{table}
+\noindent
+Supponiamo di avere un file \textit{game}, di volergli assegnare un gruppo G e di volergli attribuire i permessi di cui sopra.
+Allora procediamo come segue:
+\begin{itemize}
+    \item \textit{chgrp G game  \# cambia gruppo al file game}
+    \item \textit{chmod 764 game  \# cambia i permessi al file game}
+\end{itemize}
+\subsection{Volumi e montaggio}
+Un sistema operativo deve permettere di aggiungere e rimuovere dinamicamente unità di memorizzazione dati.
+Un dispositivo di archiviazione può essere suddiviso in \textbf{partizioni}:
+\begin{center}
+    \includegraphics[width = 0.80\linewidth]{Images/30.png}
+\end{center}
+Un \textbf{volume} è una \textbf{zona di un dispositivo di archiviazione contenete un file system}.
+Un volume, di solito, è contenuto in una partizione, su un solo dispositivo,
+ma per alcuni filesystem particolari, un volume si può \textbf{estendere su più partizioni/dispositivi}.
+Il sistema operativo deve permette di \textbf{montare e smontare} un volume all'interno dello spazio dei nomi del file system.
+Di solito per montare un volume occorre fornire al sistema operativo:
+\begin{itemize}
+    \item L'identificazione del dispositivo/partizione dove risiede il volume
+    \item Il punto di montaggio, ossia la \textbf{locazione nella struttura di file e directory alla quale "agganciare" il file system contenuto nel volume} (tipicamente una directory vuota)
+\end{itemize}
+Esistono diverse varianti di questo meccanismo:
+\begin{itemize}
+    \item \textbf{Punto di montaggio}: directory vuota oppure no
+    \item \textbf{Montaggio}: automatico o manuale
+    \item \textbf{Utilizzo di identificatori (lettere) di unità} anziché punti di montaggio
+    \item \textbf{Montaggio ripetuto di uno stesso volume permesso} oppure no
+\end{itemize}
+\begin{center}
+    \includegraphics[width = 1\linewidth]{Images/31.png}
+\end{center}
+\subsection{API POSIX per operazioni sui file}
+Per creare un file, possiamo utilizzare l'API \textit{creat}:
+\begin{center}
+    \textit{int creat(const char* path, mode\_t mode);}
+\end{center}
+Essa si comporta tuttavia come se fosse implementata nel seguente modo:
+\begin{center}
+    \includegraphics[width = 0.80\linewidth]{Images/32.png}
+\end{center}
+Quindi il parametro \textit{mode} dovrà assumere i valori delle flag presentate per \textit{open}. I valori
+di ritorno della funzione saranno quindi quelli della funzione \textit{open}.
+Per creare un file \textit{foot.txt} con diritti di lettura e scrittura per il proprietario, e di sola lettura per i membri
+del gruppo e gli altri possiamo fare nel seguente modo:
+\begin{center}
+    \textit{int fd = creat("foo.txt", S\_IRUSR|S\_IWUSR|S\_IRGRP|S\_IROTH);}
+\end{center}
+oppure possiamo chiamare direttamente \textit{open}.
+Per aprire un file, possiamo usare l'API \textit{open} (già presentata), mentre per leggere da un file
+possiamo usare la funzione \textit{read} (già presentata).
+Per scrivere su un file possiamo usare la funzione \textit{write} (già presentata), mentre per \textbf{riposizionarci all'interno di un file} possiamo usare
+la funzione \textit{lseek}
+\begin{center}
+    \textit{off\_t lseek(int fildes, off\_t offset, int whence);}
+\end{center}
+La funzione riposizionerà il puntatore per il file aperto associato al file descriptor \textit{fildes} nel seguente modo:
+\begin{itemize}
+    \item Se \textit{whence} ha valore \textit{SEEK\_SET}, il puntatore sarà impostato al byte \textit{offset}
+    \item Se \textit{whence} ha valore \textit{SEEK\_CUR}, il puntatore sarà impostato al byte corrispondente alla somma della posizione corrente e di \textit{offset}
+    \item Se \textit{whence} ha valore \textit{SEEK\_END}, il puntatore sarà impostato alla fine del file più \textit{offset}
+    \item Se \textit{whence} ha valore \textit{SEEK\_HOLE}, il puntatore sarà impostato alla prima posizione con un "buco" (regione del file senza dati) con grandezza maggiore o uguale a \textit{offset}, a meno che \textit{offset} non cada oltre l'ultimo byte non all'interno di un buco; in questo caso, il puntatore viene impostato all'ultimo byte del file (cioè, c'e sempre un buco implicito alla fine di ogni file)
+    \item Se \textit{whence} ha valore \textit{SEEK\_DATA}, il puntatore sarà impostato alla più piccola posizione di un byte che NON è in un buco a distanza minima \textit{offset} dalla posizione corrente. Verrà dato errore se questo byte non esiste
+\end{itemize}
+Le flag appena presentate sono presenti nella libreria \textit{unistd.h}.
+Un esempio del suo utilizzo è il seguente:
+\begin{center}
+    \textit{off\_t offset = lseek(fd, 10, SEEK\_CUR); // 10 bytes dopo la posizione corrente}
+\end{center}
+La funzione ritornerà l'offset risultante, misurato in byte dall'inizio del file, se ha successo, altrimenti -1.
+Per chiudere un file utilizziamo l'API \textit{close} (già presentata), mentre per cancellarlo dal file system usiamo l'API \textit{unlink} (già presentata).
+Per troncare un file invece fino ad una lunghezza $n$, possiamo usare la funzione \textit{truncate}:
+\begin{center}
+    \textit{int truncate(const char* path, off\_t length);}
+\end{center}
+La funzione quindi troncherà il file identificato dal path \textit{path} fino alla posizione \textit{length} (cioè imposta la sua lunghezza a \textit{length}).
+I dati presenti dopo \textit{length} sono \textbf{scartati}. La funzione ritornerà 0 se ha successo, -1 altrimenti. Un esempio del suo uso può essere il seguente:
+\begin{center}
+    \textit{int ok = truncate("foo.txt", n); //tronca il file alla lunghezza n}
+\end{center}
+\subsubsection{API POSIX per i lock}
+In POSIX, i lock sui file sono \textbf{consultivi}. Il lock su un file si può effettuare con l'operazione \textit{fcntl}, che è un API che permette di effettuare \textbf{diversi tipi di operazioni sui file}. La sua firma è:
+\begin{center}
+    \textit{int fcntl(int fildes, int cmd, ...);}
+\end{center}
+Essa ha parecchie funzionalità, quindi qui ci concentreremo solo su quelle necessarie per effettuare un lock.
+Occorre specificare il tipo di lock utilizzando una \textbf{struct flock}. Se si vuole effetutare un lock su un file puntato da \textit{fildes}, l'argomento di \textit{cmd} dovrà essere
+\textit{F\_SETLK}. Vediamo un esempio:
+\begin{center}
+    \textit{struct flock fl;} \\
+    \textit{fl.l\_type = F\_RDLCK; // read lock} \\
+    \textit{fl.l\_whence = SEEK\_CUR; // dalla posizione corrente...} \\
+    \textit{fl.l\_start = 10; //...più 10 byte} \\
+    \textit{fl.l\_len = 0; //fino alla fine del file} \\
+    \textit{int ok = fcntl(fd, F\_SETLK, \textnormal{\&}fl); // se non riesce ad impostare un lock, fallisce}
+\end{center}
+\subsection{API POSIX per operazioni su directory}
+Per creare una nuova directory, possiamo usare la funzione \textit{mkdir}
+\begin{center}
+    \textit{int mkdir(const char* path, mode\_t mode);}
+\end{center}
+Essa creerà una nuova directory con nome \textit{path}. Il parametro \textit{mode} indica i bit di permesso per la nuova directory.
+Per esempio, creiamo una nuova directory, con diritti di lettura, scrittura e ricerca per il proprietario e di sola lettura per i membri del gruppo e gli altri nel seguente modo:
+\begin{center}
+    \textit{mkdir("/home/pietro/newdir", S\_IRWXU|S\_IRGRP|S\_IROTH);}
+\end{center}
+La funzione restituisce 0 se ha successo, -1 altrimenti. Come si può notare, possiamo anche usare le flag viste in precedenza, concatenare con un bitwise inclusive OR (|), per specificare
+i permessi. Per eliminare una directory (solo se vuota) possiamo usare la funzione \textit{rmdir}:
+\begin{center}
+    \textit{int rmdir(const char* path);}
+\end{center}
+La funzione rimuoverà la directory specificata da \textit{path}. Ritorna 0 se ha successo, -1 altrimenti. Un esempio di un suo utilizzo può essere il seguente:
+\begin{center}
+    \textit{rmdir("/home/pietro/newdir");}
+\end{center}
+Possiamo aprire una directory tramite l'API \textit{opendir}:
+\begin{center}
+    \textit{DIR *opendir(const char *dirname);}
+\end{center}
+La funzione aprirà la directory specificata da \textit{dirname} (in particolare, apre un \textbf{directory stream}, che è una sequenza ordinata di tutte le voci in una directory). La funzione ritornerà un \textbf{puntatore ad una struttura di tipo DIR} (cioè un puntatore al directory stream)
+se ha successo, altrimenti ritornerà un puntatore a null. Per leggere da una directory possiamo usare l'API \textit{readdir}:
+\begin{center}
+    \textit{struct dirent* readdir(DIR *dirp);}
+\end{center}
+La funzione ritornerà un puntatore ad una struttura \textit{dirent}, definita in \textit{dirent.h}, che rappresenta la voce nella directory alla posizione corrente nello stream specificato nell'argomento \textit{dirp}; dopodiche posizionerà
+lo stream \textbf{alla prossima voce della directory}. Se la funzione incontra un errore oppure arriva alla fine della directory, ritornerà un puntatore a null.
+Per cambiare il nome, o spostare, un file o una directory si può usare l'API \textit{link} in combinazione con l'API \textit{unlink}. Presentiamo prima la firma di \textit{link}:
+\begin{center}
+    \textit{int link(const char* path1, const char* path2);}
+\end{center} 
+La funzione creerà un nuovo \textbf{hard link} nel percorso \textit{path2} per il file 
+identificato dal \textit{path1}. La funzione ritorna 0 se ha successo, -1 altrimenti.
+Per ottenere l'effetto descritto sopra, possiamo fare come segue: supponiamo di voler spostare il file \textit{/foo/bar} nella directory \textit{/home/pietro}
+e, allo stesso tempo, cambiare il suo nome in \textit{baz}:
+\begin{center}
+    \textit{int ok1 = link("/foo/bar", "/home/pietro/baz");} \\
+    \textit{int ok2 = unlink("/foo/bar");}
+\end{center}
+Quando il link count di un file \textbf{arriva a zero}, il file \textbf{viene cancellato}.
+Per creare un link simbolico, possiamo usare l'API \textit{symlink}:
+\begin{center}
+    \textit{int symlink(const char* path1, const char* path2);}
+\end{center}
+La funzione creerà un link simbolico chiamato \textit{path2} per il file con path \textit{path1}. Facciamo un esempio:
+\begin{center}
+    \textit{int ok = symlink("/home/pietro/baz", "/home/pietro/alias");}
+\end{center}
+I link simbolici non vengono aggiunti al link count.
+\subsection{API POSIX per la protezione}
+In POSIX, la protezione è basata su bit di lettura/scrittura/esecuzione per i gruppi proprietario/gruppo/pubblico.
+Per cambiare il proprietario eil gruppo di un file possiamo usare la funzione \textit{chown}:
+\begin{center}
+    \textit{int chown(const char *path, uid\_t owner, gid\_t group);}
+\end{center}
+La funzione imposterà per il file in \textit{path} \textit{owner} come nuovo proprietario del file e \textit{group} come nuovo gruppo di appartenenza.
+La funzone ritorna 0 se ha successo, -1 altrimenti.
+Facciamo un esempio:
+\begin{center}
+    \textit{uid\_t owner = ...; // Un nuovo proprietario} \\
+    \textit{gid\_t group = ...; // Un nuovo gruppo di appartenenza} \\
+    \textit{int ok = chown("/home/pietro/baz, owner, group);}
+\end{center}
+Per cambiare i diritti di lettura/scrittura/esecuzione, possiamo usare la funzione \textit{chmod}:
+\begin{center}
+    \textit{int chmod(const char* path, mode\_t mode);}
+\end{center}
+La funzione imposterà i nuovi bit di permesso per il file in \textit{path} a \textit{mode}, la quale può essere
+descritta con le flag viste fino ad ora per \textit{mode}, concatenate con un bitwise inclusive OR. Facciamo un esempio:
+\begin{center}
+    \textit{int ok = chmdo("/home/pietro/baz", S\_IRUSR | S\_IRGRP);}
+\end{center}
+la funzione ritornerà 0 se ha successo, -1 altrimenti.
 \end{document}
