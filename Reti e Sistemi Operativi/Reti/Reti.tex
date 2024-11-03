@@ -1,0 +1,99 @@
+\documentclass[12pt]{article}
+
+\usepackage{booktabs}% http://ctan.org/pkg/booktabs
+\usepackage[utf8]{inputenc}
+\usepackage{changepage}
+\usepackage{pgfplots}
+\usepackage{amssymb}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{adjustbox}
+\usepackage{amsmath}
+\usepackage{mathtools}
+\usepackage{biblatex}
+\usepackage{float}
+\lstset{
+  language=Python,
+  numbers=left,
+  numberstyle=\tiny,
+  stepnumber=1,
+  numbersep=5pt,
+  tabsize=4,
+  basicstyle=\ttfamily,
+  columns=fullflexible,
+  keepspaces,
+}
+\hypersetup{
+    colorlinks,
+    citecolor=black,
+    filecolor=black,
+    linkcolor=black,
+    urlcolor=black
+}
+
+% Set page size and margins
+% Replace `letterpaper' with `a4paper' for UK/EU standard size
+\usepackage[letterpaper,top=2cm,bottom=2cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
+
+% Useful packages
+\usepackage{amsmath}
+\usepackage{mathtools}
+\usepackage{graphicx}
+\newenvironment{para}{\begin{adjustwidth}{13mm}{}}{\end{adjustwidth}}
+
+\newcommand\tab[1][1cm]{\hspace*{#1}}
+
+\newcommand{\tabitem}{\llap{\textbullet}}
+\newcommand{\Hsquare}{%
+\text{\fboxsep=-.2pt\fbox{\rule{0pt}{1ex}\rule{1ex}{0pt}}}%
+}
+
+\newtheorem{Definizione}{Definizione}[subsection]
+\newtheorem{Lemma}{Lemma}[subsection]
+\newtheorem{Teorema/Definizione}{Teorema/Definizione}[subsection]
+\newtheorem{Corollario}{Corollario}[subsection]
+\newtheorem{Teorema}{Teorema}[subsection]
+\newtheorem{Proposizione}{Proposizione}[subsection]
+\newtheorem{Notazione}{Notazione}[subsection]
+\newtheorem{Commento}{Commento}[subsection]
+\newtheorem{Dimostrazione}{Dimostrazione}[subsection]
+\newtheorem{Osservazione}{Osservazione}[subsection]
+\newtheorem{Nota}{Nota}[subsection]
+
+\title{RSO: Reti}
+\author{spitfire}
+\date{A.A. 2023-2024}
+\begin{document}
+\begin{figure}
+    \centering
+    \includegraphics[width=0.35\textwidth]{Images/Logo scienze bicocca.png}
+\end{figure}
+
+\vspace{10cm}
+\date{A.A. 2023-2024}
+
+
+\maketitle
+
+\newpage
+
+\tableofcontents
+\newpage
+\section{Introduzione}
+Se vogliamo dare una visione "d'insieme" di internet possiamo pensarlo come formato dalle
+seguenti componenti:
+\begin{itemize}
+    \item Miliardi di \textbf{calcolatori} connessi:
+    \begin{itemize}
+        \item \textbf{Hosts}: dispositivi di computazione e sistemi periferici
+        \item Sono sistemi che eseguono \textbf{applicazioni di rete} al "confine" dell arete
+    \end{itemize}
+    \item 
+\end{itemize}
+
+
+
+\end{document}
