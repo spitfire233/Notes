@@ -305,4 +305,130 @@ Diamo una versione più generale della gerarchia:
     \includegraphics[width =0.85\linewidth]{Images/17.PNG}
 \end{center}
 Tuttavia, le connessioni possibili \textbf{possono anche non limitarsi a quelle mostrare in figura}.
+\subsection{Metriche di performance nelle reti}
+Il ritardo e la perdita sono due delle metriche fondamentali per capire la prestazione della rete.
+Abbiamo già parlato di \textbf{ritardo di accodamento} e di \textbf{ritardo di trasmissione}, tuttavia essi sono
+solo due dei tipi di ritardo che si possono verificare.
+\begin{center}
+    \includegraphics[width =0.70\linewidth]{Images/18.PNG}
+\end{center}
+Tuttavia ce ne sono delle altre, vediamole tutte: 
+\begin{itemize}
+    \item \textbf{Ritardo di elaborazione} ($d_{proc}$): quando un pacchetto arriva ad un nodo, devono essere effettuate delle operazioni fondamentali, per esempio \textbf{l'analisi della tabella di inoltro per capire su quale collegamento trasmettere il pacchetto} (lookup).
+    Altra operazione è il \textbf{controllo dei bit di errore}: a volte, per colpa di distorsioni o "rumore" sul canale, certi bit di un pacchetto possono essere cambiati (da 0 a 1 e viceversa); il pacchetto quindi risulta malformato. Esistono meccanismi che permettono
+    di \textbf{individuare se c'è stato un errore} (e anche di ricostruire il pacchetto originale). Questi metodi sono detti di \textbf{controllo e correzione dell'errore} e richiedono del tempo per essere eseguiti, tendenzialmente nell'ordine dei \textbf{microsecondi} ($10^-6 s$).
+    \item \textbf{Ritardo di accodamento} ($d_{queue}$): è il tempo che il pacchetto attende per essere trasmesso. Dipende dal livello di congestione della rete. È tipicamente nell'ordine dei millisecondi
+    \item \textbf{Ritardo di trasmissione} ($d_{trans}$): Se abbiamo un pacchetto di lunghezza $L$ che vogliamo trasferire su un collegamento con tasso di trasmissione $R$, allora il ritardo di trasmissione è dato da:
+    $$d_{trans} = \frac{L}{R}$$
+    \item \textbf{Ritardo di propagazione} ($d_{prop}$): Il ritardo di propagazione è il tempo che necessita un pacchetto per \textbf{propagarsi da un capo all'altro del collegamento}. Questo ritardo dipende dalla lunghezza del collegamento fisico $d$ (espressa in \textbf{metri} (m))
+    e dalla \textbf{velocità di propagazione} $s$, che è nell'ordine di grandezza della \textbf{velocità della luce}: $\sim 2 \cdot 10^8 \; m/sec$, e si calcola nel seguente modo:
+    $$d_{prop} = \frac{d}{s}$$
+\end{itemize}
+\begin{center}
+    \includegraphics[width =0.70\linewidth]{Images/19.PNG}
+\end{center}
+Il \textbf{ritardo totale del nodo} (ritardo \textbf{end-to-end}) $d_{nodal}$ è calcolato come la somma di tutti ritardi visti sopra:
+$$d_{nodal} = d_{proc} + d_{queue} + d_{trans} + d_{prop}$$
+esso è uno delle \textbf{metriche più importanti} e mi permette di valutare le prestazioni della rete. Per calcolare il ritardo ent-to-end bisognerebbe anche tener conto dei \textbf{ritardi introdotti dai sistemi periferici},
+che tuttavia non considereremo per questi appunti.
+\subsubsection{Ritardo di accodamento e intensità di traffico}
+Il ritardo di accodamento ha una caratteristica particolare: mentre tutti gli altri ritardi sono \textbf{analoghi} se considero lo stesso pacchetto trasmesso in due momenti diversi, \textbf{per il ritardo di accodamento non è così}.
+Il ritardo di accodamento dipende dallo stato della rete durante la trasmissione. Questo ritardo di solito viene studiato tramite \textbf{metodi statistici}: in particolare, il ritardo di accodamento dipende da un valore che viene chiamato \textbf{intensità di traffico} ("traffic intensity"):
+$$\frac{L \cdot \overline{a}}{R} = \frac{\textrm{tasso di arrivo dei pacchetti (bit/s)}}{\textrm{tasso di uscita dei pacchetti (bit/s)}}$$
+Dove:
+\begin{itemize}
+    \item $\overline{a}$ è il \textbf{tasso di arrivo medio dei pacchetti} (pacchetti/s)
+    \item $L$ è la \textbf{lunghezza} dei pacchetti (bit/packet)
+    \item $R$ è la \textbf{larghezza di banda} del collegamento (bit/s)
+\end{itemize}
+L'intensità di traffico è \textbf{adimensionale} ed è una quantità non negativa:
+\begin{itemize}
+    \item Se l'intensità di traffico è \textbf{vicina a 0}, allora il ritardo di accodamento medio sarà piccolo
+    \item Se l'intensità di traffico è \textbf{vicina a 1}, allora il ritardo di accodamento medio è grande
+    \item Se l'intensità di traffico è \textbf{maggiore di 1}, allora il tasso di arrivo dei pacchetti \textbf{è troppo alto rispetto alla capacità della rete di smaltirli}, quindi il tempo di accodamento medio è \textbf{potenzialmente infinito}
+\end{itemize}
+\begin{center}
+    \includegraphics[width =0.50\linewidth]{Images/20.PNG}
+\end{center}
+\subsubsection{Perdita di pacchetti}
+Un'altra metrica di performance fondamentale è la \textbf{perdita di pacchetti}; infatti, idealmente essa dovrebbe essere \textbf{nulla}.
+La perdita di pacchetti si verifica quando si ha un buffer overflow sul buffer di accodamento di un nodo.
+La perdita di pacchetti può essere mitigata tramite \textbf{meccanismi di ritrasmissione dei pacchetti} da parte del nodo sorgente (tuttavia non è obbligatorio che avvenga).
+\begin{center}
+    \includegraphics[width =0.70\linewidth]{Images/21.PNG}
+\end{center}
+Oltre alla perdita per accodamento, \textbf{i pacchetti possono essere scartati dai commutatori} se ci sono stati troppi errori durante la trasmissione oppure se non è previsto un meccanismo di correzione degli errori.
+\subsubsection{Throughput}
+Il \textbf{throughput} è il \textbf{tasso a cui i bits vengono inviati dal mittente al destinatario}; si calcola in bit/s e viene a volte chiamato \textbf{throughput end-to-end}.
+Come si fa a calcolare il throughput?
+\begin{itemize}
+    \item \textbf{Throughput istantaneo}: tasso di invio \textbf{ad un certo punto nel tempo}
+    \item \textbf{Throughput medio}: tasso di invio medio \textbf{su un lungo periodo di tempo}; si può ottenere facendo la media di tutti i valori istantanei o nel seguente modo: supponiamo di voler trasferire un file $F$ dal punto A al punto B; allora il throughput sarà la dimensione del file diviso il tempo che ha impiegato il file ad essere trasferito 
+\end{itemize}
+Il throughput è una metrica di prestazione "quanto bene" la rete sta andando nella comunicazione tra un mittente ed un destinatario.
+\begin{center}
+    \includegraphics[width =1\linewidth]{Images/22.PNG}
+\end{center}
+Si possono verificare vari casi:
+\begin{itemize}
+    \item Se $R_s < R_c$ allora il throughput medio sarà $R_s$. In questo caso, \textbf{non si causerà mai accodamento nel commutatore}
+    \item Se $R_s > R_c$ allora il throughput medio sarà $R_c$. In questo caso, potrebbe essere possibile che i \textbf{pacchetti si accodano nel commutatore}
+\end{itemize}
+In ogni caso, il throughput è vincolato dal collegamento con capacità minore, il quale prende il nome di \textbf{bottleneck link}. Vediamo questo ulteriore scenario:
+supponiamo di avere 10 client e 10 server e che essi, per comunicare, passino attraverso un collegamento all'interno della network core con larghezza di banda $R$:
+\begin{center}
+    \includegraphics[width =0.40\linewidth]{Images/23.PNG}
+\end{center}
+In questo caso, il throughput end-to-end per connessione risulta il minimo tra $R_c, R_s,$ e $R/10$, cioè $min\{R_C, R_s, R/10\}$.
+Nella pratica, tuttavia, la rete di core ha larghezze di banda \textbf{molto maggiori rispetto ai collegamenti degli hosts}, quindi $R/10$, il più delle volte, sarà comunque molto maggiore di $R_s$ e $R_c$.
+Ciò significa che, molto spesso, il bottleneck è dato dai collegamenti di accesso.
+\subsection{Strato protocollare e modelli di servizio}
+Le reti sono dei sistemi molto complessi con diverse componenti che interagiscono fra loro
+\begin{itemize}
+    \item Hosts
+    \item Routers
+    \item Collegamenti di diverso tipo e scopo
+    \item Applicazioni
+    \item Protocolli
+    \item Hardware e Software
+\end{itemize}
+C'è allora un modo intelligente per \textbf{strutturare e discutere le reti}?
+Un modo è una \textbf{struttura a strati}, in cui ogni servizio viene implementato tramite \textbf{azioni interne allo strato} e ogni servizio fa affidamento ai servizi \textbf{appartenenti al livello sottostante per implementare le proprie operazioni e garantirne il funzionamento}.
+Inoltre, i vari strati sono \textbf{indipendenti l'uno dall'altro}, nel senso che, in caso di modifiche a come vengono implementati i servizi in uno strato, gli altri strati \textbf{non vengono influenzati dalla modifica}.
+L'approccio a strati quindi permette di approcciarsi alla modellazione e alla discussione di sistemi complessi:
+\begin{itemize}
+    \item La sua \textbf{struttura esplicita} permette l'identificazione e le \textbf{relazioni fra le varia componenti del sistema}. Crea inoltre un \textbf{modello di riferimento a strati} per la discussione
+    \item Permette la \textbf{modularizzazione} del sistema e quindi rende più semplice l'aggiornamento e la manutenzione di questo
+    \begin{itemize}
+        \item I cambiamenti nell'implementazione dei servizi di uno strato sono \textbf{trasparenti al resto del sistema} e quindi non lo influenzano
+    \end{itemize}
+\end{itemize}
+Ciò che è stato definito per internet prende il nome di \textbf{pila (o stack) protocollare di internet} e prevede l'esistenza di 5 diversi strati, numerati dal basso verso l'alto:
+\begin{center}
+    \includegraphics[width =0.15\linewidth]{Images/24.PNG}
+\end{center}
+Vediamoli nel dettaglio:
+\begin{itemize}
+    \item \textbf{LIVELLO 5: APPLICATIVO}: Tutti i protocolli volti al supporto alle applicazioni di rete (HTTP, SMTP, DNS ecc..)
+    \item \textbf{LIVELLO 4: TRASPORTO}: Ha il compito di effettuare un trasferimento di dati tra macchine che si trovano su reti differenti. Esempio di protocolli a questo livello sono TCP e UDP
+    \item \textbf{LIVELLO 3: RETE}: Offre il servizio fondamentale di \textbf{instradamento} tra sorgente e destinazione. Protocollo fondamentale a questo livello è \textbf{Internet Protocol} (IP)
+    \item \textbf{LIVELLO 2: COLLEGAMENTO}: Ha il compito di trasferire i dati tra \textbf{due entità di rete adiacenti}, cioè su un collegamento. Protocolli a questo livello sono, per esempio, Ethernet e 802.11(WiFi).
+    \item \textbf{LIVELLO 1: FISICO}: Trasporto fisico dei bit su un cavo (o canale radio)
+\end{itemize}
+\subsubsection{Servizi, Stratificazione e Incapsulamento}
+Come si può andare ad implementare i vari protocolli che garantiscono il funzionamento dei servizi ad ogni livello?
+Un concetto fondamentale da introdurre a questo scopo è quello dell'\textbf{incapsulamento}: le applicazioni si devono
+scambiare messaggi per realizzare i propri servizi, e per farlo devono basarsi sui servizi offerti dal \textbf{livello di trasporto}
+\begin{center}
+    \includegraphics[width =1\linewidth]{Images/25.PNG}
+\end{center}
+Il messaggio viene quindi passato al livello di trasporto, il quale \textbf{aggiunge un'intestazione (operazione di incapsulamento)} che va ad implementare il servizio a livello di trasporto:
+\begin{center}
+    \includegraphics[width =1\linewidth]{Images/26.PNG}
+\end{center}
+A sua volta, il livello di trasporto usa \textbf{i servizi del livello di rete}, quindi passerò il nuovo \textbf{segmento} al livello di rete:
+\begin{center}
+    \includegraphics[width =1\linewidth]{Images/26.PNG}
+\end{center}
+
 \end{document}
