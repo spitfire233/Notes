@@ -531,5 +531,9 @@ Vediamo ogni passo in dettaglio:
     \item Il root DNS server restituisce la risposta ottenuta al DNS server locale
     \item Il DNS server locale restituisce la risposta ottenuta al client
 \end{enumerate}
-Solitamente, questo meccanismo non si utilizza poiché tendenzialmente i
+Solitamente, questo meccanismo non si utilizza poiché tendenzialmente i TLD DNS server, per loro natura, si trovano a gestire
+un alta quantità di traffico, quindi un meccanismo di risposta ricorsivo porrebbe ulteriore peso su di essi. Si tende quindi
+a cercare di mantenere il peso sui DNS server locali, i quali tendenzialmente gestiscono una quantità di traffico molto minore.
+
+
 \end{document}
