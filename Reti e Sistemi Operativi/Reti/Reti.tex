@@ -426,9 +426,31 @@ Il messaggio viene quindi passato al livello di trasporto, il quale \textbf{aggi
 \begin{center}
     \includegraphics[width =1\linewidth]{Images/26.PNG}
 \end{center}
-A sua volta, il livello di trasporto usa \textbf{i servizi del livello di rete}, quindi passerò il nuovo \textbf{segmento} al livello di rete:
+A sua volta, il livello di trasporto usa \textbf{i servizi del livello di rete}, quindi passerò il nuovo \textbf{segmento} al livello di rete, il quale aggiungerà un'ulteriore intestazione:
 \begin{center}
-    \includegraphics[width =1\linewidth]{Images/26.PNG}
+    \includegraphics[width =1\linewidth]{Images/27.PNG}
+\end{center}
+Da notare che a questo livello \textbf{il payload contiene anche l'header del trasporto}, e sarà così anche per le prossime operazioni.
+Lo strato di rete si basa sui \textbf{servizi offerti dal livello di collegamento} per implementare i propri, quindi passa il nuovo \textbf{datagramma} ottenuto al livello di collegamento:
+\begin{center}
+    \includegraphics[width =1\linewidth]{Images/28.PNG}
+\end{center}
+Infine, il pacchetto verrà passato al livello fisico e quindi trasmesso al destinatario.
+Come abbiamo già accennato, i pacchetti hanno  nome diverso in strati diversi:
+\begin{center}
+    \includegraphics[width =1\linewidth]{Images/29.png}
+\end{center}
+Man mano che si scende nella pila protocollare, vengono aggiunti nuovi bit di intestazione, i quali servono per \textbf{far funzionare i servizi di rete}.
+L'insieme di tutti i bit aggiunti da ogni strato prende il nome di \textbf{overhead} del pacchetto. Poiché il throughput viene misurato \textbf{a livello applicativo},
+non si avrà mai, a livello pratico, \textbf{una misura di throughput massima} poiché non vengono contati i bit di overhead. Dopo l'operazione di \textbf{incapsulamento} del messaggio
+e di trasmissione su cavo fisico, avviene sul sistema ricevente un'operazione di \textbf{decapsulamento} del messaggio:
+\begin{center}
+    \includegraphics[width =1\linewidth]{Images/30.png}
+\end{center}
+I sistemi periferici sono sempre in grado di interpretare tutti gli strati della pila protocollare; questo però non è vero per i \textbf{commutatori}, che "parlano" fino al \textbf{livello 2} se sono
+degli \textbf{switch} e fino al \textbf{livello 3} se sono dei \textbf{router}:
+\begin{center}
+    \includegraphics[width = 0.80\linewidth]{Images/31.png}
 \end{center}
 
 \end{document}
