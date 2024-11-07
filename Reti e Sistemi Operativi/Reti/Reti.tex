@@ -452,4 +452,84 @@ degli \textbf{switch} e fino al \textbf{livello 3} se sono dei \textbf{router}:
 \begin{center}
     \includegraphics[width = 0.80\linewidth]{Images/31.png}
 \end{center}
+\section{Strato applicativo: Domain Name System}
+Lo strato applicativo ha la funzione di interfacciare e fornire servizi di connettività per i \textbf{processi delle applicazioni}. Il numero
+di protocolli presenti in questo strato è altissimo; in questi appunti, tuttavia, ci concentreremo sul protocollo \textbf{DNS}, il quale è una funzionalità chiave di internet, in particolare
+se si pensa ad esso come \textbf{fornitore di servizi web}. Quando inseriamo il \textbf{nome} di un sito nel browser, ciò che è avviene è lo scatenamento di un meccanismo che permette al computer
+di ottenere \textbf{l'indirizzo IP} (quindi l'indirizzo a livello di rete) associato al server che deve fornire la pagina web richiesta. Per ottenere questo indirizzo IP, non si può pensare di conoscere
+ogni indirizzo esistente, quindi è necessario un meccanismo che ci permette di reperirlo: il \textbf{Domain Name System} (DNS). Il DNS permette di effettuare la traduzione dall'\textbf{host name} (i nomi "human readable" dei siti)
+all'indirizzo IP del server associato che dovrà fornire al richiedente il contenuto. Come funziona quindi la traduzione? Essa sfrutta la \textbf{gerarchia} di un numero molto elevato di \textbf{server DNS} (che prendono anche il nome di \textbf{name servers}),
+i quali andranno a \textbf{risolvere} (tradurre) gli host name in indirizzi IP. Poiché il DNS è un protocollo a livello applicativo, la complessità di questa operazione si trova \textbf{interamente ai confini della rete}.
+Il DNS funziona nel seguente modo:
+\begin{center}
+    \includegraphics[width = 0.90\linewidth]{Images/32.png}
+\end{center}
+abbiamo quindi un sistema distribuito che si articola su \textbf{3 livelli}:
+\begin{itemize}
+    \item \textbf{Root DNS servers}: sono la radice dell'albero gerarchico
+    \item \textbf{Top Level Domain (TLD) DNS Servers}: sono responsabili della risoluzione dei \textbf{Top Level Domains}(TLDs); come per esempio .com, .net, .it, ...
+    \item \textbf{Authoritative DNS Servers}: Responsabili di risolvere gli indirizzi per i vari domini autoritativi (es. amazon.com, google.com ecc...)
+\end{itemize}
+Questi 3 livelli collaborano tra loro per risolvere il nome richiesto.
+\subsection{Root DNS Servers}
+I root DNS server stanno alla radice del sistema DNS e senza la loro esistenza \textbf{è fondamentale per l'esistenza del web}.
+In tutto, esistono 13 root name servers "logici", gestiti da \textbf{12 provider differenti}; a loro volta ognuno di questi root dns server è replicato
+più volte nel globo. È fondamentale avere repliche dei root name server geograficamente sparse che possono essere acceduti dai vari luogo del mondo.
+\begin{center}
+    \includegraphics[width = 0.70\linewidth]{Images/33.png}
+\end{center}
+\subsection{Top Level DNS servers e Authoritative DNS servers}
+Ogni TLD DNS server è responsabile per la risoluzione dei TLD, inclusi quelli nazionali (.it, .de. .pl, ...).
+I DNS server autoritativi invece è importate specificare che \textbf{possono essere mantenuti dall'organizzazione che detiene il dominio}
+oppure \textbf{possono essere mantenuti da un service provider}. Il loro compito è di risolvere le richieste relative a tutte le pagine appartenenti
+al loro dominio.
+\subsection{Local DNS name servers}
+Quando vi è la necessità di contattare il DNS per risolvere un dominio,la prima cosa che viene fatta è contattare il \textbf{DNS server locale}, a cui viene
+demandata di fatto questa risoluzione. Il DNS server locale ha un ruolo fondamentale: esistono DNS server locali forniti da ISP, che di solito sono l'opzione di default,
+tuttavia un utente può benissimo cambiare il proprio DNS server locale ad uno fornito da un'organizzazione terza. Il DNS server locale tendenzialmente fornisce due servizi:
+\begin{itemize}
+    \item Mantiene una cache delle associazioni nome-indirizzo IP. Questa cache viene costruita a partire dalle varie richieste dei sistemi terminali e di solito le associazioni
+    vengono mantenute per 2 giorni. Il DNS server locale quindi risponderà direttamente alle richieste del client, senza quindi interpellare la gerarchia del DNS, se il nome richiesto è presente
+    nella sua cache.
+    \item In caso il nome richiesto non sia presente in cache, il DNS server locale procederà ad inoltrare la richiesta alla gerarchia del DNS; una volta ottenuta risposta, procederà a comunicarla al client
+\end{itemize}
+Ogni richiesta al DNS prende il nome di \textbf{query}.
+\subsection{DNS name resolution: Iterated query}
+Ci sono due modi per effettuare query al DNS.
+Il modo che prende il nome di \textbf{query iterativa} è quello che viene usato più spesso.
+In questo metodo, il local DNS server ha \textbf{il maggior carico} dal punto di vista delle richieste da servire.
+\begin{center}
+    \includegraphics[width = 1\linewidth]{Images/34.png}
+\end{center}
+\newpage \noindent
+Analizziamo nel dettaglio ogni passaggio:
+\begin{enumerate}
+    \item L'host chiede al DNS server locale di risolvere un certo nome in un indirizzo IP
+    \item Il DNS server locale chiede al DNS server root di risolvere il nome
+    \item Il DNS server root indica al server DNS server locale quale TLD DNS server può risolvere la sua richiesta
+    \item Il DNS server locale chiede al TLD DNS server indicato di risolvere il nome
+    \item Il TLD DNS server indica al server DNS locale quale DNS server autoritativo può risolvere la sua richiesta
+    \item Il DNS server locale chiede al server DNS autoritativo di risolvere il nome
+    \item Il DNS server autoritativo restituisce l'indirizzo IP associato al nome indicato
+    \item Il DNS server locale restituisce l'indirizzo IP al client
+\end{enumerate}
+Ogni passaggio di questo processo è inoltre \textbf{trasparente all'utente}.
+\subsection{DNS name resolution: recursive query}
+In una query ricorsiva, la risoluzione viene effettuata, in modo gerarchico, dal DNS server di livello superiore.
+Il peso delle richieste quindi grava sulla \textbf{struttura gerarchica del DNS}.
+\begin{center}
+    \includegraphics[width = 1\linewidth]{Images/35.png}
+\end{center}
+Vediamo ogni passo in dettaglio:
+\begin{enumerate}
+    \item Il client chiede al DNS server locale di risolvere il nome
+    \item Il DNS server locale chiede al DNS server di root di risolvere il nome
+    \item Il DNS server di root chiede al TLD DNS Server corrispondente di risolvere il nome
+    \item Il TLD DNS server chiede al DNS server autoritativo corrispondente di risolvere il nome
+    \item Il DNS server autoritativo restituisce l'IP richiesto al TLD DNS server
+    \item Il TLD DNS server restituisce la risposta ottenuta al root DNS server
+    \item Il root DNS server restituisce la risposta ottenuta al DNS server locale
+    \item Il DNS server locale restituisce la risposta ottenuta al client
+\end{enumerate}
+Solitamente, questo meccanismo non si utilizza poiché tendenzialmente i
 \end{document}
