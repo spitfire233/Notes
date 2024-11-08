@@ -15,6 +15,7 @@
 \usepackage{mathtools}
 \usepackage{biblatex}
 \usepackage{float}
+\usepackage{algorithm2e}
 \lstset{
   language=Python,
   numbers=left,
@@ -559,9 +560,236 @@ il quale implementa lo stack protocollare.
 \begin{center}
     \includegraphics[width = 1\linewidth]{Images/36.png}
 \end{center}
-
-
-
-
+\begin{center}
+    \includegraphics[width = 1\linewidth]{Images/37.png}
+\end{center}
+\begin{center}
+    \includegraphics[width = 1\linewidth]{Images/38.png}
+\end{center}
+\subsection{I principali protocolli di trasporto}
+Vi sono due principali protocolli di trasporto:
+\begin{itemize}
+    \item \textbf{Transmission Control Protocol (TCP)}: Fornisce un servizio di \textbf{consegna dei dati affidabile e in ordine}.
+    Offre meccanismi di \textbf{controllo della congestione, controllo di flusso} e di \textbf{inizializzazione della connessione} (TCP è un protocollo \textbf{connection oriented}).
+    TCP è adatto alle applicazioni dette \textbf{elastiche}, cioè poco sensibili al ritardo ma \textbf{molto sensibile alla perdita di pacchetti}
+    \item \textbf{User Datagram Protocol (UDP)}: Protocollo di trasporto "\textbf{best-effort}" il quale è un'estensione "senza fronzoli" del protocollo IP. 
+    Il protocollo è di tipo \textbf{connectionless} ed è adatto alle applicazioni dette \textbf{real-time}: poco sensibili
+    alla perdita di pacchetti (in un certo grado) ma \textbf{molto sensibili al ritardo}
+\end{itemize}
+Nessuno dei due protocolli \textbf{garantisce qualcosa in termini di ritardo}, cioè nessuno dei due garantisce che i pacchetti saranno
+consegnati con un ritardo massimo di $n$ secondi. Allo stesso modo, nessuno dei due protocolli garantisce nulla riguardo alla \textbf{banda}: nessuno dei due
+garantisce che la comunicazione avvenga a certi bit/s.
+\subsection{Multiplexing e Demultiplexing}
+Quando si parla di Multiplexing in generale si parla di un'operazione che porta ad unire \textbf{più flussi} in un unico flusso.
+Nel caso specifico del livello di trasporto, dobbiamo garantire che il servizio di multiplexing/demultiplexing sia \textbf{garantito} poiché mi permette
+di \textbf{estendere logicamente la comunicazione ai processi}. 
+\begin{center}
+    \includegraphics[width = 0.90\linewidth]{Images/39.png}
+\end{center}
+\begin{center}
+    \includegraphics[width = 0.90\linewidth]{Images/40.png}
+\end{center}
+quindi, l'operazione di multiplazione \textbf{porta ad aggiungere un header ai messaggi provenienti dai processi}, in modo tale che essi siano \textbf{distinguibili} una volta che arrivano al livello di rete; il quale \textbf{non ha conoscenza di quale processo ha generato quale segmento}
+ma si preoccupa solamente di consegnare il pacchetto \textbf{all'host corretto}. L'informazione che permette di distinguere i pacchetti è la \textbf{porta di destinazione}. Il livello di trasporto si vedrà recapitati segmenti, dal livello di rete, che avranno
+nel loro header dell'informazione relativa alla porta di destinazione; l'operazione di \textbf{demultiplazione} permette, a livello di trasporto, di inoltrare \textbf{verso la socket corretta} segmenti diretti verso \textbf{processi differenti}.
+In particolare, l'operazione di \textbf{demultiplazione} funziona nel seguente modo:
+\begin{itemize}
+    \item L'host riceve i \textbf{datagrammi IP}:
+    \begin{itemize}
+        \item Ogni datagramma ha un indirizzo IP sorgente e un indirizzo IP destinatario
+        \item Ogni datagramma trasporta un \textbf{segmento del livello di trasporto}
+        \item Ogni segmento ha una \textbf{numero di porta sorgente e il numero della porta di destinazione}
+    \end{itemize}
+    \item L'host mittente usa \textbf{l'indirizzo IP e il numero di porta} per inviare i segmenti alla socket appropriata
+\end{itemize}
+\subsubsection{Connectionless demultiplexing}
+Quando si va a creare una socket, \textbf{bisogna specificare attraverso su quale porta essa è raggiungibile}.
+La socket di destinazione è \textbf{univocamente identificata} da una coppia di valori:
+\begin{enumerate}
+    \item \textbf{L'indirizzo IP di destinazione}
+    \item \textbf{Il numero della porta di destinazione}
+\end{enumerate}
+Quando l'host destinatario riceve un segmento UDP:
+\begin{itemize}
+    \item Controlla il numero della porta di destinazione nel segmento
+    \item Invia il segmento UDP alla socket con quella porta
+\end{itemize}
+I datagrammi IP/UDP con \textbf{la stessa porta di destinazione e stesso indirizzo IP di destinazione}, anche se da indirizzi IP sorgenti differenti e/o con differenti numeri di porta sorgente, saranno
+\textbf{inviati alla stessa socket} dell'host destinatario.
+\begin{center}
+    \includegraphics[width = 0.90\linewidth]{Images/41.png}
+\end{center}
+\subsubsection{Connection-oriented demultiplexing}
+A differenza dei protocolli connectionless, una socket è qui identificata \textbf{da una quadrupla}:\
+\begin{itemize}
+    \item \textbf{Indirizzo IP sorgente}
+    \item \textbf{Numero di porta sorgente}
+    \item \textbf{Indirizzo IP destinatario}
+    \item \textbf{Numero della porta di destinazione}
+\end{itemize}
+Quando viene effettuata la demultiplazione, allora \textbf{tutti e 4 i valori} verranno usati per inviare il pacchetto alla socket corretta.
+Ciò significa che qui si avrà \textbf{una socket dedicata ad ogni connessione}. I server \textbf{possono supportare più socke TCP simultaneamente} e:\
+\begin{itemize}
+    \item Ogni socket è identificata da una sua quadrupla
+    \item Ad ogni socket è \textbf{associato un diverso client comunicante}
+\end{itemize}
+\begin{center}
+    \includegraphics[width = 0.90\linewidth]{Images/42.png}
+\end{center}
+\subsection{User Datagram Protocol (UDP)}
+\textbf{User Datagram Protocol} (UDP) è, di fatto, un'estensione "senza fronzoli" e "minimale" del protocollo IP.
+UDP fornisce un servizio di trasporto \textbf{"best effort"}, quindi i segmenti di UDP potrebbero essere:
+\begin{itemize}
+    \item Persi 
+    \item Consegnati in disordine all'applicazione
+\end{itemize}
+È un \textbf{protocollo connectionless}:
+\begin{itemize}
+    \item Nessun "handshaking" (inizializzazione della connessione) tra il mittente e il destinatario
+    \item Ogni segmento UDP viene gestito indipendentemente dagli altri
+\end{itemize}
+Perché è necessaria l'esistenza  di UPD?
+\begin{itemize}
+    \item Nessuna necessità di stabilire una connessione (il che può aggiungere ritardi)
+    \item È \textbf{semplice}: nessuno stato di connessione al mittente e al destinatario
+    \item \textbf{Dimensioni dell'intestazione piccole}
+    \item \textbf{Nessun controllo di congestione}
+    \begin{itemize}
+        \item UDP può \textbf{trasmettere quanto veloce si vuole}
+        \item Può funzionare in casi di congestione della rete (più o meno, comunque fatica in caso di congestione molto elevata)
+    \end{itemize}
+\end{itemize}
+L'header di UDP ha la seguente struttura:
+\begin{center}
+    \includegraphics[width = 0.80\linewidth]{Images/43.png}
+\end{center}
+Facciamo qualche considerazione:
+\begin{itemize}
+    \item L'header è quindi di \textbf{64 bit}, ed ogni campo è lungo \textbf{16 bit}.
+    \item Posso avere $2^{16} - 1$ possibili porti di sorgente e destinazione (la porta con tutti 0 non è tendenzialmente una porta valida)
+    \item Includendo l'header, al più posso avere $2^{16} - 1$ byte differenti in un segmento UDP
+    \item Il checksum si calcola nel seguente modo: si considerino gruppi di 16 bit del segmento; si sommino modulo 2 e si faccia il complemento di essa.
+    Lato destinatario, si effettua la stessa operazione e poi si somma con il checksum: se si ottengono tutti 0 allora non ci sono stati errori.
+\end{itemize}
+\subsection{Principi del trasferimento dati affidabile}
+Per servizio di dati affidabile si intende un servizio di trasporto in cui i dati \textbf{vengono consegnati senza perdite e senza errori}.
+Dal punto di vista astratto vogliamo avere la seguente situazione:
+\begin{center}
+    \includegraphics[width = 0.70\linewidth]{Images/44.png}
+\end{center}
+Tuttavia, nella realtà \textbf{il canale è sempre inaffidabile per definizione}: il protocollo IP è un protocollo "best-effort" e quindi non offre
+garanzie sulla consegna, dovremo quindi \textbf{andare ad implementare dei meccanismi di trasporto che rendano la consegna affidabile}:
+\begin{center}
+    \includegraphics[width = 1\linewidth]{Images/45.png}
+\end{center}
+Abbiamo poi un ulteriore problema: il mittente e il destinatario \textbf{non conosco lo stato l'uno dell'altro} a meno che \textbf{non sia comunicato tramite messaggio}.
+Consideriamo una \textbf{rete ideale}, cioè che non introduce:
+\begin{itemize}
+    \item Bit di errore
+    \item Scarto di segmenti
+    \item Segmenti fuori sequenza
+\end{itemize}
+Il livello di trasporto \textbf{allora non dovrà correggere nulla e il protocollo stesso sarà triviale}: il mittente invia i segmenti in sequenza (uno dopo l'altro) e il ricevente li riceve
+senza nessun ulteriore controllo
+\begin{center}
+    \includegraphics[width = 0.60\linewidth]{Images/46.png}
+\end{center}
+Sfortunatamente, le reti ideali non esistono. In una rete con errori, è possibile introdurre \textbf{riconoscimenti positivi} (ack) e \textbf{riconoscimenti negativi} (nack).
+\begin{center}
+    \includegraphics[width = 0.80\linewidth]{Images/47.png}
+\end{center}
+Un algoritmo di invio molto semplice allora potrà essere il seguente: \newline
+\begin{algorithm}[H]
+\DontPrintSemicolon
+\eIf{ack} {
+    $M_{i+1}$
+} {
+    \If{nack} {
+        $M_i$
+    }
+    \If(\tcp*[h]{problema!}){?} {
+        something
+    }
+}
+\end{algorithm}
+\noindent
+Se la rete è \textbf{soggetta ad errori} anche \textbf{gli ack possono essere soggetti ad errori}, quindi stiamo ipotizzando, con questo algoritmo, che \textbf{la perdita o la corruzione di ack non avvenga}, cosa
+che in realtà può accadere nelle reti reali. Un modo per mitigare questo problema è \textbf{ritrasmettere il messaggio se l'ack è corrotto}.
+Tuttavia, neanche questo funziona! Non ho un meccanismo per capire se \textbf{un messaggio è duplicato o meno}. Possiamo mitigare ulteriormente questo problema nel seguente modo:
+se i \textbf{segmenti sono numerati con un numero di sequenza nell'intestazione}, non c'è il rischio di non sapere se un messaggio è duplicato o meno
+\begin{center}
+    \includegraphics[width = 0.80\linewidth]{Images/48.png}
+\end{center}
+L'algoritmo di invio allora diventa: \newline
+\begin{algorithm}[H]
+\DontPrintSemicolon
+\eIf{ack} {
+    $M_{i+1}$
+} {
+    $M_i$ \tcp*[h]{è stato ricevuto un nack}
+}
+\end{algorithm}
+\noindent
+Un protocollo di questo tipo \textbf{funzionerebbe in una rete che introduce errori}. Sfortunatamente, le reti non solo introducono errori ma \textbf{anche perdite di pacchetti!}.
+Prima di passare a definire un protocollo resistente anche alle perdite, parliamo di \textbf{efficienza di un protocollo}: quando si definisce un nuovo protocollo, si deve cercare di limitare
+\textbf{il numero di messaggi diversi possibili in esso}, quindi se oltre a numerare i segmenti \textbf{numeriamo anche gli ack}
+\begin{center}
+    \includegraphics[width = 0.80\linewidth]{Images/49.png}
+\end{center}
+allora dovrò inserire una \textbf{regola aggiuntiva} che indica che, se non si è ricevuto il messaggio atteso, al posto di inviare un ack con numero di sequenza $i$ dovrò
+inviare un ack con numero di sequenza $i-1$. L'algoritmo quindi diventa: \newline
+\begin{algorithm}[H]
+    \DontPrintSemicolon
+    \eIf{ack} {
+        $M_{i+1}$
+    } {
+        $M_i$ \tcp*[h]{è stato ricevuto un $ack_i$}
+    }
+    \end{algorithm}
+\noindent
+quindi, si andrà a ritrasmettere un messaggio se \textbf{si riceve un ack duplicato}.
+Per rendere il protocollo resistente alle \textbf{perdite}: quando ho una perdita, può capitare che \textbf{il pacchetto inviato sia stato perso}
+oppure che \textbf{l'ack vada perso}; allora viene introdotto \textbf{un timer}:
+\begin{center}
+    \includegraphics[width = 1\linewidth]{Images/50.png}
+\end{center}
+nel momento in cui \textbf{il timer scade} e non ho ancora ricevuto un ack, \textbf{rinvio lo stesso messaggio}. L'algoritmo di invio diventerà: \newline
+\begin{algorithm}[H]
+    \DontPrintSemicolon
+    \eIf{$s+T$ is reached} {
+        $M_i$\;
+        set($s+T$) + $T$
+    } {
+        \eIf(\tcp*[h]{$s+T$ non è stato ancora raggiunto ($r$)}){$ack_i$} {
+            $M_{i+1}$\;
+            set($r+T$)
+        } {
+            $M_i$\;
+            set($r+T$)
+        }
+    }
+\end{algorithm}
+\noindent
+Questo tipo di implementazione è la più sofistica di quelli che vengono detti \textbf{protocolli stop-and-wait}.
+Un protocollo stop-and-wait \textbf{funziona in una rete reale}. Tuttavia, vi sono delle problematiche:
+\begin{itemize}
+    \item L'impostazione della lunghezza del timer è un problema complesso
+    \item Un timer \textbf{troppo corto} potrebbe causare \textbf{ritrasmissioni inutili}: nell'esempio fatto sopra, ci potrebbero essere lunghe sequenze di \textbf{ritrasmissioni inutili}
+    \item Un timer \textbf{troppo lungo} ferma per troppo tempo la trasmissione in caso di perdita
+\end{itemize}
+\begin{center}
+    \includegraphics[width = 0.25\linewidth]{Images/51.png}
+\end{center}
+Dovrò quindi avere un timer almeno lungo quanto il periodo di tempo che intercorre tra la trasmissione del messaggio e il ricevimento di un ack, questo valore
+prende il nome di \textbf{Round-Trip Time} (RTT); il problema quindi passa al cercare di fare una stima accurata del RTT.
+La problematica principale di un protocollo stop-and-wait è la seguente: supponiamo di essere nel caso in cui il \textbf{ritardo di trasmissione} non è più trascurabile
+\begin{center}
+    \includegraphics[width = 0.40\linewidth]{Images/52.png}
+\end{center}
+i parallelogrammi sopra rappresentano il ritardo di trasmissione, il quale vale $L/R$. Assumiamo, per semplicità, che gli ack
+abbiano un ritardo di trasmissione trascurabile. Se siamo in un protocollo stop-and-wait, in questo caso esso è \textbf{altamente inefficiente}. Una
+misura dell'efficienza del protocollo è la \textbf{utilità} (utility), la quale si calcola nel seguente modo:
+$$U = \frac{\frac{L}{R}}{RTT + \frac{L}{R}}$$
+questa misura indica \textbf{quanto tempo (da trasformare in percentuale) dedico effettivamente alla comunicazione}.
 
 \end{document}
