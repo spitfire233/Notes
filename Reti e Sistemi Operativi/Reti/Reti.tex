@@ -534,6 +534,34 @@ Vediamo ogni passo in dettaglio:
 Solitamente, questo meccanismo non si utilizza poiché tendenzialmente i TLD DNS server, per loro natura, si trovano a gestire
 un alta quantità di traffico, quindi un meccanismo di risposta ricorsivo porrebbe ulteriore peso su di essi. Si tende quindi
 a cercare di mantenere il peso sui DNS server locali, i quali tendenzialmente gestiscono una quantità di traffico molto minore.
+\section{Livello di trasporto}
+I servizi del livello di trasporto offrono:
+\begin{itemize}
+    \item \textbf{comunicazione logica} tra processi su host diversi, cioè processi su macchine diversi possono comunicare come se fossero direttamente connessi fra loro
+    \item Le azioni effettuate dai protocolli di trasporto nei sistemi periferici sono:
+    \begin{itemize}
+        \item \textbf{Mittente}: il livello di trasporto deve prendere i messaggi applicativi, eventualmente \textbf{dividerli in parti più piccole}, incapsularli in quelli che prendono il nome di \textbf{segmenti}
+        \item \textbf{Destinatario}: il livello di trasporto \textbf{riassembla i segmenti} per ricostruire il messaggio originale e poi passa il messaggio ricostruito al livello applicativo
+    \end{itemize}
+\end{itemize}
+Come si differenzia il servizio di comunicazione tra processi offerto dal livello di trasporto dal servizio offerto dal livello di rete?
+\begin{itemize}
+    \item A \textbf{livello di rete}, abbiamo una comunicazione logica tra \textbf{hosts}
+    \item A \textbf{livello di trasporto}, estende la comunicazione logica offerta dal livello di rete, migliorandola a una comunicazione tra \textbf{processi su host differenti}  
+\end{itemize}
+\subsection{Sockets}
+Una \textbf{socket} è un "varco" che permette ai processi a livello applicativo di comunicare con il livello di trasporto e di inviare i messaggi verso destinatari
+usando lo stack protocollare di internet. Quando quindi un processo deve mandare un messaggio in rete, \textbf{lo fa passare attraverso una socket}; vengono poi sfruttati i servizi
+offerti dal livello di trasporto per fare in modo che il messaggio sia recapitato \textbf{ad un'altra socket dal lato del destinatario} (ci sono quindi almeno sempre due socket in una comunicazione tra processi).
+Dal punto di vista formale, una socket è \textbf{un'interfaccia} che permette di interfacciare il livello applicativo con il livello di trasporto. La cosa particolare della socket è che, da un lato la parte della socket
+che si \textbf{interfaccia con i processi applicativi} può essere controllata da chi sviluppa l'applicazione (può aprirla, chiuderla, ...), dall'altro la parte che si interfaccia con il livello di trasporto è \textbf{controllata dal sistema operativo},
+il quale implementa lo stack protocollare.
+\begin{center}
+    \includegraphics[width = 1\linewidth]{Images/36.png}
+\end{center}
+
+
+
 
 
 \end{document}
