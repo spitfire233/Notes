@@ -791,5 +791,198 @@ abbiano un ritardo di trasmissione trascurabile. Se siamo in un protocollo stop-
 misura dell'efficienza del protocollo è la \textbf{utilità} (utility), la quale si calcola nel seguente modo:
 $$U = \frac{\frac{L}{R}}{RTT + \frac{L}{R}}$$
 questa misura indica \textbf{quanto tempo (da trasformare in percentuale) dedico effettivamente alla comunicazione}.
+\subsubsection{Protocolli a finestra scorrevole}
+\begin{center}
+    \includegraphics[width = 0.30\linewidth]{Images/53.png}
+\end{center}
+Per risolvere il problema della \textbf{bassa utilità di stop-and-wait} sono stati pensati dei protocolli detti \textbf{a finestra scorrevole}
+Questi protocolli permettono di trasferire fino a $W$ segmenti prima di \textbf{aspettare di ricevere gli ack dei vari segmenti inviati} (in questo caso si dice che la finestra si chiude).
+Ciò significa che, una volta ricevuto l'ack del primo segmento \textbf{posso far scorrere la finestra e trasmettere il segmento $W$} e così via se non si hanno perdite. L'utilizzo del canale è quindi
+molto più alto di stop-and-wait. La condizione per il quale c'è una condizione di \textbf{trasmissione continua} sul canale è che la finestra non si chiuda prima dell'arrivo del primo ack, cioè deve valere
+la seguente condizione:
+$$W \cdot \frac{L}{R} \geq RTT + \frac{L}{R}$$
+invertendo la formula, posso quindi scoprire quanto deve essere grande la finestra per garantire una trasmissione continua:
+$$W \geq \frac{RTT \cdot R}{L} + 1$$
+C'è quindi da chiedersi \textbf{cosa deve essere ritrasmesso quando un segmento viene perso}.
+Immaginiamo quindi di avere una finestra abbastanza ampia da non dover preoccuparci delle problematiche viste prima.
+La prima possibilità è il protocollo \textbf{Go-Back-N}: la trasmissione va avanti e la finestra scorre \textbf{dopo ogni ack ricevuto}.
+Se $s+T$ viene raggiunto, verranno ritrasmessi \textbf{tutti i segmenti a partire da quello che ha fatto scattare il timeout}
+\begin{center}
+    \includegraphics[width = 0.40\linewidth]{Images/54.png}
+\end{center}
+Il ricevitore, quando si accorge di aver ricevuto un segmento fuori sequenza, \textbf{scarta i segmenti fuori sequenza} e manda degli ack che "puntano" al primo segmento non ancora
+ricevuto. Dal punto di vista del trasmettitore, appena inviato un segmento viene fatto partire un timer: se il timer scade, allora \textbf{ricomincerà a trasmettere tutti i segmenti a partire da quello per il quale il timer è scaduto}.
+Tuttavia, questo protocollo non è particolarmente efficiente, perché \textbf{vado a scartare segmenti solo per poi riceverli di nuovo}, tuttavia questa implementazione \textbf{semplifica molto certi aspetti della trasmissione}: con questo protocollo
+\textbf{non richiede buffer al destinatario}, poiché ogni segmento viene ricevuto in sequenza. Un'altra cosa importante di questo protocollo è il fatto che gli \textbf{ack sono comulativi}: per come è fatto il protocollo, i dati vengono
+consegnati al livello applicativo \textbf{solo se sono in sequenza}; ciò significa che se io perdo un ack e successivamente l'ack per il segmento successivo \textbf{viene ricevuto correttamente}, allora posso essere sicuro che anche i segmenti successivi
+siano stati trasmessi e ricevuti correttamente; cioè \textbf{gli ack dei segmenti successivi certificano la ricezione dei precedenti}. Ultimo dettaglio implementativo è che in questo protocollo \textbf{basta un solo timer per tutta la comunicazione}: viene fatto
+ripartire dopo ogni ack ricevuto e si riferisce sempre al più vecchio segmento senza ack. \newline
+Seconda possibilità è il protocollo \textbf{Selective Repeat}:
+\begin{center}
+    \includegraphics[width = 0.40\linewidth]{Images/55.png}
+\end{center}
+in questo protocollo, quando un segmento viene perso e il timer scatta per quel segmento, allora \textbf{viene ritrasmesso solo quel segmento} e non vengono
+scartati gli altri segmenti. Chiaramente, in questo protocollo \textbf{ha la possibilità di avere segmenti fuori sequenza} e quindi ha bisogno di un buffer al
+ricevitore per permettere il riordino dei segmenti prima di passarli al livello applicativo. Altra complicazione è che in questo protocollo gli ack sono \textbf{individuali}
+e certificano solamente l'avvenuta ricezione di un segmento. Infine, \textbf{ogni segmento ha bisogno di un timer} per capire se esso è stato perso o meno.
+Prima di continuare, facciamo un'osservazione: Go-Back-N e Selective repeat sono due esempi accademici l'uno opposto dell'altro. Nella realtà, si utilizzano \textbf{protocolli ibridi}
+che utilizzano entrambi a seconda della situazione attuale della rete. TCP, infatti, è una soluzione ibrida tra questi due.
+\subsection{Transmission Control Protocol (TCP)}
+Transmission Control Protocol è un protocollo di trasporto \textbf{punto a punto}: vi è un singolo ricevitore e un singolo mittente che comunicano fra loro.
+È un protocollo \textbf{affidabile}, che consegna i segmenti in ordine tramite uno \textbf{stream di byte}: in TCP quindi si fa riferimento ai \textbf{byte}, NON ai segmenti.
+Non si hanno quindi \textbf{limiti del messaggio}, ciò che si va a fare è \textbf{contare i byte di dati all'interno del byte stream}; in ogni caso però i dati vengono inseriti nel
+payload di un segmento e ogni singolo segmento può avere un payload di una certa dimensione massima, che prende il nome di \textbf{Maximum Segment Size} (MSS).
+La comunicazione di TCP è \textbf{full-duplex}: vi è un flusso dati \textbf{bidirezionale} sulla stessa connessione.
+TCP è \textbf{robusto a perdite di ack} e adotta il principio degli \textbf{ack comulativi}; inoltre è un protocollo \textbf{a finestra scorrevole}: per andare a impostare correttamente
+la finestra d'invio utilizza due meccanismi di \textbf{controllo della congestione e di controllo del flusso}. È infine un protocollo \textbf{connection-oriented}, è quindi necessaria una fase
+di "handshaking" (scambio di messaggi di controllo) in cui i due comunicanti si mettono d'accordo sui \textbf{parametri della connessione}.
+La struttura di un segmento TCP è la seguente:
+\begin{center}
+    \includegraphics[width = 1\linewidth]{Images/56.png}
+\end{center}
+Alcune considerazioni:
+\begin{itemize}
+    \item Il bit $A$ viene settato ad 1 solamente se il messaggio è un \textbf{ack}: in TCP quindi ho solo messaggi o ack
+    \item Le opzioni riguardano più ambiti (es. andare a negoziare la grandezza di MSS), quindi la grandezza di un header TCP è variabile e viene indicata dal campo \textit{header len}
+    \item I bit $C$ ed $E$ servono ad indicare lo stato di congestione se si adotta la \textbf{congestione esplicita} e sono, in caso, impostati ad 1 dai router
+    \item I bit $U$ e $P$ sono stati standardizzati e, se impostati ad 1, indicano che è necessario trasmettere \textbf{subito certi bit del pacchetto, considerati ad altra priorità}. Per come si è diffuso TCP, questi due bit non vengono quasi mai utilizzati
+\end{itemize}
+\subsubsection{Numeri di sequenza e di ACK}
+Come vengono gestiti i \textbf{numeri di sequenza} e gli \textbf{ack} in TCP? Il numero di sequenza indica il \textbf{numero del byte stream del primo byte del segmento} mentre l'ack
+indica il \textbf{numero di sequenza del prossimo byte che ci si aspetta di ricevere}. Vediamo quindi un esempio per fissare le idee:
+\begin{center}
+    \includegraphics[width = 0.80\linewidth]{Images/57.png}
+\end{center}
+\subsubsection{RTT in TCP e timeout}
+Come viene impostato il timer di timeout in TCP? Questo aspetto è fondamentale per \textbf{evitare i problemi visti precedentemente} (trasmissioni inutili e tempi di risposta troppo alti)
+Come facciamo però a stimare RTT? Nelle reti, il RTT varia molto e repentinamente tra segmenti di tipo diverso; dobbiamo quindi definire un meccanismo per cercare di impostare, in maniera approssimata,
+un timer il più corretto possibile. Come fa TCP a stimare RTT?
+\begin{itemize}
+    \item Chiamiamo $SampleRTT$ il RTT che si misura dalla trasmissione al ricevimento dell'ack per un segmento specifico ignorando le ritrasmissioni.
+    \item $SampleRTT$ cambia molto e in maniera repentina tra segmenti, vogliamo quindi \textbf{catturarne il trend}, non il $SampleRTT$ specifico: per impostare quindi il timer mi baserò su una misura meno netta, che chiamiamo $EstimatedRTT$, piuttosto che sul $SampleRTT$ del segmento precedente
+\end{itemize}
+Quindi come calcoliamo $EstimatedRTT$? Dobbiamo usare una tecnica che prende il nome di \textbf{Exponential Weighted Moving Average} (EWMA):
+divido l'asse del tempo in \textbf{tempi discreti}, quindi l'$EstimatedRTT$ che deve essere calcolato al tempo $t$ è
+$$EstimatedRTT[t] = (1-\alpha)\cdot EstimatedRTT[t-1] + \alpha \cdot SampleRTT[t]$$
+\begin{center}
+    \includegraphics[width = 0.65\linewidth]{Images/58.png}
+\end{center}
+L'influenza che i vari campioni sul valore di $EstimatedRTT$ decade esponenzialmente man mano che vado avanti nel tempo.
+Un valore tipico di $\alpha$ è $\alpha = 0.125$. Per impostare l'intervallo di Timeout, dobbiamo però dobbiamo anche considerare
+che le oscillazioni del RTT possono essere molto elevate, quindi impostiamo l'intervallo per il segmento che deve essere inviato al tempo $t$ nel seguente modo:
+$$TimeoutInterval[t] = EstimatedRTT[t] + 4*DevRTT[t]$$
+con l'ultimo addendo che rappresenta un "margine di sicurezza" per evitare i problemi legati ad una finestra impostata erroneamente.
+$DevRTT[t]$ è la \textbf{deviazione}, calcolata tramite la tecnica EWMA, di $SampleRTT$ da $EstimatedRTT$ e si calcola nel seguente modo:
+$$DevRTT[t] = (1-\beta)\cdot DevRTT[t-1] + \beta \cdot |SampleRTT[t] - EstimatedRTT[t]|$$
+tipicamente, $\beta = 0.25$
+\subsubsection{Trasmettiore TCP}
+Ogni volta che si ricevono dati dallo strato applicativo, si effettuano le seguenti operazioni in un trasmettitore che usa TCP:\
+\begin{itemize}
+    \item Si crea un segmento con un numero di sequenza, il quale è definito come il primo byte del segmento all'interno del byte stream
+    \item Viene fatto partire il \textbf{timer}: viene adottato un solo timer ed esso fa riferimento al più vecchio segmento per il quale non è stato ricevuto un ack. Viene impostato $TimeoutInterval$ utilizzano le formule viste sopra (per il primo pacchetto, $EstimatedRTT = SampleRTT$)
+    \item Se \textbf{scatta il timeout}, ritrasmetto il segmento che lo ha causato e faccio ripartire il timer
+    \item Una volta che viene ricevuto un ack, esso \textbf{risconta tutti i segmenti precedenti per i quali non sono ancora stati ricevuti degli ack}; si va ad aggiornare lo stato dei segmenti che prima si consideravano "in attesa di ack" e si fa ripartire il timer per i segmenti che non sono ancora stati riscontrati
+\end{itemize}
+\begin{center}
+    \includegraphics[width = 0.75\linewidth]{Images/59.png}
+\end{center}
+\subsubsection{TCP fast retrasmit}
+Il meccanismo \textbf{fast retransmit} fu introdotto dopo la pubblicazione delle specifiche di TCP. Esso fun introdotto per permettere di ritrasmettere in maniera rapida i segmenti persi
+nel caso in cui la perdita di segmenti avvenga \textbf{in maniera sporadica} e non sia una condizione sistematica della rete.
+\begin{center}
+    \includegraphics[width = 0.85\linewidth]{Images/60.png}
+\end{center}
+Come funziona? Quando un segmento viene perso, \textbf{viene ritrasmesso dal ricevitore l'ack per l'ultimo segmento in ordine ricevuto}. Una volta che il trasmettitore riceve \textbf{3 ack duplicati} (senza contare il primo ack ricevuto, il quale riscontrava solamente la ricezione del segmento)
+allora fast retransmit permette la \textbf{ritrasmissione del segmento con il più piccolo numero di sequenza non ancora riscontrato} anche se il timeout non è ancora scattato.
+\subsubsection{TCP connection management e 3-way handshake}
+\begin{center}
+    \includegraphics[width = 0.95\linewidth]{Images/61.png}
+\end{center}
+Prima di iniziare a trasmettere, mittente e destinatario devono essere \textbf{d'accordo sullo stabilire una connessione e su quali parametri stabilire per essa}.
+Infatti, alcuni parametri della connessione devono essere negoziati tra mittente e destinatario \textbf{prima} della trasmissione; questo viene effettuato attraverso 
+\textbf{l'handshake}. TCP usa un \textbf{handshake a 3 vie}:
+\begin{center}
+    \includegraphics[width = 0.85\linewidth]{Images/62.png}
+\end{center}
+Le risorse vengono allocate \textbf{una volta ricevuto il messaggio di SYN} per il server e \textbf{una volta ricevuto il messaggio di SYNACK} per il client.
+Già nell'ultimo messaggio, inoltre, potrei avere \textbf{un payload di dati}. TCP inoltre permette di chiudere la connessione tramite una negoziazione tra client e server:
+\begin{center}
+    \includegraphics[width = 0.85\linewidth]{Images/63.png}
+\end{center}
+Nel primo caso, il client vuole terminare la connessione, quindi il server \textbf{riscontra la volontà del client}, \textbf{termina l'invio dei dati restanti} e infine \textbf{chiude la connessione}.
+Nel secondo caso, invece, il client vuole terminare la connessione e il server la chiude subito poiché \textbf{non ha ulteriori dati da inviare al client}. Notare che \textbf{anche un server può fare richiesta di terminazione di una connessione}.
+\newpage
+\subsubsection{TCP flow control}
+\begin{center}
+    \includegraphics[width = 0.65\linewidth]{Images/64.png}
+\end{center}
+Per mezzo del controllo di flusso, si permette che \textbf{il ricevitore possa controllare la quantità di dati che il mittente può inviare} per evitare di essere \textbf{sopraffatto e di portare i propri buffer al buffer overflow} (e quindi una perdita di segmenti).
+Come si controlla a livello di trasporto il tasso di arrivo?
+\begin{center}
+    \includegraphics[width = 0.45\linewidth]{Images/65.png}
+\end{center}
+Il buffer ha una determinata dimensione $RcvBuffer$ e ad un certo istante di tempo, il buffer avrà una certa quantita di dati al suo interno
+e una certa quantità di spazio libero, che chiamiamo $rwnd$. Il ricevitore quindi invia come feedback al mittente (immettendolo nell'header dell'ack nel campo \textit{receive window})
+$rwnd$, in modo che il trasmettitore la quantità massima di dati che esso può accettare prima di andare in buffer overflow.
+La finestra di trasmissione $W$ \textbf{viene quindi limitata in base al valore di receive window che esso riceve dal ricevente}.
+\subsubsection{Principi del controllo di congestione}
+Il controllo di congestione \textbf{riguarda la rete}: ci sono troppe sorgenti che inviano troppi dati troppo velocemente e quindi la rete non è in grado di gestirli.
+In questo caso, si avranno \textbf{ritardi e possibili perdite di pacchetti}. È quindi \textbf{molto diverso dal controllo di flusso}.
+Nel momento in cui la congestione cresce, \textbf{si ha una crescita dei pacchetti persi in rete}; se si adotta quindi un protocollo affidabile come TCP, si andrà ad \textbf{aumentare il numero di pacchetti ritrasmessi}.
+L'aumento di ritrasmissioni quindi andrà a peggiorare la situazione. In questa situazione, si avrà \textbf{un aumento del throughput}, che andrà vicino al 100\% della capacità operativa della rete, tuttavia \textbf{si avrà una riduzione del "goodput"} (la quantità di dati ricevuti effettivamente utili all'applicazione)c
+cala drasticamente
+\begin{center}
+    \includegraphics[width = 0.65\linewidth]{Images/66.png}
+\end{center}
+Vogliamo quindi tornare ad una situazione dove \textbf{throughput e goodput sono sovrapposti}. Un possibile approccio è il \textbf{controllo di congestione end-to-end}:
+\begin{center}
+    \includegraphics[width = 0.65\linewidth]{Images/67.png}
+\end{center}
+in questo tipo di controllo di congestione, la rete non dà \textbf{nessun feedback esplicito} e lo stato della rete viene \textbf{inferito in base alle perdite e dai ritardi dei segmenti e degli ack che vengono ricevuti dai sistemi host}.
+Questo tipo di approccio è quello adottato da TCP.
+Un altro approccio, non frequentemente adottato, è quello del \textbf{controllo di congestione network-assisted}: in questo tipo di controllo di congestione,
+i \textbf{router} hanno la capacità di fornire informazioni puntuali riguardante il loro \textbf{stato di congestione} (si può fare utilizzando i bit $C$ ed $E$ dell'header TCP).
+\begin{center}
+    \includegraphics[width = 0.65\linewidth]{Images/68.png}
+\end{center}
+\subsubsection{TCP congestion control}
+L'approccio di TCP al controllo di congestione si dice del tipo \textbf{Additive Increase Multiplicative Decrease}: si parte da un tasso di invio dei byte
+molto basso che \textbf{incrementerò gradualmente} (additive increase); prima o poi, avverrà una perdita poiché il \textbf{tasso di invio è diventato troppo elevato}, in questo caso
+vado a \textbf{dimezzare il tasso di invio per evitare che ci siano altre perdite}:
+\begin{center}
+    \includegraphics[width = 0.85\linewidth]{Images/69.png}
+\end{center}
+Vediamo quindi le fasi di questo meccanismo:
+\begin{enumerate}
+    \item \textbf{Slow start}: il numero di segmenti trasmessi (MSS) ad ogni RTT viene limitato dalla \textbf{finestra di congestione} $cwnd$.
+    Quando la connessione inizia, viene \textbf{fatto incrementare esponenzialmente} il tasso di invio fino alla prima perdita di un pacchetto:
+    \begin{itemize}
+        \item Inizialmente, $cwnd = 1$
+        \item $cwnd$ viene \textbf{raddoppiata} ad ogni RTT; ciò viene fatto \textbf{incrementando RTT ad ogni ack ricevuto}
+    \end{itemize}
+    In breve, \textbf{si ha un inizio lento, tuttavia il tasso di invio aumenta esponenzialmente}
+    \begin{center}
+        \includegraphics[width = 0.35\linewidth]{Images/70.png}
+    \end{center}
+    \item \textbf{Congestion avoidance}: Quando la crescita da esponenziale deve diventare lineare? TCP indica che ciò deve avvenire quando \textbf{$cwnd$ arriva a metà del suo valore prima dell'ultimo timeout sperimentato}. Questo meccanismo
+    si può implementare attraverso una variabile che prende il nome di $sstresh$ che, quando si verifica un evento di perdita, viene posta a \textbf{metà del valore che aveva $cwnd$ prima dell'evento di perdita}
+    \begin{center}
+        \includegraphics[width = 0.65\linewidth]{Images/71.png}
+    \end{center}
+    La primissima implementazione di TCP (\textbf{TCP tahoe}), poneva immediatamente $cwnd$ ad 1 in caso di evento di perdita.
+    Una versione più recente di TCP detta \textbf{TCP Reno} adotta invece il meccanismo di \textbf{Fast Recovery}: se l'evento di perdita è stato causato da \textbf{3 ack duplicati} invece che da un evento di \textbf{timeout},
+    invece di andare ad impostare $cwnd$ ad 1, essa viene impostata a $cwnd = sshtresh + 3 \cdot MSS$; in caso di timeout, invece, rimane il comportamento di TCP Tahoe
+\end{enumerate}
+La trasmissione in TCP viene quindi dominata \textbf{o dalla finestra di congestione ($cwnd$) o dalla finestra di ricezione ($rwnd$)}, cioè se domina il controllo di flusso oppure il controllo di congestione
+\begin{center}
+    \includegraphics[width = 0.55\linewidth]{Images/72.png}
+\end{center}
+Quindi la finestra di trasmissione è posta a $min\{cwnd, rwnd\}$ bytes; dopodiché si aspetta un RTT per gli ack e infine si inviano altri byte.
+Quando $cwnd < rwnd$, il controllo di congestione è dominante rispetto al controllo di flusso.
+Il trasmettitore TCP quindi andrà a limitare la propria trasmissione, quindi deve valere che
+$$LastByteSent - LastByteAcked \leq min\{cwnd, rwnd\}$$
+$cwnd$ è \textbf{dinamicamente aggiustata} in base alle condizioni di rete osservate (implementando il controllo di congestione TCP).
+$rwnd$ è invece aggiustato basandosi \textbf{sul valore ricevuto dal ricevente} (implementando il controllo di flusso TCP).
+
 
 \end{document}
