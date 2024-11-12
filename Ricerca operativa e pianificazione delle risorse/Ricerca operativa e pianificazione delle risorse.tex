@@ -1565,5 +1565,26 @@ Il \textbf{metodo SOB (Sensibile-Odd-Bizarre)} è descrivibile come segue:
     \end{center}
     \item Per ogni \textbf{vincolo funzionale del problema duale}, utilizzare la forma che ha la stessa etichetta del \textbf{vincolo della corrispondente variabile di decisione del problema primale} (tabella sopra)
 \end{enumerate}
+\subsubsection{Variabili e vincoli canoniche}
+Una \textbf{variabile canonica} è una variabile $x_i \geq 0$; quindi una variabile non negativa del problema primale/duale.
+Di conseguenza, una \textbf{variabile anticanonica} è una variabile negativo $x_i \leq 0$.
+Per un problema di massimizzazione, i \textbf{vincoli canonici} sono quelli di $leq$, al contrario i vincoli di $\geq$ sono canonici
+per un problema di minimizzazione.
+\subsubsection{Condizioni di complementarietà}
+Si consideri un vincolo di disuguaglianza in un problema di PL. Se questo vincolo \textbf{non è attivo} per una soluzione ottima, la corrispondente
+variabile duale sarà 0 in ciascuna delle soluzioni ottime del problema duale; cioè:
+$$y_i^*(b_i - \sum_{j=1}^{n}a_{ij}x_j^*), i=1,...,m$$
+Quindi:
+\begin{itemize}
+    \item Se $y_i^* > 0$ allora $\sum_{j=1}^{n} a_{ij}x_j^* = b_i$
+    \item Se $\sum_{j=1}^{n} a_{ij}x_j^* < b_i$ allora $y_i^*=0$
+\end{itemize}
+Analogamente, se la variabile di una soluzione ottima è diversa da 0, il corrispondente vincolo duale sarà \textbf{attivo} in ciascuna delle soluzioni ottime del problema duale, cioé:
+$$x_j^*(c_j - \sum_{i=1}^{m}a_{ij}y_i^*)=0, j=1,...,n$$
+Quindi:
+\begin{itemize}
+    \item Se $x_j^* > 0$ allora $\sum_{i=1}^{m} a_{ij}y_j^* = c_j$
+    \item Se $\sum_{i=1}^{m} a_{ij}y_j^* < c_j$ allora $x_j^* = 0$
+\end{itemize}
 
 \end{document}
