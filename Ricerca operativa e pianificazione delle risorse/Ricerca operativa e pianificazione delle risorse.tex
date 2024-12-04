@@ -1565,5 +1565,52 @@ Il \textbf{metodo SOB (Sensibile-Odd-Bizarre)} è descrivibile come segue:
     \end{center}
     \item Per ogni \textbf{vincolo funzionale del problema duale}, utilizzare la forma che ha la stessa etichetta del \textbf{vincolo della corrispondente variabile di decisione del problema primale} (tabella sopra)
 \end{enumerate}
+\section{Programmazione lineare intera}
+Fino ad ora abbiamo visto diversi esempi delle numerose e diverse applicazioni delle programmazione lineare.
+Una limitazione chiave che non abbiamo ancora affrontato è \textbf{l'ipotesi di divisibilità}, che richiede che le variabili decisionali siano 
+del dominio reale. In molti problemi pratici, tuttavia, le variabili di decisione effettivamente hanno senso solo se hanno valori interi, come abbiamo visto in alcune applicazioni come
+assegnamento, trasporto o problemi di flusso su reti.
+In generale se si richiede che le variabili di decisione assumano valori interi allora si parla di \textbf{Programmazione Lineare Intera} (PLI).
+Se solo alcune delle variabili di decisione devono essere intere allora si parla di \textbf{Programmazione Lineare Mista} (PLM).
+\subsection{Ottimizzazione Intera e Binaria}
+Consideriamo un generico problema di programmazione lineare con $n$ variabili e $m$ vincoli:
+$$\textrm{opt } f(\boldsymbol{v}) = \boldsymbol{c}^T\boldsymbol{x} \; \; \textrm{(funzione obbiettivo lineare)}$$
+$$X = \left \{ \boldsymbol{x}: g_i(\boldsymbol{x} \begin{Bmatrix}
+    \geq \\
+    = \\
+    \leq
+\end{Bmatrix}) 0, i = 1,...,m \right \} \; \; \textrm{con } g_i(\boldsymbol{x}) = \boldsymbol{a}_i^T\boldsymbol{x} - b_i \; \textrm{(vincoli lineari)}$$
+dove $\boldsymbol{a} \in \mathbb{R}^n, \boldsymbol{b} \in \mathbb{R}^m$ e $\boldsymbol{c} \in \mathbb{R}^n$ e $opt = \begin{Bmatrix}
+    min \\
+    max
+\end{Bmatrix}$
+Se $\boldsymbol{x} \in \mathbb{Z}^n$ abbiamo un problema di \textbf{programmazione lineare intera} (PLI). \newline
+Se $\boldsymbol{x} \in \{0,1\}^n$ abbiamo un problema di \textbf{programmazione lineare binaria} (PB) \newline
+Se $\boldsymbol{x} \in \mathbb{R}^p \times \mathbb{Z}^q$ con $p + q = n$ e $p > 0$ e $q > 0$ abbiamo un problema di \textbf{Programmazione Lineare Mista} (PLM), o
+\textbf{Mixed Integer Programming} (MIP).
+Avendo solo variabili di decisione binarie, il numero di soluzioni è $2^n$.
+\subsubsection{Modellazione con variabili binarie}
+Le variabili binarie trovano un vasto impiego in Ricerca Operativa per modellare le decisioni di tipo "Si o No?"
+Le variabili binarie permettono di introdurre condizioni logiche: \newline
+\begin{itemize}
+    \item \textbf{Vincoli di tipo "either-or"}: Consideriamo il caso in cui, dati due vincoli, almeno uno di questi deve essere soddisfatto (per esempio perché
+    potrebbe esserci una scelta su risorse alternative da utilizzare per un determinato scopo, in modo che sia necessario solo uno dei due vincoli). Per esempio:
+    $$3x_1 + 2x_2 \leq 18 \; textrm{oppure } x_1 + 4x_2 \leq 16$$
+    La formulazione sopra risulta equivalente al seguente insieme di vincoli:
+    $$\begin{cases}
+        3x_1 + 2x_2 \leq 18 + My \\
+        x_1 + 4x_2 \leq 16 + M(1-y)
+    \end{cases}$$
+    con $M$ numero positivo molto grande e $y \in \{0,1\}$.
+    Infatti:
+    \begin{itemize}
+        \item Se $y = 0$ allora $3x_1 + 2x_2 \leq 18$ rimane mentre $x_1 + 4x_2 \leq 16 + M$ è sempre soddisfatto per $M$ molto grande quindi può essere eliminato.
+        \item Se $y = 1$ allora $x_1 + 4x_2 \leq 16$ rimane mentre $3x_1 + 2x_2 \leq 18 + M$ è sempre soddisfatto per $M$ molto grande e quindi può essere eliminato.
+    \end{itemize}
+\end{itemize}
+
+
+
+
 
 \end{document}
