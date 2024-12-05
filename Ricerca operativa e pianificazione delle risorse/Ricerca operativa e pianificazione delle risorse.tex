@@ -1607,7 +1607,321 @@ Le variabili binarie permettono di introdurre condizioni logiche: \newline
         \item Se $y = 0$ allora $3x_1 + 2x_2 \leq 18$ rimane mentre $x_1 + 4x_2 \leq 16 + M$ è sempre soddisfatto per $M$ molto grande quindi può essere eliminato.
         \item Se $y = 1$ allora $x_1 + 4x_2 \leq 16$ rimane mentre $3x_1 + 2x_2 \leq 18 + M$ è sempre soddisfatto per $M$ molto grande e quindi può essere eliminato.
     \end{itemize}
+    \item \textbf{Dati $N$ vincoli, solo $K$ di questi sono presenti}: Consideriamo il caso in cui un modello includa $N$ vincoli tali che solo $K$ devono essere soddisfatti (con $K < N$):
+    $$f_1(x_1, x_2, ..., x_n) \leq d_1$$
+    $$f_2(x_1, x_2, ..., x_n) \leq d_2$$
+    $$...$$
+    $$f_N(x_1, x_2, ..., x_n) \leq d_N$$
+    Consideriamo $N$ variabili binarie $y_i \in \{0,1\}$ per $i = 1,...,N$ ed un numero $M$ positivo molto grande.
+    Abbiamo la seguente formulazione equivalente al requisito che solo $K$ di questi $N$ vincoli devono essere soddisfatti:
+    $$\begin{cases}
+        f_1(x_1, x_2, ..., x_n) \leq d_1 + My_1 \\
+        f_2(x_1, x_2, ..., x_n) \leq d_2 + My_2 \\
+        ... \\
+        f_N(x_1, x_2, ..., x_n) \leq d_N + My_N \\
+        \sum_{i=1}^{N} y_i = N - K
+    \end{cases}$$
+    \item \textbf{La funzione assume solo $N$ possibili valori}: Si consideri la situazione in cui una data funzione assuma uno fra $N$ possibili valori.
+    $$f(x_1, x_2, ..., x_n) = d_1 \; o \; d_2 \; o ,..., \o \; d_N$$
+    Ad esempio:
+    $$f(x_1, x_2, ..., x_n) = \sum_{j=1}^{n} a_jx_j$$
+    oppure
+    $$f(x_1, x_2, ..., x_n) = x_j$$
+    Consideriamo $N$ variabili binarie $y_i \in \{0,1\}$ per $i = 1,...,N$.
+    Abbiamo la seguente formulazione equivalente al requisito che una data funzione assuma uno fra $N$ possibili valori:
+    $$\begin{cases}
+        f(x_1, x_2, ..., x_n) = \sum_{i=1}^{N} d_i y_i \\
+        \sum_{i=1}^{N} y_i = 1
+    \end{cases}$$
+    \item \textbf{Problema del costo fisso}: Supponiamo che si voglia intraprendere un'attività $j$ il cui costo sia caratterizzato dalla seguente funzione:
+    $$f(x) = \begin{cases}
+        k + cx & \textrm{se } x > 0 \\
+        0 & \textrm{se } x = 0
+    \end{cases}$$
+    dove $k > 0$ denota il \textbf{costo fisso}, $x \geq 0$ è il livello di attività e $c$ è il costo per ogni unità incrementale.
+    La minimizzazione di tale funzione può essere espressa attraverso il seguente modello PLI:
+    $$\textrm{min } z = (ky + cx)$$
+    soggetto ai seguenti vincoli:
+    $$\begin{cases}
+        x - My \leq 0 & \textrm{o equivalentemente } x \leq My \\
+        y \in \{0,1\} \; e \; x \geq 0
+    \end{cases}$$
+    dove $M$ denota un numero molto grande. Notiamo che:
+    \begin{itemize}
+        \item Se $y = 0$ allora si ha $x leq 0 \rightarrow x = 0 \; e \; z = 0$
+        \item Se $y = 1$ allora $x \leq M$, ovvero $x$ può assumere un qualsiasi valore, e $z = k + cx$
+    \end{itemize}
+    \item \textbf{Rappresentazioni binarie di variabili intere generiche}: Si supponga di avere un problema PLI puro (solo variabili intere)
+    dove tutte le variabili sono \textbf{binarie} eccetto una. Supponiamo che tale variabile intera $x$ abbia valore nell'intervallo $[0,u]$. Chiamiamo $N$ quell'intero tale che:
+    $$2^N \leq u \leq 2^{N+1}$$
+    La rappresentazione binaria di $x$ è data da:
+    $$x = \sum_{i = 0}^{N} 2^i y_i$$
+    con $y_i$ variabili binarie aggiuntive.
+    Sostituendo nel modello $x$ con tale rappresentazione è possibile passare ad un problema caratterizzato solo da variabili binarie.
+    Facciamo un esempio: si supponga che un problema di PLI abbia tutte le variabili binarie eccetto due, $x_1$ e $x_2$ e che debba soddisfare i vincoli:
+    $$x_1 \leq 5$$
+    $$2x_1 + 3x_2 \leq 30$$
+    Questo implica che $u_1 = 5$ e $u_2 = 10$ ovvero:
+    $$2^2 \leq u_1 \leq 2^3$$
+    $$2^3 \leq u_2 \leq 2^4$$
+    Quindi
+    $x_1 = y_0 + 2y_1 + 4y_2$ e $x_2 = y_3 + 2y_4 + 4y_5 + 8y_6$
+    I vincoli del problema diventando quindi:
+    $$y_0 + 2y_1 + 4y_2 \leq 5$$
+    $$2y_0 + 4y_1 + 8y_2 + 3y_3 + 6y_4 + 12y_5 + 24y_6 \leq 30$$
 \end{itemize}
+\subsection{Considerazioni sui problemi di PLI}
+Apparentemente, i problemi di PLI potrebbero risultare più facili da risolvere rispetto ai problemi di PL.
+Un possibile ragionamento potrebbe essere:
+\begin{itemize}
+    \item I problemi di PL possono essere risolti efficientemente tramite il metodo del Simplesso
+    \item Un problema di PLI è simile ad un problema PL eccetto che il numero di soluzioni di un problema PLI è molto minore
+    \item Inoltre, i problemi di PLI con regione ammissibile limitata ai punti interi hanno un numero finito di soluzioni ammissibili
+\end{itemize}
+Quindi i problemi di PLI sono effettivamente più facili da risolvere? \textbf{ASSOLUTAMENTE NO!} Vediamo il perché:
+\begin{enumerate}
+    \item Il fatto di avere un numero finito di soluzioni ammissibili non assicura che un problema PLI sia facilmente risolvibile.
+    Nel caso di un PLI con $n$ variabili binarie, ho $2^n$ soluzioni possibili da considerare, ovvero il numero di soluzioni \textbf{cresce esponenzialmente} con il numero di variabili da considerare.
+    Se per esempio ho $n = 20$ variabili ho più di un milione di soluzioni possibili.
+    \item La rimozione di alcune soluzioni ammissibili (quelle non intere) da un problema di PL non lo rende più semplice. Nel metodo del simplesso risulta fondamentale che le variabili possano assumere valori continui.
+    Altrimenti non è possibile garantire l'esistenza di vertici ammissibili e quindi di soluzioni ammissibili di base.
+\end{enumerate}
+\subsection{Il metodo del rilassamento lineare}
+Per un qualsiasi problema di PLI è possibile formulare il corrispettivo problema di PL, ovvero lo stesso problema senza i vincoli di interezza.
+Tale problema prende il nome di \textbf{rilassamento lineare}.
+\begin{center}
+    \includegraphics[width = 1\linewidth]{Images/61.png}
+\end{center}
+\begin{center}
+    \includegraphics[width = 1\linewidth]{Images/62.png}
+\end{center}
+Quando si affronta un problema di PLI è comune partire risolvendo il suo rilassamento lineare allo scopo di verificare se la soluzione
+ottima trovata sia intera, nel qual caso abbiamo trovato la soluzione ottima. In caso contrario, si ottiene comunque un upper (lower) bound per problemi di max (min).
+Vi sono casi particolari in cui risolvere un problema di PLI non è più difficile da risolvere del problema di PL associato ad esso, ovvero
+quando la soluzione ottima del problema rilassato è una soluzione intera. In questo caso la soluzione del rilassamento lineare
+DEVE necessariamente essere ottima anche per il problema di PLI. \newline
+\textbf{ATTENZIONE}: in generale, la soluzione ottima di un problema di PLI può non corrispondere ad una delle sue soluzioni intere ottenute arrotondando le variabili non intere
+(per esempio all'intero più vicino) del problema di PL associato:
+\begin{center}
+    \includegraphics[width = 1\linewidth]{Images/64.png}
+\end{center}
+Inoltre, una soluzione ottima del problema di PL associato non è necessariamente ammissibile per il problema di PLI dopo l'arrotondamento:
+\begin{center}
+    \includegraphics[width = 1\linewidth]{Images/63.png}
+\end{center}
+Nell'esempio sopra, la soluzione ottima del rilassamento lineare è il punto $(\frac{3}{2}, 2)$. Le soluzioni ottenute approssimando $x_1 = \frac{3}{2}$ all'intero più vicino
+sono tuttavia \textbf{entrambe non ammissibili}.
+\subsection{Metodo del Branch and Bound}
+Il metodo del Branch and Bound è una tecnica generale per la risoluzione di problemi di ottimizzazione intera.
+Proposto da A.H. Land e A.G. Doig nel 1960 per risolvere problemi di PLI, inizialmente venne sviluppato per risolvere
+modelli di programmazione intera per il trasporto e lo stoccaggio del petrolio.
+La tecnica del Branch and Bound è una tecnica di \textbf{enumerazione implicita}:
+\begin{itemize}
+    \item "Valuta" le soluzioni possibili fino a trovare quella ottima
+    \item Scarta alcune di queste soluzioni a priori, dimostrando la loro non ottimalità 
+    \item Si basa sul concetto di \textit{dividi et impera}
+\end{itemize}
+Ancora oggi il metodo del Branch and Bound rappresenta una delle tecniche più usate per risolvere i problemi di PL intera, binaria e mista.
+\subsubsection{Funzionamento del metodo Branch and Bound}
+Supponiamo di avere un problema di PLI:
+$$max z = \boldsymbol{c}^T\boldsymbol{x} \; \textrm{(funzione obbiettivo lineare)}$$
+$$X = \left \{ \boldsymbol{x} \in \mathbb{Z}^n : g_i(\boldsymbol{x}) \begin{Bmatrix}
+    \geq \\
+    = \\
+    \leq
+\end{Bmatrix} 0, i = 1,...,m \right \}$$
+dove $\boldsymbol{a} \in \mathbb{R}^n, b \in \mathbb{R}^m$ e $c \in \mathbb{R}^n$. \newline
+Indichiamo tale problema come \textbf{problema completo}. Un problema di PLI rappresenta un \textbf{sotto-problema} del problema completo se presenta la
+\textbf{medesima funzione obbiettivo} ma ha un sottoinsieme proprio di $X$ come regione ammissibile.
+Sia $z^* = f(x^*)$ la soluzione ottima del problema completo e $\tilde{z} = f(\tilde{x})$ la soluzione ottima di un sotto-problema,
+allora si ha che $f(\tilde{x}) \leq f(x^*)$. Bisogna inoltre notare che tra le soluzioni ammissibili del problema completo vi è anche $\tilde{x}$ e che per definizione
+di ottimo $f(\tilde{x}) \leq f(x^*)$. \newline
+\textbf{ATTENZIONE}: per un problema di minimo \textbf{vale il contrario di quello esposto sopra}. \newline
+Il Branch and Bound fa uso delle tre seguenti tecniche per risolvere un generico problema di PLI:
+\begin{itemize}
+    \item la partizione rispetto al valore delle variabili, o \textbf{branching}
+    \item La determinazione di un limite superiore (\textbf{bounding})
+    \item L'eliminazione di sotto-problemi (\textbf{fathoming})
+\end{itemize}
+\subsubsection{Branch and Bound per problemi di PB}
+Nel caso di problemi a variabili binarie (PB), il modo più semplice per dividere l'insieme delle soluzioni ammissibili in sottoinsiemi
+è fissare il valore di una delle variabili, per esempio $x_1 = 0$ per un sottoinsieme e $x_1 = 1$ per l'altro sottoinsieme.
+La variabile che viene utilizzata per eseguire questa suddivisione ad ogni iterazione è chiamata \textbf{variabile di branching}.
+Per selezionare ad ogni iterazione la variabile di branching si può utilizzare l'ordinamento naturale delle variabili $x_1, x_2, ...$
+Prendiamo in considerazione il seguente problema di PB:
+\begin{equation*}
+    \begin{array}{ll}
+        \displaystyle \textrm{max} & \; Z = 9x_1 + 5x_2 + 6x_3 + 4x_4\\
+        \textrm{s.a.} & 6x_1 + 3x_2 + 5x_3 + 2x_4 \leq 10\\
+        \phantom{} & 2 x_3 + x_4 \leq 1\\
+        \phantom{} & -x_1 + x_3 \leq 0\\
+        \phantom{} & -x_2 + x_4 \leq 0 \\
+        \textrm{e} \\
+        \phantom{} & x_j \; \textrm{binaria} \; per \; j = 1,2,3,4
+    \end{array}
+\end{equation*}
+\textbf{Branching}: il problema viene suddiviso in due sotto-problemi considerando il branching di $x_1$:
+\begin{center}
+    \includegraphics[width = 1\linewidth]{Images/65.png}
+\end{center}
+\textbf{Bounding}: Per ognuno dei sotto-problemi dobbiamo ricavare un limite superiore
+(perché stiamo risolvendo un problema di massimo, altrimenti dovremmo cercare un limite inferiore) che ci indichi
+quando promettente è il sotto-problema. Per ottenere questo limite si risolve il problema rilassato (ovvero senza considerare i vincoli
+di interezza ma, essendo il problema binario, limitando le variabili tra 0 e 1). Quindi risolvo i sotto-problemi sostituendo l'ultima riga
+con i vincoli $x_j \geq 0$ e $x_j \leq 1$.
+Come priam cosa, risolviamo la versione rilassata del problema completo (per esempio, con il metodo del simplesso) e otteniamo:
+$$(x_1, x_2, x_3, x_4) = (\frac{5}{6}, 1, 0, 1)$$
+corrispondente a
+$$Z = 9x_1 + 5x_2 + 6x_3 + 4x_4 = 16,5$$
+Quindi il nostro problema a numeri binari avrà $Z \leq 16,5$ per qualsiasi soluzione ammissibile.
+In realtà, osservando che i coefficienti della funzione obbiettivo del problema sono tutti interi e che le soluzioni del problema devono essere binarie,
+possiamo anche arrotondare il limite a $Z \leq 16$ per qualsiasi soluzione ammissibile.
+Analogamente, possiamo trovare i limiti (bound) per i sotto-problemi risolvendo la loro versione rilassata:
+\begin{center}
+    \includegraphics[width = 1\linewidth]{Images/66.png}
+\end{center}
+\textbf{Fathoming}: un sotto-problema può essere "eliminato" dalla lista dei problemi da considerare per tre possibili ragioni:
+\begin{enumerate}
+    \item La soluzione ottenuta \textbf{soddisfa i vincoli di interezza} (cone la soluzione del sotto-problema 1). In particolare, questa soluzione può essere considerata come la \textbf{soluzione intera migliore trovata} fino a questo momento e 
+    viene detta \textbf{soluzione incombente $Z^*$}. Quindi il valore della soluzione incombente a questo punto è $Z^* = 9$.
+    La soluzione incombente \textbf{cambierà ogni volta che un sotto-problema otterrà una soluzione intera migliore della soluzione incombente corrente}.
+    \item La \textbf{soluzione incombente può essere utilizzata per un'altra possibilità di fathoming}: se il bound di un sotto-problema (che rappresenta la soluzione ottima migliore che si potrà trovare continuando a considerare il sotto-problema)
+    è peggiore della soluzione incombente (migliore soluzione ammissibile intera già trovata) allora non vale la pena continuare a considerare il sotto-problema che quindi può essere \textbf{chiuso} (fathomed).
+    \item Il sotto-problema \textbf{non ammette soluzioni ammissibili}
+\end{enumerate}
+Quindi verranno ulteriormente risolti ed analizzati solo quei problemi che hanno una soluzione non intera migliore della soluzione incombente.
+Continuiamo la soluzione del nostro problema e continuiamo ad analizzare il sotto-problema 2: \newline
+Sotto-problema 2 $(x_1 = 1)$, quindi $(x_1, x_2, x_3, x_4) = (1, \frac{4}{5}, 0, \frac{4}{5})$ e $Z \leq 16$ \newline
+Facciamo branching sulla variabile $x_2$ e otteniamo:
+\begin{center}
+    \includegraphics[width = 0.90\linewidth]{Images/67.png}
+\end{center}
+Nessuno dei due problemi soddisfa le condizioni di fathoming e quindi non possono essere chiusi.
+L'albero delle soluzioni risultante è il seguente:
+\begin{center}
+    \includegraphics[width = 0.55\linewidth]{Images/68.png}
+\end{center}
+Siccome il sotto-problema 4 ($x_1 = 1, x_2 = 1$) è quello con bound più promettente, eseguiamo il branching a
+partire da questo.
+Continuiamo ad analizzare il sotto-problema 4: \newline
+Sotto-problema 4 $(x_1 = 1, x_2 = 1)$, quindi $(x_1, x_2, x_3, x_4) = (1, 1, 0, \frac{1}{2})$ e $Z \leq 16$ \newline
+Facciamo branching sulla variabile $x_4$ e otteniamo:
+\begin{center}
+    \includegraphics[width = 1\linewidth]{Images/69.png}
+\end{center}
+Quindi il sotto-problema 6 viene chiuso e si sceglie il sotto-problema 5 per fare il branching: continuiamo
+ad analizzare il sotto-problema 5: \newline
+Sotto-problema 5 $(x_1 = 1, x_2 =1, x_3 = 0)$ quindi $(x_1, x_2, x_3, x_4) = (1, 1, 0, \frac{1}{2})$ e $Z \leq 16$ \newline
+Facciamo branching sulla variabile $x_4$ e otteniamo:
+\begin{center}
+    \includegraphics[width = 1\linewidth]{Images/70.png}
+\end{center}
+La soluzione incombente viene sostituita dalla soluzione del sotto-problema 7
+(prima condizione di fathoming)
+$$(x_1, x_2, x_3, x_4) = (1,1,0,0) \; \; Z = 14$$
+L'albero delle soluzioni risultante è il seguente:
+\begin{center}
+    \includegraphics[width = 1\linewidth]{Images/71.png}
+\end{center}
+L'unico problema ancora aperto è il sotto-problema 3, ma notiamo che la soluzione incombente (14) è migliore
+del suo bound (13) e quindi il problema può essere chiuso.
+Non essendoci altri problemi aperti possiamo fermarci e affermare che la soluzione ottima è la soluzione
+incombente $(x_1, x_2, x_3, x_4) = (1,1,0,0)$ con funzione obbiettivo pari a $Z = 14$.
+\subsubsection{Considerazioni sul Branch and Bound}
+Nel caso generale, il branch and bound fornisce una grande flessibilità di progettazione di uno specifico algoritmo per
+qualsiasi tipo di problema. Ci sono molte opzioni disponibili, e la costruzione di un algoritmo efficiente richiede
+la valutazione di diverse opzioni per trovare quella più idonea alla struttura del problema.
+Ogni algoritmo di Branch and Bound si compone dei tre passi principali che abbiamo già visto:
+\begin{itemize}
+    \item Branching
+    \item Bounding
+    \item Fathoming
+\end{itemize}
+Ma ogni passo implica delle scelte. \newline
+Il \textbf{Branching} implica la selezione di un sotto-problema da analizzare e la divisione di questo
+in sotto-problemi più piccoli. Vi sono diverse regole di selezione e divisione possibili. Posso scegliere:
+\begin{itemize}
+    \item Il \textbf{sotto-problema creato più di recente}: tale regola di selezione ha il vantaggio che è efficiente
+    per ripartire con l'ottimizzazione del rilassamento del problema di PL dal precedente problema (devo solo aggiungere un vincolo).
+    Questa regola è anche nota come \textbf{Depth First}, perché equivale a scegliere il nodo di livello maggiore (più in profondità).
+    Questo metodo è semplice da implementare, permette di ottenere presto delle soluzioni ammissibili (ci si avvicina più rapidamente alle foglie) e limita la memoria necessaria per memorizzare l'albero delle
+    soluzioni, visto che si tendono a choudere molti nodi per ammissibilità e rimangono pochi nodi contemporaneamente aperti. Per contro, presenta il rischio di esplorare completamente sotto-albero con soluzioni scadenti.
+    \item Il \textbf{sotto-problema con il miglior bound}: è una regola molto utilizzata perché in genere conduce a soluzioni incombenti più velocemente e quindi
+    permette di effettuare un fathoming più efficiente. Questo metodo è anche noto come \textbf{Best Bound First}. Si sceglie il nodo più promettente, ossia il nodo con il bound migliore (lower bound più basso per problemi di minimo o 
+    upper bound più alto per problemi di massimo). Tipicamente, tale strategia permette di limitare il numero di nodo visitati esplicitamente e tende pertanto a essere più efficiente.
+    Per contro, l'esplorazione tende a rimanere a livelli poco profondi, dove i problemi sono meno vincolati e, di conseguenza, i bound sono più promettenti ma difficilmente si ottengono presto soluzioni ammissibili che migliorino la soluzione incombente corrente.
+    Questo impedisce di applicare efficientemente le regole di fathoming e, pertanto, è maggiore la richiesta di memoria per i nodi aperti contemporaneamente.
+    \item Si può anche usare una combinazione delle due regole. I nodi vengono scelti alternando i diversi criteri, per evitarne gli svantaggi. Ad esempio, all'inizio si applica una strategia Depth First e, quando si ha una "buona" soluzione ammissibile, si passa alla strategia del Best Bound First
+\end{itemize}
+La \textbf{divisione di una variabile} può essere effettuata in più modi:
+\begin{itemize}
+    \item Si sceglie una variabile e si assegnano valori diversi (come nel caso della programmazione binaria)
+    \item Si assegna alla variabile un insieme di valori (come vedremo per i problemi di PLI)
+\end{itemize}
+Inoltre occorre scegliere la variabile su cui effettuare il branching tra eventuali possibili scelte, con l'obbiettivo di arrivare il più velocemente ad una possibilità di fathoming.
+Per esempio:
+\begin{itemize}
+    \item Si può scegliere la variabile con \textbf{indice più basso}
+    \item Si può scegliere la variabile \textbf{più lontana da un numero intero}
+\end{itemize} 
+Il \textbf{bounding} è generalmente eseguito risolvendo un rilassamento del problema.
+Oltre al rilassamento lineare, esiste anche il \textbf{rilassamento lagrangiano}: \newline
+L'intero insieme di vincoli funzione $\boldsymbol{Av} \leq \boldsymbol{b}$ viene cancellato (o quasi interamente cancellato) e la funzione obbiettivo
+$$\textrm{max } Z = \boldsymbol{cx}$$
+viene sostituita da:
+$$\textrm{max } Z = \boldsymbol{cx} - \boldsymbol{\lambda}(\boldsymbol{Ax} - \boldsymbol{b})$$
+e il problema diventa:
+\begin{equation*}
+    \begin{array}{ll}
+        \displaystyle \textrm{max} & \; Z = \boldsymbol{cx} - \boldsymbol{\lambda}(\boldsymbol{Ax}-\boldsymbol{b})\\
+        \textrm{s.a.} & x \geq 0\\
+    \end{array}
+\end{equation*}
+È detto problema lagrangiano e ha proprietà che per ogni $\lambda \geq 0$ fissato, la sua soluzione ottima costituisce
+un upper bound sull'ottimo del problema originario (lower bound se il problema è di minimo).
+Il bound ottenibile con il rilassamento lagrangiano è quindi almeno tanto buono quanto quello ottenibile con il rilassamento lineare.
+L'efficacia pratica del rilassamento lagrangiano è legata all'efficienza con sui riesce a risolvere il problema duale del problema lagrangiano.
+Non è però efficiente come il rilassamento lineare nel calcolare il primo e il terzo dei test di fathoming, che riassumiamo di seguito:
+\begin{itemize}
+    \item \textbf{Criterio 1}: È stata trovata una soluzione ottima intera del sotto-problema
+    \item \textbf{Criterio 2}: La soluzione ottima $Z$ del sotto-problema deve essere peggiore della soluzione incombente $Z^*$ ($Z \leq Z^*$ per un problema di massimizzazione e viceversa per un problema di minimizzazione)
+    \item \textbf{Criterio 3}: Il sotto-problema non presenta soluzioni ammissibili
+\end{itemize}
+Nel caso di problemi con soluzioni ottime alternative, potrebbe essere importane poter ottenere una lista delle soluzioni ottime, in modo che la scelta della soluzione migliore possa essere poi effettuata sulla base di considerazioni
+che potrebbero non essere state incluse nel modello matematico. Per trovarle basta fare alcune piccole modifiche alla procedura: \newline
+Innanzitutto tutto il test del criterio 2 deve essere fatto sulla base della \textbf{disuguaglianza stretta}; in questo modo il fathoming non avverrà se $Z = Z^*$.
+Se la soluzione di un sotto-problema soddisfa il criterio 1 con $Z = Z^*$ allora anche questa soluzione deve essere memorizzata come incombente e occorre controllare se il sotto-problema ammette soluzioni
+multiple. Nel qual caso, occorre calcolare e memorizzare anche la soluzioni alternative come incombenti.
+Alla fine della procedura, tutte le soluzioni incombenti (tutte equivalenti) saranno considerate ottime. \newline
+Il Branch and Bound può essere utilizzato anche per trovare soluzioni "buone" (quasi-ottime) anche se non necessariamente ottime, che, in genere,
+richiedono uno sforzo computazionale molto minore. Una soluzione è considerata \textbf{quasi-ottima} quando la sua soluzione $Z$ è "abbastanza vicina" al valore di una soluzione
+ottima $Z^{**}$, ovvero:
+$$Z^{**} - K \leq Z$$
+o equivalentemente
+$$(1-\alpha)Z^{**} \leq Z$$
+dove $K$ e $\alpha$ sono costanti date.
+Per esempio, se $\alpha = 0,05$ la soluzione trovata sarà ottima con un'approssimazione del $5\%$
+Quindi se una soluzione $Z^*$ soddisfa
+$$Z^{**} - K \leq Z^*$$
+oppure
+$$(1-\alpha)Z^{**} \leq Z^*$$
+la procedura può terminare fornendo una soluzione $Z^*$ quasi ottima. \newline
+Come si può ottenere il valore $Z^{**}$?
+Noi sappiamo che se esistesse una soluzione ammissibile con valore $Z^{**}$ allora si avrebbe $Z^{**} \leq Bound$
+dove $Bound$ è la soluzione migliore tra quelle dei problemi rilassati ancora aperti.
+Quindi possiamo sostituire a $Z^{**}$ nelle formule precedenti, ottenendo:
+$$Bound - K \leq Z^{*}$$
+oppure
+$$(1- \alpha)Bound \leq Z^*$$
+Anche se la soluzione corrispondente a $Bound$ non è ammissibile (intera), essa costituisce comunque  un limite superiore valido.
+Per problemi di grosse dimensioni, considerare le soluzioni quasi-ottime può evitare i tempi computazionali proibitivi. \newline
+\textbf{Criteri di arresto} \newline
+Il metodo del Branch and Bound si arresta quado tutti i nodi sono dichiarati fathomed.
+In questo caso, la soluzione ammissibile corrente corrisponde alla soluzione ottima.
+Si possono anche usare soluzioni quasi-ottime e fermarci non appena troviamo una soluzione quasi ottima.
+Oppure ancora, possono anche essere adottati criteri relativi ai limiti computazionali, come ad esempio raggiunti limiti di tempo
+di calcolo o di memoria, ma non è garantito che l'eventuale soluzione ammissibile corrente sia ottima (posso comunque calcolare quando distante è dal Bound)
+\subsubsection{Metodo del Branch and Bound}
 
 
 
