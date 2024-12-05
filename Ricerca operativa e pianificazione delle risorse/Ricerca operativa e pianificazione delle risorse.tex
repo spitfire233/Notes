@@ -884,7 +884,7 @@ La tabella sopra è stata riempita \textbf{basandosi sull'esempio presentato fin
         \vspace{-1cm}
     \end{center}
     La parte della tabella che comprende le colonne dei valori di $Z, x_1, ..., x_5$ e dei termini noti viene detto \textbf{tableau}.
-    Ricordiamo che, in questo caso, le variabili non di base sono $x_1$ e $x_2$ e che la soluzione di base ammissibile è $(0, 0, 4, 12, 8)$
+    Ricordiamo che, in questo caso, le variabili non di base sono $x_1$ e $x_2$ e che la soluzione di base ammissibile è $(0, 0, 4, 12, 18)$
     \item \textbf{TEST DI OTTIMALITÀ}: La \textbf{soluzione di base ammissibile corrente} è ottimale solo se tutti i \textbf{coefficienti della riga (0)} sono non negativi.
     Se questo è il caso, ci si arresta, altrimenti si effettua un'iterazione per ottenere una nuova soluzione di base ammissibile, il che implica che una variabile non di base venga trasformata in una variabile di base (passo 1)
     e viceversa (passo 2), per poi ottenere una nuova soluzione (passo 3).
@@ -1565,6 +1565,7 @@ Il \textbf{metodo SOB (Sensibile-Odd-Bizarre)} è descrivibile come segue:
     \end{center}
     \item Per ogni \textbf{vincolo funzionale del problema duale}, utilizzare la forma che ha la stessa etichetta del \textbf{vincolo della corrispondente variabile di decisione del problema primale} (tabella sopra)
 \end{enumerate}
+<<<<<<< HEAD
 \section{Programmazione lineare intera}
 Fino ad ora abbiamo visto diversi esempi delle numerose e diverse applicazioni delle programmazione lineare.
 Una limitazione chiave che non abbiamo ancora affrontato è \textbf{l'ipotesi di divisibilità}, che richiede che le variabili decisionali siano 
@@ -1926,5 +1927,28 @@ di calcolo o di memoria, ma non è garantito che l'eventuale soluzione ammissibi
 
 
 
+=======
+\subsubsection{Variabili e vincoli canonici}
+Una \textbf{variabile canonica} è una variabile $x_i \geq 0$; quindi una variabile non negativa del problema primale/duale.
+Di conseguenza, una \textbf{variabile anticanonica} è una variabile negativa $x_i \leq 0$.
+Per un problema di massimizzazione, i \textbf{vincoli canonici} sono quelli di $\leq$, al contrario i vincoli di $\geq$ sono canonici
+per un problema di minimizzazione.
+\subsubsection{Condizioni di complementarietà}
+Si consideri un vincolo di disuguaglianza in un problema di PL. Se questo vincolo \textbf{non è attivo} per una soluzione ottima, la corrispondente
+variabile duale sarà 0 in ciascuna delle soluzioni ottime del problema duale; cioè:
+$$y_i^*(b_i - \sum_{j=1}^{n}a_{ij}x_j^*), i=1,...,m$$
+Quindi:
+\begin{itemize}
+    \item Se $y_i^* > 0$ allora $\sum_{j=1}^{n} a_{ij}x_j^* = b_i$
+    \item Se $\sum_{j=1}^{n} a_{ij}x_j^* < b_i$ allora $y_i^*=0$
+\end{itemize}
+Analogamente, se la variabile di una soluzione ottima è diversa da 0, il corrispondente vincolo duale sarà \textbf{attivo} in ciascuna delle soluzioni ottime del problema duale, cioé:
+$$x_j^*(c_j - \sum_{i=1}^{m}a_{ij}y_i^*)=0, j=1,...,n$$
+Quindi:
+\begin{itemize}
+    \item Se $x_j^* > 0$ allora $\sum_{i=1}^{m} a_{ij}y_j^* = c_j$
+    \item Se $\sum_{i=1}^{m} a_{ij}y_j^* < c_j$ allora $x_j^* = 0$
+\end{itemize}
+>>>>>>> a8a1e4d3d3b62ff95a39a24239656f9471b43a18
 
 \end{document}
