@@ -1949,8 +1949,17 @@ soluzione dei problemi rilassati è ancora alla base delle fasi di bounding e fa
 Nel caso della PB alla variabile di branching veniva assegnato il valore 0 e 1 rispettivamente per generare
 i due nuovi sotto-problemi. Nel caso generale, assegnare tutti i possibili valori interi sarebbe impossibile 
 quindi si generano due sotto-problemi specificando per la variabile due insiemi di valori:
-$$x_j \leq \floor{x_j^*}$$
-
+$$x_j \leq \floor{x_j^*} \; e \; x_j \geq \floor{x_j^*} + 1$$
+Dove $\floor{x_j^*}$ è il massimo intero per cui $\floor{x_j^* \leq x_j^*}$
+Per esempio, se $x_j^* = \frac{7}{2}$ allora $\floor{x_j^*} = 3$ e i due vincoli sono rispettivamente
+$x_j \leq 3$ e $x_j \geq 4$. \newline 
+Con queste modifiche può verificarsi che una stessa variabile possa essere selezionata più volte durante la procedura:
+\begin{center}
+    \includegraphics[width = 0.90\linewidth]{Images/72.png}
+\end{center}
+Il terzo cambiamento riguarda la fase di Bounding: nel caso di PB, se i coefficienti della funzione obbiettivo erano tutti interi,
+il valore del problema rilassato $Z$ poteva essere arrotondato all'intero inferiore (se Max., viceversa se Min).
+Nel caso generale, questo non è più possibile.
 
 
 
