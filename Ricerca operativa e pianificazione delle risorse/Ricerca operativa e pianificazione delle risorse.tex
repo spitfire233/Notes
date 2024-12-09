@@ -1848,7 +1848,7 @@ in sotto-problemi più piccoli. Vi sono diverse regole di selezione e divisione 
     per ripartire con l'ottimizzazione del rilassamento del problema di PL dal precedente problema (devo solo aggiungere un vincolo).
     Questa regola è anche nota come \textbf{Depth First}, perché equivale a scegliere il nodo di livello maggiore (più in profondità).
     Questo metodo è semplice da implementare, permette di ottenere presto delle soluzioni ammissibili (ci si avvicina più rapidamente alle foglie) e limita la memoria necessaria per memorizzare l'albero delle
-    soluzioni, visto che si tendono a choudere molti nodi per ammissibilità e rimangono pochi nodi contemporaneamente aperti. Per contro, presenta il rischio di esplorare completamente sotto-albero con soluzioni scadenti.
+    soluzioni, visto che si tendono a chiudere molti nodi per ammissibilità e rimangono pochi nodi contemporaneamente aperti. Per contro, presenta il rischio di esplorare completamente sotto-albero con soluzioni scadenti.
     \item Il \textbf{sotto-problema con il miglior bound}: è una regola molto utilizzata perché in genere conduce a soluzioni incombenti più velocemente e quindi
     permette di effettuare un fathoming più efficiente. Questo metodo è anche noto come \textbf{Best Bound First}. Si sceglie il nodo più promettente, ossia il nodo con il bound migliore (lower bound più basso per problemi di minimo o 
     upper bound più alto per problemi di massimo). Tipicamente, tale strategia permette di limitare il numero di nodo visitati esplicitamente e tende pertanto a essere più efficiente.
@@ -1919,7 +1919,7 @@ $$(1- \alpha)Bound \leq Z^*$$
 Anche se la soluzione corrispondente a $Bound$ non è ammissibile (intera), essa costituisce comunque  un limite superiore valido.
 Per problemi di grosse dimensioni, considerare le soluzioni quasi-ottime può evitare i tempi computazionali proibitivi. \newline
 \textbf{Criteri di arresto} \newline
-Il metodo del Branch and Bound si arresta quado tutti i nodi sono dichiarati fathomed.
+Il metodo del Branch and Bound si arresta quando tutti i nodi sono dichiarati fathomed.
 In questo caso, la soluzione ammissibile corrente corrisponde alla soluzione ottima.
 Si possono anche usare soluzioni quasi-ottime e fermarci non appena troviamo una soluzione quasi ottima.
 Oppure ancora, possono anche essere adottati criteri relativi ai limiti computazionali, come ad esempio raggiunti limiti di tempo
