@@ -2110,5 +2110,99 @@ Tra le varia possibilità, citiamo:
     \item Sfruttare, con frequenza da valutare, l'informazione raccolta durante l'esplorazione dell'albero per costruire soluzini ammissibili sempre migliori
 \end{itemize}
 In ogni caso, bisogna sempre valutare il compromesso tra la qualità della soluzione ammissibile corrente e lo sforzo computazionale per ottenerla.
+\section{Programmazione non lineare}
+Un \textbf{problema di programmazione non lineare (PNL)} può essere formulato come:
+$$\textrm{opt } f(\boldsymbol{x})$$
+soggetto ai seguenti vincoli:
+$$\begin{cases}
+    g_j(\boldsymbol{x}) \leq \; con \; j = 1,...,m \\
+    x_i \geq 0 \; con \; i = 1,...,n
+\end{cases}$$
+in cui $f:\mathbb{R}^n \rightarrow \mathbb{R}$ e $g_j: \mathbb{R}^n \rightarrow \mathbb{R}$ sono funzioni note di $\boldsymbol{x} \in \mathbb{R}^n$
+\begin{Osservazione}
+    Nel caso della programmazione lineare, si assume che $f$ e $g$ siano lineari
+\end{Osservazione}
+L'assunzione di linearità non è valida per molte applicazioni! Esistono diversi tipi di modelli non lineari, a seconda delle caratteristiche delle funzioni
+$f$ e $g_i$. Alcune situazioni in cui è possibile applicare la programmazione non lineare sono:
+\begin{itemize}
+    \item Nel problema di mix di prodotti si può avere:
+    \begin{itemize}
+        \item \textbf{Elasticità del prezzo}: la quantità di un prodotto che può essere venduto ha una relazione inversa rispetto al prezzo applicato
+        \item Il \textbf{costo marginale di produzione} varia con il livello di produzione: il costo marginale può diminuire a causa di un effetto della curva di apprendimento (produzione più efficiente con più esperienza)
+    \end{itemize}
+\end{itemize}
+Nel problema del trasporto, sono disponibili sconti sul volume per spedizioni di grandi dimensioni. Altre applicazioni della programmazione non lineare sono:
+\begin{itemize}
+    \item Problemi di trasporto con sconti sul volume
+    \item Ottimizzazione di un portafoglio
+    \item Clustering 
+    \item Problemi di classificazione
+    \item Addestramento di una rete neurale
+\end{itemize}
+A seconda delle caratteristiche del problema abbiamo diversi tipi di programmazione non lineare:
+\begin{itemize}
+    \item \textbf{Ottimizzazione non vincolata}: i problemi di ottimizzazione non vincolata non hanno vincoli sulla regine ammissibile. Quindi l'obbiettivo è semplicemente:
+    $$\max_{\boldsymbol{x} \in \mathbb{R}^n}{f(\boldsymbol{x})} \; o \; \min_{\boldsymbol{x} \in \mathbb{R}^n}{f(\boldsymbol{x})}$$
+    \item \textbf{Ottimizzazione con vincoli lineari}: I problemi di ottimizzazione con vincoli lineari sono caratterizzati da tutte le funzioni $g_i(\boldsymbol{x})$ lineari e dalla funzione obbiettivo non-lineare.
+    Un caso particolare è la \textbf{programmazione quadratica} in cui la funzione obbiettivo è una funzione quadratica, come nel caso del portafoglio di Markowitz
+    \item \textbf{Ottimizzazione convessa}: In cui $f(\boldsymbol{x})$ è una funzione \textbf{concava} o \textbf{convessa} e ogni funzione $g_i(\boldsymbol{x})$ è \textbf{convessa}
+    \item \textbf{Ottimizzazione non convessa}: I problemi di programmazione non convessa comprendono tutti i problemi che non soddisfano le ipotesi di convessità. Sono più difficili da risolvere perché possono presentare diversi punti di minimo/massimo
+\end{itemize}
+Riprendiamo il problema che abbiamo illustrato durante la prima parte di questi appunti:
+\begin{center}
+    \includegraphics[width = 0.35\linewidth]{Images/83.png}
+\end{center}
+\begin{center}
+    \includegraphics[width = 0.45\linewidth]{Images/84.png}
+\end{center}
+vediamo come esso cambia facendo alcune variazioni non lineari: al posto del secondo e terzo vincolo consideriamo il vincolo:
+$$9x_1^2 + 5x_2^2 \leq 216$$
+\begin{center}
+    \includegraphics[width = 0.30\linewidth]{Images/85.png}
+\end{center}
+\begin{center}
+    \includegraphics[width = 0.35\linewidth]{Images/86.png}
+\end{center}
+Il punto di ottimo è ancora $(2,6)$ ma \textbf{non è più un vertice}.
+L'ottimo del problema non apparterrà necessariamente all'insieme dei vertici ammissibili.
+L'algoritmo del simplesso non si può quindi più utilizzare.
+Al posto di una funzione obbiettivo lineare consideriamo una nuova funzione non lineare:
+\begin{center}
+    \includegraphics[width = 0.45\linewidth]{Images/87.png}
+\end{center}
+\begin{center}
+    \includegraphics[width = 0.50\linewidth]{Images/88.png}
+\end{center}
+Il punto di ottimo è $(3,3)$ e \textbf{non è più sulla frontiera della regione ammissibile}.
+La ricerca del punto di ottimo non è più ristretta in generale alla frontiera del problema. La soluzione
+potrebbe essere in un qualunque punto della regione ammissibile.
+\subsection{Concetti base di analisi}
+Riprendiamo qui alcuni concetti che ci serviranno per affrontare l'ottimizzazione non lineare in una dimensione, tra cui:
+\begin{itemize}
+    \item Continuità
+    \item Convessità
+    \item Derivabilità
+    \item Legame tra derivabilità e punto di ottimo
+    \item Derivata seconda e suo significato geometrico
+\end{itemize}
+\subsubsection{Continuità}
+Sia $f:[a,b] \subset \mathbb{R} \rightarrow \mathbb{R}$ e $x \in [a,b]$ un punto del suo dominio.
+Diciamo che $f$ è una funzione \textbf{continua} in $x_0$ se:
+$$\lim_{x \rightarrow x_0^+} f(x) = \lim_{x \rightarrow x_0^-} f(x) = \lim_{x \rightarrow x_0} f(x) = f(x_0)$$
+\textbf{Definizione equivalente}: $f(x)$ è continua nel punto $x_0$ se $\forall \varepsilon > 0, \exists \delta(\varepsilon) > 0 \; t.c. \; se \; \newline |x-x_0| < \delta \; \textrm{allora si ha } |f(x) - f(x_0)| < \varepsilon$. $\Rightarrow$
+Se $x$ si avvicina a $x_0$ allora $f(x)$ si avvicina a $f(x_0)$ \newline
+La continuità di una funzione gode di alcune importanti proprietà:
+\begin{itemize}
+    \item La somma algebrica di funzioni continue è ancora una funzione continua
+    \item Il prodotto di funzioni continua è ancora una funzione continua 
+    \item La composizione di funzioni continue è ancora una funzione continua
+\end{itemize}
+La continuità di una funzione non è sempre garantita e possiamo avere tre tipi di discontinuità:
+\begin{center}
+    \includegraphics[width = 1\linewidth]{Images/89.png}
+\end{center}
+\subsubsection{Convessità e Concavità}
+
+
 
 \end{document}
