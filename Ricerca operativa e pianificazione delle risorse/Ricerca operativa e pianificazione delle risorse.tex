@@ -1960,9 +1960,155 @@ Con queste modifiche può verificarsi che una stessa variabile possa essere sele
 Il terzo cambiamento riguarda la fase di Bounding: nel caso di PB, se i coefficienti della funzione obbiettivo erano tutti interi,
 il valore del problema rilassato $Z$ poteva essere arrotondato all'intero inferiore (se Max., viceversa se Min).
 Nel caso generale, questo non è più possibile.
-
-
-
-
+Il quarto e ultimo cambiamento riguarda le condizioni di fathoming.
+Nel caso di un problema di programmazione binaria, potevamo fermarci se la soluzione del problema era intera.
+Nel caso generale, basta che la soluzione soddisfi la condizione di interezza per le variabili che non possono essere continue.
+Facciamo un esempio: consideriamo il seguente problema di PLIM:
+\begin{equation*}
+    \begin{array}{ll}
+        \displaystyle \textrm{max} & \; Z = 4x_1 - 2x_2 + 7x_3 - x_4\\
+        \textrm{s.a.} & x_1 + 5x_3 \leq 10\\
+        \phantom{} & x_1 + x_2 - x_3 \leq 1\\
+        \phantom{} & 6x_1 - 5x_2 \leq 0\\
+        \phantom{} & -x_1 + 2x_3 - 2x_4 \leq 3 \\
+        \textrm{}  &  x_1,x_2,x_3,x_4 \geq 0\\
+        \phantom{} &  x_1, x_2, x_3, x_4 \in \mathbb{Z}
+    \end{array}
+\end{equation*}
+\textbf{Inizializzazione}: Poniamo $z* = -\infty$. Consideriamo il rilassamento lineare per il problema iniziale $P_0$:
+\begin{center}
+    \includegraphics[width = 1\linewidth]{Images/73.png}
+\end{center}
+\textbf{Bounding}: Usando il metodo del simplesso otteniamo la soluzione $(x_1,x_2,x_3,x_4) = (\frac{5}{4}, \frac{3}{2}, \frac{7}{4}, 0)$ \newline
+\textbf{Fathoming}: Il "sotto-problema" non rispetta nessuno dei tre criteri di fathoming, infatti:
+\begin{itemize}
+    \item $z_0 \geq z^* = -\infty$
+    \item Il rilassamento lineare ha soluzione ammissibile
+    \item La soluzione ottima del rilassamento lineare ha le componenti di $x_1, x_2$ e $x_3$ non intere
+\end{itemize}
+\textbf{Test di ottimalità}: Ho un sotto-problema aperto, lo scelgo per fare branching \newline
+La soluzione del rilassamento lineare di $P_0$ è $(x_1, x_2, x_3, x_4) = (\frac{5}{4}, \frac{3}{2}, \frac{7}{4}, 0)$ e $x_1,x_2,x_3$ \textbf{DEVONO} essere intere.
+Generiamo a partire dal problema $P_0$ due nuovi sotto-problemi $P_1$ e $P_2$ considerando i due seguenti intervalli per la variabile di branching $x_1$:
+\begin{itemize}
+    \item $P_1: x_1 \leq \left [\frac{5}{4}\right ] \rightarrow x_1 \leq 1$
+    \item $P_2: x_1\ \geq \left [\frac{5}{4} \right ] + 1 \rightarrow x_1 \geq 2$
+\end{itemize}
+\begin{center}
+    \includegraphics[width = 1\linewidth]{Images/74.png}
+\end{center}
+Per ogni nuovo sotto-problema, consideriamo il rispettivo rilassamento lineare:
+\begin{center}
+    \includegraphics[width = 1\linewidth]{Images/75.png}
+\end{center}
+...ed applichiamo il metodo del simplesso per stimare un bound per ogni sotto-problema:
+\begin{itemize}
+    \item \textbf{$P_1$ rilassato}: La soluzione del problema è data da $(x_1,x_2,x_3,x_4) = (1, \frac{6}{5}, \frac{9}{5}, 0)$ con $z_1 = 14.2$
+    \item \textbf{$P_2$ rilassato}: il problema $P_2$ rilassato non ha soluzioni ammissibili
+\end{itemize}
+Quindi:
+\begin{itemize}
+    \item Il sotto-problema 1 non può essere chiuso:
+    \begin{itemize}
+        \item $z_1 \geq z^* = -\infty$
+        \item Il rilassamento lineare ha soluzioni ammissibili
+        \item La soluzione ottima del rilassamento lineare ha componenti $x_2$ e $x_3$ non intere
+    \end{itemize}
+    \item Il sotto-problema 2 soddisfa il terzo criterio di fathoming (non ammissibilità) e può essere chiuso
+\end{itemize}
+L'albero delle soluzioni diviene pertanto:
+\begin{center}
+    \includegraphics[width = 0.70\linewidth]{Images/76.png}
+\end{center}
+\textbf{Test di ottimalità}: Poiché vi è un sotto-problema ($P_1$) aperto (non soddisfa le condizioni di fathoming) bisogna continuare con il branching.
+La soluzione del rilassamento lineare di $P_1$ è $(x_1,x_2,x_3,x_4) = (1, \frac{6}{5}, \frac{9}{5}, 0)$ e $x_1,x_2,x_3$ \textbf{DEVONO} essere intere.
+Selezioniamo $x_2$ come variabile di branching considerando i due seguenti intervalli per generare due nuovi sotto-problemi $P_3$ e $P_4$:
+\begin{itemize}
+    \item $P_3$: $x_2 \leq \left [\frac{6}{5} \right ] \rightarrow x_2 \leq 1$
+    \item $P_4$: $x_2 \geq \left [{\frac{6}{5}} \right ] + 1 \rightarrow x_2 \geq 2$
+\end{itemize}
+\begin{center}
+    \includegraphics[width = 0.80\linewidth]{Images/77.png}
+\end{center}
+Per ogni nuovo sotto-problema, consideriamo il rispettivo rilassamento lineare:
+\begin{center}
+    \includegraphics[width = 0.80\linewidth]{Images/78.png}
+\end{center}
+...ed applichiamo il metodo del simplesso per stimare un bound per ogni sotto-problema:
+\begin{itemize}
+    \item \textbf{$P_3$ rilassato}: La soluzione del problema è data da $(x_1,x_2,x_3,x_4) = (\frac{5}{6}, 1, \frac{11}{5}, 0)$ con $z_3 = 14.1\overline{6}$
+    \item \textbf{$P_4$ rilassato}: La soluzione del problema è data da $(x_1,x_2,x_3,x_4) = (\frac{5}{6}, 2, \frac{11}{6}, 0)$ con $z_4 = 12.1\overline{6}$
+\end{itemize}
+Attualmente, si ha che $z^* = -\infty$ \newline
+Per il sotto-problema 3 abbiamo che:
+\begin{itemize}
+    \item $z_3 \geq x^* = -\infty$
+    \item Il rilassamento lineare ha soluzione ammissibile
+    \item La soluzione ottima del rilassamento lineare ha le componenti di $x_1$ e $x_3$ non intere
+\end{itemize}
+Per il sotto-problema 4 abbiamo che:
+\begin{itemize}
+    \item $z_4 \geq z^*=-\infty$
+    \item Il rilassamento lineare ha soluzione ammissibile
+    \item La soluzione ottima del rilassamento lineare ha le componenti di $x_1$ e $x_3$ non intere
+\end{itemize}
+Otteniamo il seguente albero delle soluzioni:
+\begin{center}
+    \includegraphics[width = 0.90\linewidth]{Images/79.png}
+\end{center}
+\textbf{Test di ottimalità}: Poiché vi sono ancora 2 sotto-problemi (il 3 e il 4) aperti che non soddisfano le condizioni di fathoming proseguiamo con il branching.
+Abbiamo due sotto-problemi rimanenti (3 e 4), per l'operazione di branching usiamo la regola del bound migliore: selezioniamo il sotto-problema $z_3 = 14.1\overline{6} > z_4 = 12.1\overline{6}$
+La soluzione del rilassamento lineare di $P_3$ è $(x_1,x_2,x_3,x_4) = (\frac{5}{6}, 1, \frac{11}{5}, 0)$ e $x_1,x_2,x_3$ \textbf{DEVONO} essere intere:
+selezioniamo $x_1$ come "nuova" variabile di branching considerando i due seguenti intervalli per generare due nuovi sotto-problemi $P_5$ e $P_6$:
+\begin{itemize}
+    \item $P_5$: $x_1 \leq \left [\frac{5}{6} \right ] \rightarrow x_1 \leq 0$
+    \item $P_6$: $x_1 \geq \left [\frac{5}{6} \right ] + 1 \rightarrow x_1 \geq 1$
+\end{itemize}
+\begin{center}
+    \includegraphics[width = 0.90\linewidth]{Images/80.png}
+\end{center}
+\newpage
+Per ogni nuovo sotto-problema, consideriamo il rispettivo rilassamento lineare...
+\begin{center}
+    \includegraphics[width = 0.90\linewidth]{Images/81.png}
+\end{center}
+...ed applichiamo il metodo del simplesso per stimare un bound per ogni sotto-problema:
+\begin{itemize}
+    \item \textbf{$P_5$ rilassato}: La soluzione del problema è data da $(x_1,x_2,x_3,x_4) = (0,0,2, \frac{1}{2})$ con $z_5 = 13.5$
+    \item \textbf{$P_6$ rilassato}: Il problema non ha soluzioni ammissibili 
+\end{itemize}
+Attualmente, si ha $z^* = -\infty$ \newline
+Per il sotto-problema 5 abbiamo che:
+\begin{itemize}
+    \item La soluzione ottima del rilassamento lineare ha componenti di $x_1, x_2$ e $x_3$ intere quindi può essere chiuso
+    \item Inoltre essendo $z_5 = 13.5 \geq z^* = -\infty$ questa diventa la nuova (e prima) soluzione incombente $z*=13-5$
+\end{itemize}
+Il sotto-problema 6 non ha soluzioni ammissibili e può quindi essere tagliato. Il sotto-problema 4 può essere escluso in quanto $z_4 \leq z^* = 13-5$.
+Abbiamo ora che tutti e tre i sotto-problemi sono chiusi e la soluzione incombente è $z^* = 13.5$
+Otteniamo il seguente albero delle soluzioni:
+\begin{center}
+    \includegraphics[width = 0.90\linewidth]{Images/82.png}
+\end{center}
+\textbf{Test di ottimalità}: Poiché non vi sono sotto-problemi aperti, l'attuale soluzione incombente $z^* = 13.5$ è la soluzione ottima del problema. \newline
+\textbf{Riassumendo}:
+\begin{itemize}
+    \item 3 iterazioni del metodo del Branch and Bound 
+    \item 7 sotto-problemi generati (compreso il problema originale) di cui:
+    \begin{itemize}
+        \item 1 sotto-problema è stato chiuso poiché il suo bound non è migliore di $z^*$
+        \item 2 sotto-problemi sono stati chiusi a causa della non-ammissibilità del rilassamento lineare
+        \item 1 sotto-problema è stato chiuso in quanto la soluzione ottima del rilassamento ha $x_1,x_2$ e $x_3$ interi
+    \end{itemize}
+\end{itemize}
+\subsubsection{Considerazioni sul branch an bound}
+\textbf{Valutazione di soluzioni ammissibili}:
+Per applicare efficacemente le regole di fathoming, è necessario disporre di soluzioni ammissibili di buona qualità.
+Nella predisposizione di un algoritmo Branch-and-Bound, bisogna quindi stabilire come e quando calcolare soluzioni ammissibili.
+Tra le varia possibilità, citiamo:
+\begin{itemize}
+    \item Aspettare semplicemente che l'enumerazione generi un nodo foglia ammissibile
+    \item Implementare un algoritmo che valuti una buona soluzione all'inizio, prima dell'esplorazione
+    \item Sfruttare, con frequenza da valutare, l'informazione raccolta durante l'esplorazione dell'albero per costruire soluzini ammissibili sempre migliori
+\end{itemize}
+In ogni caso, bisogna sempre valutare il compromesso tra la qualità della soluzione ammissibile corrente e lo sforzo computazionale per ottenerla.
 
 \end{document}
