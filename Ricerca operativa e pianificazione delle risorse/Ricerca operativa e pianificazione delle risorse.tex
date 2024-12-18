@@ -14,6 +14,8 @@
 \usepackage{amsmath}
 \usepackage{mathtools}
 \usepackage{biblatex}
+\usepackage{algorithm2e}
+
 
 \lstset{
   language=Python,
@@ -2353,5 +2355,598 @@ L'idea sottostante è quindi la seguente:
 \begin{center}
     \includegraphics[width = 0.70\linewidth]{Images/95.png}
 \end{center}
-L'algorito
+L'algoritmo di bisezione è il seguente: \newline
+\textbf{Inizializzazione}: \newline
+$k = 0$ e $\varepsilon$ piccolo a piacere.
+Si determinano i valori $\underline{x}$ e $overline{x}$ cercando dei valori di $x$ per cui la derivata sia rispettivamente positiva e negativa.
+Si seleziona il punto iniziale:
+$$x_0 = \frac{\underline{x} + \overline{x}}{2}$$
+\textbf{Iterazione del metodo di bisezione}: \newline
+\begin{algorithm}[H]
+\DontPrintSemicolon
+Calcolare $f'(x_k)$ \;
+\eIf{$f'(x_k) = 0$1} 
+{
+    $x_k = x^*$\;
+} {
+    \eIf{$f'(x_k) < 0$}
+    {
+        $\overline{x} = x_k$\;
+    } 
+    {
+        $\underline{x} = x_k$\;
+    }
+}
+Pongo $x_{k+1} = \frac{\underline{x} + \overline{x}}{2}$ \;
+Pongo $k = k + 1$ \;
+\end{algorithm}
+\noindent
+\textbf{Criterio di arresto}: \newline
+Se $\overline{x} - \underline{x} \leq 2\varepsilon$ allora il punto di ottimo $x^*$ avrà una distanza minore di $\varepsilon$ da $\underline{x}$ (o $\overline{x}$),
+altrimenti eseguo una nuova iterazione del metodo di bisezione.
+\begin{center}
+    \includegraphics[width = 0.75\linewidth]{Images/96.PNG}
+\end{center}
+Facciamo un esempio: supponiamo di voler massimizzare la seguente funzione nell'intervallo $[0,2]$:
+$$\textrm{max } f(x) = 12x - 3x^4 - 2x^6$$
+Poniamo $2\varepsilon = 0.02$ e $k = 0$ \newline
+Calcoliamo la derivata prima e seconda:
+$$f'(x) = 12 - 12x^3 - 12x^5$$
+$$f''(x) = -36x^2 - 60x^4$$
+Calcoliamo il punto iniziale:
+$$x_0 = \frac{\overline{x} - \underline{x}}{2} = 1$$
+\textbf{Prima iterazione del metodo di bisezione}:
+\begin{itemize}
+    \item Calcoliamo $f'(x_0) = f(1) = -12$
+    \item $f'(x_0) < 0 \rightarrow$ poniamo $\overline{x} = 1$ (nuovo estremo superiore)
+    \item Poniamo $x_1 = \frac{\underline{x} + \overline{x}}{2} = 0.5$ e $k = k+1 = 1$
+\end{itemize}
+\textbf{Criterio di arresto}: \newline
+Avendo $|\overline{x} - \underline{x} = 1 > 0.02$ dobbiamo eseguire un iterazione del metodo di bisezione
+\textbf{Seconda iterazione del metodo di bisezione}:
+\begin{itemize}
+    \item Calcoliamo $f'(x_1) = f'(0.5) = 10.12$
+    \item $f'(x_1) > 0 \rightarrow$ poniamo $\underline{x} = 0.5$ (nuovo estremo inferiore)
+    \item Poniamo $x_2 = \frac{\underline{x} + \overline{x}}{2} = 0.75$ e $k = k + 1 = 2$
+\end{itemize}
+\textbf{Criterio di arresto}: \newline
+Avendo $|\overline{x} -  \underline{x}| = 0.5 > \varepsilon$ dobbiamo eseguire una nuova iterazione... \newline
+Proseguendo nelle iterazioni, abbiamo:
+\begin{center}
+    \includegraphics[width =1\linewidth]{Images/97.PNG}
+\end{center}
+Notiamo che nell'algoritmo non è necessario calcolare il valore di $f(x_k)$ ad ogni iterazione, ma solo alla fine.
+Al termine dell'algoritmo otteniamo $x^* \approx 0.836$ con $f(x^*) \approx 7.884$. In conclusione, abbiamo che
+$$0.828125 < x^* < 0.84375$$
+\subsubsection{Approssimazione quadratica di una funzione}
+Il metodo di bisezione è una procedura semplice ed intuitiva, MA ha lo svantaggio di convergere molto lentamente.
+Il motivo di tale lentezza è dovuta dal fatto che esso considera solo l'informazione relativa alla derivata prima $f'(x)$.
+Un modo per aumentare la velocità di convergenza è quello di considerare anche la derivata seconda $f''(x)$.
+Tramite la formula di Taylor (centrata in $x_k$) si può ottenere un'\textbf{approssimazione quadratica} di tale funzione:
+$$f(x_{k+1}) = f(x_k) + f'(x_k)(x_{k+1}-x_k) + \frac{1}{2}f''(x_k)(x_{k+1}-x_k)^2 + \O((x_{k+1} - x_k)^2)$$
+Che diventa:
+$$f(x_{k+1}) = f(x_k) + f'(x_k)(x_{k+1}-x_k) + \frac{1}{2}f''(x_k)(x_{k+1}-x_k)^2$$
+L'approssimazione quadratica è funzione solo di $x_{k+1}$! Calcoliamo la derivata dell'approssimazione quadratica:
+$$f'(x_k) + f''(x_k)(x_{k+1}-x_k) = 0 \Rightarrow x_{k+1} = x_k - \frac{f'(x_k)}{f''(x_k)}$$
+L'idea del metodo di Newton diventa quella di usare l'ottimo dell'approssimazione quadratica di $f(x)$ dato da:
+$$x_{k+1} = x_k - \frac{f'(x_k)}{f''(x_k)}$$
+Tale formula è quella che viene usata ad ogni generica iterazione $k$ per calcolare il punto successivo $x_{k+1}$. \newline
+\textbf{IMPORTANTE}: Se $f(x)$ è concava, allora $x_k$ converge verso un punto di massimo. Perché?
+\begin{itemize}
+    \item Se $f(x)$ è concava allora se $x_k$ è a sinistra del punto di massimo $\Rightarrow$ $f'(x_k) > 0 \Rightarrow -\frac{f'(x_k)}{f''(x_k)} > 0 \Rightarrow x_{k+1} > x_k$
+    \item Se $f(x)$ è concava allora se $x_k$ è a destra del punto di massimo $Rightarrow$ $f'(x_k) < 0 \Rightarrow - \frac{f'(x_k)}{f''(x_k)} < 0 \Rightarrow x_{k+1} < x_k$
+\end{itemize}
+Se $f(x)$ fosse convessa, allora $x_k$ converge verso un punto di minimo.
+\subsubsection{Algoritmo di Newton}
+\textbf{Inizializzazione}: \newline
+Si fissa $\varepsilon$ e $k = 0$ \newline
+\textbf{Iterazione del metodo di Newton}:
+\begin{itemize}
+    \item Calcolare $f'(x_k)$ e $f''(x_k)$
+    \item Si ponga $x_{k+1} = x_k - \frac{f'(x_k)}{f''(x_k)}$
+\end{itemize}
+\textbf{Criterio di arresto}: Se $|x_{k+1} - x_{k}| \leq \varepsilon$ allora il punto $x_{k+1} = x^*$ è la soluzione ottima, altrimenti eseguo una nuova iterazione del metodo di Newton e pongo $k = k+1$.
+Consideriamo il problema d'esempio visto per il metodo di bisezione. Usando il metodo di Newton, arriviamo al punto di ottimo in sole 3 iterazioni:
+\begin{center}
+    \includegraphics[width =1\linewidth]{Images/98.PNG}
+\end{center}
+Quale dei due metodi è quindi migliore? \newline
+\textbf{Bisezione}:
+\begin{itemize}
+    \item \textbf{Vantaggi}:
+    \begin{itemize}
+        \item Richiede solo il calcolo della derivata prima 
+        \item Converge sempre
+    \end{itemize}
+    \item \textbf{Svantaggi}: È lento
+\end{itemize}
+\textbf{Newton}:
+\begin{itemize}
+    \item \textbf{Vantaggi}: La velocità di convergenza è quadratica
+    \item \textbf{Svantaggi}:
+    \begin{itemize}
+        \item Richiede il calcolo della derivata seconda
+        \item Potrebbe divergere
+    \end{itemize}
+\end{itemize}
+La convergenza globale del metodo di Newton è \textbf{scarsa}. Esso può fallire se il punto iniziale è \textbf{lontano dal punto di ottimo}:
+\begin{center}
+    \includegraphics[width =0.55\linewidth]{Images/99.PNG}
+\end{center}
+Nella pratica deve essere utilizzato con tecniche di ottimizzazione globale.
+\subsection{Algoritmi di PNL multivariata non vincolata}
+Nel caso unidimensionale si utilizzano la derivata prima e seconda della funzione obbiettivo:
+\begin{itemize}
+    \item La derivata prima da informazione sulla stazionarietà o meno di un punto
+    \item La derivata seconda fornisce informazioni sulla convessità della funzione
+\end{itemize}
+Esistono concetti simili nel caso unidimensionale? La risposta è \textbf{SI!}:
+\begin{itemize}
+    \item \textbf{Derivata prima} $\Rightarrow$ \textbf{Gradiente}
+    \item \textbf{Derivata seconda} $\Rightarrow$ \textbf{Hessiano}
+    \item \textbf{Convessità} $\Rightarrow$ \textbf{Convessità}
+\end{itemize}
+Sia $f:\mathbb{R}^n \rightarrow \mathbb{R}$ una funzione continua e $\boldsymbol{v} \in \mathbb{R}^n$ un \textbf{vettore direzionale} ($\left | |\boldsymbol{v}|\right | = 1$) di $\mathbb{R}^n$. Allora il limite:
+$$\frac{\partial f(\boldsymbol{x})}{\partial \boldsymbol{v}} = \lim_{h \rightarrow 0}{\frac{f(\boldsymbol{x} + h\boldsymbol{v} - f(\boldsymbol{x})}{h}}$$
+viene chiamato \textbf{derivata direzionale} di $f$ in $\boldsymbol{x}$ nella direzione $\boldsymbol{v}$.
+Per le direzioni della base canonica, $\frac{\partial f(x)}{\partial e_i}$ vengono chiamate \textbf{derivate parziali}.
+\begin{center}
+    \includegraphics[width = 1\linewidth]{Images/100.PNG}
+\end{center}
+Il \textbf{gradiente} rappresenta l'estensione del concetto di derivabilità per una funzione in più dimensioni.
+Sia $f:\mathbb{R}^n \rightarrow \mathbb{R}$ una funzione reale. Allora il \textbf{gradiente} di $f$ in $\boldsymbol{x}$ corrisponde al vettore delle derivate parziali:
+$$\nabla f(\boldsymbol{x} = \left [ \frac{\partial f( \boldsymbol{x})}{\partial x_1}, \frac{ \partial f(\boldsymbol{x})}{\partial x_2}, \dots, \frac{ \partial f(\boldsymbol{x})}{\partial x_n}  \right ])$$
+La \textbf{matrice Hessiana} rappresenta l'estensione del concetto di derivata seconda per una funzioni in più dimensioni:
+$$\nabla^2 f = H_f = \begin{bmatrix}
+    \frac{\partial^2 f}{\partial x_1^2} & \frac{\partial^2 f}{\partial x_1 \partial x_2}  & \dots & \frac{\partial^2 f}{\partial x_1 \partial x_n} \\
+    \frac{\partial^2 f}{\partial x_2 \partial x_1} & \frac{\partial^2 f}{\partial x_2^2} & \dots & \frac{\partial^2 f}{\partial x_2 \partial x_n} \\
+    \vdots & \vdots & \ddots & \vdots & \\
+    \frac{\partial^2 f}{\partial x_n \partial x_1} & \frac{\partial^2 f}{\partial x_n \partial x_2} & \dots & \frac{\partial^2 f}{\partial x_n^2}
+\end{bmatrix}$$
+La matrice Hessiana è una matrice quadrata di dimensione $n \times n$. \newline 
+\textbf{IMPORTANTE}: Se le derivate seconde sono continue, allora $\frac{\partial^2 f}{\partial x_i \partial x_j} = \frac{\partial^2 f}{\partial x_j \partial x_{ij}} \Rightarrow H_f$ è simmetrica. \newline
+Facciamo un esempio:
+\begin{center}
+    \includegraphics[width = 0.50\linewidth]{Images/101.PNG}
+\end{center}
+In particolare, una matrice quadrata può essere:
+\begin{itemize}
+    \item \textbf{Definita positiva} se tutti gli autovalori della matrice sono positivi
+    \item \textbf{Definita negativa} se tutti gli autovalori della matrice sono negativi
+    \item \textbf{Semi-definita positiva} se tutti gli autovalori della matrice sono NON negativi
+    \item \textbf{Semi-definita negativa} se tutti gli autovalori della matrice sono NON positivi
+\end{itemize}
+Sia $f: \mathbb{R}^n \rightarrow \mathbb{R}$ una funzione reale due volte differenziabile. Allora per ogni punto $\boldsymbol{x}_0$ è possibile calcolare il valore della matrice Hessiana per quel punto:
+$$H_f(\boldsymbol{x}_0) = \begin{bmatrix}
+    \frac{\partial^2 f(\boldsymbol{x}_0)}{\partial x_1^2} & \frac{\partial^2 f(\boldsymbol{x}_0)}{\partial x_1 \partial x_2}  & \dots & \frac{\partial^2 f(\boldsymbol{x}_0)}{\partial x_1 \partial x_n} \\
+    \frac{\partial^2 f(\boldsymbol{x}_0)}{\partial x_2 \partial x_1} & \frac{\partial^2 f(\boldsymbol{x}_0)}{\partial x_2^2} & \dots & \frac{\partial^2 f(\boldsymbol{x}_0)}{\partial x_2 \partial x_n} \\
+    \vdots & \vdots & \ddots & \vdots & \\
+    \frac{\partial^2 f(\boldsymbol{x}_0)}{\partial x_n \partial x_1} & \frac{\partial^2 f(\boldsymbol{x}_0)}{\partial x_n \partial x_2} & \dots & \frac{\partial^2 f(\boldsymbol{x}_0)}{\partial x_n^2}
+\end{bmatrix}$$
+Distinguiamo quindi due casi:
+\begin{itemize}
+    \item Se $H_f(\boldsymbol{x}_0)$ è definita positiva $\Rightarrow$ la funzione $f(\boldsymbol{x})$ è convessa
+    \item Se $H_f(\boldsymbol{x}_0)$ è definita negativa $\Rightarrow$ la funzione $f(\boldsymbol{x})$ è concava
+\end{itemize}
+Riportiamo qui di seguito delle note operative: \newline
+\textbf{TROVARE I PUNTI STAZIONARI}:
+\begin{itemize}
+    \item Calcolare il gradiente e porlo uguale a 0
+    \item Trovare i punti tali che il gradiente si annulla; essi saranno i punti stazionari della funzione
+\end{itemize}
+\textbf{CONCAVITÀ E CONVESSITÀ}:
+\begin{itemize}
+    \item Se una funzione è di \textbf{una sola variabile}, è convessa $\Leftrightarrow f''(x) \geq 0 \; \forall x \in \mathbb{R}$
+    \item Se una funzione è \textbf{multivariata}, la convessità si ottiene nel seguente modo:
+    \begin{itemize}
+        \item Si calcola la matrice Hessiana $n \times n$ $H_f$
+        \item La matrice $H_f$ deve essere \textbf{SEMIDEFINITA POSITIVA} $\forall x \in \mathbb{R}^n$
+        \item Per sapere il segno degli autovalori, possiamo sfruttarne due proprietà per stimarlo:
+        \begin{itemize}
+            \item \textbf{Traccia}: la traccia di una matrice $A$ è la \textbf{somma degli elementi sulla diagonale principale} e si indica con $track(A)$
+            \item \begin{Teorema}
+                Sia $A$ una matrice $n \times n$ triangolare e siano $\lambda_1, \lambda_2, ..., \lambda_n$ i suoi autovalori (eventualmente ripetuti). Allora: $$det(A) = \lambda_1 \cdot \lambda_2 \cdot ... \cdot \lambda_n$$
+            \end{Teorema}
+        \end{itemize}
+        \item Dal segno del determinante di $H_f$ si possono dedurre i segni dei suoi autovalori
+    \end{itemize}
+\end{itemize}
+Come invece andiamo a cercare i punti di \textbf{massimo/minimo} di una funzione? Possiamo farlo tramite una \textbf{soluzione analitica}:
+poniamo il gradiente della funzione uguale a zero per cercare i punti stazionari, ovvero i punti candidati ad essere di massimo o minimo:
+$$\nabla f = 0$$
+In questo caso, dovremmo risolvere $n$ equazioni $(\frac{\partial f}{\partial x_i} = 0)$ in $n$ incognite $x_1,x_2,\dots,x_n$. Una volta trovati i punti candidati,
+valutiamo la matrice Hessiana della funzione in quei punti:
+\begin{itemize}
+    \item Se la matrice è \textbf{definita positiva}, allora il punto candidato è di \textbf{minimo}
+    \item Se la matrice è \textbf{definita negativa}, allora il punto candidato è di \textbf{massimo}
+\end{itemize}
+In questo caso, dovremo calcolare il segno degli $n$ autovalori (come abbiamo visto sopra).
+Facciamo un esempio: consideriamo il seguente problema di ottimizzazione in tre variabili:
+$$\textrm{min } f(x_1,x_2,x_3) = x_1^2 + x_1(1-x_2) + x_2^2 - x_2x_3+x_3^2 + x_3$$
+Calcoliamo il gradiente di tale funzione:
+$$\nabla f = \begin{bmatrix}
+    \frac{\partial f}{\partial x_1} \\
+    \frac{\partial f}{\partial x_2} \\
+    \frac{\partial f}{\partial x_3}
+\end{bmatrix} = \begin{bmatrix}
+    2x_1 + 1 - x_2 \\
+    -x_1 + 2x_2 - x_3 \\
+    -x_2 + 2x_3 + 1
+\end{bmatrix}$$
+Ora poniamo il gradiente uguale a zero:
+$$\nabla f = 0 \Rightarrow \begin{cases}
+    2x_1 + 1 - x_2 = 0 \\
+    -x_1 + 2x_2 - x_3 = 0 \\
+    -x_2 + 2x_3 + 1 = 0
+\end{cases}$$
+Otteniamo un sistema lineare di 3 equazioni in 3 incognite che ha come soluzione (unica):
+$$\begin{bmatrix}
+    x_1 \\
+    x_2 \\
+    x_3
+\end{bmatrix} = \begin{bmatrix}
+    -1 \\
+    -1 \\
+    -1
+\end{bmatrix}$$
+Abbiamo quindi un solo punto candidato dove dobbiamo andare a valutare la matrice Hessiana.
+Calcoliamo le derivate seconde della funzione: \newline
+\textbf{Derivate seconde pure}:
+$$\frac{\partial^2 f}{\partial x_1^2} = 2$$
+$$\frac{\partial^2 f}{\partial x_2^2} = 2$$
+$$\frac{\partial^2 f}{\partial x_1^3} = 2$$
+\textbf{Derivate seconde miste}:
+$$\frac{\partial^2 f}{\partial x_1 \partial x_2} = -1$$
+$$\frac{\partial^2 f}{\partial x_1 \partial x_3} = 0$$
+$$\frac{\partial^2 f}{\partial x_2 \partial x_3} = -1$$
+Notiamo che essendo la matrice Hessiana simmetrica, dobbiamo calcolare solo le 3 derivate pure e 3 delle 6 derivate miste.
+Nel caso di $n$ variabili, allora dovremmo calcolare $n$ derivate pure e $\sum_{i=1}^{n-1}(n-i)$ derivate miste. \newline
+Una volta calcolate le derivate seconde, possiamo costruire la matrice Hessiana:
+$$H_f(x_1,x_2,x_3) = \begin{bmatrix}
+    2 & -1 & 0 \\
+    -1 & 2 & -1 \\
+    0 & -1 & 2
+\end{bmatrix}$$
+Notiamo che in questo caso la matrice Hessiana ottenuta non dipende dal punto considerato.
+Gli autovalori di tale matrice sono 3 e corrispondono a:
+$$\lambda_1 = 3.414 \; \; \lambda_2 = 0.586 \; \; \lambda_3 = 2$$
+Tutti gli autovalori sono positivi, quindi la matrice Hessiana è definita positiva, quindi il punto considerato è di \textbf{minimo}. \newline
+Facciamo delle \textbf{osservazioni}:
+\begin{itemize}
+    \item Nel precedente esempio, la funzione considerata era convessa, quindi il punto ottenuto di minimo locale corrisponde anche al punto (unico) di minimo globale
+    \item In generale, se non abbiamo informazioni globali riguardo la convessità o meno di una funzione, non possiamo stabilire se un punto di minimo/massimo locale è anche globale
+    \item Nel precedente esempio, per cercare i punti di minimo/massimo abbiamo posto il gradiente uguale a zero, ottenendo 3 equazioni \textbf{lineari} in 3 incognite; nel caso generale le equazioni che otteniamo non sono lineari e possono risultare particolarmente difficili da risolvere analiticamente
+\end{itemize}
+\subsubsection{Algoritmi numerici per l'ottimizzazione non lineare}
+Cosi come per il caso unidimensionale, sono disponibili vari algoritmi di ottimizzazione non lineare, tra cui:
+\begin{itemize}
+    \item Metodo del \textbf{gradiente} (\textbf{steepest descent})
+    \item Metodo di \textbf{Newton}
+\end{itemize}
+Gli algoritmi che consideriamo appartengono all'insieme delle strategie di tipi \textbf{line-search}, le quali generano una successione di punti $\boldsymbol{x}_k$ all'interno dello spazio $\mathbb{R}^n$ in modo che il punto $\boldsymbol{x}_{k+1}$ è ottenuto a partire
+dal punto $\boldsymbol{x}_k$ muovendosi lungo una \textbf{direzione di salita} (nel caso di massimo) o \textbf{di discesa} (nel caso di minimo).
+Un algoritmo generico di tipo line-search è il seguente: consideriamo una generica funzione $f:\mathbb{R}^n \rightarrow \mathbb{R}$ ed un generico punto $\boldsymbol{x} \in \mathbb{R}^n$ in cui la funzione risulti differenziabile.
+Se vogliamo cercare un generico punto di minimo della funzione $f$, possiamo usare la seguente strategia:
+\begin{itemize}
+    \item Poniamo $k = 0$ e consideriamo un generico punto $\boldsymbol{x}^k$
+    \item Determiniamo una direzione di discesa $\boldsymbol{d}^k$
+    \item Cerchiamo un nuovo punto $\boldsymbol{x}^{k+1}$ lungo la direzione $\boldsymbol{d}^k$: $$\boldsymbol{x}^{k+1} = \boldsymbol{x}^k + \alpha^k \boldsymbol{d}^k$$
+    dove $k$ è la generica iterazione e $\alpha^k > 0$ è una quantita scalare chiamata \textbf{step-size}
+\end{itemize}
+Come si calcola quindi lo \textbf{step-size}? Facciamo delle osservazioni:
+\begin{itemize}
+    \item Vogliamo massimizzare/minimizzare il valore della funzione $f(\boldsymbol{x}^{k+1}) = f(\boldsymbol{x}^k + alpha^k\boldsymbol{d}^k)$ ovvero la restrizione della funzione $f(boldsymbol{x})$ lungo la direzione $\boldsymbol{d}^k$
+    \item Notiamo che $\boldsymbol{x}^k$ (punto corrente) e $\boldsymbol{d}^k$ direzione corrente sono fissate, quindi la sola variabile risulta essere $\alpha^k$
+    \item Per trovare $\alpha^k$ possiamo allora porre
+    $$\frac{d f(\boldsymbol{x}^k è \alpha^k \boldsymbol{d}^k)}{d \alpha^k} = 0$$
+    ed usare un metodo di minimizzazione/massimizzazione per funzioni in una variabile per trovare $\alpha^k$ ottimale
+\end{itemize}
+\subsubsection{Metodo del gradiente}
+Nel metodo del gradiente, viene utilizzata:
+\begin{itemize}
+    \item Come direzione di crescita $\boldsymbol{d}^k = \nabla f(\boldsymbol{x}^k)$ per problemi di massimo
+    \item Come direzione di decrescita $\boldsymbol{d}^k = - \nabla f(\boldsymbol{x}^k)$ per problemi di minimo
+\end{itemize}
+Si ha quindi che:
+$$\boldsymbol{x}^{k+1} = \boldsymbol{x}^k \pm \alpha^k \nabla f(\boldsymbol{x}^k)$$
+L'idea di tale metodo è che il gradiente è la direzione di salita/discesa più ripida della funzione
+\begin{center}
+    \includegraphics[width = 0.50\linewidth]{Images/102.PNG}
+\end{center}
+\textbf{L'algoritmo del gradiente} è quindi quello di seguito:
+\begin{enumerate}
+    \item Poniamo $k = 0$, scegliamo $\varepsilon_1,\varepsilon_2$ arbitrari e consideriamo un generico punto $\boldsymbol{x}^k$
+    \item Calcoliamo il gradiente di $f(\boldsymbol{x}^k)$ $\nabla f(\boldsymbol{x}^k)$
+    \item Poniamo $\boldsymbol{d^k} = -\nabla f(\boldsymbol{x}^k)$ per problemi di minimo e $\boldsymbol{d^k} = +\nabla f(\boldsymbol{x}^k)$ per problemi di massimo
+    \item Poniamo $\boldsymbol{x^{k+1}} = \boldsymbol{x}^k \pm \alpha^k \nabla f(\boldsymbol{x}^k)$ ($+$ se il problema è di massimo, $-$ se è di minimo)
+    \item Calcoliamo $\alpha^k >0$ come soluzione di $$f(\boldsymbol{x}^k \pm \alpha^k \nabla f(\boldsymbol{x}^k)) = 0$$ utilizzando un metodo di ottimizzazione per funzioni in una variabile
+    \item \textbf{CRITERIO DI ARRESTO}: Se $\left | f(\boldsymbol{x}^{k+1}) - f(\boldsymbol{x}^k) \right | < \varepsilon_1$ oppure $||\nabla f(\boldsymbol{x}^{k+1})|| < \varepsilon_2$ allora STOP. Altrimenti eseguiamo una nuova iterazione del metodo; poniamo $k = k+1$ e torniamo al punto 2.
+\end{enumerate}
+\subsubsection{Metodo di Newton}
+Nel metodo di Newton, approssimiamo nell'intorno del punto corrente la funzione $f(\boldsymbol{x})$ con una funzione quadratica che viene ottimizzata per ottenere un nuovo punto. Sia $\delta \boldsymbol{x} = \boldsymbol{x}^{k+1} - \boldsymbol{x}^k$, allora:
+$$f(\boldsymbol{x}^k + \delta \boldsymbol{x}) = f(\boldsymbol{x}^k) + \nabla f(\boldsymbol{x}^k)\delta \boldsymbol{x} + \frac{1}{2}\delta \boldsymbol{x} H_f(\boldsymbol{x}^k)\delta \boldsymbol{x}$$
+quindi approssimiamo la funzione tramite uno sviluppo in serie di Taylor per funzioni a più variabili. \newline
+Cerchiamo una direzione di miglioramento che ottimizzi la funzione nel nuovo punto $(x^k + \delta x)$:
+$$\frac{\partial f(\boldsymbol{x}^k + \delta \boldsymbol{x})}{\partial \delta \boldsymbol{x}} = 0 \Leftrightarrow H_f(\boldsymbol{x}^k)\delta x = -\nabla f(\boldsymbol{x}^k)$$
+\textbf{Newton step}: muove ad un punto stazionario del 2°ordine dello sviluppo in serie di Taylor della funzione $f(\boldsymbol{x}^k)$.
+Vediamo quindi l'algoritmo del metodo di Newton:
+\begin{enumerate}
+    \item Poniamo $k = 0$, scegliamo $\varepsilon_1, \varepsilon_2$ arbitrarie e consideriamo un punto iniziale $\boldsymbol{x}^k$
+    \item Calcoliamo $\nabla f(\boldsymbol{x}^k)$ e $H_f(boldsymbol{x}^k)^-1$
+    \item Calcoliamo il nuovo punto usando la seguente equazione: $$\boldsymbol{x}^{k+1} = \boldsymbol{x}^k - H_f(\boldsymbol{x}^k)^-1 \cdot \nabla f(boldsymbol{x}^k)$$
+    \item Usiamo i criteri di convergenza (i.e di arresto) visti prima per il metodo del gradiente. Se non vengono superati, allora $k = k+1$ e torniamo al punto 2
+\end{enumerate}
+Facciamo delle osservazioni:
+\begin{itemize}
+    \item Il metodo di Newton utilizza sia il gradiente che la matrice Hessiana ad ogni iterazione
+    \item Il metodo di Newton (se) converge, converge molto più velocemente del metodo del gradiente, ma ogni iterazione richiede uno sforzo computazionale maggiore. Nel caso di una funzione con 100 variabili si dovrebbe invertire una matrice $100 \times 100$ ad ogni iterazione
+    \item Nel caso di funzioni quadratiche, il metodo di Newton converge in \textbf{una iterazione} (questo perché l'approssimazione che fa della funzione è essa stessa quadratica)
+    \item Nel caso di funzioni più complesse, la matrice Hessiana risulta più complessa da calcolare
+\end{itemize}
+\subsection{Algoritmi di PNL multivariata vincolata}
+Consideriamo un generico problema di programmazione non lineare vincolata:
+$$\textrm{opt } f(\boldsymbol{x})$$
+Soggetto ai seguenti vincoli:
+$$\begin{cases}
+    g_i(\boldsymbol{x}) = 0 \; \; \textrm{con } i = 1,...,m \; \;  \textrm{vincoli di uguaglianza} \\
+    h_j(\boldsymbol{x}) \leq 0 \; \;  \textrm{con } j = 1,...,p \; \;  \textrm{vincoli di disuguaglianza}
+\end{cases}$$
+Per affrontare tale problema vedremo tre possibili approcci:
+\begin{itemize}
+    \item Riduzione del numero di variabili libere (dimensionality reduction)
+    \item Metodo dei moltiplicatori di Lagrange
+    \item Condizioni di Karash-Kuhn-Tucker (KTT)
+\end{itemize}
+\subsubsection{Riduzione del numero di variabili libere}
+Supponiamo di avere un problema di ottimizzazione soggetto ad un certo numero $l$ di vincoli di uguaglianza.
+Nel caso in cui sia possibile esplicitare $l$ variabili in funzione delle restanti $n-l$ variabili utilizzando i vincoli di uguaglianza
+del problema, allora possiamo trasformare tale problema in un problema di ottimizzazione non vincolata con $n-l$ variabili:
+\begin{center}
+    \includegraphics[width = 1\linewidth]{Images/103.PNG}
+\end{center}
+\textbf{PROBLEMA}: tale metodo molto spesso non è possibile applicarlo. Vediamo un esempio:
+supponiamo di avere il seguente problema di minimizzazione:
+$$\textrm{min } x_1 + x_2$$
+soggetto al seguente vincolo:
+$$x_1^2 + x_2^2 = 1$$
+In questo problema, fissato $x_1$, $x_2$ può assumere 2 valori e viceversa. Quindi non posso esplicitare univocamente una variabile in funzione dell'altra.
+Analizziamo cosa succede dal punto di vista grafico:
+\begin{center}
+    \includegraphics[width = 0.50\linewidth]{Images/104.PNG}
+\end{center}
+La regione ammissibile è un cerchio di raggio unitario. Le curve di livello della funzione obbiettivo sono \textbf{rette} con pendenza $-1$.
+Il punto di minimo corrisponderà a quel punto del cerchio tangente alla curva di livello avente valore più basso.
+\begin{center}
+    \includegraphics[width = 0.50\linewidth]{Images/105.PNG}
+\end{center}
+Possiamo notare che:
+\begin{itemize}
+    \item $\nabla f(\boldsymbol{x})$ è costante e punta sempre lungo la bisettrice del primo e terzo quadrante: $$\nabla f(\boldsymbol{x}) = \begin{bmatrix}
+        1 \\
+        1
+    \end{bmatrix}$$
+    \item $\nabla g(\boldsymbol{x})$ varia e punta in direzione uscente dal cerchio: $$\nabla g(\boldsymbol{x}) = \begin{bmatrix}
+        2x_1 \\
+        2x_2
+    \end{bmatrix}$$
+\end{itemize}
+$\nabla g(\boldsymbol{x})$ punta in direzione opposta a quella di $\nabla f(\boldsymbol{x})$ nel punto di minimo del problema:
+$$\nabla f(\boldsymbol{x^*}) = -\nabla g(\boldsymbol{x^*})$$
+\begin{center}
+    \includegraphics[width = 0.50\linewidth]{Images/106.PNG}
+\end{center}
+In tutti gli altri punti, i due vettori $\nabla f(\boldsymbol{x})$ e $\nabla g(\boldsymbol{x})$ non sono paralleli e quindi possiamo muoverci lungo il vincolo
+verso il punto di minimo della funzione.
+\subsubsection{La lagrangiana}
+Consideriamo un generico problema di programmazione non lineare vincolata con solo vincoli di uguaglianza:
+$$\textrm{opt } f(x_1,...,x_n)$$
+soggetto ai seguenti vincoli:
+$$g_i(x_1,...,x_n) = 0 \; \; \textrm{con } i = 1,...,m$$
+Consideriamo la seguente funzione in $n+m$ variabili:
+$$L(x_1,...,x_n, \lambda_1,...,\lambda_m) = f(x_1,...,x_n) + \sum_{i=0}^{m} \lambda_i \cdot g_i(x_1,...,x_n)$$
+Tale funzione prende il nome di \textbf{funzione Lagrangiana}, mentre le variabili $\lambda_i$ (tante quante sono i vincoli) prendono il nome di \textbf{moltiplicatori di Lagrange}.
+Perché è importante introdurre la Lagrangiana? Consideriamo la funzione Lagrangiana dell'esempio precedente:
+$$\textrm{min } x_1 + x_2$$
+soggetto ai seguenti vincoli:
+$$x_1^2+x_2^2 = 1$$
+diventa:
+$$L(x_1,x_2,\lambda_1) = x_1 + x_2 + \lambda_1(x_1^2+x_2^2 - 1)$$
+Cerchiamo i punti stazionari della Lagrangiana:
+$$\frac{\partial L}{\partial x_1} = 1 + 2\lambda_1x_1 = 0 \Rightarrow x_1 = -\frac{1}{2\lambda_1}$$
+$$\frac{\partial L}{\partial x_2} = 1 + 2\lambda_1x_2 = 0 \Rightarrow x_2 = -\frac{1}{2\lambda_1}$$
+Quindi $x_1 = x_2$. Inoltre:
+$$\frac{\partial L}{\partial \lambda_1} = (x_1^2 + x_2^2 - 1) = 0 \Rightarrow \textrm{ non è altro che il vincolo del problema} \Rightarrow 2x_1^2 = 1$$
+Si noti che deve essere $\lambda_1 \neq 0$.
+Da ciò che abbiamo scritto sopra, otteniamo i due punti stazionari:
+$$A = (\frac{1}{\sqrt{2}}, \frac{1}{\sqrt{2}}) \; \textrm{con } \lambda_1 = -\frac{\sqrt{2}}{2}$$
+$$B = (-\frac{1}{\sqrt{2}}, -\frac{1}{\sqrt{2}}) \; \textrm{con } \lambda_1 = \frac{\sqrt{2}}{2}$$
+\begin{center}
+    \includegraphics[width = 0.50\linewidth]{Images/107.PNG}
+\end{center}
+Notiamo che il punto $A$ corrisponde al punto di massimo della funzione, mentre il punto $B$ corrisponde al punto di minimo della funzione.
+I punti stazionari della Lagrangiana sono fortemente legati ai punti di minimo/massimo della funzione.
+\subsubsection{Metoto dei moltiplicatori di Lagrange}
+Consideriamo un generico problema di ottimizzazione non lineare del tipo:
+$$\textrm{opt } f(x_1,...,x_n)$$
+soggetto ai seguenti vincoli di uguaglianza:
+$$g_i(x_1,...,x_n) = 0 \; \; \textrm{con } i = 1,...,m$$
+Sia $\boldsymbol{x^*} = x(x_1^*,...,x_n^*)$ il punto stazionario di $f$, allora esistono $m$ moltiplicatori di Lagrange $\boldsymbol{\lambda^*} = (\lambda_1^*,...,\lambda_m^*)$ tali che
+$(\boldsymbol{x}^*, \boldsymbol{\lambda}^*)$ è un punto stazionario della Lagrangiana associata
+$$L(\boldsymbol{x}^*, \boldsymbol{\lambda}^*) = f(\boldsymbol{x}^*) + \sum_{i=1}^{m} \lambda_i^* \cdot g_i(\boldsymbol{x}^*)$$
+\textbf{OSSERVAZIONI}:
+\begin{itemize}
+    \item I punti $\boldsymbol{x}^*$ e  $(\boldsymbol{x}^*, \boldsymbol{\lambda}^*)$ possono essere punti stazionari di tipo diverso (massimo, minimo, di sella)
+    \item Tale condizione fornisce una \textbf{condizione necessaria ma non sufficiente} per l'ottimizzazione del problema vincolato
+\end{itemize}
+\textbf{CONDIZIONI DEL PRIMO ORDINE}: \newline
+Consideriamo un generico problema di ottimizzazione non lineare del tipo:
+$$\textrm{opt } f(x_1,...x_n)$$
+soggetto ai seguenti vincoli di uguaglianza:
+$$g_i(x_1,...,x_n) = 0 \; \; \textrm{con } i = 1,...,m$$
+Sia $\boldsymbol{x}^* = (x_1^*,...,x_n^*)$ il punto stazionario di $f$, allora esistono $m$ moltiplicatori di Lagrange $\boldsymbol{\lambda^*} = (\lambda_1^*, ...,\lambda_m^*)$ tali che nel punto
+$(\boldsymbol{x}^*, \boldsymbol{\lambda}^*)$, il gradiente della funzione Lagrangiana è \textbf{nullo}, ovvero:
+$$\frac{\partial L(\boldsymbol{x}^*, \boldsymbol{\lambda}^*)}{\partial x_i} = 0 \; \; \textrm{con } i = 1,...,n$$
+$$\frac{\partial L(\boldsymbol{x}^*, \boldsymbol{\lambda}^*)}{\partial \lambda_i} = 0 \; \; \textrm{con } i = 1,...,m$$
+Come nel caso dell'ottimizzazione non vincolata, i punti che annullano il gradiente rappresentano i punti candidati ad essere punto di massimo/minimo della funzione.
+Facciamo delle considerazioni:
+\begin{itemize}
+    \item Se la funzione $f$ è \textbf{convessa}, allora i punti stazionari sono punti di minimo
+    \item Se la funzione $f$ è \textbf{concava}, allora i punti stazionari sono punti di massimo
+    \item Le condizioni $$\frac{\partial L(\boldsymbol{x}^*, \boldsymbol{\lambda}^*)}{\partial \lambda_j} = 0 \; \; \textrm{con } j = 1,...,m$$ sono di fatto un modo "elegante" di riscrivere i vincoli $g_i(x_1,...,x_n)$
+    \item Le condizioni $$\frac{\partial L(\boldsymbol{x}^*, \boldsymbol{\lambda}^*)}{\partial x_i} = 0 \; \; \textrm{con } i = 1,...,n$$ possono essere riscritte come $$\frac{\partial L(\boldsymbol{x}^*, \boldsymbol{\lambda}^*)}{\partial x_i} = \frac{\partial f(\boldsymbol{x}^*)}{\partial x_i} + \sum_{i=0}^{m} \lambda_i^* \cdot \frac{\partial g_i(\boldsymbol{x}^*)}{\partial x_i} = 0$$ ovvero $$\nabla L(\boldsymbol{x}^*, \boldsymbol{\lambda}^*) = \nabla f(\boldsymbol{x}^*) + \sum_{i=1}^{m}\lambda_i^* \cdot \nabla g_i(\boldsymbol{x}^*) = 0 \Rightarrow \nabla f(\boldsymbol{x}^*) = -\sum_{i=1}^{m} \lambda_i^* \cdot \nabla g_i(\boldsymbol{x}^*)$$
+\end{itemize}
+L'insieme dei vincoli di fatto restringe lo spazio delle soluzioni ammissibili del problema al sottospazio intersezione dato dall'intersezione dei vari vincoli.
+\begin{center}
+    \includegraphics[width = 0.45\linewidth]{Images/108.PNG}
+\end{center}
+Il gradiente della funzione $\nabla f(\boldsymbol{x}^*)$ nel punto ottimo $\boldsymbol{x}^*$ deve risultare \textbf{ortogonale} a tale sottospazio.
+Il vettore ortogonale a tale sottopsazio è dato da:
+$$\sum_{i=1}^{m} \lambda_i^* \cdot \nabla g_i(\boldsymbol{x}^*)$$
+Dobbiamo quindi avere che:
+$$\nabla f(\boldsymbol{x}^*) = -\sum_{i=1}^{m} \lambda_i^* \cdot \nabla g_i(\boldsymbol{x}^*)$$
+Quest'ultima condizione significa che nel punto di ottimo il gradiente della funzione $f$ può essere riscritto come combinazione lineare dei gradienti dei vincoli. \newline
+\textbf{CONDIZIONI DEL SECONDO ORDINE}: \newline
+Come nel caso dell'ottimizzazione non vincolata, abbiamo anche in questo caso delle condizioni sufficienti per garantire che i punti di stazionari della Lagrangiana siano punti di massimo/minimo della funzione $f$.
+Sia $J$ la matrice dei gradienti dei vincoli (detta \textbf{matrice Jacobiana}):
+consideriamo l'insieme die vettori $\boldsymbol{y} \in \mathbb{R}?^n$ tali che:
+$$J(\boldsymbol{x}^*) \cdot \boldsymbol{y} = 0$$
+dove:
+$$J(\boldsymbol{x}^*) = \begin{bmatrix}
+    \frac{\partial g_1}{\partial x_1} & \dots & \frac{\partial g_1}{\partial x_n} \\
+    \vdots & \ddots & \vdots \\
+    \frac{\partial g_m}{\partial x_1} & \dots & \frac{\partial g_m}{\partial x_n}
+\end{bmatrix} \Rightarrow \begin{cases}
+    \nabla g_1 (\boldsymbol{x}^*) \cdot \boldsymbol{y} = 0 \\
+    \dots \\
+    \nabla g_m (\boldsymbol{x}^*) \cdot \boldsymbol{y} = 0
+\end{cases}$$
+Tale sottospazio rappresenta l'insieme dei vettori \textbf{perpendicolari} ai gradienti dei vari vincoli.
+\begin{center}
+    \includegraphics[width = 0.45\linewidth]{Images/109.PNG}
+\end{center}
+Consideriamo la matrice Hessiana della funzione Lagrangiana ristretta alle variabili iniziali $x_1,...,x_n$:
+$$H_L(\boldsymbol{x}^*, \boldsymbol{\lambda}^*) = \begin{bmatrix}
+    \frac{\partial^2 L}{\partial x_1^2} & \dots & \frac{\partial^2 L}{\partial x_1 \partial x_n} \\
+    \vdots & \ddots & \vdots \\
+    \frac{\partial^2 L}{\partial x_1 \partial x_n} & \dots & \frac{\partial^2 L}{\partial x_n^2}
+\end{bmatrix}$$
+\begin{itemize}
+    \item Condizione sufficiente affinché $\boldsymbol{x}^*$ sia un punto di minimo è che \newline $\boldsymbol{y}^T \cdot H_L(\boldsymbol{x}^*, \boldsymbol{\lambda}^*) \cdot y > 0$
+    \item Condizione sufficiente affinché $\boldsymbol{x}^*$ sia un punto di massimo è che \newline $\boldsymbol{y}^T \cdot H_L(\boldsymbol{x}^*, \boldsymbol{\lambda}^*) \cdot y < 0$
+    \item Condizione necessaria affinché $\boldsymbol{x}^*$ sia un punto di minimo è che \newline $\boldsymbol{y}^T \cdot H_L(\boldsymbol{x}^*, \boldsymbol{\lambda}^*) \cdot y \geq 0$
+    \item Condizione necessaria affinché $\boldsymbol{x}^*$ sia un punto di massimo è che \newline $\boldsymbol{y}^T \cdot H_L(\boldsymbol{x}^*, \boldsymbol{\lambda}^*) \cdot y \leq 0$
+\end{itemize}
+Facciamo un esempio: consideriamo la funzione lagrangiana dell'esempio precedente:
+$$L(x_1,x_2, \lambda_1) = x_1 + x_2 + \lambda_1(x_1^2+x_2^2 - 1)$$
+Da prima abbiamo che i punti stazionari della Lagrangiana sono:
+$$A = \left (\frac{1}{\sqrt{2}}, \frac{1}{\sqrt{2}}, -\frac{\sqrt{2}}{2} \right ) \; \; B = \left (-\frac{1}{\sqrt{2}}, -\frac{1}{\sqrt{2}}, \frac{\sqrt{2}}{2} \right )$$
+Il vettore $\boldsymbol{y}$ è dato da:
+$$\nabla g(\boldsymbol{x}^*) \cdot \boldsymbol{y} = 0 \Rightarrow [2x_1^*, 2x_2^*] \cdot \begin{bmatrix}
+    y_1 \\
+    y_2
+\end{bmatrix} = 0 \Rightarrow \boldsymbol{y} = \pm [1, -1]^T$$
+La matrice Hessiana della funzione Lagrangiana ristretta alle variabili iniziali $x_1,x_2$ è data da:
+$$H_L(x_1,x_2, \lambda_1) = \begin{bmatrix}
+    2\lambda_1 & 0 & 0 \\
+    0 & 2\lambda_1 & 1 + 2x_2 \\
+    0 & 1 + 2x_2 & 0
+\end{bmatrix} \Rightarrow \tilde{H}_L(x_1,x_2, \lambda_1) = \begin{bmatrix}
+    2\lambda_1 & 0 \\
+    0 & 2\lambda_1
+\end{bmatrix}$$
+Nel punto $A$ la matrice è definita positiva, quindi $A$ è un punto di \textbf{minimo} \newline
+Nel punto $B$ la matrice è definita negativa, quindi $B$ è un punto di \textbf{massimo}. \newline
+In questo caso, non è nemmeno necessaria restringere l'analisi al sottospazio $\boldsymbol{y} = \pm[1, -1]^T$. \newline
+Il metodo dei moltiplicatori ha quindi la seguente \textbf{procedura generalizzata}:
+\begin{enumerate}
+    \item Si cercano i punti stazionari della Lagrangiana per ottenere i punti candidati ad essere punti di massimo/minimo: $$\frac{\partial L(\boldsymbol{x}^*, \boldsymbol{\lambda})^*}{\partial x_i} = 0 \; \; \textrm{con } i = 1,...,n$$ $$\frac{\partial L(\boldsymbol{x}^*, \boldsymbol{\lambda})^*}{\partial lambda_j} = 0 \; \; \textrm{con } j = 1,...,m$$
+    \item Utilizzo le condizioni del secondo ordine per eliminare i punti stazionari che di sicuro non sono ne di minimo ne di massimo, ovvero i punti di sella:
+    \begin{itemize}
+        \item Cerco $y$ tali che $J(\boldsymbol{x}^*)\cdot \boldsymbol{y} = 0$
+        \item Se esistono $\boldsymbol{y_1}$ e $\boldsymbol{y_2}$ tali che $\boldsymbol{y_1}^T \cdot H_L(\boldsymbol{x}^*) \cdot \boldsymbol{y_1} > 0$ oppure $\boldsymbol{y_2}^T \cdot H_L(\boldsymbol{x}^*) \cdot \boldsymbol{y_2} < 0$ allora possiamo classificarlo come punto di sella 
+    \end{itemize}
+    \item Per i rimanenti punti:
+    \begin{itemize}
+        \item Se $\boldsymbol{y}^T \cdot H_L(\boldsymbol{x}^*) \cdot \boldsymbol{y} > 0$ oppure $\boldsymbol{y}^T \cdot H_L(\boldsymbol{x}^*) \cdot \boldsymbol{y} < 0$ allora possiamo classificarlo come punto di minimo o massimo
+        \item Se $\boldsymbol{y}^T \cdot H_L(\boldsymbol{x}^*) \cdot \boldsymbol{y} \geq 0$ oppure $\boldsymbol{y}^T \cdot H_L(\boldsymbol{x}^*) \cdot \boldsymbol{y} \leq 0$ allora non possiamo sapere se tale punto è di minimo o massimo
+    \end{itemize}
+\end{enumerate}
+\subsubsection{Condizioni di Karush-Kuhn-Tucker}
+Finora abbiamo considerato solamente \textbf{problemi con vincoli solamente di uguaglianza}. Cosa succede però se introduciamo i \textbf{vincoli di disuguaglianza}? Consideriamo
+un generico problema di programmazione non lineare vincolata:
+Consideriamo un generico problema di programmazione non lineare vincolata:
+$$\textrm{opt } f(x_1,...,x_n)$$
+Soggetto ai seguenti vincoli:
+$$\begin{cases}
+    g_i(x_1,...,x_n) = 0 \; \; \textrm{con } i = 1,...,m \; \;  \textrm{vincoli di uguaglianza} \\
+    h_j(x_1,...,x_n) \leq 0 \; \;  \textrm{con } j = 1,...,p \; \;  \textrm{vincoli di disuguaglianza}
+\end{cases}$$
+In questo caso un punto di minimo/massimo $\boldsymbol{x}^*$ è tale che:
+\begin{itemize}
+    \item $g_i(\boldsymbol{x}^*) = 0 \; \; \forall i = 1,...,m$
+    \item $h_j(\boldsymbol{x}^*) = 0$ (vincolo attivo) oppure $h_j(\boldsymbol{x}^*) < 0$ (vincolo non attivo) $\forall j = 1,...,p$
+\end{itemize}
+Se $h_j(\boldsymbol{x}^*) < 0$ (vincolo non attivo), allora significa che un piccolo cambiamento non viola il vincolo.
+Possiamo anche in questo caso definire la funzione Lagrangiana come una funzione in $n+m+p$ variabili:
+$$L(x_1,...,x_n,\lambda_1,...,\lambda_m,\mu_1,...,\mu_p) = f(x_1,...x_n) + \sum_{i=1}^{m} \lambda_i \cdot g_i(x_1,...,x_n) + \sum_{j=1}^{p}\mu_j\cdot h_j(x_1,...,x_n)$$
+Le \textbf{condizioni di Karus-Kuhn-Tucker} rappresentano una generalizzazione del metodo dei moltiplicatori di Lagrange, applicato a problemi in cui siano presenti anche dei vincoli di disuguaglianza.
+Consideriamo un generico problema di programmazione non lineare vincolata:
+$$\textrm{opt } f(x_1,...,x_n)$$
+Soggetto ai seguenti vincoli:
+$$\begin{cases}
+    g_i(x_1,...,x_n) = 0 \; \; \textrm{con } i = 1,...,m \; \;  \textrm{vincoli di uguaglianza} \\
+    h_j(x_1,...,x_n) \leq 0 \; \;  \textrm{con } j = 1,...,p \; \;  \textrm{vincoli di disuguaglianza}
+\end{cases}$$
+Sia $\boldsymbol{x}^* = (x_1^*,...,x_n^*)$ un punto di ottimo di $f$, allora $h_j(\boldsymbol{x}^*)$ può essere attivo ($h_j(\boldsymbol{x^*}) = \boldsymbol{0}$) o inattivo ($h_j(\boldsymbol{x}^*) <0$).
+Indichiamo con $I(\boldsymbol{x}^*)$ l'insieme degli \textbf{indici} dei vincoli attivi.
+Sia $\boldsymbol{x}^* = (x_1^*,...,x_n^*)$ il punto di ottimo di $f$, allora esistono $m$ moltiplicatori $\boldsymbol{\lambda}^* = (\lambda_1^*,...,\lambda_m^*)$ e $p$ moltiplicatori 
+$\boldsymbol{\mu}^* = (\mu_1^*,...,\mu_p^*)$ tali che valgono le seguenti condizioni: \newline
+\newpage
+\textbf{Condizione di stazionarietà}:
+\begin{itemize}
+    \item $\nabla f(\boldsymbol{x}^*, \boldsymbol{\lambda}^*, \boldsymbol{\mu}^*) - \sum_{i=1}^{m}\lambda_i^* \cdot \nabla g_i(\boldsymbol{x}^*) - \sum_{j=1}^{p}\mu_i^* \cdot \nabla h_i(\boldsymbol{x}^*) = 0$ (per problemi di max)
+    \item $\nabla f(\boldsymbol{x}^*, \boldsymbol{\lambda}^*, \boldsymbol{\mu}^*) + \sum_{i=1}^{m}\lambda_i^* \cdot \nabla g_i(\boldsymbol{x}^*) + \sum_{j=1}^{p}\mu_i^* \cdot \nabla h_i(\boldsymbol{x}^*) = 0$ (per problemi di min)
+\end{itemize}
+\textbf{Ammissibilità primale}:
+\begin{itemize}
+    \item $g_i(\boldsymbol{x}^*) = 0 \; \; \forall i = 1,...,m$
+    \item $h_j(\boldsymbol{x}^*) \leq 0 \; \; \forall j = 1,...,p$
+\end{itemize}
+\textbf{Ammissibilità duale}: $\mu_j^* \geq 0 \; \; \forall j = 1,...,p$ \newline
+\textbf{Condizioni di complementarietà}: $\mu_j^* \cdot h_j(\boldsymbol{x}^*) = 0 \; \; \forall j = 1,...,p$ \newline
+Le condizioni di \textbf{ammissibilità del duale} e di \textbf{complementarietà} implicano che, nel caso dei vincoli di disuguaglianza abbiamo che:
+\begin{itemize}
+    \item Se $h_j(\boldsymbol{x}^*) < 0$ (vincolo non attivo) allora $\mu_j^* = 0$
+    \item Se $h_j(\boldsymbol{x}^*) = 0$ (vincolo attivo) allora $\mu_j^* \geq 0$
+\end{itemize}
+\textbf{CONDIZIONI DEL SECONDO ORDINE}: \newline
+Abbiamo anche in questo caso delle condizione sufficienti per garantire che i punti stazionari della Lagrangiana siano punti di massimo/minimo della funzione $f$.
+Consideriamo l'insieme dei vettori $\boldsymbol{y}\in \mathbb{R}^n$ tali che:
+$$J(\boldsymbol{x}^*) \cdot \boldsymbol{y} = 0$$
+dove in questo caso $J(\boldsymbol{x}^*)$ è una matrice di dimensione $|I(\boldsymbol{x}^*)| \times n$ contenente tutti i gradienti dei vincoli attivi, ovvero:
+\begin{itemize}
+    \item Vincoli di uguaglianza (che sono attivi per definizione)
+    \item Vincoli di disuguaglianza attivi
+\end{itemize}
+Consideriamo la matrice Hessiana della funzione Lagrangiana ristretta alle variabili iniziali $x_1,...,x_n$:
+$$H_L(\boldsymbol{x}^*, \boldsymbol{\lambda}^*, \boldsymbol{\mu}^*) = \begin{bmatrix}
+    \frac{\partial^2 L}{\partial x_1^2} & \dots & \frac{\partial^2 L}{\partial x_1 \partial x_n} \\
+    \vdots & \ddots & \vdots & \\
+    \frac{\partial^2 L}{\partial x_1 \partial x_n} & \dots & \frac{\partial^2 L}{\partial x_n^2}
+\end{bmatrix}$$
+Abbiamo che:
+\begin{itemize}
+    \item Condizione sufficiente affinché $\boldsymbol{x}^*$ sia un punto di minimo è che \newline $\boldsymbol{y}^T \cdot H_L(\boldsymbol{x}^*, \boldsymbol{\lambda}^*, \boldsymbol{\mu}^*) \cdot \boldsymbol{y} > 0$
+    \item Condizione sufficiente affinché $\boldsymbol{x}^*$ sia un punto di massimo è che \newline $\boldsymbol{y}^T \cdot H_L(\boldsymbol{x}^*, \boldsymbol{\lambda}^*, \boldsymbol{\mu}^*) \cdot \boldsymbol{y} < 0$
+    \item Condizione necessaria affinché $\boldsymbol{x}^*$ sia un punto di minimo è che \newline $\boldsymbol{y}^T \cdot H_L(\boldsymbol{x}^*, \boldsymbol{\lambda}^*, \boldsymbol{\mu}^*) \cdot \boldsymbol{y} \geq 0$
+    \item Condizione necessaria affinché $\boldsymbol{x}^*$ sia un punto di massimo è che \newline $\boldsymbol{y}^T \cdot H_L(\boldsymbol{x}^*, \boldsymbol{\lambda}^*, \boldsymbol{\mu}^*) \cdot \boldsymbol{y} \leq 0$
+\end{itemize}
+Facciamo delle considerazioni:
+\begin{itemize}
+    \item Le condizioni di KTT rappresentano le condizioni \textbf{necessarie ma non sufficienti} che caratterizzano i punti di ottimo (condizioni di ottimalità)
+    \item I punti di ottimi DEVONO soddisfare le condizioni di KTT
+    \item Le condizioni di KTT consentono di "limitare" la ricerca del/dei punto/i di ottimo tra i punti che soddisfano le condizioni
+    \item Le condizioni di KTT \textbf{NON SONO UN ALGORITMO}
+\end{itemize}
+
 \end{document}
