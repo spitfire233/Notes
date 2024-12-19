@@ -2109,7 +2109,7 @@ Tra le varia possibilità, citiamo:
 \begin{itemize}
     \item Aspettare semplicemente che l'enumerazione generi un nodo foglia ammissibile
     \item Implementare un algoritmo che valuti una buona soluzione all'inizio, prima dell'esplorazione
-    \item Sfruttare, con frequenza da valutare, l'informazione raccolta durante l'esplorazione dell'albero per costruire soluzini ammissibili sempre migliori
+    \item Sfruttare, con frequenza da valutare, l'informazione raccolta durante l'esplorazione dell'albero per costruire soluzioni ammissibili sempre migliori
 \end{itemize}
 In ogni caso, bisogna sempre valutare il compromesso tra la qualità della soluzione ammissibile corrente e lo sforzo computazionale per ottenerla.
 \section{Programmazione non lineare}
@@ -2673,7 +2673,7 @@ Vediamo quindi l'algoritmo del metodo di Newton:
 \begin{enumerate}
     \item Poniamo $k = 0$, scegliamo $\varepsilon_1, \varepsilon_2$ arbitrarie e consideriamo un punto iniziale $\boldsymbol{x}^k$
     \item Calcoliamo $\nabla f(\boldsymbol{x}^k)$ e $H_f(boldsymbol{x}^k)^-1$
-    \item Calcoliamo il nuovo punto usando la seguente equazione: $$\boldsymbol{x}^{k+1} = \boldsymbol{x}^k - H_f(\boldsymbol{x}^k)^-1 \cdot \nabla f(boldsymbol{x}^k)$$
+    \item Calcoliamo il nuovo punto usando la seguente equazione: $$\boldsymbol{x}^{k+1} = \boldsymbol{x}^k - H_f(\boldsymbol{x}^k)^-1 \cdot \nabla f(\boldsymbol{x}^k)$$
     \item Usiamo i criteri di convergenza (i.e di arresto) visti prima per il metodo del gradiente. Se non vengono superati, allora $k = k+1$ e torniamo al punto 2
 \end{enumerate}
 Facciamo delle osservazioni:
@@ -2695,7 +2695,7 @@ Per affrontare tale problema vedremo tre possibili approcci:
 \begin{itemize}
     \item Riduzione del numero di variabili libere (dimensionality reduction)
     \item Metodo dei moltiplicatori di Lagrange
-    \item Condizioni di Karash-Kuhn-Tucker (KTT)
+    \item Condizioni di Karush-Kuhn-Tucker (KTT)
 \end{itemize}
 \subsubsection{Riduzione del numero di variabili libere}
 Supponiamo di avere un problema di ottimizzazione soggetto ad un certo numero $l$ di vincoli di uguaglianza.
@@ -2889,7 +2889,7 @@ In questo caso un punto di minimo/massimo $\boldsymbol{x}^*$ è tale che:
 Se $h_j(\boldsymbol{x}^*) < 0$ (vincolo non attivo), allora significa che un piccolo cambiamento non viola il vincolo.
 Possiamo anche in questo caso definire la funzione Lagrangiana come una funzione in $n+m+p$ variabili:
 $$L(x_1,...,x_n,\lambda_1,...,\lambda_m,\mu_1,...,\mu_p) = f(x_1,...x_n) + \sum_{i=1}^{m} \lambda_i \cdot g_i(x_1,...,x_n) + \sum_{j=1}^{p}\mu_j\cdot h_j(x_1,...,x_n)$$
-Le \textbf{condizioni di Karus-Kuhn-Tucker} rappresentano una generalizzazione del metodo dei moltiplicatori di Lagrange, applicato a problemi in cui siano presenti anche dei vincoli di disuguaglianza.
+Le \textbf{condizioni di Karush-Kuhn-Tucker} rappresentano una generalizzazione del metodo dei moltiplicatori di Lagrange, applicato a problemi in cui siano presenti anche dei vincoli di disuguaglianza.
 Consideriamo un generico problema di programmazione non lineare vincolata:
 $$\textrm{opt } f(x_1,...,x_n)$$
 Soggetto ai seguenti vincoli:
