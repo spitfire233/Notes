@@ -1627,7 +1627,7 @@ Le variabili binarie permettono di introdurre condizioni logiche: \newline
         \sum_{i=1}^{N} y_i = N - K
     \end{cases}$$
     \item \textbf{La funzione assume solo $N$ possibili valori}: Si consideri la situazione in cui una data funzione assuma uno fra $N$ possibili valori.
-    $$f(x_1, x_2, ..., x_n) = d_1 \; o \; d_2 \; o ,..., \o \; d_N$$
+    $$f(x_1, x_2, ..., x_n) = d_1 \; o \; d_2 \; o ,..., \; o \; d_N$$
     Ad esempio:
     $$f(x_1, x_2, ..., x_n) = \sum_{j=1}^{n} a_jx_j$$
     oppure
@@ -2423,7 +2423,7 @@ Il metodo di bisezione è una procedura semplice ed intuitiva, MA ha lo svantagg
 Il motivo di tale lentezza è dovuta dal fatto che esso considera solo l'informazione relativa alla derivata prima $f'(x)$.
 Un modo per aumentare la velocità di convergenza è quello di considerare anche la derivata seconda $f''(x)$.
 Tramite la formula di Taylor (centrata in $x_k$) si può ottenere un'\textbf{approssimazione quadratica} di tale funzione:
-$$f(x_{k+1}) = f(x_k) + f'(x_k)(x_{k+1}-x_k) + \frac{1}{2}f''(x_k)(x_{k+1}-x_k)^2 + \O((x_{k+1} - x_k)^2)$$
+$$f(x_{k+1}) = f(x_k) + f'(x_k)(x_{k+1}-x_k) + \frac{1}{2}f''(x_k)(x_{k+1}-x_k)^2 + \mathcal{O}((x_{k+1} - x_k)^2)$$
 Che diventa:
 $$f(x_{k+1}) = f(x_k) + f'(x_k)(x_{k+1}-x_k) + \frac{1}{2}f''(x_k)(x_{k+1}-x_k)^2$$
 L'approssimazione quadratica è funzione solo di $x_{k+1}$! Calcoliamo la derivata dell'approssimazione quadratica:
