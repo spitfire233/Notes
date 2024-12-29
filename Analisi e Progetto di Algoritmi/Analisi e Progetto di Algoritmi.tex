@@ -322,10 +322,180 @@ Il tempo di calcolo di questo algoritmo è $T(n) = \Theta(n)$, tuttavia viene "s
 Notiamo che l'istruzione all'interno del for \textbf{è praticamente uguale alla relazione di ricorrenza presentata in precedenza}; la programmazione dinamica
 è quindi \textbf{strettamente legata alla ricorsione} e a come essa \textbf{definisce la STRUTTURA della soluzione}.
 \subsection{LCS - Longest Common Subsequence}
-
-
-
-
+Sia $X = <x_1,...,x_m>$ una sequenza con elementi provenienti da un alfabeto $\Sigma$, quindi $x_i \in \Sigma \; \forall i = 1,...,m$.
+\begin{Definizione}
+    $Z = <z_1,\dots,z_k>$ è \textbf{sottosequenza} di $X$ se e solo se esiste una sequenza \textbf{strettamente crescente di indici} $<i_1,\dots,i_k>$ tali che $\forall i \in [1,k] \; z_j = x_{i_j}$
+\end{Definizione}
+\begin{Nota}
+    Non devono per forza essere consecutivi!
+\end{Nota}
+Sia ora $X = <x_1,\dots,x_n>$ una sequenza e sia $i \in \{1,\dots,n\}$; allora
+\textbf{il prefisso i-esimo di $X$} viene indicato con $X_i = <x_1,\dots,x_i>$ con $X_0 = \varepsilon$ che indica
+\newpage
+la \textbf{sequenza vuota}. Facciamo due considerazioni:
+\begin{itemize}
+    \item $X_i$ \textbf{è sottosequenza} di $X$
+    \item $X_n = X$ se $X$ ha lunghezza $n$
+\end{itemize}
+Diamo ora la formulazione formale del problema: \newline
+\textbf{\underline{PROBLEMA}}: Date due sequenze $X$ e $Y$, rispettivamente di $m$ ed $n$ numeri interi, si determini \textbf{UNA} tra le più lunghe sottosequenze comuni a $X$ e $Y$. \newline
+\textbf{\underline{ISTANZA}}: $X = <x_1,\dots,x_m>$ e $Y = <y_1,\dots,y_n>$ \newline
+\textbf{\underline{SOLUZIONE}}: $Z$ sottosequenza sia di $X$ che di $Y$ tale che \newline $|Z| = \max\{|W|: \textrm{W è sottosequenza sia di X che di Y}\}$
+\begin{Nota}
+    Notare che il la definizione del problema non è ricorsiva!
+\end{Nota}
+Come possiamo quindi "sfruttare" la ricorsione per raggiungere una soluzione del problema?
+Dobbiamo \textbf{individuare un sottoproblema}; che in questo caso "lavorerà" con i \textbf{prefissi}
+di $X$ e $Y$. Un sottoproblema del problema originale è quindi il seguente: \newline
+\textbf{\underline{ISTANZA DEL SOTTOPROBLEMA}}: $X_i = <x_1,...,x_i>$ e $Y_j = <y_1,...,y_j>$ \newline
+\textbf{\underline{SOLUZIONE}}: $LCS(X_i, Y_j) = S^{(i,j)}$ \newline
+Quindi per risolvere un problema ricorsivo, \textbf{devo immaginare di aver già risolto tutti i sottoproblemi più piccoli}, quindi di aver già risolto:
+$$S^{m-1, n}, S^{m-2, n}, \dots, S^{0, n}$$
+$$S^{m-1, n-1}, S^{m-2, n-1}, \dots S^{0, n-1}, \dots$$
+Quindi come andiamo a definire $S^{(m, n)}$?
+essa contiene \textbf{tutti i sottoproblemi risolti, combinati in una certa maniera}. \newline
+Il sottoproblema generico è quindi individuato da una coppia $(i,j)$ tale che:
+$$0 \leq i \leq m$$
+$$0 \leq j \leq n$$
+Definiamo allora il problema ricorsivamente: \newline
+\textbf{\underline{CASO BASE}}: $i = 0 \vee j = 0$; allora 
+$S^{(i,j)} = \varepsilon$ \newline
+\textbf{\underline{PASSO RICORSIVO}}: $i > 0 \land j > 0$ \newline
+Dobbiamo distinguere due casi:
+\begin{itemize}
+    \item Se $x_i = y_j$ allora $S^{(i,j)} = S^{(i-1, j-1)}|x_i$ (con $|$ che significa "accodo")
+    \item Se $x_i \neq y_j$ allora:
+    $$S^{(i,j)}\begin{cases}
+        S^{(i-1, j)} \; \; \textrm{Se } |S^{(i-1, j)}| > |S^{(i, j-1)}| \\
+        S^{(i, j-1)} \; \; \textrm{Altrimenti}
+    \end{cases}$$
+\end{itemize}
+Questa però \textbf{non è una dimostrazione}; per dimostrare che effettivamente la soluzione abbia questa struttura dobbiamo introdurre il
+concetto di \textbf{proprietà della sottostruttura ottima (PSO)}:
+\begin{Teorema}[PSO della LCS]
+    Siano $X_m, Y_n$ le sequenze e sia $Z_k$ una LCS di $X_m$ e $Y_n$. Allora:
+    \begin{enumerate}
+        \item Se $x_m = y_n$ allora $z_k = x_m = y_n$ e $Z_{k-1}$ è una LCS di $X_{m-1}$ e $Y_{n-1}$
+        \item Se $x_m \neq y_n$ e $z_k \neq x_m$ allora $Z_k$ è una LCS di $X_{m-1}$ e $Y_n$
+        \item Se $x_m \neq y_n$ e $z_k \neq y_n$ allora $Z_k$ è una LCS di $X_m$ e $Y_{n-1}$
+    \end{enumerate}
+\end{Teorema}
+\begin{Dimostrazione}
+    Dimostriamo tutti i casi del teorema sopra:
+    \begin{enumerate}
+        \item Se $x_m = y_n$
+        \begin{enumerate}
+            \item Facciamo vedere che $z_k = x_m = y_n$. Se per assurdo $z_k \neq x_m \vee z_k \neq y_n$ allora potrei
+            costruire una sequenza $Z_k|x_m$; tuttavia essa sarebbe una LCS di lunghezza maggiore di $Z_k$, il chè è \textbf{assurdo} poiché
+            $Z_k$ è la LCS tra $X_m$ e $Y_n$.
+            \item Facciamo vedere che $Z_{k-1} = LCS(X_{m-1}, Y_{n-1})$. Assumiamo per assurdo che $Z_{k-1}$ non è una LCS di $X_{m-1}$ e $Y_{n-1}$.
+            Sia $Z'$ una LCS di $X_{m-1}$ e $Y_{n-1}$, allora $|Z'| > k-1$; quindi potrei costruire una sequenza $Z'|x_m$, la quale è una sottosequenza comune
+            di $X_m$ e $Y_n$. Inoltre, $|Z'|x_m| > k$, tuttavia ciò contraddice il fatto che $Z_k$ sia una LCS tra $X_m$ e $Y_n$, quindi è \textbf{assurdo}
+        \end{enumerate}
+        \item Se $x_m \neq y_n \land z_k \neq x_m$, allora devo far vedere che $Z_k = LCS(X_{m-1}, Y_n)$. Assumiamo per assurdo $Z_k$ non è una $LCS(X_{m-1}, Y_n)$.
+        Sia $Z'$ una $LCS(X_{m-1}, Y_n)$, allora $|Z'| > k$. Inoltre, $Z'$ è anche sottosequenza di $X_m$ e $Y_n$, tuttavia ciò implicherebbe che $Z_k$ non può essere una $LCS(X_m, Y_n)$, il che è \textbf{assurdo}
+        \item Simmetrica a quella del punto 2
+    \end{enumerate}
+\end{Dimostrazione}
+\begin{algorithm}[H]
+    \caption{Algoritmo ricorsivo che stampa la LCS tra due sequenze $X_m$ e $Y_n$}
+    \DontPrintSemicolon
+    \SetKwFunction{FLCSRic}{LCS-Ric}
+    \Proc{\FLCSRic{X, Y, i, j}} {
+        \eIf{$i = 0 \vee j = 0$} {
+            \Return $\varepsilon$
+        } {
+            \eIf{$x_i = y_j$} {
+                \Return LCS-Ric(X, Y, i-1, j-1)|$x_i$
+            }  {
+                A := LCS-Ric(X, Y, i-1, j) \;
+                B := LCS-Ric(X, Y, i, j-1) \;
+                \eIf{$|A| \geq |B|$} {
+                    \Return A
+                } {
+                    \Return B
+                }
+            }
+        }
+    }
+\end{algorithm}
+Notiamo che seppur tratti della struttura della soluzione, \textbf{non possiamo derivare un algoritmo basandoci unicamente sulla PSO}; infatti io non conosco il valore di $z_k$!.
+Tuttavia, se nella caratterizzazione della sottostruttura ottima sia si utilizzano sia gli input che le caratteristiche della sottostruttura ottima,
+\textbf{posso comunque arrivare ad un algoritmo anche in caso di mancanza di informazione}, a patto che \textbf{tutti i casi siano coperti}. Poiché è questo il caso, possiamo derivare l'algoritmo
+sopra riportato. La complessità dell'algoritmo 3 tuttavia \textbf{è altissima}; abbiamo però a disposizione \textbf{tutte le informazioni necessarie per applicare la programmazione dinamica e scrivere un algoritmo iterativo che calcoli la LCS tra $X_m$ e $Y_n$}: \newline
+\begin{algorithm}[H]
+    \caption{Un algoritmo iterativo che stampa una LCS tra $X_m$ e $Y_n$}
+    \DontPrintSemicolon
+    \SetKwFunction{FLCSIt}{LCS-It}
+    \Proc{\FLCSIt{X, Y}} {
+        m = LENGTH(X) \;
+        n = LENGTH(Y) \;
+        \For{$j \gets 0$ to $n$} {
+            S[0,j] := $\varepsilon$
+        }
+        \For{$i \gets 0$ to $m$} {
+            S[i,0] := $\varepsilon$
+        }
+        \For{$i \gets 1$ to $m$} {
+            \For{$j \gets 1$ to $n$} {
+                \eIf{$x_i = y_j$} {
+                    S[i,j] := S[i-1, j-1]|$x_i$
+                } {
+                    \eIf{LENGTH(S[i-1,j]) $\geq$ LENGTH(S[i, j-1])} {
+                        S[i, j] := S[i-1, j]
+                    } {
+                        S[i,j] := S[i, j-1]
+                    }
+                }
+            }
+        }
+        \Return S[m,n]
+    }
+\end{algorithm}
+\noindent
+Ci avvaliamo quindi di una \textbf{matrice} $m \times n$ S per \textbf{salvare i risultati dei sottoproblemi}.
+La soluzione del problema si troverà quindi nella cella [m,n] della matrice. Il \textbf{tempo di calcolo} di questo algoritmo è:
+$$T(n) = \Theta(m \cdot n)$$
+tuttavia, vi è uno \textbf{spreco di memoria per memorizzare la matrice}, vista che ogni cella contiene una \textbf{sottosequenza}.
+Possiamo quindi lavorare come una \textbf{versione ridotta del problema}, il quale ha la seguente formulazione: \newline
+\textbf{\underline{PROBLEMA RIDOTTO}}: Date due sequenze $X$ e $Y$, rispettivamente di $m$ ed $n$ numeri interi, si determini \underline{la lunghezza} di una tra le più lunghe sottosequenze comuni a $X$ e $Y$. \newline
+Anche il problema ridotto contiene \textbf{diversi sottoproblemi}, ognuno dei quali non ha come input la coppia $(X,Y)$ ma una coppia di prefissi di tali sequenze. Ogni sottoproblema è quindi
+\textbf{identificato da una coppia $(i,j)$} ed è definito come segue: \newline
+\textbf{SOTTOPROBLEMA GENERICO}: Date due sequenze $X$ e $Y$, rispettivamente di $m$ ed $n$ numeri interi, si determini la lunghezza di una tra le più lunghe sottosequenze comuni al prefisso $X_i$ e al prefisso $Y_j$. \newline
+Anche in questo caso, dato che $0 \leq i \leq m$ e $0 \leq j \leq n$, si ottengono $(m+1) \cdot (n+1)$ sottoproblemi ($i$ e $j$ possono valere 0 in quanto si deve considerare anche il caso in cui un prefisso sia la sequenza vuota).
+Ad ogni sottoproblema del problema ridotto \textbf{è associata una variabile}: considerato il sottoproblema di dimensione $(i,j)$, la variabile ad esso associata è $c_{i,j}$ ed è così definita:
+$$c_{i,j} := \textrm{lunghezza di una tra le più lunghe sottosequenze comuni a } X_i \; e \; Y_j$$
+Per determinare la soluzione di un qualsiasi sottoproblema di dimensione $(i,j)$, oltre all'input, si utilizzeranno le soluzione dei sottoproblemi di dimensione minore (come nel caso visto prima).
+Si noti però che ogni variabile associata ad un sottoproblema è da considerare come una \textbf{black-box}: si può utilizzare ma non è possibile conoscerne il contenuto.
+Scriviamo l'equazione di ricorrenza del problema ridotto: \newline
+\textbf{\underline{CASO BASE}}: $(i,j)$ con $i = 0 \vee j = 0$. \newline
+Il caso base si ha per un qualunque sottoproblema di dimensione $(i,j)$ con $i = 0 \vee j = 0$, ossia quando uno dei due prefissi considerati è la sequenza vuota.
+In questo caso, è facile ottenere il valore della variabile $c_{i,j}$ in quanto la lunghezza di una tra le più lunghe sottosequenze comuni fra una qualsiasi fra una qualsiasi sequenza e la sequenza vuota è 0 (ossia la lunghezza della sequenza vuota).
+Per questa ragione, il caso base è scrivibile come:
+$$c_{i,j} = 0 \; \textrm{se } i = 0 \vee j = 0$$
+\textbf{\underline{PASSO RICORSIVO}}: $(i,j)$ con $i > 0 \land j > 0$ \newline
+Il passo ricorsivo si ha per un qualunque sottoproblema di dimensione $(i,j)$ con $i > 0 \land j > 0$, ossia quando si vanno a considerare due prefissi
+$X_i = <x_1,\dots,x_i$ e $Y_j = <y_1,\dots,y_j>$ entrambi diversi dalla sequenza vuota. I dati disponibili per calcolare $c_{i,j}$ sono:
+\begin{itemize}
+    \item L'input $X$ ed in particolare l'elemento $x_i$
+    \item L'input $Y$ ed in particolare l'elemento $y_j$
+    \item Tutte le variabili $\{c_{0,0}, \dots, c_{i-1, j}, c_{i, j-1} \}$
+\end{itemize}
+Per calcolare $c_{i,j}$ è necessario applicare il \textbf{teorema della proprietà della sottostruttura ottima} (Teorema 2.1.1), di cui ciò che segue è una conseguenza:
+\begin{itemize}
+    \item Se $x_i = y_j$: se i due elementi considerati sono identici allora la lunghezza della più lunga sottosequenza comune fra $X_i$ e $Y_j$ è uguale alla lunghezza della più lunga sottosequenza comune fra $X_{i-1}$ e $Y_{j-1}$ (ossia il valore di $c_{i-1,j-1}$)
+    aumentata di uno (l'elemento comune $x_i$ è accodato ad una più lunga sottosequenza comune a $X_{i-1}$ e $Y_{j-1}$ correlata al sottoproblema di dimensione ($i-1, j-1$) e che quindi lunghezza $c_{i-1,j-1}$).
+    In altri termini, se $Z_k$ è una LCS fra $X_i$ e $Y_j$, allora $z_k = x_i = y_j$ e $Z_{k-1} = LCS(X_{i-1}, Y_{j-1})$
+    \begin{center}
+        \includegraphics[width = 0.50\linewidth]{Images/5.png}
+    \end{center}
+    quindi $c_{i,j} = 1 + c_{i-1, j-1} \; \; \textrm{se } x_i = y_j$
+    \item Se $x_i \neq y_j$ i due elementi considerati sono differenti, allora la lunghezza della più lunga sottosequenza comune è data dalla soluzione di uno dei sottoproblemi di dimensione minore.
+    Siccome gli elementi finali dei due prefissi considerati sono differenti, non possono appartenere entrambi alla soluzione $Z_k$ e risulta necessario considerare i seguenti due casi, sulla base di come è fatto l'ultimo elemento $z_k$ della soluzione $Z_k$:
+    \begin{itemize}
+        \item 
+    \end{itemize}
+\end{itemize}
 
 
 \end{document}
