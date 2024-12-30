@@ -70,6 +70,7 @@
 \DeclarePairedDelimiter\ceil{\lceil}{\rceil}
 \DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
 
+
 \title{Analisi e Progetto di Algoritmi}
 \author{spitfire}
 \date{A.A. 2024-2025}
@@ -493,9 +494,458 @@ Per calcolare $c_{i,j}$ è necessario applicare il \textbf{teorema della proprie
     \item Se $x_i \neq y_j$ i due elementi considerati sono differenti, allora la lunghezza della più lunga sottosequenza comune è data dalla soluzione di uno dei sottoproblemi di dimensione minore.
     Siccome gli elementi finali dei due prefissi considerati sono differenti, non possono appartenere entrambi alla soluzione $Z_k$ e risulta necessario considerare i seguenti due casi, sulla base di come è fatto l'ultimo elemento $z_k$ della soluzione $Z_k$:
     \begin{itemize}
-        \item 
+        \item Se $z_k \neq x_i$, allora si deve considerare la soluzione $c_{i-1,j}$, ossia la soluzione del sottoproblema di dimensione $(i-1,j)$ con input il prefisso $X_{i-1}$ e il prefisso $Y_j$
+        \item Se $z_k \neq y_j$, allora si deve considerare la soluzione $c_{i,j-1}$, ossia la soluzione del sottoproblema di dimensione $(i,j-1)$ con input il prefisso $X_i$ e il prefisso $Y_{j-1}$
     \end{itemize}
+    Siccome $z_k$ non è noto, non possiamo sapere a priori quale dei due casi si verifichi. Quindi consideriamo la soluzione di entrambi i sottoproblemi di dimensione $(i-1,j)$ e $(i, j-1)$ e scegliamo quella di valore massimo.
+    Formalmente, possiamo scrivere:
+    $$c_{i,j} = \max\{c_{i-1,j}, c_{i,j-1}\} \; \; se x_i \neq y_j$$
 \end{itemize}
+Il passo ricorsivo è quindi descrivibile come:
+$$c_{i,j} = \begin{cases}
+    1 + c_{i-1,j-1} \; \; \textrm{se } x_i = y_j \\
+    \max\{c_{i-1,j}, c_{i, j-1}\} \; \; \textrm{se } x_i \neq y_j
+\end{cases}$$
+Una volta calcolati i valori di tutte le soluzioni ($c_{0,0}, c_{0,1}, \dots, c_{m,n}$), si hanno a disposizione tutte le lunghezza delle
+sottosequenze comuni massimali fra qualsiasi prefisso di $X$ e qualsiasi prefisso di $Y$. La \textbf{soluzione del problema ridotto} è quindi
+$$c_{m,n}$$
+\begin{center}
+    \includegraphics[width = 0.70\linewidth]{Images/6.png}
+\end{center}
+Scriviamo quindi l'algoritmo bottom-up per calcolare la lunghezza di una LCS fra $X$ e $Y$
+\begin{algorithm}[H]
+    \DontPrintSemicolon
+    \caption{Algoritmo iterativo che calcola la lunghezza di una LCS di $X$ e $Y$}
+    \SetKwFunction{FLCSLen}{LCS-LEN}
+    \Proc{\FLCSLen{X,Y}} {
+        m := LENGTH(X) \;
+        n := LENGTH(Y) \;
+        \For{$j \gets 0$ to $n$} {
+            c[0,j] := 0
+        }
+        \For{$i \gets 0$ to $m$} {
+            c[0,j] := 0
+        }
+        \For{$i \gets 1$ to $m$} {
+            \For{$j \gets 1$ to $n$} {
+                \eIf{$x_i = y_j$} {
+                    c[i,j] := c[i-1, j-1] + 1 \;
+                    b[i,j] := "$\nwarrow$" \;
+                } {
+                    \eIf{$c[i-1, j] \geq c[i, j-1]$} {
+                        c[i,j] := c[i-1,j] \;
+                        b[i,j] := "$\uparrow$" \;
+                    } {
+                        c[i,j] := c[i, j-1] \;
+                        b[i,j] := "$\leftarrow$"
+                    }
+                }
+            }
+        }
+        \Return c e b
+    }
+\end{algorithm} \noindent
+Questo algoritmo ha lo stesso costo computazionale dell'algoritmo 4, cioè $T(n) = \Theta(m \cdot n)$.
+Si noti che si utilizza una matrice ausiliaria $b$ di dimensioni $m \times n$ per memorizzare \textbf{l'informazione utile a ricostruire una LCS di $X$ e $Y$}; in 
+particolare, andremo a salvare \textbf{quale sottoproblema è stato usato} tramite una freccia:
+\begin{itemize}
+    \item $\uparrow$ indica che è stato usato il sottoproblema $(i-1, j)$
+    \item $\leftarrow$ indica che è stato usato il sottoproblema $(i, j-1)$
+    \item $\nwarrow$ indica che è stato usato il sottoproblema $(i-1, j-1)$
+\end{itemize}
+Tramite la matrice $b$, abbiamo tutte le informazioni necessarie per definire un algoritmo ricorsivo che
+\textbf{ricostruisca una LCS di $X$ e $Y$}: \newline
+\begin{algorithm}[H]
+    \caption{Algoritmo ricorsivo che stampa una LCS di $X$ e $Y$}
+    \DontPrintSemicolon
+    \SetKwFunction{FPrintLCS}{PRINT-LCS}
+    \Proc{\FPrintLCS{b, X, i, j}} {
+        \If{$i \neq 0 \land j \neq 0$} {
+            \eIf{$b[i,j] = "\nwarrow"$} {
+                PRINT-LCS(X, b, i-1, j-1) \;
+                Print($x_i$) \;
+            } {
+                \eIf{$b[i,j] = "\uparrow"$} {
+                    PRINT-LCS(X, b, i-1, j)\;
+                } {
+                    PRINT-LCS(X, b, i, j-1)\;
+                }
+            }
+        }
+    }
+\end{algorithm}\noindent
+La procedura impiega un tempo $T(n) = \Theta(m + n)$ perché a ogni chiamata ricorsiva essa decrementa almeno uno dei valori $i$ e $j$.
+\subsection{WIS - Weighted Interval Scheduling}
+Sia $X = \{1,\dots,n\}$ un insieme di $n$ attività, con $n \in \mathbb{N}$. Ad ogni attività
+$i \in X$ sono associate le seguente informazioni $([s_i, e_i), v_i)$ dove:
+\begin{itemize}
+    \item $s_i$ indica il tempo di inizio dell'attività
+    \item $e_i$ con $e_i \geq s_i$ indica il tempo di fine dell'attività (si noti che $e_i$ non appartiene all'intervallo che specifica la durata dell'attività)
+    \item $v_i$ indica il valore dell'attività
+\end{itemize}
+Due attività $i,j \in X$ sono dette \textbf{compatibili} se non si sovrappongono:
+$$[s_i, e_i) \cap [s_j, e_j) = \emptyset$$
+Un insieme $X$ di attività \textbf{contiene attività mutualmente compatibili} se e solo se per tutte le coppie $(i,j)$ con $i \neq j$, l'attività $i$ è compatibile con l'attività $j$:
+$$\forall i,j \in X \; \textrm{con } i \neq j, \textrm{se } [s_i, e_i) \cap [s_j, e_j) = \emptyset$$
+Definiamo ora la seguente funzione:
+$$COMP: \mathcal{P}(\{1,\dots,n\}) \rightarrow \{True, False\}$$
+che associa ad ogni sottoinsieme di attività $A \subseteq \{1,\dots,n\}$, \textbf{True} se $X$ contiene
+attività mutualmente compatibili, \textbf{False} altrimenti. Formalmente: $\forall A \subseteq \{1,\dots,n\}$:
+$$COMP(A) = \begin{cases}
+    True \; \; \; \textrm{se } \forall i,j \in A \; \textrm{con } i \neq j, [s_i, e_i) \cap [s_j, e_j) = \emptyset \\
+    False \; \; \textrm{Altrimenti}
+\end{cases}$$
+Infine, definiamo la funzione
+$$V: \mathcal{P}(\{1,\dots,n\}) \rightarrow \mathbb{R}^+$$
+che associa ad ogni sottoinsieme di attività $A \subseteq \{1,\dots,n\}$ il suo valore complessivo.
+Formalmente, $\forall A \subseteq \{1,\dots,n\}$:
+$$V(A) = \begin{cases}
+    \sum_{i\in A} v_i \; \; \textrm{se } A \neq \emptyset \\
+    0 \; \; \; \; \; \; \; \; \; \; \; \; \textrm{Altrimenti}
+\end{cases}$$
+Definiamo quindi il problema: \newline
+\textbf{\underline{PROBLEMA}}: Dato un insieme $\{1,\dots,n\}$ di attività, trovare un sottoinsieme di attività mutualmente compatibili di valore massimo \newline
+\textbf{\underline{ISTANZA}}: $\{1,\dots,n\}$ con $([s_i, e:i), v_i) \; \forall i \in \{1,\dots,n\}$ \newline
+\textbf{\underline{SOLUZIONE}}: $S \subseteq \{1,\dots,n\}$ tale che:
+$$COMP(S) = TRUE \land V(S) = \max_{COMP(A) = TRUE}\{V(A)| A \subseteq X\}$$
+Possiamo direttamente risolvere questo problema \textbf{senza definire un problema ridotto}.
+Il problema contiene \textbf{diversi sottoproblemi}, ognuno dei quali non ha come input l'insieme $X$ con $([s_i, e_i) _i), \forall i \in X$ ma un suo sottoinsieme.
+Formuliamo quindi il problema in modo \textbf{ricorsivo}:
+\begin{enumerate}
+    \item Dato $X_n = \{1,\dots,n\}$ si vuole trovare una soluzione $S_n \subseteq X_n$ tale che:
+    $$COMP(S_n) = True \land V(S_n) = \max_{COMP(A) = True}\{V(A)|A \subseteq X_n\}$$
+    \item Dato $X_{n-1} = \{1,\dots,n-1\}$ si vuole trovare una soluzione $S_{n-1} \subseteq X_{n-1}$ tale che:
+    $$COMP(S_{n-1}) = True \land V(S_{n-1}) = \max_{COMP(A) = True}\{V(A)|A \subseteq X_{n-1}\}$$
+    \item $\dots$
+    \item Dato $X_2 = \{1,2\}$ si vuole trovare una soluzione $S_2 \subseteq X_2$ tale che:
+    $$COMP(S_2) = True \land V(S_2) = \max_{COMP(A) = True}\{V(A)|A \subseteq X_2\}$$
+    \item Dato $X_1 = \{1\}$ si vuole trovare una soluzione $S_1 \subseteq X_1$ tale che:
+    $$COMP(S_1) = True \land V(S_1) = \max_{COMP(A) = True}\{V(A)|A \subseteq X_1\}$$
+    \item Dato $X_0 = \emptyset$ si vuole trovare una soluzione $S_0 \subseteq X_0$ tale che:
+    $$COMP(S_0) = True \land V(S_0) = \max_{COMP(A) = True}\{V(A)|A \subseteq X_0\}$$
+\end{enumerate}
+Quindi, \textbf{il generico sottoproblema del problema originale è individuato} da $i \in \{1,\dots, n\}$; il \textbf{sottoproblema di dimensione $i$ è definito come segue}: \newline
+\textbf{\underline{SOTTOPROBLEMA GENERICO}}: Dato un insieme $\{1,\dots, n\}$ di attività, trovare un suo sottoinsieme di attività mutualmente compatibili di valore massimo \newline
+Ossia: \newline
+\textbf{\underline{ISTANZA DEL SOTTOPROBLEMA}}: $X_i = \{1,\dots, i\}$ con $([s_i, e_i), v_j) \; \forall i \in X_i$ \newline
+\textbf{\underline{SOLUZIONE DEL SOTTOPROBLEMA}}: $S_i \subseteq X_i$ tale che:
+$$COMP(S_i) = True \land V(S_i) = \max_{COMP(A) = True}\{V(A)|A \subseteq X_i\}$$
+Dato che $0 \leq i \leq n$ si ottengono $(n+1)$ sottoproblemi, ad ognuno dei quali è associata una \textbf{coppia di variabili}:
+considerato il sottoproblema di dimensione $i$, la coppia di variabili ad esso associata è $(OPT_i, S_i)$ ed è cosi definita:
+\begin{center}
+    $S_i$, un sottoinsieme di $X_i$ che contiene attività compatibili di peso massimo
+    $OPT_i = V(S_i)$, ossia il valore di un sottoinsieme di $X_i$ che contiene attività mutualmente compatibili di peso massimo \\
+\end{center}
+Per determinare la soluzione di un qualsiasi sottoproblema di dimensione $i$, oltre all'input del problema, si utilizzeranno le soluzione dei sottoproblemi di dimensione minore e le loro variabili associate $S_j$ e $OPT_j$.
+Si noti, però, che ognuna di queste variabili è da considerare come una \textbf{black-box}: si può utilizzare ma non è possibile conoscerne il contenuto.
+Scriviamo quindi l'equazione di ricorrenza del problema: \newline
+\textbf{\underline{CASO BASE}}: $i = 0$ \newline
+Il caso vase si ha per un qualunque sottoproblema di dimensione $i = 0$, ossia quando non ci sono attività da considerare. In questo caso è facile ottenere la soluzione del sottoproblema:
+$$OPT_i = 0$$
+$$S_i = \emptyset$$
+Dunque il caso base è descrivibile come:
+$$OPT_i = 0 \; \textrm{e } S_i = \emptyset \; \; \textrm{se } i = 0$$
+\textbf{\underline{PASSO RICORSIVO}}: $i > 0$
+Per definire il passo ricorsivo, assumiamo che le attività in $X_n = \{1,\dots,n\}$ siano ordinate rispetto ai \textbf{tempi di fine}, cioè che valga che \newline $e_1 \leq e_2 \leq \dots \leq e_i \leq \dots \leq e_n$. Inoltre, dato
+$i \in X_n$, definiamo:
+$$\psi(i) = \max\{j|j < i \; \textrm{e } j \; \textrm{è compatibile con } i\}$$
+Assumiamo infine che $\max \emptyset = 0$. \newline
+Ora possiamo definire il passo ricorsivo. Esso si ha per un qualunque sottoproblema di dimensione $i$ con $i > 0$, ossia quando si va a considerare un insieme che contiene almeno un'attività.
+I dati disponibili per calcolare la soluzione di un sottoproblema sono: l'input $X_i = \{1,\dots,i\}$ (in particolare l'attività $i$) e tutte le soluzioni dei sottoproblemi di dimensione minore.
+Per risolvere un sottoproblema è necessario domandarsi: "Com'è fatto $S_i$ rispetto a $S_{i-1}, S_{i-2}, \dots, S_1, S_0$?" Per rispondere a questa domanda, bisogna considerare due casi:
+\begin{itemize}
+    \item Se $i \notin S_i$, cioè se l'attività $i$ non appartiene alla soluzione, allora è sufficiente considerare l'insieme di attività $X_{i-1} = \{1,\dots, i-1\}$ e si può dunque considerare la soluzione del sottoproblema di dimensione subito minore, ossia:
+    $$OPT_i = OPT_{i-1} \; e \; S_i = S_{i-1}$$
+    \item Se $i \in S_i$, cioè se l'attività $i$ appartiene alla soluzione, allora è necessario andare a determinare la soluzione del sottoproblema di dimensione minore ad $i$ di peso massimo e il cui insieme di attività risulta essere compatible con l'attività $i$.
+    È dunque possibile considerare la soluzione del sottoproblema di dimensione $\psi(i)$ e aggiungere a questa attività $i$. Si ottiene dunque:
+    $$OPT_i = OPT_{\psi(i)} + v_i \; e \; S_i = S_{\psi(i)} \cup \{i\}$$
+\end{itemize}
+Siccome non possiamo sapere a priori se l'attività $i$ appartenga o meno alla soluzione, consideriamo \textbf{entrambe le soluzioni e scegliamo quella di valore massimo}.
+Formalmente possiamo scrivere:
+$$OPT_i = \max\{OPT_{i-1}, OPT_{\psi(i)} + v_i\}$$
+e
+$$S_i = \begin{cases}
+    S_{i-1} \; \; \, \; \; \; \; \; \; \; \; \; \textrm{se } OPT_{i-1} \geq OPT_{\psi(i)} + v_i \\
+    S_{\psi(i)} \cup \{i\} \; \; \textrm{Altrimenti}
+\end{cases}$$
+Si noti come l'insieme $S_i$ venga definito a partire dalle variabili $S_j$ ma sulla base dei valori delle variabili $OPT_j$ relative ai sottoproblemi di dimensione minore (ossia con $j < i$).
+Una volta calcolati i valori $OPT_0, OPT_1, \dots, OPT_n$, è possibile determinare la \textbf{soluzione del problema} andando a considerare la coppia:
+$$(OPT_n, S_n)$$
+\begin{center}
+    \includegraphics[width = 0.60\linewidth]{Images/7.png}
+\end{center}
+Enunciamo quindi il teorema della \textbf{proprietà della sottostruttura ottima}:
+\begin{Teorema}[PSO di WIS]
+    Sia $i \geq 1$. Siano $S_0, S_1, \dots, S_{i-1}$ soluzioni dei sottoproblemi di dimensione $0, 1,\dots,i-1$ di WIS.
+    Allora vale che:
+    \begin{equation*}
+        S_i = \begin{cases}
+        S_{\psi(i)} \cup \{i\} & \textrm{se } i \in S_i \\
+        S_{i-1} & \textrm{se } i \notin S_i
+    \end{cases}
+    \end{equation*}
+\end{Teorema}
+\begin{Dimostrazione}
+    Distinguiamo i due casi:
+    \begin{itemize}
+        \item Supponiamo che $i \notin S_i$; devo allora dimostrare che $S_i = S_{i-1}$.
+        Supponiamo per assurdo che $S_{i-1}$ non sia soluzione del problema $i$, cioè $S_i \neq S_{i-1}$.
+        Allora esiste $S' \neq S_{i-1}$ che è soluzione del problema $i$; allora $V(S') > V(S_{i-1})$.
+        Inoltre $i \neq S' rightarrow S' \subseteq\{1,\dots, i-1\}$, ma allora $S_{i-1}$ non potrebbe essere la soluzione
+        del sottoproblema $i-1$, \textbf{assurdo}!.
+        \item Supponiamo che $i \in S_i$; devo dimostrare che $S_i = S_{\psi(i)} \cup \{i\}$
+        Supponiamo per assurdo che $S_i \neq S_{\psi(i)} \cup \{i\}$ e che quindi $S_{\psi(i)} \cup \{i\}$ non è soluzione del problema $i$.
+        Allora esiste $S' \neq S_{\psi(i)} \cup \{i\}$ che è soluzione del problema $i$; allora $V(S') > V(S_{\psi(i)} \cup \{i\})$.
+        Inoltre $i \in S'$, quindi $S' = S'' \cup \{i\}$ con $S''$ formato da attività mutualmente compatibili.
+        Inoltre $S'' \subseteq \{1,\dots, \psi(i)\}$, quindi:
+        $$V(S') = V(S'') + v_i > V(S_{\psi(i)}) + v_i = V(S_{\psi(i)} \cup \{i\})$$
+        cioè
+        $$V(S'') > V(S_{\psi(i)})$$
+        ma quindi $S_{\psi(i)}$ non può essere soluzione del sottoproblema $S_{\psi(i)}$, \textbf{assurdo}!
+    \end{itemize}
+\end{Dimostrazione}
+Utilizzando le equazioni di ricorrenza presentate precedentemente, possiamo definire in maniera immediata un algoritmo ricorsivo che
+ritorni \textbf{la soluzione di ogni sottoproblema}: \newline
+\begin{algorithm}[H]
+    \caption{Algoritmo ricorsivo che ritorna la soluzione del problema WIS}
+    \SetKwFunction{FWISRic}{WIS-Ric}
+    \Proc{\FWISRic{i}} {
+        \eIf{$i = 0$} {
+            \Return (0, $\emptyset$)
+        } {
+            $(V_1, S_1) \gets \textrm{WIS-Ric}(i-1)$ \;
+            $(V_2, S_2) \gets \textrm{WIS-Ric}(\psi(i))$ \;
+            $V_2 \gets V_2 + v_i$ \;
+            \eIf{$V_1 \geq V_2$} {
+                \Return $(V_1, S_1)$
+            } {
+                \Return $(V_2, S_2 \cup \{i\})$
+            }
+        }
+    }
+\end{algorithm} \noindent
+Questo algoritmo \textbf{ha complessità esponenziale}, dato che ogni sottoproblema viene risolto più volte. 
+È Anche facile scrivere un algoritmo ricorsivo che calcoli il valore di $OPT_i$: \newline
+\begin{algorithm}[H]
+    \caption{Algoritmo ricorsivo che calcola il valore di $OPT_i$}
+    \SetKwFunction{FOPTRic}{OPT-Ric}
+    \Proc{\FOPTRic{i}} {
+        \eIf{$i = 0$} {
+            \Return 0
+        } {
+            \Return $\max \{\textrm{OPT-Ric}(\psi(i)) + v_i, \textrm{OPT-Ric}(i-1)\}$
+        }
+    }
+\end{algorithm} \noindent
+Possiamo utilizzare una tecnica \textbf{bottom-up} per risolvere il problema WIS: questa tecnica
+infatti permette di calcolare la soluzione di ogni sottoproblema solo una volta. In questo modo si ottiene un algoritmo con \textbf{complessità spaziale maggiore}, in quanto devo memorizzare le varie soluzioni, ma con \textbf{complessità di tempo minore rispetto all'algoritmo ricorsivo}.
+L'algoritmo bottom-up per il calcolo della soluzione del problema WIS è il seguente: \newline
+Prima di tutto definisco un algoritmo iterativo per calcolare i valori di $OPT$ legati alle soluzioni; per farlo
+mi avvalgo di un array $M$ di dimensione $n$: \newline
+\begin{algorithm}[H]
+    \caption{Algoritmo iterativo per il calcolo di $OPT$}
+    \SetKwFunction{FOPTIt}{OPT-IT}
+    \Proc{\FOPTIt{n}} {
+        $M[0] := 0$ \;
+        \For{$i \gets 1$ to $nell$} {
+            $M[i] := \max\{M[\psi(i)] + v_i, M[i-1]\}$
+        }
+    }
+\end{algorithm} \noindent
+dopodiché definisco l'algoritmo bottom-up per il calcolo della soluzione al problema WIS: per farlo
+mi avvalgo di un array $S$ di dimensione $n$ che contiene le soluzioni dei sottoproblemi (cioè gli insiemi di attività mutualmente compatibili) \newline
+\begin{algorithm}[H]
+    \caption{Algoritmo iterativo per il calcolo della soluzione del problema WIS}
+    \SetKwFunction{FWISIt}{WIS-IT}
+    \Proc{\FWISIt{n}} {
+        $S := \emptyset$ \;
+        \For{$i \gets 1$ to $n$} {
+            $V_1 := M[i-1]$ \;
+            $V_2 := M[\psi(i)] + v_i$ \;
+            \eIf{$V_1 \geq V_2$} {
+                $S[i] := S[i-1]$
+            } {
+                $S[i] := S[\psi(i)] \cup \{i\}$
+            }
+        }
+        \Return $(M[n], S[n])$
+    }
+\end{algorithm} \noindent
+\begin{algorithm}[H]
+    \caption{Algoritmo di ricostruzione della soluzione di WIS}
+    \DontPrintSemicolon
+    \SetKwFunction{FPrintWIS}{PRINT-WIS}
+    \Proc{\FPrintWIS{i, M}} {
+        \If{$i \neq 0$} {
+            \eIf{$M[\psi(i)] + v_i \geq M[i-1]$} {
+                PRINT-WIS($\psi(i)$, $M$) \;
+                Print($i$)
+            } {
+                PRINT-WIS($i-1$, $M$)
+            }
+        }
+    }
+\end{algorithm} \noindent
+La complessità computazionale dell'algoritmo 10 è:
+$$T(n) = \mathcal{O}(n)$$
+tuttavia, esso occupa uno spazio in memoria pari a $\mathcal{O}(n + n^2)$ poiché necessita
+di un vettore per contenere i vari $OPT_i$ e un vettore per contenere i vari insieme $S_i$, ognuno dei quali può contenere
+al massimo $n$ elementi.
+\subsection{LIS - Longest Increasing Subsequence}
+Il problema LIS è definito come segue: \newline
+\textbf{\underline{PROBLEMA}}: Data una sequenza $X$ di $n$ numeri interi, si determini \textbf{\underline{UNA}} tra le più lunghe sottosequenze strettamente crescenti di $X$. \newline
+In particolare, come nel caso di LCS, andremo a risolvere un \textbf{problema ridotto}: \newline
+\textbf{\underline{PROBLEMA RIDOTTO}}: Data una sequenza $X$ di $n$ numeri interi, si determini \textbf{la lunghezza} di una tra le più lunghe sottosequenze strettamente crescenti di $X$ \newline
+Il problema ridotto contiene \textbf{diversi sottoproblemi} ognuno dei quali non ha come input la sequenza $X$ ma un suo prefisso.
+Il \textbf{generico sottoproblema} di dimensione $i$ è definito come segue: \newline
+\textbf{\underline{SOTTOPROBLEMA GENERICO}}: Data una sequenza $X$ di $n$ numeri interi, si determini la lunghezza di una tra le più lunghe sottosequenze strettamente crescenti di $X_i$. \newline
+Dato che $1 \leq i \leq n$, si ottengono $n$ sottoproblemi (non si considera in questo caso il valore $i = 0$). Ad ogni sottoproblema del problema ridotto \textbf{è associata una variabile}: considerato il 
+sottoproblema di dimensione $i$, la variabile ad esso associata è $c_i$, ed è così definita:
+\begin{center}
+    $c_i =$ lunghezza di una tra le più lunghe sottosequenze strettamente crescenti di $X_i$
+\end{center}
+Per determinare la soluzione di un qualsiasi sottoproblema di dimensione $i$, oltre all'input del problema, si utilizzeranno le soluzioni dei sottoproblemi di dimensione minore.
+Proviamo ad impostare la risoluzione del problema come abbiamo fatto con LCS: siano allora:
+\begin{center}
+    $X_n = <x_1, \dots, x_n>$ \\
+    $X_{n-1} = <x_1, \dots, x_{n-1}>$ \\
+    $\dots$ \\
+    $X_1 = <x_1>$ \\
+    $X_0 = \varepsilon$
+\end{center}
+La soluzione allora potrebbe avere la seguente struttura:
+$$S_n =S_{n-k}|x_n \; \; \textrm{con } 0 < k < n$$
+per sapere se questa assunzione sia vera o meno, mi basterebbe sapere l'ultimo elemento di $S_{n-k}$; tuttavia
+\textbf{NON POSSIAMO SAPERE IL VALORE DI $s_{n-k}$} poiché le soluzioni ai sottoproblemi sono delle \textbf{black-box} e quindi
+\textbf{NON NE CONOSCIAMO IL VALORE!}. Per risolvere il problema dobbiamo quindi introdurre un \textbf{PROBLEMA VINCOLATO}: \newline
+\textbf{\underline{PROBLEMA VINCOLATO}}: Data una sequenza $X$ di $n$ numeri interi, si determini la lunghezza di una tra le più lunghe sottosequenze strettamente crescenti
+di $X$, la quale termina con $x_n$. \newline
+In altre parole, si richiede che la sottosequenza crescente più lunga termini con l'ultimo elemento della sequenza di input.
+Come per il problema ridotto, \textbf{anche il problema vincolato contiene $n$ diversi sottoproblemi}, ognuno associato ad una differente variabile.
+Il sottoproblema generico del problema vincolato di dimensione $i$ è definito come segue: \newline
+\textbf{\underline{SOTTPROB. GEN. PROBLEMA VINCOLATO}}: Data una sequenza $X$ di $n$ numeri interi, si determini la lunghezza di una tra le più lunghe sottosequenze strettamente crescenti di $X_i$, la quale termina con $x_i$ \newline
+ogni sottoproblema generico è associato ad una variabile $c_i$ così definita:
+\begin{center}
+    $c_i = $ lunghezza di una tra le più lunghe sottosequenze crescenti di $X_i$, la quale termina con $x_i$
+\end{center}
+Si noti quindi che per un qualunque sottoproblema di dimensione $s$, solo imponendo che la soluzione $c_s$ si riferisca ad una sottosequenza strettamente crescente
+di $X_s$ la quale termina con $x_s$ è possibile stabilire se un altro elemento $x_u$ con $u > s$ possa essere accodato a tale sottosequenza (andando a verificare che $x_s < x_u$). \newline
+Prima di procedere con le equazioni di ricorrenza, può essere utile enunciare e dimostrare già adesso il teorema della proprietà della sottostruttura ottima \textbf{per il problema vincolato}:
+\begin{Teorema}[PSO LIS Vincolato]
+    Sia $X$ una sequenza di $n$ numeri interi e sia $X_i$ un suo prefisso di lunghezza $i$ con $1 \leq i \leq n$. Sia $Z^i$ una tra le più lunghe sottosequenze strettamente crescenti di $X_i$ la quale termina
+    con $x_i$. Allora vale che $Z^i = Z^*|x_i$, con $Z^* \in \mathcal{W}_i$ e $|Z^*| = \max_{W \in \mathcal{W}_i}\{|W|\}$, dove $\mathcal{W}_i$ è l'insieme di tutte le sottosequenze crescenti (\textbf{non necessariamente più lunghe}) di $X_j$ le quali finiscono con $x_j$ e a cui è possibile
+    concatenare $x_i$, ovvero:
+    $$\mathcal{W}_i = \smashoperator[r]{\bigcup_{\substack{1 \leq j \leq i \\ x_j < x_i}}}\{W \; \textrm{sottosequenza di } X_j \; \textrm{la quale termina con } x_j\}$$
+\end{Teorema}
+Si noti che $Z^*$ \textbf{sarà anche soluzione di un qualche sottoproblema di dimensione minore a $i$} (una più lunga tra le soluzioni di alcuni sottoproblemi più piccoli, in particolare quei sottoproblemi $j < i$ tali che $x_j < x_i$).
+\begin{Dimostrazione}
+    Per assurdo, si supponga che $Z^*|x_i$ non sia la soluzione del problema $i$-esimo. Allora, relativamente alla soluzione $Z^i$ del problema valgono le seguente affermazioni:
+    \begin{enumerate}
+        \item $Z'$ tale che $Z^i = Z'|x_i$
+        \item $|Z'| > |Z^*|$ (dato che $Z^i$ non si ottiene a partire da $Z^*$ ma da $Z'$, necessariamente $Z'$ sarà più lunga di $Z^*$)
+    \end{enumerate}
+    Dove $Z'$ è una qualche sottosequenza crescente di un prefisso più piccolo di $X_i$. Sia ora $z'$ l'ultimo elemento di $Z'$. Vale quindi che $z' < x_i$ poiché è stato
+    possibile concatenare $x_i$ a $Z'$. Inoltre, sia $h < i$ \textbf{il più grande indice tale che $x_h = z'$}. Di conseguenze, per come è stato definito $\mathcal{W}_i$, si ottiene
+    che $Z' \in \mathcal{W}_i$. Infatti $Z'$ è una \textbf{sottosequenza strettamente crescente } di $X_h$, la quale termina con $x_h < x_i$.
+    Ciò pero porta ad una contraddizione: infatti dal punto 2 vale che $|Z'| > |Z^*|$, ma ciò non può valere con l'ipotesi che $|Z*| = \max_{W \in \mathcal{W}_i}\{|W|\}$, quindi \textbf{assurdo}!
+\end{Dimostrazione}
+Scriviamo ora le equazioni di ricorrenza: \newline
+\textbf{\underline{CASO BASE}}: $i = 1$ \newline
+Il caso base si ha quando $i = 1$, ossia quando il prefisso considerato è una sequenza composta da un singolo elemento.
+È facile ottenere il valore della variabile $c_1$: la lunghezza di una tra le più lunghe sottosequenze crescenti di una sequenza composta da un singolo elemento la quale termina con quell'elemento è $1$. Il caso base è quindi scrivibile come:
+$$c_i = 1 \; \textrm{se } i = 1$$
+\textbf{\underline{PASSO RICORSIVO}}: $i > 1$ \newline
+Il passo ricorsivo si ha per un qualunque sottoproblema di dimensione $i$ con $i >1$, ossia quando si considera un prefisso della sequenza $X$ in input di almeno due elementi.
+I dati disponibili per calcolare $c_i$ sono: l'input $X$ ed in particolare l'elemento $x_i$ e tutte le variabili $\{c_1,\dots,c_{i-1}\}$. Si ricorda che i valori $c_1,c_2,\dots,c_{i-1}$ rappresentano
+\textbf{le lunghezza delle più lunghe sottosequenze strettamente crescenti di $X_1, X_2, \dots, X_{i-1}$} le quali terminano rispettivamente con $x_1, x_2, \dots, x_{i-1}$.
+Tra queste ci saranno alcune sottosequenze alle quali possiamo accodare $x_i$ (in quanto maggiore dell'ultimo elemento) e altre alle quali l'elemento $x_i$ non può essere accodato (in quanto minore dell'ultimo elemento).
+Se prendiamo la più lunga sottosequenza strettamente crescente alla quale possiamo attaccare $x_i$ e accodiamo ad essa $x_i$, otteniamo la più lunga sottosequenza strettamente crescete di $X_i$ che termina con $x_i$.
+La lunghezza di tale sottosequenza sarà uguale alla lunghezza della sottosequenza crescente alla quale abbiamo accodato $x_i$ aumentata di 1. Il passo ricorsivo è quindi scrivibile come:
+$$c_i = 1 + \max\{c_h|1 \leq i \land x_h < x_i \}$$
+Poiché può accadere che l'insieme $\{c_h|1 \leq i \land x_h < x_i \}$ \textbf{sia vuoto} (il che corrisponde al fatto che l'elemento $x_i$ è minore di tutti gli elementi precedenti e, quindi, non può essere accodato a nessuna più lunga sottosequenza strettamente crescente relativa a sottoproblemi di dimensione minore),
+assumiamo per definizione che $\max \emptyset = 0$, così che il corrispondente valore di $c_i$ risulti uguale a 1 in questo caso.
+\begin{center}
+    \includegraphics[width = 0.60\linewidth]{Images/8.png}
+\end{center}
+Una volta calcolati i valori $c_1, \dots, c_n$ si hanno a disposizione tutte le lunghezze di una tra le più lunghe sottosequenze crescenti dei vari prefissi di $X$ le quali terminano
+con l'ultimo elemento del prefisso. La \textbf{soluzione del problema vincolato} è $c_n$, mentre \textbf{la soluzione del problema ridotto} è:
+$$\max\{c_i|1 \leq i \leq n\}$$
+Con le informazioni presentate fino ad ora, è immediato ricavare l'algoritmo ricorsivo per determinare la soluzione $c_i$ di ogni sottoproblema (si suppone di aver accesso alla sequenza $X$). In ogni caso, questo algoritmo
+\textbf{presenterà una complessità esponenziale}, dato che ogni sottoproblema viene risolto più volte. \newline
+\begin{algorithm}[H]
+    \caption{Algoritmo ricorsivo per risolvere un sottoproblema $i$ di LIS}
+    \DontPrintSemicolon
+    \SetKwFunction{FLISRic}{LIS-Ric}
+    \Proc{\FLISRic{i}} {
+        \eIf{$i = 1$} {
+            \Return 1
+        } {
+            $max := 0$ \;
+            \For{$h \gets 1$ to $i-1$} {
+                \If{$x_h < x_i$} {
+                    $S := $ LIS-Ric(h) \;
+                    \If{$S > max$} {
+                        $max = S$
+                    }
+                }
+            }
+            \Return $1 + max$
+        }
+    }
+\end{algorithm} \noindent
+Possiamo quindi scrivere un algoritmo bottom-up per risolvere il problema. Utilizziamo
+anche un array $b$ per salvare dati utili alla ricostruzione. \newline
+\begin{algorithm}[H]
+    \caption{Algoritmo iterativo che calcola una LIS di una sequenza $X$}
+    \DontPrintSemicolon
+    \SetKwFunction{FLISIt}{LIS-IT}
+    \Proc{\FLISIt{X}} {
+        $c[1] := 1$ \;
+        $b[1] := 0$ \;
+        $max := c[1]$ \;
+        \For{$i \gets 2$ to $n$} {
+            $tmp := 0$ \;
+            $ind := 0$ \;
+            \For{$h \gets 1$ to $i-1$} {
+                \If{$(x_h < x_i) \land (c[h] > temp)$} {
+                    $temp := c[h]$ \;
+                    $ind := h$
+                }
+                $c[i] :=  1 + temp$ \;
+                $b[i] := ind$ \;
+                \If{$c[i] > max$} {
+                    $max := c[i]$ \;
+                    $indMax := i$
+                }
+            }
+        }
+        \Return $max$
+    }
+\end{algorithm}\noindent
+L'algoritmo ha complessità computazionale
+$$T(n) = \mathcal{O}(n^2)$$
+e occupa spazio in memoria pari a $\Theta(n)$ (ossia un vettore che contiene i vari $c_i$; ovviamente non stiamo contando il vettore introdotto per la ricostruzione).
+L'algoritmo ricorsivo per la ricostruire la LIS è il seguente: \newline
+\begin{algorithm}[H] 
+    \caption{Algoritmo di ricostruzione di una LIS di $X$}
+    \DontPrintSemicolon
+    \SetKwFunction{FPRINTLis}{PRINT-LIS}
+    \Proc{\FPRINTLis{i, b, X}} {
+        \eIf{$b[i] \neq 0$} {
+            PRINT-LIS($b[i]$, $b$, $X$) \;
+            Print($x_i$) \;
+        } {
+            Print($x_i$)
+        }
+    }
+\end{algorithm} \noindent
+Notare che per ottenere una LIS di $X$ è necessario sapere \textbf{in che indice dell'array $c$ è presente la massima lunghezza calcolata}; cioè bisogna
+sapere quale numero, se messo in coda, porta a formare una più lunga sottosequenza strettamente crescente di $X$ (ovviamente ce ne potrebbero essere più di uno, ma noi
+ne basta uno). Nell'algoritmo bottom-up lo abbiamo salvato nella variabile $indMax$.
+\subsection{LICS - Longest Increasing Common Subsequence}
+
+
+
 
 
 \end{document}
