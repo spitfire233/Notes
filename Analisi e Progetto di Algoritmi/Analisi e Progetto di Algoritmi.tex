@@ -794,6 +794,8 @@ al massimo $n$ elementi.
 \subsection{LIS - Longest Increasing Subsequence}
 Il problema LIS è definito come segue: \newline
 \textbf{\underline{PROBLEMA}}: Data una sequenza $X$ di $n$ numeri interi, si determini \textbf{\underline{UNA}} tra le più lunghe sottosequenze strettamente crescenti di $X$. \newline
+\textbf{\underline{ISTANZA}}: $X_n = <x_1, \dots, x_n>$ \newline
+\textbf{\underline{SOLUZIONE}}: $Z$ una più lunga sottosequenza strettamente crescete di $X_n$ \newline
 In particolare, come nel caso di LCS, andremo a risolvere un \textbf{problema ridotto}: \newline
 \textbf{\underline{PROBLEMA RIDOTTO}}: Data una sequenza $X$ di $n$ numeri interi, si determini \textbf{la lunghezza} di una tra le più lunghe sottosequenze strettamente crescenti di $X$ \newline
 Il problema ridotto contiene \textbf{diversi sottoproblemi} ognuno dei quali non ha come input la sequenza $X$ ma un suo prefisso.
@@ -943,9 +945,259 @@ Notare che per ottenere una LIS di $X$ è necessario sapere \textbf{in che indic
 sapere quale numero, se messo in coda, porta a formare una più lunga sottosequenza strettamente crescente di $X$ (ovviamente ce ne potrebbero essere più di uno, ma noi
 ne basta uno). Nell'algoritmo bottom-up lo abbiamo salvato nella variabile $indMax$.
 \subsection{LICS - Longest Increasing Common Subsequence}
-
-
-
-
-
+Il problema LICS è definito come segue: \newline
+\textbf{\underline{PROBLEMA}}: Date due sequenze $X$ e $Y$, rispettivamente di $m$ ed $n$ numeri interi, si determini \textbf{\underline{UNA}} tra le più lunghe sottosequenze crescenti comuni a $X$ e $Y$. \newline
+\textbf{\underline{ISTANZA}}: $X_m = <x_1, \dots, x_m>$ e $Y_n = <y_1, \dots, y_n>$ \newline
+\textbf{\underline{SOLUZIONE}}: Una più lunga sottosequenza crescente di $X_m$ e $Y_n$. \newline
+Quello che si andrà a risolvere sarà comunque un \textbf{problema ridotto}, il quale è definito come segue: \newline
+\textbf{\underline{PROBLEMA RIDOTTO}}: Date due sequenze $X$ e $Y$, rispettivamente di $m$ ed $n$ numeri interi, si determini
+la \underline{lunghezza} di una tra le più lunghe sottosequenze crescenti comuni a $X$ e $Y$. \newline
+Il problema ridotto contiene diversi sottoproblemi, ognuno dei quali non ha come input la coppia $(X, Y)$ ma una \textbf{coppia di prefissi} di tali sequenze.
+Il sottoproblema generico è quindi individuato dalla coppia $(i,j)$ ed è definito come segue: \newline
+\textbf{\underline{SOTTOPROBLEMA GENERICO}}: Date due sequenze $X$ e $Y$, rispettivamente di $m$ ed $n$ numeri interi, si determini la lunghezza di una tra le più lunghe sottosequenze crescenti comuni
+al prefisso $X_i$ e al prefisso $Y_j$. \newline
+Non consideriamo coppie $(i,j)$ con $i = 0 \vee j = 0$. Dato che $1 \leq i \leq m$ e $1 \leq j \leq n$, si ottengono $m \cdot n$ sottoproblemi.
+Ad ogni sottoproblema \textbf{è associata una variabile}: considerato il sottoproblema di dimensione $(i,j)$, la variabile ad esso associata è $c_{i,j}$ così definita:
+\begin{center}
+    $c_{i,j} =$ lunghezza di una tra le più lunghe sottosequenze crescenti comuni a $X_i$ e $Y_j$
+\end{center}
+per determinare la soluzione di un qualsiasi sottoproblema di dimensione $(i,j)$, oltre all'input del problema, si utilizzeranno anche le soluzioni dei sottoproblemi di dimensione minore.
+Si noti, però, che ognuna delle variabili associate ai diversi sottoproblemi è da considerare come una \textbf{black-box}: si può utilizzare ma non è possibile conoscerne il contenuto. \newline
+Proviamo ad approcciarci al problema come abbiamo fatto con LCS: se $x_i = y_j$, la struttura della soluzione potrebbe essere:
+$$S^{(i,j)} = S|x_i$$
+con $S$ una soluzione di un sottoproblema di dimensione minore. Tuttavia, \textbf{non sappiamo cosa è contenuto all'interno di $S$}, quindi \textbf{ci mancano delle informazioni necessarie per continuare}.
+Infatti, date solamente le variabili $\{c_{1,1}, \dots, c_{i-1, j}, c_{i, j-1}\}$ e i prefissi $X_i$ e $Y_j$ (dei quali, in realtà, ci interessano solamente gli elementi $x_i$ e $y_j$), non c'è alcun modo per poter comprendere
+se gli elementi $x_i$ e $y_j$, nel caso fossero uguali, possano essere accodati alle sottosequenze crescenti relative ai sottoproblemi di dimensioni minore a $(i,j)$: non sappiamo infatti con quale elemento termini ognuna di queste sottosequenze ma ne conosciamo
+solamente la lunghezza (nel caso del problema ridotto). Si rende quindi necessaria l'introduzione di un \textbf{problema ausiliario} nel quale introdurre l'informazione mancante necessaria.
+Il problema ausiliario è definito come segue: \newline
+\textbf{\underline{PROBLEMA AUSILIARIO}}: Date due sequenze $X$ e $Y$, rispettivamente di $m$ ed $n$ numeri interi, si determina la lunghezza di una tra le più lunghe sottosequenze crescenti comuni a $X$ e $Y$ la quale termini
+con $x_m$ e $y_n$ (se questi coincidono, 0 in caso contrario) \newline \newline
+In altre parole, si richiede che la sottosequenza soluzione del problema termini con l'ultimo elemento delle sequenze $X$ e $Y$ nel caso siano lo stesso elemento (in caso contrario, \textbf{la soluzione non esiste}, il valore 0 per la lunghezza sta ad indicare tale fatto in questo contesto ed esso risulterà utile nel passo ricorsivo).
+Come per il problema ridotto, anche il problema ausiliario contiene $m \cdot n$ diversi sottoproblemi, ognuno associato ad una differente variabile. Il sottoproblema generico del problema ausiliario di dimensione $(i,j)$ è definito come segue: \newline
+\textbf{\underline{SOTTOPROB. GEN. PROB. AUSILIARIO}}: Date due sequenze $X$ ed $Y$, rispettivamente di $m$ ed $n$ numeri interi, si determini la lunghezza di una tra le più lunghe sottosequenze crescenti comuni a $X_i$ e $Y_j$ la quale termini con $x_i$ e $y_j$ (se questi coincidono). \newline
+Anche in questo caso, ad ogni sottoproblema è associata una variabile $c_{i,j}$ così definita:
+\begin{center}
+    $c_{i,j} =$ lunghezza di una tra le più lunghe sottosequenze crescenti comuni a $X_i$ e $Y_j$ la quale termina con $x_i$ e $y_j$ (se questi coincidono, 0 altrimenti)
+\end{center}
+Si noti che per un qualunque sottoproblema di dimensione $(s,t)$, solo imponendo che la soluzione $c_{s,t}$ si riferisca ad una sottosequenza crescente comune a $X_s$ e $Y_t$ la quale termini con $x_s = y_t$ è possibile stabilire se un altro elemento $x_u = y_v$ con $u>s$ e $v>t$ possa essere
+accodato a tale sottosequenza (andando a verificare che $x_s = y_t \leq x_u = y_v$). \newline
+Prima di enunciare l'equazione di ricorrenza, può essere utile enunciare e dimostrare fin da subito il \textbf{teorema della proprietà della sottostruttura ottima per il problema ausiliario}:
+\begin{Teorema}[PSO LICS Vincolata]
+    Sia $X$ una sequenza di $m$ numeri interi e sia $X_i$ un suo prefisso di lunghezza $i$ con $1 \leq i \leq m$. Sia $Y$ una sequenza di $n$ numeri interi e sia $Y_j$ un suo prefisso di lunghezza
+    $j$ con $1 \leq j \leq n$. Sia $Z^{(i,j)}$ una tra le più lunghe sottosequenze crescenti comuni di $X_i$ e $Y_j$ la quale termina con $x_i = y_j$. Allora vale che $Z^{(i,j)} = Z^*|x_i$ (analogamente, $Z^{(i,j)} = Z^*|y_j$) con $Z^* \in \mathcal{W}_{i,j}$ e $|Z^*| = \max_{W \in \mathcal{W}_{i,j}}\{|W|\}$ dove $\mathcal{W}_{i,j}$ è
+    l'insieme di tutte le sottosequenze crescenti comuni (non necessariamente le più lunghe) di $X_h$ e $Y_k$ le quali terminano con $x_h = y_k$ e a cui è possibile concatenare $x_i$ (o analogamente $y_i$), ovvero:
+    $$\mathcal{W}_{i,j} = \smashoperator[r]{\bigcup_{\substack{1 \leq h < i \\ 1 \leq k < j \\ x_h = y_k<x_i = y_j}}}\{W \textrm{sottosequenza crescente di } X_h \; e \; Y_k \; \textrm{che termina con } x_h = y_k\}$$
+\end{Teorema}
+Si noti che $Z^*$ sarà una soluzione di un qualche sottoproblema di dimensione minore a $(i,j)$ (una più lunga tra le soluzioni di alcuni sottoproblemi più piccoli, in particolare quei sottoproblemi $(h,k)$ con $h<i$ e $k<j$ tali che $x_h=y_k<x_i=y_j$).
+\begin{Dimostrazione}
+    Per assurdo supponiamo che $Z^*|x_i$ non sia la soluzione del problema $(i,j)-esimo$. Allora, relativamente alla soluzione $Z^{(i,j)}$ del problema valgono le seguenti affermazioni:
+    \begin{enumerate}
+        \item $Z^{(i,j)} = Z'|x_i$
+        \item $|Z'| > |Z^*|$ (dato che $Z'$ non si ottiene a partire da $Z^*$ ma da $Z'$, necessariamente $Z'$ sarà più lunga di $Z^*$)
+    \end{enumerate}
+    Dove $Z'$ è una qualche sottosequenza comune crescente di un prefisso più piccolo di $X_i$ e $Y_j$. Sia ora $z'$ l'ultimo elemento di $Z'$, vale quindi che $z' < x_i =y_j$, poiché
+    è stato possibile concatenare $x_i$ (o $y_j$) a $Z'$. Inoltre, siano $r < i$ e $s < j$ i \textbf{più grandi indici tali per cui $x_r = y_s = z'$}. Di conseguenza, per come è stato definito $\mathcal{W}_{i,j}$, si ottiene che $Z' \in \mathcal{W}_{i,j}$. Infatti
+    $Z'$ è una sottosequenza comune crescente di $X_r$ e $Y_s$, la quale termina con $x_r < x_i$. Ciò però porta ad una contraddizione: infatti dal punto 2 vale che $|Z'| > |Z^*|$, ma ciò è in contraddizione con l'ipotesi che $|Z^*| = max_{W \in \mathcal{W}_{i,j}}\{|W|\}$,
+    quindi è \textbf{assurdo}!.
+\end{Dimostrazione}
+Scriviamo ora \textbf{l'equazione di ricorrenza riferite al problema ausiliario}: \newline
+\textbf{\underline{CASO BASE}}: Se $x_i \neq y_j$ \newline
+Certamente fanno parte del caso bse tutte le coppie $(i,j)$ tali che $x_i \neq y_j$, ossia quando i due prefissi considerati $X_i$ e $Y_j$ terminano con due elementi diversi.
+Questo caso, infatti, è semplice da risolvere: per definizione di $c_{i,j}$ gli elementi $x_i$ e $y_j$ devono coincidere, in caso contrario la soluzione è 0 (ossia non c'è nessuna sequenza soluzione).
+Il numero di sottoproblemi che compone il problema ausiliario sono quindi $m \cdot n$. Il caso base si ha per quei \textbf{sottoproblemi di dimensione $(i,j)$ con $i > 0 \land j > 0$ tali che $x_i \neq y_j$} ed è scrivibile come segue:
+$$c_{i,j} = 0$$
+\begin{Nota}
+    Quanti casi base invece esistono? \textbf{Dipende dalle sottosequenze}; infatti non posso saperlo a priori; l'unica informazione che ho al riguardo è che è un \textbf{numero in funzione dell'input}.
+\end{Nota} \noindent
+\textbf{\underline{PASSO RICORSIVO}}: $(i,j)$ con $i >0$ e $j>0$ tali che $x_i = y_j$ \newline
+IL passo ricorsivo si ha per un qualunque sottoproblema $(i,j)$ tale che $x_i = y_j$, ossia quando i due prefissi $X_i$ e $Y_j$ considerati terminano
+con lo stesso elemento. In questo caso, la lunghezza della più lunga sottosequenza crescente comune fra $X_i$ e $Y_j$ è uguale alla lunghezza della più lunga sottosequenza
+comune calcolare per un sottoproblema di dimensione minore la quale termina con un carattere minore di $x_i = y_j$ aumentata di uno (in quanto si accoda l'elemento comune $x_i = y_j$ alla sottosequenza crescente comune relativa al sottoproblema considerato).
+Il tutto può essere scritto come:
+$$c_{i,j} = 1 + \max\{c_{h,k}|1 \leq h < i, 1 \leq k < j, x_h < x_i\}$$
+Poiché può accadere che l'insieme $\{c_{h,k}|1 \leq h < i, 1 \leq k < j, x_h < x_i\}$ sia vuoto (il che corrisponde al fatto che l'elemento $x_i = y_j$ è minore di tutti gli elementi precedenti e, quindi, non può essere accodato a nessuna più lunga sottosequenza crescente relativa a sottoproblemi di dimensione minore),
+assumiamo per definizione che $\max \emptyset = 0$, così che il corrisponde valore di $c_{i,j}$ risulti uguale a $1$. Inoltre, si noti che l'insieme $\{c_{h,k}|1 \leq h < i, 1 \leq k < j, x_h < x_i\}$ corrisponde all'insieme vuoto
+anche se $i = 1 \vee j = 1$, inquanto i casi con $i = 0 \vee j = 0$ non sono considerati e, pertanto, non esistono sottoproblemi di dimensione minore a quella del sottoproblema considerato (ossia quello con $i = 1 \vee j = 1$). \newline
+Una volta calcolati i valori $c_{1,1}, c_{2,1}, c_{1,2}, \dots, c_{m,n}$ si hanno a disposizione le lunghezze delle sottosequenze comuni massimali fra
+qualsiasi prefisso di $X$ e qualsiasi prefisso di $Y$ le quali terminano con l'ultimo elemento di entrambi i prefissi $x_i = y_j$. La \textbf{soluzione al problema ausiliario} è $c_{m,n}$, mentre \textbf{la soluzione al problema ridotto è}:
+$$\max\{c_{i,j}|1 \leq i \leq m \land 1 \leq j \leq n\}$$
+\begin{center}
+    \includegraphics[width = 0.60\linewidth]{Images/9.png}
+\end{center}
+\begin{algorithm}[H]
+    \caption{Algoritmo ricorsivo che risolve un generico sottoproblema $(i,j)$ di LICS}
+    \DontPrintSemicolon
+    \SetKwFunction{FLICSRic}{LICS-RIC}
+    \Proc{\FLICSRic{i,j}} {
+        \eIf{$x_I \neq y_j$} {
+            \Return 0
+        } {
+            $max := 0$
+            \For{$h \gets 1$ to $i-1$} {
+                \For{$k \gets 1$ to $j-1$} {
+                    \If{$x_h < x_i$} {
+                        $S := $ LICS-RIC$(h,k)$ \;
+                        \If{$S > max$} {
+                            $max := S$ \;
+                        }
+                    }
+                }
+            }
+        }
+        \Return $1 + max$
+    }
+\end{algorithm} \noindent
+l'algoritmo ricorsivo sopra determina la soluzione $c_{i,j}$
+di ogni sottoproblema (si assume di poter accedere alle sequenze $X$ e $Y$).
+Questo algoritmo presenta una complessita \textbf{esponenziale}, dato che ogni sottoproblema verrà risolto più volte. Per questa ragione, presentiamo anche un algoritmo scritto
+tramite una tecnica bottom-up che permette di calcolare la soluzione di ogni ogni sottoproblema solamente una volta. \newline
+\begin{algorithm}[H]
+    \caption{Algoritmo iterativo che calcola una LICS tra due sequenze $X$ e $Y$}
+    \DontPrintSemicolon
+    \SetKwFunction{FLICSIt}{LICS-IT}
+    \Proc{\FLICSIt{X,Y}} {
+        $max := 0$ \;
+        \For{$i \gets 1$ to $m$} {
+            \For{$j \gets 1$ to $n$} {
+                \eIf{$x_i \neq y_j$} {
+                    $c[i,j] := 0$ \;
+                    $b[i,j] := (0,0)$ \;
+                } {
+                    $temp := 0$ \;
+                    \For{$h \gets 1$ to $i-1$} {
+                        \For{$k \gets 1$ to $j-1$} {
+                            \If{$(x_h < x_i) \land (c[h,k] > temp)$ } {
+                                $temp := c[h,k]$ \;
+                                $b[i,j] := (h,k)$ \;
+                            }
+                        }
+                    }
+                    $c[i,j] := 1 + temp$
+                }
+                \If{$c[i,j] > max$} {
+                    $max := c[i,j]$ \;
+                    $maxIdx := (i,j)$
+                }
+            }
+        }
+        \Return $max$
+    }
+\end{algorithm} \noindent
+\begin{algorithm}[H]
+    \caption{Algoritmo di ricostruzione di una LICS tra $X$ e $Y$}
+    \DontPrintSemicolon
+    \SetKwFunction{FPRINTLICS}{PRINT-LICS}
+    \Proc{\FPRINTLICS{i, j, b, c, X}} {
+        \eIf{$c[i,j] = 0$} {
+            print("non esiste nessuna LCS di $X_i$ e $Y_j$ la quale termini con $x_i = y_j$")
+        } {
+            \eIf{$b[i,j] \neq (0,0)$} {
+                PRINT-LICS($b[i,j]$, b, c, X) \;
+                print($x_i$)
+            } {
+                print($x_i$)
+            }
+        }
+    }
+\end{algorithm}
+L'algoritmo che calcola una LICS permette di risolvere il problema in tempo:
+$$T(n) = \mathcal{O}(m^2 \cdot n^2)$$
+occupando $\Theta(m \cdot n)$ spazio in memoria (ossia una matrice che contiene i vari $c_{i,j}$; ovviamente non stiamo contando la matrice $b$).
+Si noti che abbiamo utilizzato una matrice $b$ per salvare informazioni utili alla ricostruzione
+\begin{center}
+    \includegraphics[width = 0.40\linewidth]{Images/10.png}
+\end{center}
+\subsection{Hateville}
+Hateville è una città formata da $n$ case dispose lungo un'unica strada e numerate da $1$ a $n$, in cui si sta organizzando una colletta fondi per la costruzione di un nuovo ospedale.
+Ogni abitante $i$ della città è interessato a partecipare e ha già comunicato la quantità di denaro che intende versare, ovvero $d_i$. Ad Hateville però, \textbf{ognuno odia i propri vicini, da entrambi i lati}.
+Ovvero, l'abitante della casa $i$ odia i vicini della casa $i-1$ e $i+1$. Per questo motivo, nessuno vuole partecipare ad una colletta a cui partecipano uno o entrambi i propri vicini.
+Si vuole quindi determinare \textbf{la massima quantità di denaro che può essere raccolta rispettando questa regola}. \newline
+Prima di definire il problema, è necessario introdurre alcune definizioni preliminari.
+Sia $X_n = \{1,\dots,n\}$ l'insieme che rappresenta gi $n$ abitanti di Hateville e $A \subseteq X_n$ un suo qualunque sottoinsieme.
+Inoltre, sia $(d_1, \dots, d_n)$ un vettore di $n$ elementi con $d_i \in \mathbb{N}$ che rappresenta la quantità di denaro che l'abitante $i$ è disposto a versare.
+Possiamo quindi definire il concetto di \textbf{compatibilità} di un sottoinsieme di $X_n$:
+\begin{center}
+    Un sottoinsieme $A \subseteq X_n$ è \textbf{compatibile} se e solo se $\forall i \in A$ vale che $i-1 \notin A$ e $i+1 \notin A$ (se esistono)
+\end{center}
+Ovvero, un sottoinsieme $A$ è compatibile se e solo se per nessuno abitante in $A$, $A$ contiene un suo vicino. Possiamo rappresentare questo concetto con la funzione $COMP(A)$:
+\begin{center}
+    $COMP(A) = True$ se e solo se $\forall i \in A$ vale che $i-1 \notin A$ e $i+1 \notin A$ (se esistono) \\
+    $COMP: \mathcal{P}(X_n) \rightarrow \{True, False\}$
+\end{center}
+Infine, possiamo definire il concetto di \textbf{denaro raccolto} da un sottoinsieme di $X_n$:
+\begin{center}
+    Il \textbf{denaro raccolto} da un sottoinsieme $A \subseteq X_n$ è la somma delle quantità di denaro che ogni abitante in $A$ è disposto a versare
+\end{center}
+Ovvero, il denaro raccolto da un sottoinsieme $A$ è la somma dei valori $d_i$ per ogni $i \in A$. Possiamo rappresentare questo concetto con la funzione $D(A)$:
+$$D: \mathcal{P}(X_n) \rightarrow \mathbb{R}^+$$
+\begin{equation*}
+    D(A) = \begin{cases}
+        \sum_{i \in A} d_i & \textrm{se } A \neq \emptyset \\
+        0 & \textrm{se } A = \emptyset
+    \end{cases}
+\end{equation*}
+Il problema può essere quindi definito come segue: \newline
+\textbf{\underline{PROBLEMA}}: Dato $n \in \mathbb{N}$ il numero degli abitanti, rappresentati nell'insieme $X_n = \{1,2,\dots,n\}$ e $d_i, \forall i \in X_n$ la quantità di denaro che l'abitante
+$i$ è disposto a versare, determinare un sottoinsieme $S \subseteq X_n$ tale che:
+$$COMP(S) = True \land D(S) = \max_{\substack{A \subseteq X_n \\ COMP(A) = True}}\{D(A)\}$$
+Il problema può essere formalizzato come segue: \newline
+\textbf{\underline{ISTANZA}}: $X_n = \{1,\dots, n\}$ e $d_i, \forall i \in X_n$ \newline
+\textbf{\underline{SOLUZIONE}}: $S \subseteq \{1,\dots,n\}$ tale che:
+$$COMP(S_n) = True \land D(S_n) = \max_{\substack{A \subseteq X_n \\ COMP(A) = True}}\{D(A)\}$$
+Il problema contiene diversi sottoproblemi ognuno dei quali non ha come input l'insieme $X_n$ con $d_i, \forall i \in X_n$ ma un suo sottoinsieme:
+\begin{enumerate}
+    \item Dato $X_n = \{1,\dots, n\}$, si vuole trovare $S_n \subseteq X_n$ tale che:
+    $$COMP(S_n) = True \land D(S_n) = \max_{\substack{A \subseteq X_n \\ COMP(A) = True}}\{D(A)\}$$
+    \item Dato $X_{n-1}= \{1,\dots, n-1\}$, si vuole trovare $S_{n-1} \subseteq X_{n-1}$ tale che:
+    $$COMP(S_{n-1}) = True \land D(S_{n-1}) = \max_{\substack{A \subseteq X_{n-1}\\ COMP(A) = True}}\{D(A)\}$$
+    \item $\dots$
+    \item Dato $X_2= \{1,2\}$, si vuole trovare $S_2 \subseteq X_2$ tale che:
+    $$COMP(S_2) = True \land D(S_2) = \max_{\substack{A \subseteq X_2\\ COMP(A) = True}}\{D(A)\}$$
+    \item Dato $X_1= \{1\}$, si vuole trovare $S_1 \subseteq X_1$ tale che:
+    $$COMP(S_1) = True \land D(S_1) = \max_{\substack{A \subseteq X_1\\ COMP(A) = True}}\{D(A)\}$$
+    \item Dato $X_0= \emptyset$ si vuole trovare $S_0 \subseteq X_0$ tale che:
+    $$COMP(S_0) = True \land D(S_0) = \max_{\substack{A \subseteq X_0\\ COMP(A) = True}}\{D(A)\}$$
+\end{enumerate}
+Quindi il generico sottoproblema è individuato da $i \in \{0,\dots,n\}$.
+Il \textbf{generico sottoproblema di dimensione $i$} è definito come segue: \newline
+\textbf{\underline{SOTTOPROBLEMA GENERICO}}: Dato un insieme $X_i = \{1,\dots,i\}$ rappresentante i primi $i$ abitanti di
+Hateville, trovare un suo sottoinsieme, che rispetti la compatibilità, che massimizzi il denaro raccolto. \newline
+Ossia: \newline
+\textbf{\underline{ISTANZA SOTTOPROB. GEN}}: $X_i = \{1,\dots,i\}$ con $d_j, \forall j \in X_i$ \newline
+\textbf{\underline{SOLUZIONE SOTTOPROB. GEN}}: $S_i \subseteq \{1,\dots, i\}$ tale che:
+$$COMP(S_i) = True \land D(S_i) = \max_{\substack{A \subseteq X_i\\ COMP(A) = True}}\{D(A)\}$$
+Dato che $0 \leq i \leq n$ si ottengono $(n+1)$ sottoproblemi, ad ognuno dei quali è associata una \textbf{coppia di variabili}.
+Considerato il sottoproblema di dimensione $i$, la coppia di variabili ad esso associata è $(OPT_i, S_I)$ così definita:
+\begin{center}
+    $OPT_i = D(S_i)$, ossia il valore di un sottoinsieme di $X_i = \{1,\dots,i\}$, che rispetti la compatibilità, che massimizzi il denaro raccolto \\
+    $S_i$, un sottoinsieme di $X_i$ che rispetti la compatibilità e che massimizzi il denaro raccolto, pari a $OPT_i$
+\end{center}
+Per determinare la soluzione di un qualsiasi sottoproblema di dimensione $i$, oltre all'input del problema, si utilizzeranno le soluzioni dei sottoproblemi di dimensione minore.
+Si noti che ognuna delle variabili associate ad un sottoproblema è da considerarsi una \textbf{black-box}: si può utilizzare, ma non è possibile conoscerne il contenuto.
+Scriviamo le equazioni di ricorrenza: \newline
+\textbf{\underline{CASO BASE}}: Se $i = 0 \vee i = 1$ \newline
+Il caso base si ha per un qualunque sottoinsieme di dimensione $i$ con $i = 0 \vee i = 1$. Nel caso in cui $i = 0$, il sottoproblema di dimensione $i$ è un
+problema \textbf{vuoto}, ossia non ci sono abitanti in Hateville e quindi non c'è nessuno che può partecipare alla colletta.
+La soluzione del problema vuoto è quindi $OPT_i = 0$ e $S_i = \emptyset$.
+Nel caso in cui $i = 1$ invece, significa che c'è solo un abitante in Hateville e quindi non è necessario fare nessuna scelta per per evitare di inserire i vicini.
+La soluzione del sottoproblema di dimensione $i$ considererà quindi solamente l'abitante $1$, di conseguenza $OPT_i = d_1$ e $S_i = \{1\}$. Dunque, il caso base è scrivibile come:
+\begin{equation*}
+    OPT_i = \begin{cases}
+        0 & \textrm{se } i = 0 \\
+        d_1 & \textrm{se } i = 1
+    \end{cases}
+\end{equation*}
+\begin{equation*}
+    S_i = \begin{cases}
+        \emptyset & \textrm{se } i = 0 \\
+        \{1\} & \textrm{se } i = 1
+    \end{cases}
+\end{equation*}
+\textbf{\underline{PASSO RICORSIVO}}: Se $i > 1$ \newline
+Il passo ricorsivo si ha per un qualunque sottoproblema di dimensione $i$ con $i > 1$, ossia quando ci sono almeno due abitanti in Hateville.
+I dati disponibili per calcolare la soluzione del sottoproblema sono: l'input $X_i$ (in particolare la quantità $d_i$) e tutte le soluzioni dei sottoproblemi di dimensione minore.
+Per risolvere un sottoproblema, è necessario domandarsi quali sia la struttura di $S_i$ rispetto a $S_{i-1}, \dots, S_0$. Distinguiamo due casi:
+\begin{itemize}
+    \item 
+\end{itemize}
 \end{document}
