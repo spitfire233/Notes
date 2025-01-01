@@ -1198,6 +1198,258 @@ Il passo ricorsivo si ha per un qualunque sottoproblema di dimensione $i$ con $i
 I dati disponibili per calcolare la soluzione del sottoproblema sono: l'input $X_i$ (in particolare la quantità $d_i$) e tutte le soluzioni dei sottoproblemi di dimensione minore.
 Per risolvere un sottoproblema, è necessario domandarsi quali sia la struttura di $S_i$ rispetto a $S_{i-1}, \dots, S_0$. Distinguiamo due casi:
 \begin{itemize}
-    \item 
+    \item Se $i \notin S_i$ allora la soluzione del problema di dimensione $i$ sarà uguale a quella del problema di dimensione $S_{i-1}$; infatti è sufficiente considerare l'insieme di abitanti $\{1,\dots, i-1\}$. Di conseguenza:
+    $$OPT_i = OPT_{i-1} \; e \; S_i = S_{i-1}$$
+    \item Se $i \in S_i$ allora non è possibile che il vicino $i-1$ partecipi alla colletta, per la regola della compatibilità. Al contrario però, possiamo aggiungere $d_i$ ad $OPT_{i-2}$ e $i$ a $S_{i-2}$ sicuramente senza violare la compatibilità e, dato che $OPT_{i-2}$ era il massimo per il problema
+    di dimensione $i-2$, aggiungendo $d_i$ avremo anche il massimo per il problema di dimensione $i$ (se $i \in S_i$). Di conseguenza abbiamo che:
+    $$OPT_i = OPT_{i-2} + d_i \; S_i = S_{i-2} \cup \{i\}$$
 \end{itemize}
+Siccome non possiamo sapere a priori se l'abitante $i$ appartenga o meno alla soluzione, consideriamo entrambe le soluzioni e scegliamo quella di valore massimo.
+Formalmente, possiamo scrivere:
+$$OPT_i = \max\{OPT_{i-1}, OPT_{i-2} + d_i\}$$
+e
+\begin{equation*}
+    S_i = \begin{cases}
+        S_{i-1} & \textrm{se } OPT_{i-1} \geq OPT_{i-2} + d_i \\
+        S_{i-2} \cup \{i\} & \textrm{altrimenti}
+    \end{cases}
+\end{equation*}
+\begin{center}
+    \includegraphics[width = 0.40\linewidth]{Images/11.png}
+\end{center}
+Una volta calcolati i valori $OPT_0, OPT_1 ,\dots, OPT_n$, è possibile determinare \textbf{la soluzione} al problema andando a considerare
+$$(OPT_n, S_n)$$
+Enunciamo e dimostriamo il \textbf{teorema della proprietà della sottostruttura ottima}:
+\begin{Teorema}[PSO Hateville]
+    Sia $i \geq 2$. Siano $S_0, S_1, \dots, S_{i-1}, S_{i-1}$ le soluzioni dei sottoproblemi $0, 1, \dots, i-2, i-1$.
+    Sia $S_i$ la soluzione del sottoproblema $i$. Allora:
+    \begin{equation*}
+        S_i = \begin{cases}
+            S_{i-2} \cup \{i\} & \textrm{se } i \in S_i \\
+            S_{i-1} & \textrm{se } i \notin S_i
+        \end{cases}
+    \end{equation*}
+\end{Teorema}
+\begin{Dimostrazione}
+    Distinguiamo i due casi:
+    \begin{itemize}
+        \item Supponiamo che $i \notin S_i$, devo dimostrare che $S_i = S_{i-1}$. Per assurdo, supponiamo che $S_i \neq S_{i-1}$.
+        Allora deve esistere $S' \neq S_{i-1}$ tale che $D(S') > D(S_{i-1})$; inoltre $i \notin S_i$ quindi $S' \subseteq \{1,\dots,i-1\}$, ma così $S_{i-1}$ non
+        può più essere soluzione del problema $i-1$-esimo, \textbf{assurdo}!.
+        \item Supponiamo che $i \in S_i$, devo dimostrare che $S_i = S_{i-2} \cup \{i\}$. Per assurdo, supponiamo che $S_i \neq S_{i-2} \cup \{i\}$; allora deve esistere $S' \neq S_{i-2} \cup \{i\}$ tale che
+        $S'$ è soluzione del problema $i$, quindi tale che $D(S') > D(S_{i-2} \cup \{i\})$; inoltre $S' \subseteq\{1,\dots,i\}$ perché $i \in S_i$ e, inoltre, $COMP(S_i) = True$.
+        Infine, $S' = S'' \cup \{i\}$ con $S'' \subseteq\{1,\dots, i-1\}$.
+        Quindi:
+        $$D(S') > D(S_{i-2} \cup \{i\})$$
+        $$D(S'' \cup \{i\}) > D(S_{i-2} \cup \{i\})$$
+        $$D(S'') + d_i > D(S_{i-2}) + d_i$$
+        $$D(S'') > D(S_{i-2})$$
+        Ma quindi $S_{i-2}$ non può più essere soluzione del problema $i-2$; \textbf{assurdo}!.
+    \end{itemize}
+\end{Dimostrazione}
+Utilizzando l'equazione di ricorrenza, possiamo definire un algoritmo ricorsivo che calcoli la soluzione di ogni sottoproblema: \newline
+\begin{algorithm}[H]
+    \caption{Algoritmo ricorsivo che risolve un generico sottoproblema $i$ di Hateville}
+    \DontPrintSemicolon
+    \SetKwFunction{FHATEVILLERic}{HATEVILLE-RIC}
+    \Proc{\FHATEVILLERic{i}} {
+        \eIf{$i = 0$} {
+            \Return $(0, \emptyset)$
+        } {
+            $(V_1, S_1) :=$ HATEVILLE-RIC$(i-1)$ \;
+            $(V_2, S_2) :=$ HATEVILLE-RIC$(i-2)$ \;
+            $V_2 := V_2 + d_i$ \;
+            $S_2 := S_2 \cup \{i\}$ \;
+            \eIf{$V_1 \geq V_2$} {
+                \Return $(V_1, S_1)$
+            } {
+                \Return $(V_2, S_2)$
+            }
+        }
+    }
+\end{algorithm} \noindent
+\newpage \noindent
+Questo algoritmo ha \textbf{complessità esponenziale}, visto che ogni sottoproblema viene ricalcolato più volte. Definiamo
+quindi un algoritmo bottom-up che calcoli la soluzione al problema: \newline
+\begin{algorithm}[H]
+    \caption{Algoritmo iterativo che calcola la soluzione al problema Hateville}
+    \DontPrintSemicolon
+    \SetKwFunction{FHATEVILLEIt}{HATEVILLE-IT}
+    \Proc{\FHATEVILLEIt{n}} {
+        $OPT[0] := 0$ \;
+        $S[0] := \emptyset$ \;
+        $OPT[1] := d_1$ \;
+        $S[1] := \{1\}$ \;
+        \For{$i \gets 1$ to $n$} {
+            $V_1 := OPT[i-1]$ \;
+            $V_2 := OPT[i-2] + d_i$ \;
+            \eIf{$V_1 \geq V_2$} {
+                $S[i] := S[i-1]$ \;
+                $OPT[i] := V_1$
+            } {
+                $S[i] := S[i-2] \cup \{i\}$ \;
+                $OPT[i] := V_2$
+            }
+        }
+        \Return $(OPT[n], S[n])$
+    }
+\end{algorithm} \noindent
+L'algoritmo ha tempo di esecuzione pari a:
+$$T(n) = \mathcal{O}(n)$$
+occupando però $\mathcal{O}(n+n^2)$ spazio in memoria (ossia un vettore che contiene i vari $OPT_i$ e un vettore che contiene i vari insiemi $S_i$, ognuno dei quali contiene al massimo $n$ elementi).
+Scriviamo l'algoritmo di ricostruzione: \newline
+\begin{algorithm}[H]
+    \caption{Algoritmo che stampa l'insieme $S_i$ di Hateville}
+    \DontPrintSemicolon
+    \SetKwFunction{FPRINTHATEVILLE}{PRINT-HATEVILLE}
+    \Proc{\FPRINTHATEVILLE{i}} {
+        \If{$i \neq 0$} {
+            \eIf{$i = 1$} {
+                print$(i)$
+            } {
+                \eIf{$OPT{i-2} + d_i \geq OPT[i-1]$} {
+                    PRINT-HATEVILLE$(i-2)$ \;
+                    print($i$)
+                } {
+                    PRINT-HATEVILLE$(i-1)$
+                }
+            }
+        }
+    }
+\end{algorithm}
+\subsection{Distanza di Edit}
+Il problema della distanza di edit può essere definito come segue: \newline
+\textbf{\underline{PROBLEMA}}: Date due sequenze $X = <x_1, \dots, x_m>$ e $Y = <y_1, \dots, y_n>$, rispettivamente di lunghezza $m$ ed $n$ definite su un alfabeto $\Sigma$, si determini
+la \textbf{minima sequenza delle seguenti operazioni elementari} che permette di trasformare $X$ in $Y$ operando una scansione su $X$:
+\begin{itemize}
+    \item \textbf{insert(a)}: Inserisce $a$ nella posizione corrente della sequenza $X$
+    \item \textbf{delete(a)}: cancella $a$ dalla posizione corrente della sequenza $X$
+    \item \textbf{replace(a,b)}: sostituisce $a$ con $b$ nella posizione corrente della sequenza $X$
+\end{itemize}
+Quello che si andrà a risolvere, comunque, è una versione ridotta del problema; la quale è definita come segue: \newline
+\textbf{\underline{PROBLEMA RIDOTTO}}: Date due sequenze $X = <x_1,\dots,x_m>$ e $Y = <y_1,\dots,y_n>$, rispettivamente di lunghezza $m$ ed $n$ definite su un alfabeto
+$\Sigma$, si determini il \textbf{minimo numero di operazioni elementari} che permette di trasformare $X$ in $Y$ \newline
+Il problema ridotto contiene diversi sottoproblemi, ognuno dei quali non ha come input la coppia $(X,Y)$ ma una \textbf{coppia di prefissi di tali sequenze}.
+Il sottoproblema generico è quindi individuato dalla coppia $(i,j)$ ed è definito come segue: \newline
+\textbf{\underline{SOTTOPROBLEMA GENERICO}}: Date due sequenze $X = <x_1, \dots, x_m>$ e $Y = <y_1, \dots, y_n>$, rispettivamente di lunghezza $m$ ed $n$, si determini il minimo numero di operazioni
+elementari che permette di trasformare $X_i$ in $Y_j$. \newline
+Dato che $0 \leq i \leq m$ e $0 \leq j \leq n$, si ottengono $(m+1) \cdot (n+1)$ sottoproblemi. Ad ogni sottoproblema \textbf{è associata una variabile}: considerato il sottoproblema di dimensione
+$(i,j)$, la variabile ad esso associata è $\delta_{i,j}$ così definita:
+\begin{center}
+    $d_{i,j} =$ numero minimo di operazioni elementari che permette di trasformare $X_i$ in $Y_j$
+\end{center}
+Per determinare la soluzione di un qualsiasi sottoproblema $(i,j)$, oltre all'input del problema, si utilizzeranno le soluzioni dei sottoproblemi di dimensione minore.
+Scriviamo le \textbf{equazioni di ricorrenza}: \newline
+\textbf{\underline{CASO BASE}}: Se $i = 0 \vee j = 0$ \newline
+Il caso base si ha per un qualunque sottoproblema di dimensione $(i,j)$ con $i = 0 \vee j = 0$, ossia quando uno dei due prefissi considerati è la sequenza vuota.
+In questo cso, è facile ottenere il valore della variabile $\delta_{i,j}$ distinguendo tre casi:
+\begin{itemize}
+    \item $i = 0 \land j = 0$ allora i prefissi sono entrambi la sequenza vuota; quindi non è necessario alcuna operazione elementare per trasformare $X_i$ in $Y_j$.
+    Allora 
+    $$\delta_{i,j} = 0$$
+    \item $i = 0 \land j > 0$ allora $X_i$ è la sequenza vuota; quindi è necessario eseguire un numero di operazioni elementare pari alla lunghezza del prefisso $Y_j$ (in quanto è necessario inserire tutti gli elementi di $Y_j$ in $X_i$).
+    Quindi:
+    $$\delta_{i,j} = j$$
+    \item $i > 0 \land j = 0$; allora $Y_j$ è la sequenza vuota; quindi è necessario eseguire un numero di operazioni elementari pari alla lunghezza del prefisso $X_i$ (in quanto è necessario eliminare tutti gli elementi di $X_i$). Quindi:
+    $$\delta_{i,j} = i$$
+\end{itemize}
+Il caso base è quindi scrivibile come segue:
+\begin{equation*}
+    \delta_{i,j} = \begin{cases}
+        0 & \textrm{se } i = 0 \land j = 0 \\
+        j & \textrm{se } i = 0 \land j > 0 \\
+        i & \textrm{se } i > 0 \land j = 0
+    \end{cases}
+\end{equation*}
+\textbf{\underline{PASSO RICORSIVO}}: Se $i > 0 \land j > 0$ \newline
+Il passo ricorsivo si ha per un qualunque sottoproblema di dimensione $(i,j)$ con $i > 0 \land j > 0$, ossia quando si vanno a considerare due prefissi
+$X_i$ e $Y_j$ entrambi diversi dalla sequenza vuota. I dati disponibili per calcolare $\delta_{i,j}$ sono: l'input $X$ ed in particolare l'elemento $x_i$, l'input $Y$ ed in particolare l'elemento $y_j$ e tutte le variabili $\{\delta_{0,0},\dots, \delta_{i-1, j}, \delta_{i, j-1}\}$.
+Per calcolare $\delta_{i,j}$ e quindi risolvere il problema di dimensione $(i,j)$ è necessario distinguere i seguenti casi:
+\begin{itemize}
+    \item Se $x_i = y_j$; se i due elementi considerati sono identici, allora il numero minimo di operazioni elementari per trasformare $X_i$ in $Y_j$ è uguale al numero minimo di operazioni
+    per trasformare il prefisso $X_{i-1}$ in $Y_{j-1}$, ovvero:
+    $$\delta_{i,j} = \delta_{i-1, j-1} \; \textrm{se } x_i = y_j$$
+    \item Se $x_i \neq y_j$, allora il numero minimo di operazioni è dato dalla soluzione di \textbf{uno dei sottoproblemi di dimensione minore}. Sarà quindi necessario distinguere in base \textbf{all'ultime operazione utilizzata per trasformare $X_i$ in $Y_j$}:
+    \begin{itemize}
+        \item \textbf{insert($y_j$)}: in questo caso, il numero minimo di operazioni per trasformare $X_i$ in $Y_j$ si ottiene a partire dal numero $\delta_{i,j-1}$ di operazioni per trasformare $X_{i}$ in $Y_{j-1}$ a cui si aggiunge l'operazione di inserimento dell'elemento $y_j$ in $X_i$; ovvero:
+        $$\delta_{i,j} = \delta_{i,j-1} + 1$$
+        dove 1 rappresenta il contributo dato dall'operazione \textbf{insert($y_j$)}
+        \item \textbf{delete($x_i$)}: in questo caso, il numero minimo di operazioni per trasformare $X_i$ in $Y_j$ si ottiene a partire dal numero $\delta_{i-1,j}$ di operazioni per trasformare $X_{i-1}$ in $Y_{j}$ a cui si aggiunge l'operazione di cancellazione dell'elemento $x_i$ da $X_i$; ovvero:
+        $$\delta_{i,j} = \delta_{i-1,j} + 1$$
+        dove 1 rappresenta il contributo dato dall'operazione \textbf{delete($x_i$)}.
+        \item \textbf{replace($x_i$, $y_j$)}: in questo caso, il numero minimo di operazioni per trasformare $X_i$ in $Y_j$ si ottiene a partire dal numero $\delta_{i-1,j-1}$ di operazioni per trasformare $X_{i-1}$ in $Y_{j-1}$ a cui si aggiunge l'operazione di sostituzione dell'elemento $x_i$ con $y_j$ in $X_i$; ovvero:
+        $$\delta_{i,j} = \delta_{i-1,j-1} + 1$$
+        dove 1 rappresenta il contributo dato dall'operazione \textbf{replace($x_i, y_j$)}.
+    \end{itemize}
+    Siccome la serie di operazioni \textbf{non è nota}, non possiamo sapere a priori quale dei tre casi si verifichi.
+    Quindi consideriamo la soluzione dei tre possibili sottoproblemi e scegliamo quella di valore minimo. Formalmente, possiamo scrivere:
+    $$\delta_{i,j} = \min\{\delta_{i, j-1} + 1, \delta_{i-1, j} + 1, \delta_{i-1,j-1} + 1\} \; \textrm{se } x_i \neq y_j$$
+\end{itemize}
+Il passo ricorsivo è quindi scrivibile come:
+\begin{equation*}
+    \delta_{i,j} = \begin{cases}
+        \delta_{i-1, j-1} & \textrm{se } x_i = y_j \\
+        1 + \min\{\delta_{i, j-1} + 1, \delta_{i-1, j} + 1, \delta_{i-1,j-1} + 1\} & \textrm{se } x_i \neq y_j
+    \end{cases}
+\end{equation*}
+\begin{Nota}
+    L'equazione di ricorrenza \textbf{è la proprietà della sottostruttura ottima}
+\end{Nota}
+Una volta calcolati i valori $\delta_{0,0}, \delta_{0,1}, \dots,\delta_{m,n}$ si hanno a disposizione tutte le lunghezze delle sequenze di operazioni per rendere ciascun prefisso $X_i$ uguale al prefisso $Y_j$.
+La \textbf{soluzione del problema} è quindi il valore $\delta_{m,n}$.
+\begin{center}
+    \includegraphics[width = 0.40\linewidth]{Images/12.png}
+\end{center}
+\begin{algorithm}[H]
+    \caption{Algoritmo ricorsivo che calcola la distanza di edit per due prefissi $X_i$ e $Y_j$}
+    \DontPrintSemicolon
+    \SetKwFunction{FEDRic}{ED-RIC}
+    \Proc{\FEDRic{i,j}} {
+        \eIf{$i = 0 \vee j = 0$} {
+            \eIf{$i = 0$} {
+                \Return $j$
+            } {
+                \Return $i$
+            }
+        } {
+            \eIf{$x_i = y_j$} {
+                \Return ED-RIC$(i-1, j-1)$
+            } {
+                $ins := 1 + \textrm{ED-RIC}(i, j-1)$ \;
+                $del := 1 + \textrm{ED-RIC}(i-1, j)$ \;
+                $rep := 1 + \textrm{ED-RIC}(i-1, j-1)$ \;
+                \Return $MIN(ins, del, rep)$
+            }
+        }
+    }
+\end{algorithm} \noindent
+L'algoritmo sopra calcola ricorsivamente la soluzione ad un generico sottoproblema $(i,j)$; tuttavia il suo tempo di calcolo è \textbf{esponenziale}.
+Scriviamo quindi un algoritmo bottom-up che calcoli la soluzione al problema: \newline
+\begin{algorithm}[H]
+    \caption{Algoritmo iterativo che calcola la distanza di edit tra due sequenze $X$ e $Y$}
+    \DontPrintSemicolon
+    \SetKwFunction{FEDIt}{ED-IT}
+    \Proc{\FEDIt{X,Y}} {
+        \For{$i \gets 0$ to $m$} {
+            $\delta[i,0] := i$
+        }
+        \For{$j \gets 0$ to $n$} {
+            $\delta[0, j] := j$
+        }
+        \For{$i \gets 1$ to $m$} {
+            \For{$j \gets 1$ to $n$} {
+                \eIf{$x_i = y_j$} {
+                    $\delta[i,j] := \delta{i-1, j-1}$
+                } {
+                    $\delta[i,j] := 1 + MIN(\delta[i,j-1], \delta[i, j-1], \delta[i-1,j-1])$
+                }
+            }
+        }
+        \Return $\delta[m,n]$
+    }
+\end{algorithm} \noindent
+L'algoritmo bottom-up ha complessità:
+$$T(n) = \mathcal{O}(m \cdot n)$$
+e occupa spazio in memoria pari a $\Theta(m \cdot n)$ (ossia una matrice per contenere i vari $\delta_{i,j}$).
+
 \end{document}
