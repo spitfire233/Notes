@@ -366,7 +366,7 @@ Dobbiamo distinguere due casi:
 \begin{itemize}
     \item Se $x_i = y_j$ allora $S^{(i,j)} = S^{(i-1, j-1)}|x_i$ (con $|$ che significa "accodo")
     \item Se $x_i \neq y_j$ allora:
-    $$S^{(i,j)}\begin{cases}
+    $$S^{(i,j)} = \begin{cases}
         S^{(i-1, j)} \; \; \textrm{Se } |S^{(i-1, j)}| > |S^{(i, j-1)}| \\
         S^{(i, j-1)} \; \; \textrm{Altrimenti}
     \end{cases}$$
@@ -1451,5 +1451,258 @@ Scriviamo quindi un algoritmo bottom-up che calcoli la soluzione al problema: \n
 L'algoritmo bottom-up ha complessità:
 $$T(n) = \mathcal{O}(m \cdot n)$$
 e occupa spazio in memoria pari a $\Theta(m \cdot n)$ (ossia una matrice per contenere i vari $\delta_{i,j}$).
+\subsection{Varianti di LCS, LIS e LICS}
+Presentiamo di seguito, in maniera più o meno formale, delle varianti dei problemi LCS, LIS e LICS.
+\subsubsection{LDCS - Longest Decreasing Common Subsequence}
+In questa variante di LICS, avviene la seguente variazione all'interno della definizione dell'equazione di ricorrenza:
+\begin{itemize}
+    \item Se $x_i \neq y_j$ allora
+    $$c_{i,j} = 0$$
+    \item Se $x_i = y_j$ allora
+    $$c_{i,j} = \max\{c_{h,k}|1 \leq h < i \land 1 \leq k < j \land x_h > x_i\} + 1$$
+\end{itemize}
+la modifica dell'algoritmo bottom-up, per fare in modo che esso rispetti la nuova definizione della variabile $c_{i,j}$, risulta quindi triviale.
+\subsubsection{LCS in cui non vi sono due simboli consecutivi che si ripetono}
+In questa variante di LCS, vi è la seguente variazione nell'equazione di ricorrenza:
+$$c_{i,j} = \max\{c_{h,k}|1 \leq h < i \land 1 \leq k < j \land x_h \neq x_i\} + 1$$
+la modifica dell'algoritmo bottom-up, per fare in modo che esso rispetti la nuova definizione della variabile $c_{i,j}$, risulta quindi triviale.
+\subsubsection{LCS in cui si alternano numeri pari e numeri dispari}
+In questa variante di LCS, vi è la seguente variazione nell'equazione di ricorrenza:
+$$c_{i,j} = \max\{c_{h,k}|1 \leq h < i \land 1 \leq k < j \land x_h \bmod 2 \neq x_i \bmod 2\} + 1$$
+la modifica dell'algoritmo bottom-up, per fare in modo che esso rispetti la nuova definizione della variabile $c_{i,j}$, risulta quindi triviale.
+\subsubsection{LACS - Longest Alternating Common Subsequence}
+Sia $C$ un insieme di colori e $col: \Sigma \rightarrow C$ una funzione che attribuisce ad ogni simbolo dell'alfabeto $\Sigma$ un colore.
+Possiamo quindi definire così il problema: \newline
+\textbf{\underline{PROBLEMA}}: Data due sequenze $X$ e $Y$, rispettivamente di $m$  e $n$ numeri interi, si determini \textbf{\underline{UNA}} tra le più lunghe sottosequenze comuni a $X$ e $Y$ la quale non abbia elementi consecutivi dello stesso colore. \newline
+Quello che si andrà a risolvere, comunque, è una versione ridotta del problema, la quale è definita come segue: \newline
+\textbf{\underline{PROBLEMA RIDOTTO}}: Date due sequenze $X$ e $Y$, rispettivamente di $m$ ed $n$ numeri interi, si determini \underline{la lunghezza} di una tra le più lunghe sottosequenze comuni a $X$ e $Y$ che non abbia elementi consecutivi dello stesso colore. \newline
+Il problema ridotto contiene diversi sottoproblemi ognuno dei quali non ha come input la coppia $(X,Y)$ ma una \textbf{coppia di prefissi} di tali sequenze. Il generico sottoproblema $(i,j)$ è quindi così definito \newline
+\textbf{\underline{SOTTOPROBLEMA GENERICO}}: Date due sequenze $X$ e $Y$, rispettivamente di $m$ ed $n$ numeri interi, si determini la lunghezza di una tra le più lunghe sottosequenze comuni a $X_i$ e $Y_j$ la quale non abbia elementi
+consecutivi dello stesso colore. \newline
+Non consideriamo le coppie $i = 0 \vee j = 0$. Dato che $1 \leq i \leq m$ e $1 \leq j \leq n$, si ottengono $m \cdot n$ sottoproblemi. 
+Ad ogni sottoproblema $(i,j)$ è associata \textbf{una variabile} così definita:
+\begin{center}
+    $c_{i,j} =$ lunghezza di una tra le più lunghe sottosequenze comuni a $X_i$ e $Y_j$ la quale non ha elementi consecutivi dello stesso colore
+\end{center}
+Per determinare la soluzione di un qualsiasi sottoproblema di dimensione $(i,j)$, oltre all'input del problema, si utilizzeranno le soluzioni dei sottoproblemi di dimensione minore.
+Si noti, però, che ogni variabile associata ad un sottoproblema è da considerare come una \textbf{black-box}: si può utilizzare ma non è possibile conoscerne il contenuto.
+Il problema così definito \textbf{non è risolvibile poiché ci manca informazione}: date solamente le variabili $\{c_{1,1}, \dots, c_{i-1,j}, c_{i, j-1}\}$ e i prefissi $X_i$ e $Y_j$ (dei quali, in realtà, ci interessano solo gli elementi $x_i$ e $y_j$), non c'è
+alcun modo per poter comprendere se gli elementi $x_i$ e $y_j$, nel caso fossero uguali, possano essere accodati alle sottosequenze comuni alternanti relative ai sottoproblemi di dimensione minore a $(i,j)$: non sappiamo \textbf{con quale elemento termini ognuna di queste sottosequenze}, ma ne conosciamo solamente la lunghezza.
+Risulta necessario quindi introdurre un \textbf{problema vincolato} nel quale introdurre l'informazione mancante necessaria: \newline
+\textbf{\underline{PROBLEMA VINCOLATO}}: Date due sequenze $X$ e $Y$, rispettivamente di $m$ ed $n$ numeri interi, si determini la lunghezza di una tra le più lunghe sottosequenze comuni a $X$ e $Y$ la quale non abbia elementi consecutivi dello stesso colore
+e la quale termini con $x_m$ e $y_n$ (se questi coincidono, $0$ in caso contrario). \newline
+Come per il problema ridotto, anche il problema vincolato contiene $m \cdot n$ diversi sottoproblemi, ognuno \textbf{associato ad una differente variabile}. Il sottoproblema generico del problema vincolato di dimensione $(i,j)$ è definito come segue: \newline
+\textbf{\underline{SOTTOPROB. GEN. PROBL. VINCOLATO}}: Date due sequenze $X$ e $Y$, rispettivamente di $m$ ed $n$ numeri interi, si determini la lunghezza di una tra le più lunghe sottosequenze comuni a $X_i$ e $Y_j$ la quale non abbia elementi consecutivi dello stesso colore
+e la quale termini con $x_i$ e $y_j$ (se questi coincidono, $0$ in caso contrario). \newline
+il sottoproblema è associato alla variabile $c_{i,j}$ così definita:
+\begin{center}
+    $c_{i,j} =$ lunghezza di una tra le più lunghe sottosequenze comuni a $X_i$ e $Y_j$ la quale non ha elementi consecutivi dello stesso colore e la quale termina con $x_i$ e $y_j$ (se questi coincidono)
+\end{center}
+Si noti quindi che per un qualunque sottoproblema di dimensione $(s,t)$, solo imponendo che la soluzione $c_{s,t}$ si riferisca ad una sottosequenza comune a $X_s$ e $Y_t$ la quale non presenta elementi consecutivi dello stesso colore e la quale termina con $x_s = y_t$ è possibile stabilire se un altro elemento $x_u = y_v$ con $u >s$ e $v>t$ possa essere accodato a tale sottosequenza (andando a verificare che 
+$col(x_s) = col(y_t) \neq col(x_u) = col(y_v)$).
+Scriviamo le \textbf{equazioni di ricorrenza}: \newline
+\textbf{\underline{CASO BASE}}: $(i,j)$ con $i > 0 \land j > 0$ tali che $x_i \neq y_j$ \newline
+Certamente fanno parte del caso base tutte le coppie $(i,j)$ tali che $x_i \neq y_j$, ossia quando i due prefissi $X_i$ e $Y_j$ terminano con due elementi diversi.
+Questo caso, infatti, è semplice da risolvere: per definizione di $c_{i,j}$, gli elementi $x_i$ e $y_j$ devono coincidere, in caso contrario la soluzione è $0$ (ossia non c'è nessuna soluzione).
+Il numero di sottoproblemi che compone il problema vincolato possono essere ridotti a $m \cdot n$. Allora $c_{i,j}$ è scrivibile come:
+$$c_{i,j} = 0$$
+\textbf{\underline{PASSO RICORSIVO}}: $(i,j)$ con $i > 0 \land j > 0$ tali che $x_i = y_j$ \newline
+Il passo ricorsivo si ha per un qualunque sottoproblema di dimensione $(i,j)$ tale che $x_i = y_j$, ossia quando i due prefissi $X_i$ e $Y_j$ considerati terminano con lo stesso elemento.
+In questo caso, la lunghezza della più lunga sottosequenza con colori alternanti comune fra $X_i$ e $Y_j$ è uguale alla lunghezza della più lunga sottosequenza comune con colori alternanti calcolata per un sottoproblema di dimensione minore e che termina con un carattere con colore diverso da quello di $x_i = y_j$ aumentata di uno.
+Il tutto può essere scritto come:
+$$c_{i,j} = 1 + \max\{c_{h,k}|1 \leq h < i, 1 \leq k < j, col(x_i) \neq col(x_h)\}$$
+Poiché può accadere che l'insieme $\{c_{h,k}|1 \leq h < i, 1 \leq k < j, col(x_i) \neq col(x_h)\}$ sia vuoto (il che corrisponde al fatto che l'elemento $x_i = y_j$ è colorato allo stesso modo di tutti gli elementi precedenti e, quindi, non può essere accodato a nessuna più lunga sottosequenza alternante relativa a sottoproblemi di dimensione minore),
+assumiamo per definizione che $\max \emptyset = 0$, così che il corrispondente valore di $c_{i,j}$ risulti uguale a $1$. Inoltre, si noti che l'insieme $\{c_{h,k}|1 \leq h < i, 1 \leq k < j, col(x_i) \neq col(x_h)\}$ corrisponde all'insieme vuoto anche se $i = 1 \vee j = 1$, in quanto i casi $i = 0 \vee j = 0$ non sono considerati e, pertanto, non esistono
+sottoproblemi di dimensione minore a quella del sottoproblema considerato. \newline
+Una volta calcolati i valori $c_{1,1}, c_{2,1}, \dots, c_{m,n}$, si hanno a disposizione tutte le lunghezze delle sottosequenze comuni massimali fra qualsiasi prefisso di $X$ e qualsiasi prefisso di $Y$ le quali non hanno elementi consecutivi dello stesso colore e le quali terminano con l'ultimo elemento di entrami i prefissi.
+La \textbf{soluzione al problema vincolato} è $c_{m,n}$ mentre la \textbf{soluzione al problema ridotto} è:
+$$\max\{c_{i,j}|1 \leq i \leq m \land 1 \leq j \leq n\}$$
+\begin{center}
+    \includegraphics[width = 0.60\linewidth]{Images/13.png}
+\end{center}
+Utilizzando le equazioni di ricorrenza, scriviamo un algoritmo ricorsivo che calcola la soluzione ad un generico sottoproblema $(i,j)$: \newline
+\begin{algorithm}[H]
+    \caption{Algoritmo ricorsivo che calcola la soluzione ad un gen. sottoprob. $(i,j)$ di LACS}
+    \DontPrintSemicolon
+    \SetKwFunction{FLACSRic}{LACS-RIC}
+    \Proc{\FLACSRic{i, j}} {
+        \eIf{$x_i \neq y_j$} {
+            \Return 0
+        } {
+            $max := 0$ \;
+            \For{$h \gets 1$ to $i-1$} {
+                \For{$k \gets 1$ to $j-1$} {
+                    \If{$col(x_h) \neq col(x_i)$} {
+                        $S :=$ LACS-RIC$(h,k)$ \;
+                        \If{$S > max$} {
+                            $max := S$
+                        }
+                    }
+                }
+            }
+        }
+        \Return $1 + max$
+    }
+\end{algorithm} \noindent
+l'algoritmo sopra ha \textbf{complessità esponenziale}; scriviamo quindi un algoritmo bottom-up che calcoli la soluzione al problema: \newline
+\begin{algorithm}[H]
+    \caption{Algoritmo bottom-up che calcola la soluzione al problema LACS}
+    \DontPrintSemicolon
+    \SetKwFunction{FLACSIt}{LACS-IT}
+    \Proc{\FLACSIt{X,Y}} {
+        $max := 0$ \;
+        \For{$i \gets 1$ to $m$} {
+            \For{$j \gets 1$ to $n$} {
+                \eIf{$x_i \neq y_j$} {
+                    $c[i,j] := 0$
+                } {
+                    $temp := 0$ \;
+                    \For{$h \gets 1$ to $i-1$} {
+                        \For{$k \gets 1$ to $j-1$} {
+                            \If{$(col(x_h) \neq col(x_i)) \land (c[h,k] > temp)$} {
+                                $temp := c[h,k]$
+                            }
+                        }
+                    }
+                    $c[i,j] := 1 + temp$ \;
+                }
+                \If{$c[i,j] > max$} {
+                        $max := c[i,j]$
+                    }
+            }
+        }
+        \Return $max$
+    }
+\end{algorithm} \noindent
+L'algoritmo ha complessità computazionale pari a:
+$$T(n) = \mathcal{O}(m^2 \cdot n^2)$$
+e occupa uno spazio pari a $\Theta(m \cdot n)$ (ossia una matrice che contiene i vari $c_{i,j}$).
+\subsubsection{LCS senza due pari consecutivi}
+In questa variante di LCS, vi è la seguente variazione alla definizione della variabile:
+$$c_{i,j} = \max\{c_{h,k}|1 \leq h < i \land 1 \leq k < j \land x_h \bmod 2 \neq 0 \land x_i \bmod 2 \neq 0\} + 1$$
+la modifica dell'algoritmo bottom-up, per fare in modo che esso rispetti la nuova definizione della variabile $c_{i,j}$, risulta quindi triviale.
+\subsubsection{LCSR: LCS con al massimo R simboli rossi}
+\textbf{\underline{ISTANZA}}: $X_m$ e $Y_n$ sequenze \newline
+\textbf{\underline{SOLUZIONE}}: Calcolare \underline{la lunghezza} di una più lunga sottosequenza di $X_m$ e $Y_n$ la quale ha al massimo $R$ simboli colorati di rosso. \newline
+Si assume di avere una funzione $col: \Sigma \rightarrow \{Red, Blue\}$ e che ad ogni simbolo all'interno delle due sequenze ha un colore che è il rosso oppure il blu. \newline
+Ogni \textbf{sottoproblema generico} è quindi \textbf{identificato da una tripla} $(i, j, r)$ con:
+$$i \in \{0,\dots, m\}$$
+$$j \in \{0,\dots, m\}$$
+$$r \in \{0\dots, R\}$$
+ad ogni sottoproblema è \textbf{associata una variabile} così definita:
+\begin{center}
+    $c_{i,j,r} =$ la lunghezza di una più lunga sottosequenza comune di $X_i$ e $Y_j$ con $r$ simboli rossi
+\end{center}
+Definiamo le \textbf{equazioni di ricorrenza}: \newline
+\textbf{\underline{CASO BASE}}: $(i,j,r)$ con $i = 0 \vee j = 0, \forall r \in \{0,\dots,R\}$ \newline  
+In questo caso, una (o entrambe) le sottosequenze sono \textbf{vuote}, quindi la lunghezza di una più lunga sottosequenza comune a $X_i$ e $Y_j$ con $r$ simboli rossi è:
+$$c_{i,j,r} = 0$$
+\textbf{\underline{PASSO RICORSIVO}}: $(i,j,r)$ con $i > 0 \land j > 0$ e con $r$ qualsiasi \newline
+Visto che $i > 0 \land j > 0$, allora entrambe i prefissi considerati \textbf{non sono la sequenza vuota}. Dobbiamo distinguere due casi:
+\begin{itemize}
+    \item Se $x_i \neq y_j$ allora significa che dobbiamo prendere il valore massimo tra i due problemi di dimensione $(i-1, j, r)$ e $(i, j-1, r)$; quindi la variabile avrà valore
+    $$c_{i, j, r} = \max\{c_{i-1, j, r}, c_{i, j-1, r}\}$$
+    \item Se $x_i = y_j$ allora significa che $x_i = y_j$ potrebbe appartenere alla sottosequenza soluzione del problema. Dobbiamo quindi distinguere altri due sotto-casi:
+    \begin{itemize}
+        \item Se $col(x_i) = Red$ allora dobbiamo stare attenti a \textbf{quanti simboli rossi sono già presenti all'interno della sottosequenza}
+        \begin{itemize}
+            \item Se $r = 0$ allora $$c_{i,j,r} = c_{i-1, j-1, 0}$$
+            cioè \textbf{non posso aggiungere il simbolo $x_i$} poiché "non c'è più spazio" per ulteriori simboli rossi
+            \item Se $0 < r \leq R$ allora $$c_{i, j, r} = c_{i-1, j-1, r-1} + 1$$
+        \end{itemize}
+        \item Se $col(x_i) \neq Red$ allora
+        $$c_{i,j,r} = c_{i-1, j-1, r} +1$$
+    \end{itemize}
+\end{itemize}
+Il passo ricorsivo è quindi riassumibile come segue:
+\begin{equation*}
+    c_{i,j,r} = \begin{cases}
+        \max\{c_{i-1, j, r}, c_{i, j-1, r}\} & \textrm{se } x_i \neq y_j \\
+        \begin{cases}
+            \begin{cases}
+                c_{i-1, j-1, 0} & \textrm{se } $r = 0$ \\
+                c_{i-1, j-1, r} + 1 & \textrm{se } 0 < r \leq R
+            \end{cases} & \textrm{se } col(x_i) = Red \\
+            c_{i-1, j-1, r} + 1 & \textrm{se } col(x_i) \neq Red
+        \end{cases} & \textrm{se } x_i = y_j
+    \end{cases}
+\end{equation*}
+Scriviamo quindi l'algoritmo bottom-up per calcolare la soluzione al problema \newline
+\begin{algorithm}[H]
+    \caption{Algoritmo iterativo che calcola al soluzione al problema LCSR}
+    \DontPrintSemicolon
+    \SetKwFunction{FLCSRit}{LCSR-IT}
+    \Proc{\FLCSRit{X,Y,R}} {
+        $m := LENGTH(X)$ \;
+        $n := LENGTH(Y)$ \;
+        \For{$i \gets 0$ to $m$} {
+            \For{$r \gets 0$ to $R$} {
+                $c[i, 0, r] := 0$
+            }
+        }
+        \For{$j \gets 0$ to $n$} {
+            \For{$r \gets 0$ to $R$} {
+                $c[0, j, r] := 0$
+            }
+        }
+        \For{$i \gets 1$ to $m$} {
+            \For{$j \gets 1$ to $n$} {
+                \For{$r \gets 0$ to $R$} {
+                    \eIf{$x_i \neq y_j$} {
+                        $c[i,j,r] := \max\{c[i-1,j,r], c[i, j-1, r]\}$
+                    } {
+                        \eIf{$col(x_i) \neq Red$} {
+                            $c[i,j,r] := c[i-1,j-1,r] + 1$
+                        } {
+                            \eIf{$r = 0$} {
+                                $c[i,j,r] := c[i-1,j-1,0]$
+                            } {
+                                $c[i,j,r] := c[i-1,j-1, r-1] +1$
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        \Return $c[m, n, R]$
+    }
+\end{algorithm} \noindent
+l'algoritmo ha complessità computazionale pari a:
+$$T(n) = \Theta(m \cdot n \cdot R)$$
+\newpage \noindent
+Presentiamo inoltre l'algoritmo di ricostruzione: \newline
+\begin{algorithm}[H]
+    \caption{Algoritmo che stampa la soluzione al problema LCSR}
+    \DontPrintSemicolon
+    \SetKwFunction{FPRINTLCSR}{PRINT-LCSR}
+    \Proc{\FPRINTLCSR{X,Y,i,j,r}} {
+        \If{$i \neq 0 \land j \neq 0$} {
+            \eIf{$x_i \neq y_j$} {
+                \eIf{$c[i-1,j,r] \geq c[i,j-1,r]$} {
+                    PRINT-LCSR(X, Y, i-1, j, r)
+                } {
+                    PRINT-LCSR(X, Y, i, j-1, r)
+                }
+            } {
+                \eIf{$col(x_i) \neq Red$} {
+                    PRINT-LCSR(X, Y, i-1, j-1, r) \;
+                    print($x_i$)
+                } {
+                    \eIf{$r = 0$} {
+                        PRINT-LCSR(X,Y, i-1, j-1, 0)
+                    } {
+                        PRINT-LCSR(X, Y, i-1, j-1, r-1) \;
+                        print($x_i$)
+                    }
+                }
+            }
+        }
+    }
+\end{algorithm}
+
+
+
+
+
 
 \end{document}
