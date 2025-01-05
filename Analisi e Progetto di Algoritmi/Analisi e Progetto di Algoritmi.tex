@@ -1757,9 +1757,360 @@ e $p = 1$ che indica l'opposto. Ad ogni sottoproblema è associata \textbf{una v
         False & \textrm{Se } p = 1
     \end{cases}
 \end{equation*}
-
-
-
+Scriviamo \textbf{l'equazione di ricorrenza}: \newline
+\textbf{\underline{CASO BASE}}: $(i,j,p)$ con $ i = 0 \vee j = 0$ e $p \in \{0,1\}$ \newline
+In questo caso, la variabile è così definita:
+\begin{equation*}
+    e_{i,j,p} = \begin{cases}
+        True & \textrm{Se } p = 0 \\
+        False & \textrm{Se} P = 1
+    \end{cases}
+\end{equation*}
+\textbf{\underline{PASSO RICORSIVO}}: $(i,j,p)$ con $i > 0 \land j > 0$ e $p \in \{0,1\}$ \newline
+Assumiamo di aver calcoalto la lunghezze di tutte le LCS tra $X$ ed $Y$ e di averle salvate nelle variabili $c_{i,j}$.
+In caso, dobbiamo distinguere i diversi casi:
+\begin{itemize}
+    \item Se $x_i \neq y_j$ allora la variabile è così definita, per ogni valore di $p$:
+    \begin{equation*}
+        e_{i,j,p} = \begin{cases}
+            e_{i-1, j, p} & \textrm{Se } c_{i-1, j} > c_{i, j-1} \\
+            e_{i, j-1, p} & \textrm{Se } c_{i-1, j} < c_{i, j-1} \\
+            e_{i, j-1 , p} \land e_{i-1, j, p} & \textrm{Se } c_{i-1, j} = c_{i, j-1}
+        \end{cases}
+    \end{equation*}
+    \item Se $x_i = y_j$ allora dobbiamo distringuere altri due sottocasi:
+    \begin{itemize}
+        \item Se $col(x_i) = Red$ allora la variabile è così definita:
+        \begin{equation*}
+            e_{i,j,p} = \begin{cases}
+                e_{i-1, j-1, 1} & \textrm{Se } p = 0 \\
+                e_{i-1, j-1, 0} & \textrm{Se } p = 1
+            \end{cases}
+        \end{equation*}
+        \item Se $col(x_i) \neq Red$ allora la variabile è così definita:
+        $$e_{i,j,p} = e_{i-1, j-1, p}$$
+    \end{itemize}
+\end{itemize}
+La \textbf{soluzione} del problema è nella variabile $e_{m,n,0}$.
+\subsection{Interleaving}
+Il problema è definito come segue: \newline
+\textbf{\underline{PROBLEMA}}: Date tre sequenze, definite su un alfabeto $\Sigma$, $X = <x_1,\dots,x_m>$ di lunghezza $m$, $Y = <y_1, \dots, y_n>$ di lunghezza $n$ e $W = <w_1, \dots, w_{m+n}>$ di lunghezza $m+n$, stabilire
+se $W$ è un interleaving di $X$ ed $Y$, ovvero se $X$ e $Y$ si possono trovare come due sottosequenze disgiunte in $W$. Ovverro:
+\begin{itemize}
+    \item $\exists \{i_1, \dots, i_m\} \subseteq \{1, \dots, m+n\}$ con $i_1 < i_2 < \dots < i_m$
+    \item $\exists \{j_1, \dots, j_n\} \subseteq \{1, \dots, m+n\}$ con $j_1 < j_2 < \dots < i_n$
+\end{itemize}
+Tali che:
+\begin{itemize}
+    \item $\{i_1, \dots, i_m\} \cap \{j_1, \dots, j_n\} = \emptyset$
+    \item $\{i_1, \dots, i_m\} \cup \{j_1, \dots, j_n\} = \{1, \dots, m+n\}$
+    \item $\forall k \in \{1,\dots, m\}, x_k = w_{i,k}$
+    \item $\forall h \in \{1, \dots, n\}, y_h = w_{j,h}$ 
+\end{itemize}
+Il problema contiene diversi sottoproblemi, ognugno dei quali non ha come input $(X,Y,Z)$ ma i prefissi di tali sequenze.
+Ogni sottoproblema è quindi definito da una coppia $(i,j)$ ed è definito come segue: \newline
+\textbf{\underline{SOTTOPROBLEMA GENERICO}}: Date tre sequenze $X$, $Y$ e $W$, rispettivamente di lunghezza $m, n$ e $m+n$, si determini se $W_{i+j}$ è interleaving di $X_i$ e $Y_j$. \newline
+Dato che $0 \leq i \leq m$ e $0 \leq j \leq n$, si ottengono $(m+1) \cdot (n+1)$ sottoproblemi.
+Ad ogni sottoproblema \textbf{è associata una variabile} così definita:
+\begin{equation*}
+    s_{i,j} = \begin{cases}
+        True & \textrm{Se } W_{i+j} \; \textrm{è interleaving di } X_i \; e \; Y_j \\
+        False & \textrm{Altrimenti}
+    \end{cases}
+\end{equation*}
+Ovvero, la variabile $s_{i,j}$ è la soluzione del sottoproblema $(i,j)$. Per determinare la soluzione di un qualsiasi sottoproblema di dimensione $(i,j)$, oltre all'input del problema, si utilizzeranno le soluzioni dei sottoproblemi di dimensione minore.
+Si noti, però, che ognuna delle variabili associate ai sottoproblemi è una \textbf{black-box}: si può utilizzare ma non è possibile conoscerne il contenuto.
+Scriviamo le \textbf{equazioni di ricorrenza}:
+\begin{itemize}
+    \item \textbf{\underline{PRIMO CASO}}: $(i,j)$ con $i = 0 \vee j = 0$ \newline
+    Concentriamoci inizialmente su un qualunque sottoproblema di dimensione $(i,j)$ con $i = 0 \vee j = 0$, ossia quando uno dei due prefissi considerati è la sequenza vuota. In questo caso, il valore della variabile $s_{i,j}$ sarà, considerando i diversi casi possibili:
+    \begin{itemize}
+        \item Se $i = 0 \land j = 0$ allora entrambi i prefissi sono la sequenza vuota, allora $W_{i+j}$ è la sequenza vuota e di conseguenza sarà interleaving di $X_i$ e $Y_j$. Quindi
+        $$s_{i,j} = True$$
+        \item Se $i = 0 \land j > 0$ in questo caso bisognerà considerare altre due situazioni diverse:
+        \begin{itemize}
+            \item Se $w_i = y_j$, allora $W_{i+j}$ è interleaving di $X_i$ e $Y_j$ solo se lo era anche $W_{i+j-1}$; in questo caso quindi
+            $$s_{i, j} = s_{i, j-1}$$
+            \item Se $w_j \neq y_j$ allora $W_{i+j}$ non può essere interleaving dI $X_i$ e $Y_j$, quindi:
+            $$s_{i,j} = False$$
+        \end{itemize}
+        \item Se $i > 0 \land j = 0$ , anche in questo caso bisogna considerare due situazioni:
+        \begin{itemize}
+            \item Se $w_i = x_i$ allora $W_{i+j}$ è interleaving di $X_i$ e $Y_j$ solo se lo era anche $W_{i+j-1}$; in questo caso quindi
+            $$s_{i,j} = s_{i-1, j}$$
+            \item Se $w_i \neq x_i$ allora $W_{i+j}$ non può essere interleaving di $X_i$ e $Y_j$; in questo caso quindi
+            $$s_{i,j} = False$$
+        \end{itemize}
+    \end{itemize}
+    Possiamo quindi riassumere questo primo caso con la seguente equazione:
+    \begin{equation*}
+        s_{i,j} = \begin{cases}
+            True & \textrm{Se } i = 0 \land j = 0 \\
+            s_{i, j-1} & \textrm{Se } i = 0 \land j > 0 \land w_j = y_j \\
+            False & \textrm{Se } i = 0 \land j > 0  \land w_j \neq y_j\\
+            s_{i-1, j} & \textrm{Se } i > 0 \land j = 0 \land w_i = x_i \\
+            False & \textrm{Se } i > 0 \land j = 0 \land w_i \neq x_i
+        \end{cases}
+    \end{equation*}
+    \item \textbf{\underline{SECONDO CASO}}: $(i, j)$ con $i > 0 \land j > 0$ \newline
+    Ora invece consideriamo un qualunque sottoproblema di dimensione $(i,j)$ con $i > 0 \land j > 0$, ossia quando si vanno a considerare due prefissi $X_i$ e $Y_j$ entrambi diversi dalla sequenza vuota.
+    I dati disponibili per calcolare $s_{i,j}$ sono: l'input $X$, ed in particolare l'elemento $x_i$, l'input $Y$, e in particolare l'elemento $y_j$, e tutte le variabili $\{s_{0,0}, \dots, s_{i-1, j}, s_{i, j-1}\}$. Per
+    calcolare $s_{i,j}$ e quindi risolvere il sottoproblema di dimensione $(i,j)$ è necessario distingere i seguenti casi:
+    \begin{itemize}
+        \item Se $w_{i+j} \neq x_i \land w_{i+j} \neq y_j$ allora non possono essere accodati né $x_i$ né $y_j$ al simbolo in posizione $w_{i+j}$; allora $W_{i+j}$ non può essere interleaving di $X_i$ e $Y_j$ e quindi:
+        $$s_{i,j} = False$$
+        \item Se $w_{i+j} = x_i \land w_{i+j} \neq y_j$ allora l'unico carattere valido per la posizione $i+j$ in $W$ è proprio $x_i$. Quindi $W_{i+j}$ è interleaving di $X_i$ e $Y_j$ solo se lo era anche $W_{i+j-1}$; in questo caso quindi:
+        $$s_{i,j} = s_{i-1,j}$$
+        \item Se $w_{i+j} \neq x_I \land w_{i+j} = y_j$ allora l'unico carattere valido per la posizione $i+j$ in $W$ è proprio $y_j$. Quindi $W_{i+j}$ è interleaving di $X_i$ e $Y_j$ solo se lo era anche $W_{i+j-1}$; in questo caso quindi:
+        $$s_{i,j} = s_{i, j-1}$$
+        \item Se $w_{i+j} = x_i \land w_{i+j} = y_j$, allora possiamo accodare sia $x_i$ che $y_j$ al simbolo in posizione $w_{i+j}$ in $W$. In questo caso quindi:
+        $$s_{i,j} = s_{i-1, j} \vee s_{i, j-1}$$
+    \end{itemize}
+    Possiamo quindi riassumere i casi precedenti nella seguente equazione:
+    \begin{equation*}
+        s_{i,j} = \begin{cases}
+            False & \textrm{Se } w_{i+j} \neq x_i \land w_{i+j} \neq y_j \\
+            s_{i-1, j} & \textrm{Se } w_{i+j} = x_i \land w_{i+j} \neq y_j \\
+            s_{i, j-1} & \textrm{Se } w_{i+j} \neq x_i \land w_{i+j} = y_j \\
+            s_{i-1, j} \vee s_{i, j-1} & \textrm{Se } w_{i+j} = x_i \land w_{i+j} = y_j
+        \end{cases}
+    \end{equation*}
+\end{itemize}
+Riassumendo il tuto abbiamo: \newline
+\textbf{\underline{CASO BASE}}:
+\begin{equation*}
+    s_{i,j} = \begin{cases}
+        True & \textrm{Se } i = 0 \land j = 0 \\
+        False & \textrm{Se } i = 0 \land j > 0  \land w_j \neq y_j\\
+        False & \textrm{Se } i > 0 \land j = 0 \land w_i \neq x_i \\
+        False & \textrm{Se } w_{i+j} \neq x_i \land w_{i+j} \neq y_j \\
+    \end{cases}
+\end{equation*}
+\textbf{\underline{PASSO RICORSIVO}}:
+\begin{equation*}
+    s_{i,j} = \begin{cases}
+        s_{i, j-1} & \textrm{Se } i = 0 \land j > 0 \land w_j = y_j \\
+        s_{i-1, j} & \textrm{Se } i > 0 \land j = 0 \land w_i = x_i \\
+        s_{i-1, j} & \textrm{Se } w_{i+j} = x_i \land w_{i+j} \neq y_j \\
+        s_{i, j-1} & \textrm{Se } w_{i+j} \neq x_i \land w_{i+j} = y_j \\
+        s_{i-1, j} \vee s_{i, j-1} & \textrm{Se } w_{i+j} = x_i \land w_{i+j} = y_j
+    \end{cases}
+\end{equation*}
+Una volta calcolati valori di tutte le variabili associate ai sottoproblemi, la \textbf{solzuione} al problema è $s_{m,n}$. \newline
+\begin{algorithm}[H]
+    \caption{Determina ricosrivamente se $W$ è interleaving di $X$ ed $Y$}
+    \DontPrintSemicolon
+    \SetKwFunction{FINTRic}{INTERLEAVING-RIC}
+    \Proc{\FINTRic{i,j}} {
+        \If{$i = 0 \land j = 0$} {
+            \Return $True$
+        }
+        \If{$w_{i+j} \neq x_i \land w_{i+j} \neq y_j$} {
+            \Return $False$
+        }
+        \If{$i = 0 \land j > 0$} {
+            \eIf{$w_j = y_j$} {
+                \Return INTERLEAVING-RIC$(i, j-1)$
+            } {
+                \Return $False$
+            }
+        }
+        \If{$i > 0 \land j = 0$} {
+            \eIf{$w_i = x_i$} {
+                \Return INTERLEAVING-RIC$(i-1, j)$
+            } {
+                \Return $False$
+            }
+        }
+        \If{$w_{i+j} = x_i \land w_{i+j} \neq y_j$} {
+            \Return INTERLEAVING-RIC$(i-1, j)$
+        }
+        \If{$w_{i+j} \neq x_i \land w_{i+j} = y_j$} {
+            \Return INTERLEAVING-RIC$(i, j-1)$
+        }
+        \If{$w_{i+j} = x_i \land w_{i+j} = y_j$} {
+            \Return INTERLEAVING-RIC$(i-1, j)$ $\vee$ INTERLEAVING-RIC$(i, j-1)$
+        }
+    }
+\end{algorithm} \noindent
+L'algoritmo sopra \textbf{calcola ricorsivamente} la soluzione al problema; tuttavia esso \textbf{ha complessità esponenziale}.
+Scriviamo quindi un algoritmo bottom-up che calcoli iterativamente la soluzione al problema. Questo algoritmo permetterà
+di risolvere il problema in tempo:
+$$T(n) = \mathcal{O}(m \cdot n)$$
+occupando uno spazio di $\Theta(m \cdot n)$ (ossia una matrice che contiene i vari $s_{i,j}$). \newline
+\begin{center}
+    \includegraphics[width = 0.40\linewidth]{Images/14.png}
+\end{center}
+\begin{algorithm}[H]
+    \caption{Determina iterativamente se $W$ è interleaving di $X$ e $Y$}
+    \DontPrintSemicolon
+    \SetKwFunction{FINTIt}{INTERLEAVING-IT}
+    \Proc{\FINTIt{X,Y,W}} {
+        $s[0,0] := True$ \;
+        \For{$i \gets 1$ to $m$} {
+            \eIf{$w_i = x_i$} {
+                $s[i, 0] := s[i-1, 0]$
+            } {
+                $s[i, 0] := False$
+            }
+        }
+        \For{$j \gets 1$ to $n$} {
+            \eIf{$w_j = y_j$} {
+                $s[0, j] := s[0, j-1]$
+            } {
+                $s[0, j] := False$
+            }
+        }
+        \For{$i \gets 1$ to $m$} {
+            \For{$j \gets 1 $ to $n$} {
+                \If{$w_{i+j} \neq x_i \land w_{i+j} \neq y_j$} {
+                    $s[i,j] := False$
+                }
+                \If{$w_{i+j} = x_i \land w_{i+j} \neq y_j$} {
+                    $s[i,j] := s[i-1,j]$
+                }
+                \If{$w_{i+j} \neq x_i \land w_{i+j} = y_j$} {
+                    $s[i,j] := s[i,j-1]$
+                }
+                \If{$w_{i+j} = x_i \land w_{i+j} = y_j$} {
+                    $s[i,j] := s[i-1,j] \vee s[i,j-1]$
+                }
+            }
+        }
+        \Return $s[m,n]$
+    }
+\end{algorithm}
+\subsection{Rendere palindroma una stringa}
+Il problema è definito come segue: \newline
+\textbf{\underline{PROBLEMA}}: Sia $S = <s_1, \dots, s_n>$ una stringa di lunghezza $n$ definita su un alfabeto $\Sigma$. Determinare il numero minimo di caratteri da aggiungere ad $S$ per renderla palindroma.
+Introduciamo la funzione $f: \Sigma^* \rightarrow \mathbb{N}$, così definita:
+$$\forall S \in \Sigma^*, f(S) = \textrm{numero minimo di caratteri da aggiungere ad S per renderla palindroma}$$
+Il problema può essere quindi definito in termini più formali come segue: \newline
+\textbf{\underline{PROBLEMA}}: Sia $S = <s_1, \dots, s_n>$ una stringa di lunghezza $n$ defiita su un alfabeto $\Sigma$. Determinare $f(S)$. \newline
+Prima di deifnire le variabili dei sottoproblemi, è necessario capire che casi si possono presentare in base alla struttura di $S$:
+\begin{itemize}
+    \item $S = \varepsilon$, allora $S$ è palindroma e quindi $f(S) = 0$
+    \item $S = a, \forall a \in \Sigma^*$, allora $S$ è palindroma e quindi $f(S) = 0$
+    \item $|S| \geq 2$ allora possiamo vedere $S$ come $a S' b$ con:
+    \begin{itemize}
+        \item $a$ il primo carattere di $S$
+        \item $b$ l'ultimo carattere di $S$
+        \item $S'$ la sottostringa di $S$ rimanente dopo aver tolto $a$ e $b$
+    \end{itemize}
+    Se siamo in quest'ultimo caso, per rendere $S$ palindroma dobbiamo distinguere:
+    \begin{itemize}
+        \item Se $a = b$ allora $S$ è palindroma se lo è anche $S'$, quindi $f(S) = f(S')$
+        \item Se $a \neq b$, allora per rendere $S$ palindroma abbiamo due possibilità
+        \begin{enumerate}
+            \item Aggiungere $a$ alla fine di $S$ e rendere palindroma $S'b$, quindi $f(S) = 1 + f(S'b)$
+            \item Aggiungere $b$ alla fine di $S$ e rendere palindroma $aS'$, quindi $f(S) = 1 + f(aS')$
+        \end{enumerate}
+    \end{itemize}
+    Di conseguenza, quando $a \neq b$ per scegliere tra i due casi, prenderemo quello di valore minimo. Ovvero:
+    $$f(S) = \min\{f(S'b), f(aS')\} + 1$$
+    Si noti che nelle situazioni illustrate in precedenza, per rendere palindroma una stringa $S = aS'b$ con $|S| \geq 2$ occorre rendere palindroma la stringa ottenuta da $S$ o togliendo sia il primo che l'ultimo simbolo (ossia rendere palindroma $S'$ se $a = b$) o togliendo solo il primo o solo l'ultimo simbolo.
+    In generale, qindi, il passaggio ad un sottoproblema richiede di ridurre una stringa potendo togliere il suo primo o ultimo simbolo (o entrambi). Pertanto, $\forall (i,j), 1 \leq i \leq j \leq n$, definiamo:
+    $$S_{i,j} = <s_i, \dots, s_j>$$
+    la sottostringa della stringa $S$ ottenuta da $S$ considerando tutti i simboli di $S$ dalla posizione $i$ alla posizione $j$. Si noti che $\forall (i,j), i > j$ si avrà che $S_{i,j} = \varepsilon$.
+\end{itemize}
+Il generico sottoproblema è quindi individuato da una coppia $(i,j)$ ed è definito come segue: \newline
+\textbf{\underline{SOTTOPROBLEMA GENERICO}}: Data una stringa $S$, definita su $\Sigma$ e di lunghezza $n$, determinare il numero di caratteri da aggiungere alla sottostringa $S_{i,j}$ per renderla palindroma. \newline
+Dato che $1 \leq i \leq n$ e $1 \leq j \leq n$ si ottengono $n^2$ sottoproblemi. Ad ogni sottoproblema è \textbf{associata una variabile} così definita:
+\begin{center}
+    $m_{i,j}=$ il minimo numero di caratteri da aggiungere alla sottostringa $S_{i,j}$ per renderla palindroma
+\end{center}
+Per determinare la soluzione di un qualsiasi sottoproblema di dimensione $(i,j)$, oltre all'input del problema, si utilizzeranno anche le soluzioni dei sottoproblemi di dimensione minore.
+Si noti che ognuna delle variabili associate ai sottoproblemi è una \textbf{black-box}: si può utilizzare, ma non ne si può conoscere il contenuto. Scriviamo le \textbf{equazioni di ricorrenza}: \newline
+\textbf{\underline{CASO BASE}}: $(i, j)$ con $i \geq j$ \newline
+In questo caso abbiamo da considerare due possibilità:
+\begin{itemize}
+    \item Se $i = j$ allora $S_{i,j}$ è composa da un solo carattere e quindi è palindroma, quindi $$m_{i,j} = 0$$
+    \item Se $i > j$, allora $S_{i,j}$ è vuota, quindi è palindroma, quindi $$m_{i,j} = 0$$
+\end{itemize}
+Di conseguenza, possiamo riassumere il caso base come:
+$$m_{i,j} = 0 \; \textrm{Se } i \geq j$$
+\textbf{\underline{PASSO RICORSIVO}}: $(i,j)$ con $i < j$ \newline
+Il passo ricorsivo si ha per un qualunque sottoproblema di dimensione $(i,j)$ con $i < j$, ossia quando la sottostringa $S_{i,j}$ è composta da almeno due caratteri. In questo caso, si devono considerare due possibilità:
+\begin{itemize}
+    \item Se $s_i = s_j$, allora $S_{i,j}$ è palindroma se lo è anche $S_{i+1, j-1}$, quindi:
+    $$m_{i,j} = m_{i+1, j-1}$$
+    \item Se $s_i \neq s_j$, allora $S_{i,j}$ è palindroma se lo è anche $S_{i+1, j}$ o  $S_{i, j-1}$, quindi:
+    $$m_{i,j} = \min\{m_{i+1, j}, m_{i, j-1}\} + 1$$
+\end{itemize}
+Di conseguenza, possiamo riassumere le equazioni di ricorrenza come segue:
+\begin{equation*}
+    m_{i,j} = \begin{cases}
+        0 & \textrm{Se } i \geq j \\
+        m_{i+1, j-1} & \textrm{Se } i < j \land s_i = s_j \\
+        1 + \min\{m_{i+1,j}, m_{i, j-1}\} & \textrm{Se } i < j \land s_i \neq s_j 
+    \end{cases}
+\end{equation*}
+Una volta calcolati i valori $m_{0,0}, m_{0,1}, \dots, m_{n,n}$ la soluzione del problema è in
+$$m_{1, n}$$
+infatti, sono interessato a trovare il numero minimo di caratteri da aggiungere per rendere l'intera $S$ palindroma.
+Utilizzando le equazioni di ricorrenza, potrei scrivere un algoritmo ricorsivo per determinare la soluzione del problema, tuttavia
+esso avrebbe \textbf{complessità esponenziale}. Quindi, scrivo un algoritmo iterativo bottom-up che calcola la soluzione al problema: \newline
+\begin{algorithm}[H]
+    \caption{Algoritmo iterativo che calcola il minimo numero di caratteri da aggiungere ad $S$ per renderla palindroma}
+    \DontPrintSemicolon
+    \SetKwFunction{FPALIt}{PAL-IT}
+    \Proc{\FPALIt{S}} {
+        $n := LENGTH(S)$ \;
+        \For{$j \gets 1$ to $n$} {
+            \For{$i \gets j$ to $n$} {
+                $m[i,j] := 0$
+            }
+        }
+        \For{$i \gets n-1$ down to $1$} {
+            \For{$i \gets i + 1$ to $n$} {
+                \eIf{$s_i = s_j$} {
+                    $m[i,j] := m[i+1, j-1]$
+                } {
+                    $m[i,j] := 1 + \min\{m[i+1, j], m[i, j-1]\}$
+                }
+            }
+        }
+        \Return $m[1,n]$
+    }
+\end{algorithm} \noindent
+L'algoritmo ha complessità
+$$T(n) = \mathcal{O}(n^2)$$
+e occupa uno spazio pari a $\Theta(n^2)$ (ossia una matrice per contenere i vari $m_{i,j}$).
+\begin{center}
+    \includegraphics[width = 0.40\linewidth]{Images/15.png}
+\end{center}
+\subsection{Knapsack}
+Sia $C > 0$ la capacità di uno zaino e sia $X = \{1, \dots, n\}$ un insieme di $n$ oggetti, con $n \in \mathbb{N}$.
+Ad ogni oggetto $i \in X$ sono associate le seguenti informazioni $(v_i, w_i)$ dove:
+\begin{itemize}
+    \item $v_i$ indica il \textbf{valore} dell'oggetto
+    \item $w_i$ indica il \textbf{peso} dell'oggetto
+\end{itemize}
+Introduciamo ora la funzione:
+$$V: \mathcal{P}(X) \rightarrow \mathbb{R}^+$$
+che associa ad ogni sottoinsieme di oggetti $A \subseteq X$ il suo valore complessivo. Formalmente, $\forall A \subseteq X$:
+\begin{equation*}
+    V(A) = \begin{cases}
+        \sum_{i \in A} v_i & \textrm{Se } A \neq \emptyset \\
+        0 & \textrm{Se } A = \emptyset
+    \end{cases}
+\end{equation*}
+Introduciamo inoltre la funzione
+$$W: \mathcal{P}(X) \rightarrow \mathbb{R}^+$$
+che associa ad ogni sottonsieme di oggetti $A \subseteq X$ il suo ingombro complessivo. Formalemente, $\forall A \subseteq X$:
+\begin{equation*}
+    W(A) = \begin{cases}
+        \sum_{i \in A} w_i & \textrm{Se } A \neq \emptyset \\
+        0 & \textrm{Se } A = \emptyset
+    \end{cases}
+\end{equation*}
+Il problema è quindi così definito: \newline
+\textbf{\underline{PROBLEMA}}: Dato un insieme $X = \{1,\dots, n\}$ di oggetti, trovare un sottoinsieme di ingombro complessivo $\leq C$ e di massimo valore complessivo. \newline
+Il problema può essere ridefinito come segue: \newline
+\textbf{\underline{ISTANZA}}: $X = \{1,\dots, n\}$ con $(v_i, w_i), \forall i \in X$ \newline
+\textbf{\underline{SOLUZIONE}}: $S \subseteq X$ tale che:
+$$W(S) \leq C \land V(S) = \max_{\substack{A \subseteq X \\ W(A) \leq C}} \{V(A)\}$$
+Come per il problema WIS, possiamo risolvere questo problema senza definire un problema ridotto.
 
 
 
