@@ -1698,7 +1698,65 @@ Presentiamo inoltre l'algoritmo di ricostruzione: \newline
             }
         }
     }
-\end{algorithm}
+\end{algorithm} \noindent
+\subsubsection{Stabilire se tutte le LCS di X e Y hanno almeno R simboli rossi}
+Siano $X$ e $Y$ due sequenze, rispettivamente di $m$ ed $n$ simboli, costruite sull'alfabeto $\Sigma$ e sia $col$ la funzione:
+$$col: \Sigma \rightarrow \{Red, Blue\}$$
+Il problema è quindi così definito: \newline
+\textbf{\underline{PROBLEMA}}: Stabilire se tutte le LCS di $X$ ed $Y$ hanno almeno $R$ simboli rossi \newline
+Ogni sottoproblema generico è individuato da una tripla $(i,j,r)$ con $r \in \{0,\dots, R\}$ ed è così definito \newline
+\textbf{\underline{SOTTOPROBLEMA GENERICO}}: Stabilire se tutte le LCS di $X_i$ e $Y_j$ hanno almeno $R$ simboli rossi. \newline
+Ad ogni sottoproblema è \textbf{associata una variabile} così definita:
+\begin{equation*}
+    e_{i,j,r} = \begin{cases}
+        True & \textrm{Se tutte le LCS di } X_i \; e \; Y_j \; \textrm{hanno almeno } R \; \textrm{simboli rossi} \\
+        False & \textrm{Altrimenti}
+    \end{cases}
+\end{equation*}
+Scriviamo \textbf{l'equazione di ricorrenza}: \newline
+\textbf{\underline{CASO BASE}}: $(i,j,r)$ con $(i = 0 \vee j = 0)$ e $\forall r \in \{0,\dots, R\}$ \newline
+In questo caso, abbiamo che:
+\begin{equation*}
+    e_{i,j,r} = \begin{cases}
+        True & \textrm{se } r = 0 \\
+        False & \textrm{se } r > 0
+    \end{cases}
+\end{equation*}
+\textbf{\underline{PASSO RICORSIVO}}: $(i,j,r)$ con $i > 0 \land j > 0$ e $\forall r \in \{0,\dots,R\}$ \newline
+Assumiamo di aver \textbf{già calcolato le lunghezze di tutte le LCS tra $X_i$ e $Y_j$} e di averle salvate nelle variabili $c_{i,j}$ (asintoticamente, questo non modifica i tempi dell'algoritmo).
+Dobbiamo in questo caso distinguere diversi casi:
+\begin{itemize}
+    \item Se $x_i \neq y_j$ allora:
+    \begin{center}
+        $e_{i,j,r} = \begin{cases}
+            e_{i-1, j, r} & \textrm{Se } c_{i-1, j} > c_{i, j-1} \\
+            e_{i, j-1, r} & \textrm{Se } c_{i, j-1} > c_{i-1, j} \\
+            e_{i-1,j,r} \land e_{i, j-1, r} & \textrm{Se } c_{i-1,j} = c_{i, j-1}
+        \end{cases}$
+    \end{center}
+    \item Se $x_i = y_j$ dobbiamo distinguere altri 3 sotto-casi:
+    \begin{itemize}
+        \item Se $col(x_i) \neq Red$ allora:
+        $$e_{i,j,r} = c_{i-1, j-1, r}$$
+        \item Se $col(x_i) = Red \land r > 0$ allora:
+        $$e_{i,j,r} = c_{i-1, j-1, r-1}$$
+        \item Se $col(x_i) = Red \land r = 0$ allora:
+        $$e_{i,j,r} = c_{i-1, j-1, 0} = True$$  
+    \end{itemize}
+\end{itemize}
+La \textbf{soluzione al problema} sarà in $e_{m,n,R}$.
+\subsubsection{Stabilire se tutte le LCS di X ed Y hanno numero pari di simboli rossi}
+Assumiamo di essere nella stessa situazione del paragrafo precedente per quanto riguarda $X$, $Y$ e $col$.
+Il problema è quindi così definito: \newline
+\textbf{\underline{PROBLEMA}}: Stabilire se tutte le LCS di $X$ e $Y$ hanno un numero pari di simboli rossi. \newline
+Ogni sottoproblema è individuato da una tripla $(i,j,p)$ con $p = 0$ che indica che il sottoproblema ha \textbf{un numero pari di simboli rossi}
+e $p = 1$ che indica l'opposto. Ad ogni sottoproblema è associata \textbf{una variabile} così definita:
+\begin{equation*}
+    e_{i,j,p} = \begin{cases}
+        True & \textrm{Se } p = 0 \\
+        False & \textrm{Se } p = 1
+    \end{cases}
+\end{equation*}
 
 
 
