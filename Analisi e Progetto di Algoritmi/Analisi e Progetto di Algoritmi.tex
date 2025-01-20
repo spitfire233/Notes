@@ -2111,6 +2111,384 @@ Il problema può essere ridefinito come segue: \newline
 \textbf{\underline{SOLUZIONE}}: $S \subseteq X$ tale che:
 $$W(S) \leq C \land V(S) = \max_{\substack{A \subseteq X \\ W(A) \leq C}} \{V(A)\}$$
 Come per il problema WIS, possiamo risolvere questo problema senza definire un problema ridotto.
+Il problema contiene diversi sottoproblemi, ognuno dei quali non ha come input l'insieme $\{1,\dots, n\}$ con $(v_i, w_i), \forall i \in \{1,\dots,n\}$ ma un suo sottoinsieme:
+\begin{enumerate}
+    \item Dato $X_n = \{1, \dots, n\}$, si vuole trovare $S_n \subseteq X_n$ tale che:
+    $$W(S_n) \leq C \land V(S_n) = \max_{\substack{A \subseteq X_n \\ W(A) \leq C}}\{V(A)\}$$
+    \item Dato $X_{n-1} = \{1, \dots, n-1\}$, si vuole trovare $S_{n-1} \subseteq X_{n-1}$ tale che:
+    $$W(S_{n-1}) \leq C \land V(S_{n-1}) = \max_{\substack{A \subseteq X_{n-1} \\ W(A) \leq C}}\{V(A)\}$$
+    \item $\dots$
+    \item Dato $X_i = \{1, \dots, i\}$, si vuole trovare $S_i \subseteq X_i$ tale che:
+    $$W(S_i) \leq C \land V(S_i) = \max_{\substack{A \subseteq X_i \\ W(A) \leq C}}\{V(A)\}$$
+    \item $\dots$
+    \item Dato $X_0 = \emptyset$, si vuole trovare $S_0 \subseteq X_0$ tale che:
+    $$W(S_0) \leq C \land V(S_0) = \max_{\substack{A \subseteq X_0 \\ W(A) \leq C}}\{V(A)\}$$
+\end{enumerate}
+Quindi il generico sottoproblema è identificato da una variabile $i$, ed è così definito: \newline
+\textbf{\underline{SOTTOPROBLEMA GENERICO}}: Dato un insieme $X_i = \{1, \dots, i\}$ di oggetti, trovare un suo sottoinsieme di ingombro complessivo $\leq C$ e di massimo valore complessivo. \newline
+Ossia: \newline
+\textbf{\underline{ISTANZA GEN. SOTTOPROB.}}: $X_i = \{1,\dots, i\}$ con $(v_j, w_j), \forall j \in X_i$ \newline
+\textbf{\underline{SOLUZIONE GEN. SOTTOPROB.}}: $S_i \subseteq X_i$ tale che:
+$$W(S_i) \leq C \land V(S_i) = \max_{\substack{A \subseteq X_i \\ W(A) \leq C}} \{V(A)\}$$
+Dato che $0 \leq i \leq n$ si ottengono $(n+1)$ sottoproblemi, ad ognuno dei quali è associata una \textbf{coppia di variabili} $(OPT_i, S_i)$ così definita:
+\begin{center}
+    $OPT_i = V(S_i)$, ossia il valore di un sottoninseme di $X_i$ di ingombro complessivo $\leq C$ e di massimo valore complessivo \\
+    $S_i =$ un sottoinsieme di $X_i$ di ingombro complessivo $\leq C$ e di massivo valore complessivo, pari a $OPT_i$
+\end{center}
+Per determinare la soluzione di un qualsiasi sottoproblema di dimensione $i$, oltre all'input del problema, si utilizzeranno le soluzioni dei sottoproblemi di dimensione minore.
+Si noti che ognuna delle variabili associate ad un sottoproblema è da considerarsi come una \textbf{black-box}: si può utilizzare ma non è possibile conoscerne il contenuto. \newline
+Purtroppo, però, il problema così definito \textbf{non è risolvibile}: i sottoproblemi così definiti non ci permettono di risolvere il problema. Date solamente le variabili $\{(OPT_0, S_0), \dots, (OPT_{i-1}, S_{i-1})\}$ e il sottoinsieme $X_i$, non c'è alcun modo
+per \textbf{poter comprendere se l'elemento $i$ possa essere aggiunto a qualche sottoinsieme di oggetti relativo ai sottoproblemi di dimensione minore a $i$}, poiché non sappiamo l'ingombro complessivo di questi sottoinsiemi e quindi non possiamo sapere se, aggiungendo l'oggetti $i$, si superi la capacità dello $C$ dello zaino.
+Risulta pertanto necessario \textbf{ridefinire i sottoproblemi}: è necessario suddividere il problema in $(n+1) \cdot (C+1)$ sottoproblemi. Il sottoproblema generico sarà quindi individuato da una coppia di valori $(i,c)$ con $0 \leq i \leq n$ e $0 \leq c \leq C$ e sarà definito come segue \newline
+\textbf{\underline{GEN. SOTTOPROB. RIDEFINITO}}: Dato un insieme $X_i$ di oggetti, trovare un suo sottoinsieme di ingombro complessivo $\leq c$ e di massimo valore complessivo. \newline
+Ovvero: \newline
+\textbf{\underline{ISTANZA GEN. SOTTOPROB. RID.}}: $X_i = \{1,\dots, i\}$ con $(v_j, w_j), \forall j \in X_i$ e $c \in \{0, \dots, C\}$ \newline
+\textbf{\underline{SOLUZIONE GEN. SOTTOPROB. RID.}}: $S_i \subseteq X_i$ tale che:
+$$W(S_{i,c}) \leq c \land V(S_{i,c}) = \max_{\substack{A \subseteq X_i \\ W(A) \leq c}} \{V(A)\}$$
+Ad ogni sottoproblema di dimensione $(i,c)$ è associata \textbf{una coppia di variabili} così definita:
+\begin{center}
+    $OPT_{i,c} = V(S_{i,c})$, ossia il valore di un sottoninseme di $X_i$ di ingombro complessivo $\leq c$ e di massimo valore complessivo \\
+    $S_{i,c} =$ un sottoinsieme di $X_i$ di ingombro complessivo $\leq c$ e di massivo valore complessivo, pari a $OPT_{i,c}$
+\end{center}
+Avendo ridefinito il problema, possiamo andare a scrivere le \textbf{equazioni di ricorrenza}: \newline
+\textbf{\underline{CASO BASE}}: $(i,c)$ con $i = 0 \vee c = 0$ \newline
+Il caso base si ha per un qualunque sottoproblema di dimensione $(i,c)$ con $i = 0 \vee c = 0$. In questo caso, è facile ottenere la soluzione del sottoproblema.
+Infatti, se $i = 0$, non abbiamo oggetti mentre se $c = 0$ si richiede che l'insieme di oggetti abbia ingombro complessivo pari a $0$. In entrambi questi casi, si ha che:
+$$OPT_{i,c} = 0 \; e \; S_{i,c} = 0 \; \textrm{Se } i = 0 \vee c = 0$$
+\textbf{\underline{PASSO RICORSIVO}}: $(i,c)$ con $i > 0 \land c > 0$ \newline
+Il passo ricorsivo si ha per un qualunque sottoproblema di dimensione $(i,c)$ con $i > 0 \land c > 0$, ossia quando si va a considerare un insieme che contiene almeno un ogetto e si richiede un ingombro complessivo minore di un certo valore diverso da $0$.
+I dati disponibili per calcolare la soluzione di un sottoproblema sono: l'input $X_i$ (in particolare l'oggetto $i$) e tutte le soluzioni ai problemi di dimensione minore. È necessario considerare \textbf{due casi}:
+\begin{itemize}
+    \item Se $w_i > c$, cioè se l'oggetto $i$ ha peso maggiore della capacità $c$, allora l'oggetto \textbf{non può appartenere alla soluzione} e quindi si va a considerare la soluzione del sottoproblema di dimensione minore; cioè:
+    $$OPT_{i,c} = OPT_{i-1, c} \; e \; S_{i,c} = S_{i-1, c} \; \textrm{Se } w_i > c$$
+    \item Se $w_i \leq c$, cioè se l'oggetto $i$ ha peso minore delal capacità $c$, allora l'oggetto potrebbe appartenere alla soluzione. Ci si può quindi trovare in due sottocasi:
+    \begin{itemize}
+        \item Se $i \notin S_i$, allora è sufficiente considerare l'insieme di oggetti $X_{i-1}$ e si può dunque considerare la soluzione del sottoproblema di dimensione $(i-1, c)$, ossia:
+        $$OPT_{i,c} = OPT_{i-1, c} \; e \; S_{i,c} = S_{i-1, c}$$
+        \item Se $i \in S_i$ allora è necessario determinare la soluzione del sottoproblema di dimensione $(i-1, c- w_i)$ e aggiungere a questo l'oggetto $i$. Quindi:
+        $$OPT_{i,c} = OPT_{i-1, c-w_i} + v_i \; e \; S_{i,c} = S_{i-1, c-w_i} \cup \{i\}$$
+    \end{itemize}
+    Siccome non possiamo sapere a priori se $i \in S_i$, allora scegliamo l'opzione che ci restituisce il valore massimo. Dunque:
+    $$OPT_{i,c} = \max\{OPT_{i-1, c}, OPT_{i-1, c-w_i} + v_i\}$$
+    e
+    \begin{equation*}
+        S_{i,c} = \begin{cases}
+            S_{i-1,c} & \textrm{Se } OPT_{i-1, c} \geq OPT_{i-1, c-w_i} + v_i \\
+            S_{i-1, c-w_i} \cup \{i\} & \textrm{Altrimenti}
+        \end{cases}
+    \end{equation*}
+\end{itemize}
+Dunque, il passo ricorsivo può essere riscritto come:
+\begin{equation*}
+    OPT_{i,c} = \begin{cases}
+        OPT_{i-1, c} & \textrm{Se } w_i > c \\
+        \max\{OPT_{i-1, c}, OPT_{i-1, c-w_i} + v_i\} & \textrm{Altrimenti}
+    \end{cases}
+\end{equation*}
+\begin{equation*}
+    S_{i,c} = \begin{cases}
+        S_{i-1, c} & \textrm{Se } w_i > c \\
+        \begin{cases}
+            S_{i-1, c} & \textrm{Se } OPT_{i-1, c} \geq OPT_{i-1, c-w_i} + v_i \\
+            S_{i-1, c-w_i} \cup \{i\} & \textrm{Altrimenti}
+        \end{cases} & \textrm{Altrimenti}
+    \end{cases}
+\end{equation*}
+Enunciamo quindi la \textbf{proprietà della sottostruttura ottima}:
+\begin{Teorema}[PSO Knapsack]
+    Sia $i > 0$ e $c > 0$. Siano $S_{0, 0}, \dots, S_{i-1, c-1}$ le soluzione dei sottoproblemi di dimensione
+    $(0, 0), \dots, (i-1, c-1)$.di Knapsack. Allora vale che:
+    \begin{equation*}
+        S_{i,c} = \begin{cases}
+            S_{i-1,c} & \textrm{Se } i \notin S_{i,c} \\
+            S_{i-1, c-w_i} \cup \{i\} & \textrm{Se } i \in S_i
+        \end{cases}
+    \end{equation*}
+\end{Teorema}
+\begin{Dimostrazione}
+    Distinguiamo i due casi:
+    \begin{itemize}
+        \item Se $i \notin S_i$ allora devo dimostrare che $S_{i,c} = S_{i-1,c}$.
+        Per assurdo, assumiamo che $S_{i-1,c}$ non sia soluzione del problema di dimensione $(i, c)$, allora $S_{i-1,c} \neq S_{i,c}$.
+        Deve allora esistere $S'_{i-1, c} \neq S_{i-1, c}$ che è soluzione del problema $(i,c)$.
+        Quindi $$V(S'_{i-1,c}) = \max_{\substack{A \subseteq X_i \\ W(A) \leq c}}\{V(A)\}$$
+        Quindi $V(S'_{i-1,c}) > V(S_{i-1, c})$ e $W(S'_{i-1,c}) < c$.
+        Poiché $i \notin S_{i,c}$, allora $i \notin S'_{i-1, c}$, quindi $S'_{i-1, c} \subseteq X_{i-1}$, ma ciò non è possibile, poiché allora $S_{i-1, c}$ non sarebbe
+        più la soluzione del sottoproblema di dimensione $(i-1, c)$; quindi \textbf{assurdo}.
+        \item Se $i \in S_{i,c}$, allora devo dimostrare che $S_{i,c} = S_{i-1, c-w_i} \cup \{i\}$. Per assurdo, supponiamo che $S_{i-1, c-w_i} \cup \{i\}$
+        non è soluzione del problema di dimensioni $(i,c)$. Allora deve esistere $S'_{i-1, c - w_{i}} \neq S_{i-1, c-w_i} \cup \{i\}$ tale che $S'_{i-1, c -w_i}$ è soluzione del sottoproblema $(i,c)$.
+        Allora $V(S'_{i-1, c-w_{i}}) > V(S_{i-1, c-w_i} \cup \{i\})$. \newline
+        Siccome $i \in S_{i,c}$ allora $i \in S'_{i-1, c-w_{i}}$, quindi $S'_{i-1, c-w_i} = S''_{i-1, c-w_i} \cup \{i\}$. Allora:
+        $$V(S'_{i-1, c-w_{i}}) > V(S_{i-1, c-w_i} \cup \{i\})$$
+        $$V(S''_{i-1, c-w_{i}} \cup \{i\}) > V(S_{i-1, c-w_i} \cup \{i\})$$
+        $$V(S''_{i-1, c-w_{i}}) + v_i > V(S_{i-1, c-w_i}) + v_i$$
+        $$V(S''_{i-1, c-w_{i}}) > V(S_{i-1, c-w_i})$$
+        Tuttavia ciò non può essere, poiché allora $S_{i-1, c-w_i}$ non sarebbe più la soluzione del sottoproblema $i(i-1, c-w_i)$, quindi \textbf{assurdo}.
+
+    \end{itemize}
+\end{Dimostrazione}
+Una volta calcolati i valori $OPT_{0,0}, \dots, OPT_{n, C}$, è possibile determinare \textbf{la soluzione} al problema andando a considerare:
+$$(OPT_{n, C}, S_{n, C})$$
+Seguendo le equazioni di ricorrenza, potremmo scrivere un algoritmo ricorsivo che calcola la soluzione al problema. Tuttavia, esso avrebbe costo computazionale \textbf{esponenziale}.
+Quindi, scriviamo un algoritmo iterativo bottom-up che calcola la soluzione del problema: \newline
+\begin{algorithm}[H]
+    \caption{Algoritmo iterativo che calcola la soluzione a Knapsack}
+    \DontPrintSemicolon
+    \SetKwFunction{FKNAPSACKIt}{KNAPSACK-IT}
+    \Proc{\FKNAPSACKIt{n, C}} {
+        \For{$i \gets 0$ to $n$} {
+            $OPT[i, 0] := 0$ \;
+            $S[i, 0] := \emptyset$
+        }
+        \For{$c \gets 0$ to $C$} {
+            $OPT[0, c] := 0$ \;
+            $S[0, c] := \emptyset$
+        }
+        \For{$i \gets 1$ to $n$} {
+            \For{$c \gets 1$ to $C$} {
+                \eIf{$w_i > c_i$} {
+                    $OPT[i,c] := OPT[i-1,c]$ \;
+                    $S[i,c] := S[i-1,c]$
+                } {
+                    $V_1 := OPT[i-1, c]$ \;
+                    $V_2 := OPT[i-1, c-w_i] + v_i$ \;
+                    $OPT[i,c] := MAX(V_1, V_2)$
+                    \eIf{$V_1 > V_2$} {
+                        $S[i,c] := S[i-1,c]$
+                    } {
+                        $S[i,c] := S[i-1, c-w_i] \cup \{i\}$
+                    }
+                }
+            }
+        }
+        \Return $(OPT[n,C], S[n,C])$
+    }
+\end{algorithm} \noindent
+L'algoritmo ha complessità computazionale pari a:
+$$T(n) = \mathcal{O}(n \cdot C)$$
+occupando però $\Theta(n \cdot C + n^2 \cdot C)$ spazio in memoria (ossia una matrice che contiene i vari $OPT_{i,c}$ e una matrice che contiene i vari $S_{i,c}$, ognuno dei quali può contenere sino a $n$ elementi).
+\begin{Osservazione}
+    Questo algoritmo \textbf{non è polinomiale} nell'input ma \textbf{pseudopolinomiale}
+\end{Osservazione}
+Presentiamo l'algoritmo di ricostruzione: \newline
+\begin{algorithm}[H]
+    \caption{Algoritmo di ricostruzione della soluzione di Knapsack}
+    \DontPrintSemicolon
+    \SetKwFunction{FPRINTKNAPSACK}{PRINT-KNAPSACK}
+    \Proc{\FPRINTKNAPSACK{i, c}} {
+        \If{$i > 0 \land c > 0$} {
+            \eIf{$w_i > c$} {
+                PRINT-KNAPSACK$(i-1, c)$
+            } {
+                \eIf{$OPT[i-1, c-w_i] + v_i \geq OPT[i-1, c]$} {
+                    PRINT-KNAPSACK$(i-1, c-w_i)$ \;
+                    print$(i)$
+                } {
+                    PRINT-KNAPSACK$(i-1, c)$
+                }
+            }
+        }
+    }
+\end{algorithm} \noindent
+\begin{center}
+    \includegraphics[width = 0.80\linewidth]{Images/16.png}
+\end{center}
+\subsubsection{Knapsack con oggetti colorati}
+Presentiamo, in maniera meno formale, una variante del problema Knapsack. \newline
+\textbf{\underline{PROBLEMA}}: Dato un insieme $X = \{1,\dots, n\}$ di oggetti, trovare un sottoinsieme di ingombro complessivo $\leq C$ e di massimo valore complessivo e che contiene al massimo $R$ oggetti di colore rosso. \newline
+\textbf{\underline{ISTANZA}}: Si ha che:
+\begin{itemize}
+    \item $X_n = \{1, \dots, n\}$ con $n \in \mathbb{N}$
+    \item $\forall i \in X_n$ si ha la seguente tripla di valori:
+    \begin{itemize}
+        \item $v_i \in \mathbb{N}$, valore di $i$
+        \item $w_i \in \mathbb{N}$, peso di $i$
+        \item $col(i) \in \{Red, Blue\}$, colore di $i$
+    \end{itemize}
+    \item $C \in \mathbb{N}$, capacità dello zaiono
+    \item $R \in \mathbb{R}$, numero massimo di oggetti rossi concessi
+\end{itemize}
+\textbf{\underline{SOLUZIONE}}: $S \subseteq X_n$ tale che:
+$$W(S) \leq C \land V(S) = \max_{\substack{A \subseteq X_n \\ W(A) \leq C \\ |\{j \in A| col(i) = Red\}| \leq R}}\{V(A)\}$$
+Il generico sottoproblema è quindi definito dalla tripla $(i, c, r)$ ed è così definito: \newline
+\textbf{\underline{SOTTOPROBLEMA GENERICO}}: Dato un insieme $X_i = \{1,\dots, i\}$ di oggetti, trovare un sottoinsieme di ingombro complessivo $\leq c$ e di massimo valore complessivo e che contiene al massimo $r$ oggetti di colore rosso. \newline
+Ad ogni sottoproblema è associata una \textbf{coppia di variabili} $(OPT_{i,c,r}, S_{i,c,r})$ così definite:
+\begin{center}
+    $OPT_{i,c, r} = V(S_{i,c, r})$, ossia il valore di un sottoninseme di $X_i$ di ingombro complessivo $\leq c$ di massimo valore complessivo e con al massimo $r$ simboli rossi \\
+    $S_{i,c, r} =$ un sottoinsieme di $X_i$ di ingombro complessivo $\leq c$ di massivo valore complessivo, pari a $OPT_{i,c}$, e con al massimo $r$ simboli rossi
+\end{center}
+Si hanno quindi $(n+1) \cdot (C+1) \cdot (R+1)$ sottoproblemi diversi.
+Scriviamo le \textbf{equazioni di ricorrenza}: \newline
+\textbf{\underline{CASO BASE}}: $(i,c,r)$ con $i = 0 \vee c = 0$ e $r \in \{0,\dots, R\}$ \newline
+Si hanno i seguenti casi:
+\begin{itemize}
+    \item Se $i = 0$ allora $\forall c \in \{0, \dots, C\}$ e $\forall r \in \{0, \dots, R\}$ si ha che:
+    $$OPT_{i,c,r} = 0 \; e \; S_{i,c,r} = \emptyset$$
+    \item Se $c = 0$ allora $\forall i \in \{0, \dots, i\}$ e $\forall r \in \{0, \dots, R\}$ si ha che:
+    $$OPT_{i,c,r} = 0 \; e \; S_{i,c,r} = \emptyset$$
+\end{itemize}
+\textbf{\underline{PASSO RICORSIVO}}: $(i,c,r)$ con $i > 0 \land c > 0$ e $r \in \{0, \dots, R\}$ \newline
+Dobbiamo distinguere i seguenti casi:
+\begin{enumerate}
+    \item Se $w_i > c$ allora certamente $i \notin S_{i,c,r}$, allora:
+    $$S_{i,c,r} = S_{i-1, c, r}$$
+    e 
+    $$OPT_{i,c,r} = OPT_{i-1, c, r}$$
+    \item Se $w_i \leq c$ allora dobbiamo distinguere altri tre sottocasi:
+    \begin{enumerate}
+        \item Se $col(i) = Red \land r > 0$ allora:
+        \begin{equation*}
+            S_{i,c,r} = \begin{cases}
+                S_{i-1, c-w_i, r-1} \cup \{i\} & \textrm{Se } OPT_{i-1, c-w_i, r-1} + v_i \geq OPT_{i-1, c, r} \\
+                S_{i-1, c, r} & \textrm{Altrimenti}
+            \end{cases}
+        \end{equation*}
+        e:
+        $$OPT_{i,c,r} = \max\{OPT_{i-1, c-w_i, r-1} + v_i, OPT_{i-1, c, r}\}$$
+        \item Se $col(i) = Red \land r = 0$ allora certamente $i \notin S_{i,c,r}$, quindi
+        $$S_{i,c,r} = S_{i-1, c, r}$$
+        e
+        $$OPT_{i,c,r} = OPT_{i-1, c, r}$$
+        \item Se $col(i) \neq Red$, allora $\forall r \in \{0, \dots, R\}$ si ha che:
+        \begin{equation*}
+            S_{i,c,r} = \begin{cases}
+                S_{i-1, c-w_i, r} \cup \{i\} & \textrm{Se } OPT_{i-1, c-w_i, r} + v_i \geq OPT_{i-1, c, r} \\
+                S_{i-1, c, r} & \textrm{Altrimenti}
+            \end{cases}
+        \end{equation*} 
+        e
+        $$OPT_{i,c,r} = \max\{OPT_{i-1, c-w_i, r} + v_i, OPT_{i-1, c, r}\}$$
+    \end{enumerate}
+\end{enumerate}
+\begin{algorithm}[H]
+    \caption{Algoritmo di ricostruzione della soluzione di Knapsack con R simboli rossi}
+    \DontPrintSemicolon
+    \SetKwFunction{FPRINTKNAPSACK}{PRINT-KNAPSACK-RED}
+    \Proc{\FPRINTKNAPSACK{i, c, r}} {
+        \If{$i > 0 \land c > 0$} {
+            \eIf{$w_i > c$} {
+                PRINT-KNAPSACK$(i-1, c, r)$
+            } {
+                \eIf{$col(x_i) \neq Red$} {
+                        \eIf{$OPT[i-1, c-w_i, r] + v_i \geq OPT[i-1, c, r]$} {
+                        PRINT-KNAPSACK$(i-1, c-w_i, r)$ \;
+                        print$(i)$
+                        } {
+                        PRINT-KNAPSACK$(i-1, c, r)$
+                        }
+                } {
+                    \eIf{$r > 0$} {
+                        \eIf{$OPT[i-1, c-w_i, r-1] + v_i \geq OPT[i-1, c, r]$} {
+                        PRINT-KNAPSACK$(i-1, c-w_i, r-1)$ \;
+                        print$(i)$
+                        } {
+                        PRINT-KNAPSACK$(i-1, c, r)$
+                        }
+                    } {
+                        PRINT-KNAPSACK$(i-1, c, r)$
+                    }
+                }   
+            }
+        }
+    }
+\end{algorithm} \noindent
+Una volta calcoalte tutte le variabili associate ai sottoproblemi, è possibile trovare \textbf{la soluzione} considerando:
+$$(OPT_{n, C, R}, S_{n, C, R})$$
+\subsubsection{Subset-Sum}
+Presentiamo in maneira informale il seguente problema: \newline
+\textbf{\underline{ISTANZA}}: $X = \{x_1, \dots, x_n\}$ con $x_i \in \mathbb{N}^+$ e $K \in \mathbb{N}^+$ \newline
+\textbf{\underline{PROBLEMA}}: Stabilire se esiste un sottoinsieme $Y \subseteq X$ i cui elementi danno somma $K$, ossia:
+$$\sum_{y \in Y} y = K$$
+\textbf{\underline{SOLUZIONE}}: $True \Leftrightarrow \exists Y \subseteq X \; t.c. \; \sum_{y \in Y} y = K$ \newline
+Il generico sottoproblema è individuato da una \textbf{coppia} $(i,k)$ con $0 \leq i \leq n$ e $0 \leq k \leq K$ ed è così definito: \newline
+\textbf{\underline{SOTTOPROBLEMA GENERICO}}:Stabilire se esiste un sottoinsieme $Y_{i,k} \subseteq X_i = \{x_1, \dots, x_i\}$ i cui elementi danno somma $k$, ossia:
+$$\sum_{y \in Y_{i,k}} y = k$$
+Ad ogni sottoproblema di dimensioni $(i,k)$ è assocaita \textbf{una variabile} così definita:
+\begin{center}
+    $e_{i,k} = True \Leftrightarrow \exists Y_{i,k} \subseteq X_i \; t.c. \; \sum_{y \in Y_{i,k}} y = k$
+\end{center} 
+Scriviamo le \textbf{equazioni di ricorrenza}: \newline
+\textbf{\underline{CASO BASE}}: $(i, k)$ con $i = 0 \vee k = 0$ \newline
+Dobbiamo distinguere 3 casi:
+\begin{itemize}
+    \item Se $i = 0 \land k = 0$ allora $e_{i,k} = True$ poiché $Y_{i,k} = \emptyset$
+    \item Se $i = 0 \land k > 0$ allora $e_{i,k} = False$ poiché $\not\exists Y_{i,k}$
+    \item Se $i > 0 \land k = 0$ allora $e_{i,k} = True$ poiché $Y_{i,k} = \emptyset$
+\end{itemize}
+\textbf{\underline{PASSO RICORSIVO}}: $(i,k)$ con $i > 0 \land k > 0$ \newline
+Dobbiamo distinguere due casi:
+\begin{enumerate}
+    \item Se $x_i > k$, allora certamente $Y_{i,k}$ non contiene $x_i$, quindi $e_{i,k} = e_{i-1, k}$ e $Y_{i,k} = Y_{i-1,k}$
+    \item Se $x_i \leq k$, potrebbe verificarsi uno dei seguente sottocasi:
+    \begin{itemize}
+        \item Se $x_i \in Y_{i,k}$ allora $e_{i,k} = e_{i-1, k - x_i}$ (se $Y_{i,k}$ esiste, allora $Y_{i,k} = Y_{i-1, k-x_i} \cup \{x_i\}$)
+        \item Se $x_i \notin Y_{i,k}$ allora $e_{i,k} = e_{i-1, k}$ (Se $Y_{i,k}$ esiste allora $Y_{i,k} = Y_{i-1, k}$)
+    \end{itemize}
+    Non sapendo a priori quale tra i due casi si verifica, avremo che:
+    $$e_{i,k} = e_{i-1, k-x_i} \vee e_{i-1, k}$$
+\end{enumerate}
+La \textbf{soluzione al problema} può essere trovata considerando $e_{n,K}$. Scriviamo l'algoritmo bottom-up: \newline
+\begin{algorithm}[H]
+    \caption{Algoritmo iterativo che trova la soluzione al problema Subset-Sum}
+    \DontPrintSemicolon
+    \SetKwFunction{FSUBSETSUMIt}{SUBSETSUM-IT}
+    \Proc{\FSUBSETSUMIt{X, K}} {
+        $n := LENGTH(X)$ \;
+        \For{$k \gets 0$ to $K$} {
+            \If{$k = 0$} {
+                $e[0,k] := True$
+            } {
+                $e[0,k] := False$
+            }
+        }
+        \For{$i \gets 1$ to $n$} {
+            $e[i, 0] := True$
+        }
+        \For{$i \gets 1$ to $n$} {
+            \For{$k \gets 1$ to $K$} {
+                \eIf{$x_i > k$} {
+                    $e[i,k] := e[i-1, k]$
+                } {
+                    $e[i,k] := e[i-1, k-x_i] \vee e[i-1,k]$
+                }
+            }
+        }
+        \Return $e[n, K]$
+    }
+\end{algorithm}
+\begin{algorithm}[H]
+    \caption{Algoritmo di ricostruzione della soluzione di Subset-Sum}
+    \DontPrintSemicolon
+    \SetKwFunction{FPRINTSUBSETSUM}{PRINT-SUBSETSUM}
+    \Proc{\FPRINTSUBSETSUM{i, k}} {
+        \eIf{$e[i,k] = False$} {
+            print("non esiste alcun sottoinsieme $Y_{i,k}$")
+        } {
+            \If{$ i > 0 \land k > 0$} {
+                \eIf{$x_i > k$} {
+                    PRINT-SUBSETSUM$(i-1, k)$
+                } {
+                    \eIf{$e[i-1, k-x_i] = True$} {
+                        PRINT-SUBSETSUM$(i-1, k-x_i)$ \;
+                        print($x_i$)
+                    } {
+                        PRINT-SUBSETSUM$(i-1, k)$
+                    }
+                }
+            }
+        }
+    }
+\end{algorithm}
+\subsubsection{LCS con ingombri}
+Presentiamo, in maniera informale, il seguente problema: sia $w: \Sigma \rightarrow \mathbb{N}^+$ una funzione che da un peso 
+ad ogni simbolo dell'alfabeto $\Sigma$ e siano $X$ e $Y$ due sequenze, di lunghezza rispettivamente $m$ ed $n$, costruire su tale alfabeto. 
+Sia infine $C$ l'ingombro complessivo permesso. 
+Il problema è quindi così definito: \newline
+\textbf{\underline{PROBLEMA}}: Calcolare la lunghezza di una più lunga sottosequenza comune di $X$ e $Y$ la quale ha ingombro complessivo $\leq C$. \newline
+Ogni sottoproblema è identificato da una \textbf{tripla} $(i, j, c)$ ed è così definito: \newline
+\textbf{\underline{SOTTOPROBLEMA GENERICO}}: Calcolare la lunghezza di una più lunga sottosequenza comune di $X$ e $Y$ la quale ha ingombro complessivo $\leq C$. \newline
+
+
 
 
 
