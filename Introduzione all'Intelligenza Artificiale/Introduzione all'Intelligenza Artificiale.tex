@@ -880,12 +880,231 @@ Tuttavia, dobbiamo tenere in considerazione che:
     \end{itemize}
 \end{itemize}
 \subsection{Classical Planning}
+Fino ad adesso, non abbiamo utilizzato tutte le caratteristiche degli stati. Infatti, abbiamo trattato
+gli stati come se fossero delle "etichette" per capire se un certo stato fosse già stato esplorato o meno.
+I problemi di \textbf{planning} sono simili ai problemi di ricerca nella misura che, per entrambi, \textbf{una soluzione è un insieme di passi sequenziali che permetta di raggiungere uno stato desiderato}.
+Un \textbf{planner} accetta un problema e automaticamente computa una sua soluzione. Per farlo, i problemi devono essere codificati in un \textbf{linguaggio indipendente dal dominio} (domain-independent language):
+\begin{itemize}
+    \item Quali \textbf{azioni} e \textbf{sensori} sono disponibili e come funzionano
+    \item Qual'è \textbf{l'obbiettivo} e qual'è \textbf{la situazione iniziale}
+\end{itemize}
+Nel caso più semplice, abbiamo:
+\begin{enumerate}
+    \item Una situazione iniziale \textbf{completamene nota}
+    \item Gli effetti delle azioni sono \textbf{deterministici}
+    \item Non c'è bisogno di \textbf{alcuna percezione}
+\end{enumerate}
+Questa forma di planning è detta, nel campo dell'IA, \textbf{classical planning}.
+Nel caso più generale, le assunzioni sopra vengono \textbf{rilassate}.
+In un problema di classical planning, abbiamo:
+\begin{itemize}
+    \item Uno \textbf{spazio degli stati} discreto e finito $S$
+    \item Uno \textbf{stato iniziale noto} $s_0 \in S$
+    \item Un insieme $S_G \subseteq S$ di \textbf{stati obbiettivo}
+    \item Delle azioni $\mathcal{A}(s) \subseteq A$ applicabili ad ogni $s \in S$
+    \item Una \textbf{funzione di transizione degli stati deterministica} $s^j = f(a,s) \; per \; a \in \mathcal{A}(s)$
+    \item Un \textbf{costo positivo} per le azioni $c(a, s)$
+\end{itemize}
+Una \textbf{soluzione} (o \textbf{piano}) è una sequenza di azioni applicabili $a_0, \dots, a_n$ che mappa $s_0$ all'interno di $S_G$, cioè
+esiste una sequenza di stati $s_0, \dots, s_{n+1}$ tale che $a_i \in \mathcal{A}(s_i),$ \newline  $s_{i+1} = f(a_i, s_i)$, e $s_{n+1} \in S_G, i = 0,\dots,n$.
+Un piano è \textbf{ottimale} se minimizza la \textbf{somma dei costi delle azioni}, cioè
+$$\sum_{i=0}^n c(a_i, s_i)$$
+Tuttavia, modellare un problema secondo un modello a stati e risolverlo come un problema di ricerca è \textbf{differente} rispetto a modellare il problema come un problema di classical planning.
+La differenza viene dall'uso dei \textbf{linguaggi di planning} (STRIPS, PDDL, ecc...) e da una \textbf{rappresentazione più ricca degli stati} (data proprio da questi linguaggi), i quali, in un problema di classical planning, non sono solo
+delle label. Si passa inoltre da agenti che hanno una conoscenza basilare dell'ambiente ad \textbf{agenti con una conoscenza dell'ambiente più strutturata}:
+\begin{itemize}
+    \item Gli agenti \textbf{acquisiscono conoscenza attraverso la percezione, \newline l'apprendimento  e il linguaggio}
+    \begin{itemize}
+        \item Gli agenti possono rappresentare \textbf{conoscenza sulle conseguenze delle proprie azioni}, quindi si possono utilizzare svariati linguaggi (LISP, Prolog, Logiche di vario tipo, ...) per rappresentare la funzione di transizione ("transition model")
+        \item Gli agenti sanno come i loro sensori \textbf{corrispondo allo stato del mondo} ("sensor model"), cioè hanno conoscenza sul come interpretare le percezioni dei propri sensori
+        \item Gli agenti conoscono lo \textbf{stato attuale dell'ambiente}
+    \end{itemize}
+    \item Gli agenti \textbf{possono anche tener traccia delle parti dell'ambiente che attualmente non sta osservando}, quindi possono tener traccia di \textbf{un ambiente parzialmente osservabile}. I linguaggi di planning quindi possono esprimere condizioni più complesse, dove vi è una distinzione fra quello che l'agente osserva in un'istante  e quello che è effettivamente lo stato del mondo.
+    \item Gli agenti \textbf{possono formulare piani per raggiungere l'obbiettivo}
+\end{itemize}
+Gli agenti quindi si avvalgono di una \textbf{base di conoscenza}, cioè di un'\textbf{insieme di frasi scritte in un linguaggio formale}.
+La costruzione di un'agente avviene quindi in \textbf{maniera dichiarativa}:
+\begin{itemize}
+    \item Bisogna \textbf{dirgli oppure fargli apprendere} ciò che ha bisogno di conoscere
+    \item Dopodiché, esso può \textbf{chiedersi} cosa fare: le risposte dovrebbero \textbf{derivare dalla base di conoscenza} (KB) 
+\end{itemize}
+Gli agenti possono essere visti, quindi, \textbf{al livello della conoscenza}, cioè ci si può focalizzare \textbf{su ciò che sanno} indipendentemente da come essi sono implementati.
+Un singolo algoritmo di inferenza può rispondere a tutte le domande a cui è possibile rispondere.
+\begin{center}
+    \includegraphics[width =0.60\linewidth]{Images/50.PNG}
+\end{center}
+Facciamo un esempio: supponiamo di voler codificare in logica proposizionale una partita di PacMan sulla seguente mappa:
+\begin{center}
+    \includegraphics[width =0.30\linewidth]{Images/51.PNG}
+\end{center}
+In questo caso, la maggior parte della base di conoscenza sarebbe occupata da $\mathcal{O}(NT)$ frasi del modello di transizione, con $N$ il numero
+di posizioni possibili e $T$ gli istanti temporali. Se ogni frase sono più o meno 10 linee di testo, e se supponessimo $N = 200, T = 400$ allora dovremmo scrivere, più o meno,
+800.000 linee di testo, cioè 20.000 pagine.
+Questo è dato dal fatto che la logica proposizionale ha una capacità espressiva limitata.
+Invece, se decidessimo di usare la logica del primo ordine, avremmo bisogno solamente di un numero $\mathcal{O}(1)$ di frasi del modello di transizione.
+Tuttavia, se decidessimo comunque di utilizzare la logica proposizionale, potremmo scrivere un \textbf{agente basato sulla conoscenza} che, ad ogni passo, aggiorni la base di conoscenza e si chieda qual'è la prossima azione da compiere (quindi effettua un'inferenza sulla KB):
+\begin{center}
+    \includegraphics[width =0.70\linewidth]{Images/52.PNG}
+\end{center}
+questo tipo di approccio può essere usato anche per i seguenti problemi:
+\begin{itemize}
+    \item \textbf{Localizzazione} con una mappa e delle percezioni locali 
+    \begin{itemize}
+        \item Dati una KB iniziale, più una sequenza di azioni e percezioni, dove sono?
+    \end{itemize}
+    \item \textbf{Costruire una mappa} con un sensore locale
+    \begin{itemize}
+        \item Data una KB iniziale, più una sequenza di azioni e percezioni, qual'è la mappa?
+    \end{itemize}
+    \item \textbf{SLAM: Simultaneous Localization and Mapping}
+    \begin{itemize}
+        \item Localizzazione + Costruire una mappa
+    \end{itemize}
+    \item \textbf{Planning}
+    \begin{itemize}
+        \item Data una KB iniziale, più una sequenza di azioni e percezioni, qual'è la sequenza di azioni che mi garantisce di raggiungere l'obbiettivo?
+    \end{itemize}
+\end{itemize}
+Il vantaggio di questo approccio è che, per tutti i problemi precedenti, \textbf{possiamo usare lo stesso algoritmo e la stessa KB}.
+Ricapitolando, quindi:
+\begin{itemize}
+    \item Una possibile architettura par un agente è quella di conoscenza + inferenza
+    \item La logica mette a disposizione una maniera formale per codificare la conoscenza
+    \item Una semplice KB per PacMan compre lo stato iniziale, il sensor model e il transition model
+    \item L'inferenza logica computa le \textbf{relazioni di implicazione} tra le frasi, permettendo che un ampio spettro di compiti possano essere risolti
+\end{itemize}
+\subsubsection{STRIPS}
+STanford Research Institute Problem Solver (STRIPS) è un linguaggio di classical planning.
+Un \textbf{problema} in STRIPS è una tupla $P = (F, O, I ,G)$ con:
+\begin{itemize}
+    \item $F$ l'insieme di tutti gli \textbf{atomi} (variabili booleane)
+    \item $O$ l'insieme di tutti gli \textbf{operatori} (azioni)
+    \item $I \subseteq F$ l'insieme delle \textbf{situazioni iniziali}
+    \item $G \subseteq F$ l'insieme delle \textbf{situazioni obbiettivo}
+\end{itemize}
+Gli operatori $o \in O$ sono rappresentati combinando:
+\begin{enumerate}
+    \item l'operazione di aggiunta alla lista degli atomi veri $Add(o) \subseteq F$ (simile alla notazione dei DB relazionali. Se è nella lista, allora è vero)
+    \item L'operazione di rimozione dalla lista degli atomi veri $Del(o) \subseteq F$
+    \item La lista delle precondizioni $Pre(o) \subseteq F$
+\end{enumerate}
+Un problema in STRIPS $P$ determina uno \textbf{modello a stati} $S(P)$ dove:
+\begin{itemize}
+    \item Gli stati $s \in S$ sono \textbf{collezioni di atomi} da $F$
+    \item Lo stato iniziale $s_0$ è $I$
+    \item Gli stati obbiettivo $s$ sono tali che $G \subseteq s$
+    \item Le azioni $a \in \mathcal{A}(s)$ sono operazioni in $O$ tali che $Pre(a) \subseteq s$
+    \item Il prossimo stato $s^j = s - Del(a) + Add(a)$
+    \item Il costo delle azioni $c(a,s)$ sono tutte 1
+\end{itemize}
+La \textbf{soluzione (ottima) del problema P} è una \textbf{soluzione (ottima) del problema $S(P)$}.
+Le estensioni del linguaggio (negazione, effetti condizionali ecc...) offrono maniere convenienti per esprimere i problemi; alcune sono necessarie per descrivere modelli più ricchi (costi, probabilità, ...).
+STRIPS ci permette di descrivere un problema \textbf{indipendentemente dal tempo}.
+La lista degli atomi veri definisce, quindi, \textbf{lo stato del problema in un determinato istante}.
+La \textbf{lista delle precondizioni} per una determinata azione, invece, definisce quali atomi devono essere veri per poter eseguire l'azione.
+Facciamo un esempio:
+\begin{center}
+    \includegraphics[width =1\linewidth]{Images/53.PNG}
+\end{center}
+Vediamo ora un'esempio più complesso: supponiamo che un robot si trovi in un ambiente formato da due stanze.
+Il robot deve trasportare due pacchi dalla stanza $A$ alla stanza $B$. La codifica in STRIPS del problema è quindi la
+seguente:
+\begin{center}
+    \includegraphics[width =1\linewidth]{Images/54.PNG}
+\end{center}
+In questo caso, abbiamo quindi un numero di stati possibili di $2^8$.
+Tuttavia, questa codifica presenta molte ripetizioni. Possiamo quindi usare delle \textbf{variabili} per 
+definire in modo più compatto il problema. L'introduzione di variabili necessita inoltre che si possano definire
+i \textbf{tipi di queste variabili}. Il problema quindi diventa:
+\begin{center}
+    \includegraphics[width =1\linewidth]{Images/55.PNG}
+\end{center}
+\newpage
+\subsubsection{PDDL}
+Il \textbf{Planning Domain Description Language} (PDDL) è una versione avanzata di STRIPS e si configura come una sintassi standard per i problemi di classical planning.
+Sviluppato per la International Planning Competition(IPC), è un linguaggio che continua ad evolversi sin dalla sua creazione, nel 1998.
+Durante l'IPC, i pianificatori vengono valutati su \textbf{problemi da loro non ancora visti} codificati in PDDL
+\begin{center}
+    \includegraphics[width =0.50\linewidth]{Images/56.PNG}
+\end{center}
+PDDL specifica una sintassi per i problemi $P = (F,I,O,G)$ e supporta STRIPS, variabili, tipi e molto altro.
+I problemi in PDDL sono specificati in due parti:
+\begin{itemize}
+    \item \textbf{Dominio}: Contiene azioni e gli \textbf{schemi degli atomi}, oltre che ai \textbf{tipi degli argomenti}
+    \item \textbf{Istanza}: Contiene la \textbf{situazione iniziale, l'obbiettivo} e le \textbf{costanti} (oggetti) per ogni tipo
+\end{itemize}
+Queste due parti, in PDDL, si trovano in due file separati, in modo da facilitare \textbf{la creazione di diverse istanze per lo stesso problema}.
+\begin{center}
+    \includegraphics[width =1\linewidth]{Images/57.PNG}
+\end{center}
+In PDDL, \textbf{i parametri di un'azione devono coprire sia le precondizione che gli effetti}; quindi sono le variabili che vanno utilizzate dentro un'azione
+per crearne una completa.
+Come facciamo però a risolvere un problema di classical planning?
+Il planning è una delle aree più vecchie dell'IA; quindi molte idee sono state provate.
+Ciò che si può fare, utilizzando questi linguaggi, è impiegare una vasta gamma di ragionatori per risolvere il problema; questo insieme è più ricco rispetto
+a quello dei ragionatori che effettuano una ricerca su grafo poiché i primi possono sfruttare la struttura dello spazio degli stati.
+I due metodi classici principali per risolvere problemi di classical planning sono:
+\begin{itemize}
+    \item Pianificazione come \textbf{ricerca euristica}; questo metodo è ispirato a ciò che abbiamo già detto sulle euristiche
+    \item Pianificazione come \textbf{SAT}, cioè si trasforma il piano in un problema di soddisfacimento di vincoli, dove bisogna riuscire a definire il valore di tutte le variabili indefinite.
+\end{itemize}
+Questi metodi sono in grado di risolvere problemi caratterizzati da un spazio degli stati di dimensione considerevole.
+Ovviamente, alcuni problemi sono intrinsecamente difficili, e quindi, per essi, i \textbf{pianificatori generali e indipendenti dal dominio} non saranno
+probabilmente in grado di raggiungere le performance di \textbf{metodi specializzati}.
+\subsubsection{Pianificazione come ricerca euristica}
+L'idea della pianificazione come ricerca euristica è quella di \textbf{sfruttare la corrispondenza tra i modelli a stati (classici) e i grafi orientati}:
+\begin{itemize}
+    \item I \textbf{nodi} del grafo rappresentano gli \textbf{stati} $s$ del modello
+    \item Gli archi $(s, s^j)$ catturano la transizione corrispondente nel modello con lo stesso costo
+\end{itemize}
+Nella formulazione di una pianificazione come ricerca euristica, il problema $P$ è risolto da degli \textbf{algoritmi di path-finding} su un grafo
+associato con il modello $S(P)$, con un'\textbf{euristica} derivata automaticamente da $P$.
+Uno sviluppo chiave nel campo del planning, avvenuto negli anni '90, è l'estrazione automatica di \textbf{funzioni euristiche} per guidare la ricerca dei piani (quindi di una soluzione).
+L'euristica verrà derivata dal \textbf{rilassamento del problema} dove le \textbf{azioni di cancellazione dalla lista non hanno alcun effetto}. Viene quindi
+eliminata la possibilità di rendere falso un atomo. Questo rilassamento viene detto \textbf{delete-relaxation}.
+Siano quindi $P(s)$ il problema $P$ con $s$ come suo stato iniziale, $P^+$ la sua delete-relaxation e $h^*_P(s)$ il \textbf{costo ottimale} per risolvere $P$ da $s$.
+Allora, \textbf{l'euristica} $h(s)$ potrebbe essere impostata a:
+$$h(s) := h_P^+(s)$$
+tuttavia, questo non \textbf{funziona computazionalmente}: risolvere $P^+(s)$ in maniera ottimale è difficile quanto risolvere $P(s)$ in maniera ottimale (il problema è NP-Completo).
+Dall'altra parte, seppur risolvere il rilassamento $P^+(s)$ ottimamente sia difficile, \textbf{trovare una sua soluzione, non necessariamente ottimale, è semplice}.
+Poiché in questo caso viene rimossa la possibilità di rimuovere atomi dalla lista, ciò che si può fare è eseguire \textbf{tutte le azioni eseguibili in un determinato momento} e quindi
+vedere quali sono gli \textbf{stati raggiungibili al prossimo passo} e così via fino a non ottenere tutti gli elementi del goal nella lista.
+Ciò quindi da una misura della distanza tra un certo stato e lo stato finale; che è un euristica \textbf{ottimistica}. Si può quindi prendere quest'euristica e usarla
+per effettuare una ricerca informata (es. con $A^*$).
+In realtà, la procedura che effettivamente si adopera comprende anche una fase di "back-tracking", dove si vanno a cancellare \textbf{tutte le azioni inutili}, andando quindi a semplificare
+lo spazio degli stati. Un'euristica ammissibile per $h(s)$ per il problema rilassato $P^+$ è quindi l'euristica $h_{max}$, definita come segue:
+\begin{itemize}
+    \item \textbf{Idea chiave}: I problemi STRIPS \textbf{delete-free} sono \textbf{completamente decomponibili}
+    \item Se il piano $\pi_1$ arriva al goal $G_1$ e il piano $\pi_2$ arriva al goal $G_2$, allora il piano $\pi_1, \pi_2$, dove $\pi_2$ segue $\pi_1$, risolve sia il goal $G_1$ che il goal $G_2$
+    \item L'osservazione suggerisce la seguente \textbf{procedura iterativa} sopra tutti gli atomi in $P^+(s)$:
+    \begin{enumerate}
+        \item L'atomo $p$ è \textbf{raggiungibile} in 0 passi se $p \in s$
+        \item L'atomo $p$ è \textbf{raggiungibile} in $i + 1$ passi se non è raggiungibile in $i$ passi o meno, ed esiste \textbf{un'azione} $a_P$ in $P$ tali che le \textbf{precondizioni} $p_i$ di $a_P$ sono raggiungibili in $i$ passi o meno        
+    \end{enumerate}
+    \item \textbf{Affermazioni}:
+    \begin{itemize}
+        \item La procedura sopra riportata termina in un numero di passi limitato dal numero di atomi; cioè quando non vi sono più atomi raggiungibili
+        \item Se l'atomo $p$ non è raggiungibile, allora si può mostrare che non esiste un piano per raggiungere $p$ in $P$
+    \end{itemize}
+    \item \textbf{Proprietà}:
+    \begin{itemize}
+        \item $h(s)$ posta al numero di passi richiesti per raggiungere \textbf{tutti gli atomi obbiettivo} è un'\textbf{euristica ammissibile}. Viene chiamata \textbf{euristica massima} oppure $h_{max}$
+    \end{itemize}
+\end{itemize}
+L'euristica $h = h_{max}$ è \textbf{ammissibile}, ma non è particolarmente \textbf{informativa}.
+Anche l'euristica $h(s) = 0$ è \textbf{ammissibile}, ma è completamente \textbf{poco informativa}.
+Delle euristiche più informative possono essere ottenute da un \textbf{piano} $\pi(s)$ per il rilassamento $P^+(s)$, che viene chiamato \textbf{piano rilassato}.
+Un piano rilassato $\pi(s)$ viene ottenuto \textbf{concatenando a ritroso} partendo dagli obbiettivi e utilizzando le azioni $a_P$, identificate dalla \textbf{procedura di raggiungibilità}, che rendono raggiungibili i goal.
+La procedura di raggiungibilità è definita come segue:
+\begin{center}
+    $\pi(s)$ contiene l'azione $a_p$ per ogni obbiettivo $p$ in $P$, $p \in s$, e un'azione $a_q$ per ogni precondizione $q$ dell'azione $\pi(s)$, $q \in s$
+\end{center}
+\begin{Nota}
+    Qui le slide hanno degli artefatti??? La procedura potrebbe essere sbagliata!
+\end{Nota}
+L'euristica viene quindi impostata a $|\pi(s)|$, cioè il numero di azioni del piano rilassato.
+Quest'euristica viene chiamata \textbf{piano rilassato} $h$ o $h_{FF}$; tuttavia, seppur sia \textbf{informativa} (è piuttosto accurata), essa \textbf{non è ammissibile}.
 
-
-
-
-
-% 1:40:46
 
 
 
