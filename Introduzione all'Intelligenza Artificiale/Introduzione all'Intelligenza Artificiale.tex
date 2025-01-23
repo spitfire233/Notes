@@ -491,11 +491,11 @@ Se abbiamo $b$ azioni possibili per stato, e un massima profondità $D$ di ricer
     \item \textbf{Tempo}: $\mathcal{O}(b^D)$ (enorme)
 \end{itemize}
 \subsubsection{Depth First Search}
-A volte, non abbiamo condizioni complesse sul percorso ma, semplicemente, il valore di una foglia (quindi lo stato attuale) ci basta per capire
-se la condizione di interesse è soddisfatta. Allora, in questo caso, possiamo usare un algoritmo di ricerca in profondità (DFS):
 \begin{center}
     \includegraphics[width = 0.70\linewidth]{Images/27.PNG}
 \end{center}
+A volte, non abbiamo condizioni complesse sul percorso ma, semplicemente, il valore di una foglia (quindi lo stato attuale) ci basta per capire
+se la condizione di interesse è soddisfatta. Allora, in questo caso, possiamo usare un algoritmo di ricerca in profondità (DFS).
 una volta che l'algoritmo trova una soluzione, \textbf{esso termina}.
 L'algoritmo, durante la sua esecuzione, \textbf{tiene in memoria solamente le informazioni relative alla soluzione}.
 \begin{center}
@@ -538,7 +538,6 @@ Le proprietà della BFS sono le seguenti:
     \item \textbf{Completezza}: Se $s$ è finito, allora di sicuro una soluzione esiste. L'algoritmo è completo
     \item \textbf{Ottimalità}: è ottimo solo se i costi dei cammini sono tutti \textbf{uguali}
 \end{itemize}
-\newpage
 In termini di complessità, abbiamo che:
 \begin{itemize}
     \item \textbf{Spazio}: $\mathcal{O}(b^s)$
@@ -547,7 +546,7 @@ In termini di complessità, abbiamo che:
 \begin{center}
     \includegraphics[width = 0.70\linewidth]{Images/32.PNG}
 \end{center}
-\subsubsection{DFS con approfondimento iterativo (DFS-ID)}
+\subsubsection{DFS con approfondimento iterativo (IDDFS)}
 L'idea di questo algoritmo è di combinare la complessità spaziale di una DFS con la complessità
 temporale di una BFS. L'algoritmo quindi esegue i seguenti passi:
 \begin{itemize}
@@ -567,10 +566,17 @@ e $s$ è la profondità della soluzione:
     \item \textbf{Spazio}: $\mathcal{O}(s)$
     \item \textbf{Tempo}: $\mathcal{O}(b^s)$
 \end{itemize}
+\newpage \noindent
+Inoltre:
+\begin{itemize}
+    \item \textbf{Completezza}: quando $s$ è finito
+    \item \textbf{Ottimalità}: L'algoritmo è ottimale
+\end{itemize}
 ricapitolando:
 \begin{center}
     \includegraphics[width = 0.50\linewidth]{Images/34.PNG}
 \end{center}
+
 \subsubsection{Il problema della tigre}
 Un esempio, molto presente in letteratura, è il cosiddetto "problema della tigre";
 ed esso è un esempio di problema \textbf{non risolvibile con gli algoritmi che abbiamo visto fino ad adesso}.
@@ -625,7 +631,7 @@ Prima di presentarli facciamo due ulteriori considerazioni:
 \subsubsection{Uniform Cost Search (UCS)}
 In questo algoritmo, si procede ad esplorare il nodo che ha \textbf{costo minore dall'origine}.
 \begin{center}
-    \includegraphics[width = 1\linewidth]{Images/38.PNG}
+    \includegraphics[width = 0.90\linewidth]{Images/38.PNG}
 \end{center}
 un implementazione di questo algoritmo è quindi la seguente:
 \begin{center}
@@ -671,7 +677,7 @@ Tutti gli algoritmi che abbiamo visto fino ad ora sono \textbf{uguali} tranne pe
 Il problema principale di UCS è che \textbf{esplora l'albero degli stati in ogni direzione}; quindi non tiene conto di nessuna informazione
 riguardante la \textbf{posizione dell'obbiettivo all'interno dell'albero}.
 \begin{center}
-    \includegraphics[width = 0.45\linewidth]{Images/42.PNG}
+    \includegraphics[width = 0.40\linewidth]{Images/42.PNG}
 \end{center}
 per velocizzare il processo di ricerca, dobbiamo quindi \textbf{guidare la ricerca verso l'obbiettivo}, invece che cercare in tutte le direzioni possibili.
 Questo tipo di ricerca viene detto \textbf{ricerca informata}
@@ -730,6 +736,154 @@ L'idea alla base di $A^*$ è quindi la seguente:
     \includegraphics[width =1\linewidth]{Images/47.PNG}
 \end{center}
 Per fare in modo che \textbf{$A^*$ sia ottimo}, abbiamo bisogno che l'euristica sia \textbf{ottimista rispetto al costo reale}.
+Quando si dovrebbe fermare l'algoritmo? Ovviamente, \textbf{non possiamo fermarci quando troviamo il goal} (cioè quando immettiamo nella coda di priorità il nodo), poiché
+\textbf{potrebbero esistere dei cammini sul grafo di costo minore di quello correntemente considerato}.
+Ci fermiamo quindi solamente quando \textbf{rimuoviamo dalla coda di priorità il nodo goal} (cioè quando lo espandiamo).
+In che condizioni $A^*$ è \textbf{ottimale}? Per fare in modo che $A^*$ trovi il cammino di costo minimo, l'euristica che esso usa
+deve essere \textbf{ammissibile}:
+\begin{itemize}
+    \item Un'euristica \textbf{inammissibile} (pessimistica) rompe l'ottimalità dell'algoritmo, poiché non gli permette di esplorare le soluzioni che porterebbero alla soluzione ottima
+    \item Un'euristica \textbf{ammissibile} (ottimista) non è mai al di sopra del costo reale
+\end{itemize}
+Diamo quindi una definizione di euristica ammissibile:
+\begin{Definizione}[Euristica ammissibile]
+    Un'euristica ammissibile $h$ si dice ammissibile quando
+    $$0 \leq h(n) \leq h^*(n)$$
+    dove $h^*(n)$ è il reale costo per arrivare all'obbiettivo più vicino
+\end{Definizione}
+Enunciamo quindi il seguente teorema:
+\begin{Teorema} [Ottimalità di $A^*$]
+    Si assuma che $A$ sia un noto obbiettivo ottimo, che $B$ sia un nodo obbiettivo sub-ottimale e che $h$ sia un'euristica ammissibile.
+    Allora $A$ sarà scelta per l'espansione prima di $B$
+\end{Teorema}
+\begin{Dimostrazione}
+    Immaginiamo che sia $B$ sia alcuni antenati $n$ di $A$ stiano sulla frontiera (oppure che sulla frontiera ci sia $A$ stesso).
+    Dobbiamo dimostrare quindi che $n$ sarà scelto per l'espansione prima di $B$.
+    Facciamo le seguenti considerazioni:
+    \begin{enumerate}
+        \item $f(n) \leq f(A)$ poiché:
+        \begin{itemize}
+            \item La definizione della funzione di costo indica che:
+            $$f(n) = g(n) + h(n)$$
+            $$f(A) = g(A) + h(A)$$
+            \item L'euristica ammissibile sottostima il vero costo di A, quindi $h(A) = 0$
+            \item $h(n)$ deve sottostimare il vero costo per arrivare da $n$ ad $A$, quindi $g(n) + h(n) \leq g(A)$,
+            quindi:
+            $$f(n) \leq f(A)$$
+        \end{itemize}
+        \item $f(A) < f(B)$ poiché:
+        \begin{itemize}
+            \item Sappiamo che:
+            $$f(A) = g(A) + h(A)$$
+            $$f(B) = g(B) + h(B)$$
+            \item L'euristica deve sottostimare i veri costi per arrivare ad A e B, quindi:
+            $$h(A) = h(B) = 0$$
+            \item Poiché abbiamo assunto che $B$ è un obbiettivo sub-ottimale, allora sicuramente:
+            $$g(A) < g(B) \Rightarrow f(A) < f(B)$$
+        \end{itemize}
+    \end{enumerate}
+    Quindi tutti gli antenati di $A$ saranno espansi prima di $B$ e $A$ sarà espanso prima di $B$.
+    L'algoritmo $A^*$ è quindi ottimo.
+\end{Dimostrazione}
+\subsubsection{Creare euristiche ammissibili}
+Spesso, le euristiche ammissibili non sono altre che \textbf{soluzioni a rilassamenti di un problema}, dove nuove azioni vengono rese ammissibili.
+Diamo quindi la seguente definizione:
+\begin{Definizione}[Problema rilassato]
+    Un problema $P_2$ è una versione rilassata del problema $P_1$ se $\mathcal{A}_2(s) \supseteq \mathcal{A}_1(s)$ per ogni $s$
+\end{Definizione}
+\begin{Teorema}
+    $h_2^*(s) \leq h_1^*(s)$ per ogni $s$, quindi $h_2^*(s)$ è un euristica ammissibile per $P_1$
+\end{Teorema}
+Quali fattori quindi possiamo considerare quando cerchiamo una buona euristica?
+\begin{itemize}
+    \item La funzione di successione aiuta? E le azioni?
+    \item Cosa succede se si aggiungono/rimuovono casualmente delle azioni da stati casuali? Quali sarebbero le soluzioni risultanti in una funzione euristica ammissibile?
+\end{itemize}
+Quando si hanno più euristiche tra cui scegliere, esse si possono \textbf{combinare}.
+Quali sono quindi i criteri da seguire quando si combinano delle euristiche?
+\begin{itemize}
+    \item \textbf{Dominanza}: $h_1 \geq h_2$ se $\forall n, h_1(n) \geq h_2(n)$
+    Quindi, assumendo che entrambe le euristiche siano ammissibili, si prende quella con il valore più ottimista.
+    \item L'euristica nulla non è per niente ottimale (Con $A^*$, ci si ritrova nuovamente con UCS)
+    \item L'euristica esatta è buona, ma solitamente troppo costosa
+    \item \textbf{Cosa fare se nessuna delle due euristiche domina l'altra?}
+    \begin{itemize}
+        \item Si forma una nuova euristica prendendo i valori massimi di entrambe:
+        $$h(n) = \max\{h_1(n), h_2(n)\} \; \forall n$$
+        Il massimo di due euristiche ammissibili è esso stesso ammissibile e domina entrambe.
+    \end{itemize}
+\end{itemize}
+\subsubsection{Euristiche consistenti}
+Una ricerca DFS ha il problema che \textbf{si blocca in caso di loop} all'interno dell'albero.
+Tuttavia, una DFS risparmia memoria ed è possibile riutilizzarla in altri contesti.
+Vogliamo quindi evitare che la DFS espanda gli stessi sotto-alberi.
+Come possiamo fare? \textbf{Abbiamo abbastanza informazioni solamente guardando l'albero di ricerca per farlo?}
+La strategia di selezione che abbiamo seguito fino ad ora è quella di partire ad espandere i nodi dell'albero che non sono ancora stati espansi;
+tuttavia non abbiamo controllato se \textbf{questi nodi sono già presenti nell'albero}. Dobbiamo quindi gestire meglio la struttura dati che utilizziamo
+per implementare l'algoritmo.
+\begin{center}
+    \includegraphics[width =0.90\linewidth]{Images/48.PNG}
+\end{center}
+Ciò che si fa per evitare questa problematica è passare da algoritmi di ricerca sugli alberi a \textbf{algoritmi di ricerca su grafi}.
+L'idea è quindi quella di \textbf{non espandere mai uno stato due volte}.
+L'implementazione è quindi la seguente:
+\begin{itemize}
+    \item Alla ricerca sull'albero si aggiunge un \textbf{insieme degli stati già espansi} ("closed set")
+    \item Si espande l'albero di ricerca nodo per nodo, ma... 
+    \item Prima di espandere un nodo, ci si assicura che quello stato non sia mai stato espanso prima
+    \item Se lo stato è già stato espanso, lo si salta, altrimenti lo si aggiunge al closed set
+\end{itemize}
+\textbf{IMPORTANTE}: Bisogna immagazzinare il closed set \textbf{come un set}, non una lista. \newline
+Questo approccio riesce quindi ad evitare la presenza di loop, tuttavia esso può \textbf{andare a intaccare la completezza e l'ottimalità degli algoritmi di ricerca}.
+Facciamo il seguente esempio:
+\begin{center}
+    \includegraphics[width =0.90\linewidth]{Images/49.PNG}
+\end{center}
+come si può vedere, il percorso di costo minimo verrebbe bloccato. Per evitare questo tipo di problematica, abbiamo quindi bisogno di un'\textbf{euristica consistente}:
+\begin{itemize}
+    \item \textbf{Idea principale}: La stima euristica dei costi deve essere minore o uguale al costo effettivo
+    \begin{itemize}
+        \item \textbf{Ammissibilità}: Il costo euristico deve essere minore del costo effettivo per arrivare all'obbiettivo:
+        $$h(A) \leq h^*(A)$$
+        \item \textbf{Consistenza}: Il costo euristico per ogni arco deve essere minore o uguale al costo effettivo per ogni arco:
+        $$h(A) - h(C) \leq c(A \; to \; C)$$
+        oppure deve rispettare la diseguaglianza triangolare:
+        $$h(A) \leq c(A \; to \; C) + h(C)$$
+        \textbf{Nota}: $h^*$ necessariamente soddisfa la diseguaglianza triangolare
+    \end{itemize}
+    \item \textbf{Conseguenze della consistenza}:
+    \begin{itemize}
+        \item Il valore di $f$ lungo un certo cammino non decresce mai:
+        $$h(A) \leq c(A, C) + h(C) \Rightarrow g(A) + h(A) \leq g(A) + c(A,C) + h(C)$$
+        \item $A^*$ quindi è ottimale
+    \end{itemize}
+\end{itemize}
+Rendere un euristica consistente però \textbf{non è banale}, poiché bisognerebbe verificarla per tutti gli stati; non possiamo quindi
+farlo tramite un approccio "forza bruta", poiché richiederebbe calcolare \textbf{il percorso ottimo all'obbiettivo da ogni singolo stato}.
+Quindi, se si ha un'euristica consistente, allora si può direttamente utilizzare $A^*$.
+Altrimenti, è necessario avere dei controlli più complessi su quali stati sono già stati visitati.
+Per quanto riguarda l'ottimalità di $A^*$ quindi:
+\begin{itemize}
+    \item \textbf{Tree search}: $A^*$ è ottimo se l'euristica è \textbf{ammissibile}
+    \item \textbf{Graph search}: $A^*$ è ottimo se l'euristica è \textbf{consistente}
+    \item La consistenza di un'euristica ne implica l'ammissibilità
+    \item La maggior parte delle euristiche ammissibili tendono ad essere anche consistenti, specialmente se esse derivano da problemi rilassati
+\end{itemize}
+Tuttavia, dobbiamo tenere in considerazione che:
+\begin{itemize}
+    \item $A^*$ mantiene l'intera regione esplorata in memoria, quindi finirà lo spazio per problemi molto complessi
+    \item Ci sono varianti che utilizzano meno memoria:
+    \begin{itemize}
+        \item $IDA^*$ funzione come IDDFS, eccetto che usa una funzione di limite $f$ invece che un limite di profondità
+        \item $RBFS$ è un algoritmo DFS ricorsivo che usa una funzione di limite $f$ uguale al miglior cammino alternativo disponibile da uno qualsiasi degli antenati del nodo corrente
+        \item $SMA^*$ usa tutta la memoria disponibile per la coda, minimizza quindi il thrashing.
+    \end{itemize}
+\end{itemize}
+\subsection{Classical Planning}
+
+
+
+
 
 % 1:40:46
 
