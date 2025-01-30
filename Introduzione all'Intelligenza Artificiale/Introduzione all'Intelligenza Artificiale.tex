@@ -1146,7 +1146,7 @@ Facciamo quindi un passo indietro e chiediamoci la seguente domanda: qual'è la 
     \item All'interno di alcune tecniche di apprendimento automatico, il programmatore \textbf{studia il problema} e seleziona un \textbf{algoritmo automatico} che, analizzando i dati, automaticamente produce un programma che risolverà il problema. Un \textbf{algoritmo di Machine Learning} quindi avrà in \textbf{input dei dati} e ritornerà in \textbf{output un programma}.
 \end{itemize}
 Ovviamente, entrambi i processi sono \textbf{iterativi}; ciò permette la gestione di errori e di risultati che non considerati "abbastanza buoni".
-\subsubsection{Apprendimento supervisionato}
+\subsubsection{Introduzione all'apprendimento supervisionato}
 Nell'\textbf{apprendimento supervisionato}, i dati di addestramento che vengono dati in pasto all'algoritmo includono le \textbf{soluzioni desiderate}, chiamate \textbf{labels} (etichette).
 \begin{itemize}
     \item Esse possono essere \textbf{categorie} (es. SPAM / NOT SPAM) nei \textbf{modelli di classificazione}. La supervisione, quindi, \textbf{è l'avere degli esempi con un'etichettatura}. Ovviamente, gli esempi devono essere in \textbf{numero sufficiente} e devono avere una \textbf{buona rappresentanza delle varia classi}.
@@ -1155,7 +1155,7 @@ Nell'\textbf{apprendimento supervisionato}, i dati di addestramento che vengono 
 \begin{center}
     \includegraphics[width =0.65\linewidth]{Images/60.PNG}
 \end{center}
-\subsubsection{Apprendimento non supervisionato}
+\subsubsection{Introduzione all'apprendimento non supervisionato}
 Nell'\textbf{apprendimento non supervisionato}, i dati \textbf{non sono etichettati!}
 Alcune tipiche mansioni in quest'area sono:
 \begin{itemize}
@@ -1227,5 +1227,125 @@ Le sfide quindi nell'ambito del ML sono:
 \begin{center}
     \includegraphics[width =0.80\linewidth]{Images/67.PNG}
 \end{center}
+\newpage
+\subsection{Apprendimento supervisionato}
+Nell'apprendimento supervisionato abbiamo a disposizione una serie di \textbf{esempi} (record, casi, istanze, ecc...).
+Diamo quindi delle definizioni più precise:
+\begin{itemize}
+    \item \textbf{Dati}: Una serie di "record" (anche chiamati esempi, istanze o casi) descritti da:
+    \begin{itemize}
+        \item \textbf{k attributi} $A_1, \dots, A_k$
+        \item \textbf{Una classe} (se parliamo di classificatori): ogni esempio è etichettato con un classe definita a priori
+    \end{itemize}
+    \item \textbf{Obbiettivo}: Apprendere un \textbf{modello di classificazione} dai dati che possa essere usato per prevedere le classi di nuovi casi/istanze.
+\end{itemize}
+Se l'output $a$ non appartiene a un \textbf{insieme discreto}, ma è piuttosto un \textbf{valore numerico} (sia discreto che continuo), allora parliamo di \textbf{regressione invece che di classificazione}.
+Il resto della discussione rimane invece praticamente uguale.
+\begin{center}
+    \includegraphics[width =0.80\linewidth]{Images/68.PNG}
+\end{center}
+Quali sono quindi le differenze con l'apprendimento non supervisionato?
+\begin{itemize}
+    \item \textbf{Apprendimento supervisionato}: La classificazione è vista come un apprendimento supervisionato dagli esempi
+    \begin{itemize}
+        \item \textbf{Supervisione}: I dati (osservazioni, misure, ecc...), sono etichettati con classi predefinite. È come se un "insegnate" dia le classi al modello (\textbf{supervisione})
+        \item Anche i dati di test vengono classificati in queste classi
+    \end{itemize}
+    \item \textbf{Apprendimento non-supervisionato} (clustering): Le etichette di classe dei dati \textbf{non sono noti a priori}. Dato quindi un insieme di dati, il compito è quello di stabilire l'esistenza di classi o di \textbf{raggruppamenti} all'interno del dataset
+\end{itemize}
+\newpage
+\noindent
+Il flusso di lavoro dell'apprendimento supervisionato generalmente prevede le seguenti fasi:
+\begin{enumerate}
+    \item \textbf{Apprendimento (addestramento)}: Viene appreso un modello usando i \textbf{dati di addestramento}
+    \item \textbf{Testing}: Si testa il modello utilizzato \textbf{dati di test non visti durante la fase di addestramento} per stabilire l'accuratezza del modello.
+    Un modo per stimare l'accuratezza di un modello può essere la seguente:
+    $$Accuracy = \frac{\textrm{Number of correct classifications}}{\textrm{Total number of test cases}}$$
+\end{enumerate}
+\begin{center}
+    \includegraphics[width =0.80\linewidth]{Images/69.PNG}
+\end{center}
+È necessario notare che \textbf{i dati che vengono utilizzati per testare il modello non devono contenere dati che sono stati utilizzati per addestrarlo}.
+L'assunzione di base che ci permette di adottare questo tipo di approccio è la seguente: \newline
+\textbf{ASSUNZIONE}: La distribuzione degli esempi (quanti sono appartenenti alle diverse  classi? Ogni classe è rappresentata sufficientemente? E in che proporzione, ed essa è ragionevolmente vicina al mondo reale?) usati nell'addestramento è \textbf{identica} alla distribuzione dei casi di test (inclusi gli esempi futuri mai osservati prima). Cioè, che i dati
+del dataset \textbf{siano rappresentativi di come sono davvero i dati nel mondo reale}. \newline
+Nella pratica, questa assunzione è \textbf{spesso violata in una certa misura}. Ampie violazioni di questa assunzione, chiaramente, risulteranno in \textbf{una scarsa accuratezza di classificazione}.
+Per raggiungere una buona accuratezza sui dati di test, i dati di addestramento devono essere \textbf{sufficientemente rappresentativi}.
+\subsubsection{Induzione di alberi di decisione}
+Gli alberi di decisione sono una tecnica nota ed utilizzata ai fini di \textbf{classificazione}:
+\begin{itemize}
+    \item Su dati tabellari, la loro accuratezza è molto competitiva con altri metodi di classificazione
+    \item Sono molto efficienti
+    \item Su altri tipi di dati, gli alberi di decisione invece risultano meno accurati o efficienti rispetto ad altri approcci
+\end{itemize}
+La tecnica che andremo a discutere \textbf{costruisce un albero}, il quale avrà sui nodi dei \textbf{test sugli attributi di un nuovo individuo} e che ci permetterà, navigando dalla radice alla foglia, di determinare la \textbf{classe da assegnare ad esso}.
+La particolarità di questo albero è ispezionabile, leggibile è può essere \textbf{trasformato in regole del tipo if-then}. L'albero quindi è "spiegabile", cioè è interpretabile ed è possibile capire, da esso, come il modello effettua la classificazione. Non tutti gli algoritmi
+producono un modello "spiegabile". Facciamo un esempio di albero di decisione usando la tabella sopra:
+\begin{center}
+    \includegraphics[width =0.80\linewidth]{Images/70.PNG}
+\end{center}
+i nodi dell'albero sono associati ad attributi della tabella. In base al tipo di dato, \textbf{il fattore di ramificazione può essere differente}.
+Gli alberi di decisione, tuttavia, \textbf{non sono unici}; infatti un albero equivalente e più semplice rispetto a quello sopra è il seguente:
+\begin{center}
+    \includegraphics[width =0.40\linewidth]{Images/71.PNG}
+\end{center}
+vogliamo quindi trovare l'albero decisionale \textbf{più piccolo e più accurato possibile}, poiché esso avrà prestazioni migliori e risulterà più facile da comprendere.
+Tuttavia, trovare un albero ottimale è un problema \textbf{NP-Completo}; quindi tutti i correnti algoritmi di costruzione di alberi decisionali sono \textbf{algoritmi euristici}; quindi sono algoritmi che non garantiscono l'ottimalità
+ma hanno \textbf{ottime proprietà computazionali} (tempo di esecuzione e utilizzo di memoria). Per loro struttura, invece, fare un'inferenza su un albero decisionale ha un \textbf{costo logaritmico rispetto al numero dei nodi}, quindi effettuare una classificazione
+tramite un albero decisionale ha un costo relativamente basso.
+Come abbiamo detto, un albero di decisione può essere convertito in un \textbf{insieme di regole}; in particolare, ognuna di esse rappresenterà un \textbf{cammino dalla radice ad una foglia}.
+Ogni regola sarà \textbf{supportata da un certo numero di casi} e avrà un indicatore di \textbf{quanto è numeroso il suo supporto}:
+\begin{center}
+    \includegraphics[width =0.90\linewidth]{Images/72.PNG}
+\end{center}
+Un \textbf{algoritmo semplice} per la costruzione di un albero decisionale è il seguente:
+\begin{itemize}
+    \item L'algoritmo è di tipo \textbf{greedy} ed adotta l'approccio \textbf{dividi-et-impera}
+    \item Si assuma che gli attributi siano categorici (possono essere gestiti anche attributi continui)
+    \item L'albero è costruito \textbf{ricorsivamente in maniera top-down}
+    \item All'inizio, tutti gli esempi d'addestramento \textbf{sono posizionati alla radice}
+    \item Gli esempi vengono poi \textbf{partizionati ricorsivamente} in base agli attributi selezionati
+    \item La selezione degli attributi su cui effettuare la partizione viene effettuata sulla base di una \textbf{funzione di impurità}; che considera quanto è \textbf{eterogeneo il dataset rispetto ai risultati dato il valore di un certo attributo}
+\end{itemize}
+L'algoritmo terminerà la partizione del dataset nei seguenti casi:
+\begin{itemize}
+    \item Tutti gli esempi per un certo nodo appartengono alla stessa classe
+    \item Non ci sono più attributi rimanenti per effettuare un'ulteriore partizione
+    \item Non ci sono più esempi
+\end{itemize}
+Il codice dell'algoritmo è quindi il seguente:
+\begin{center}
+    \includegraphics[width =1\linewidth]{Images/73.PNG}
+\end{center}
+Facciamo delle considerazioni:
+\begin{itemize}
+    \item Iniziamo guardando i parametri della funzione:
+    \begin{itemize}
+        \item $D$ è l'insieme di individui in questo stadio dell'analisi dell'albero (inizialmente sarà l'intero insieme di addestramento, ma vedremo che sarà diviso in sottoinsiemi durante l'esecuzione)
+        \item $A$ è l'insieme di attributi non ancora analizzati (inizialmente tutti, ma quando effettueremo una divisione del dataset, lo faremo basandoci sul valore di un certo attributo, il quale verrà poi rimosso da $A$)
+        \item $T$ è la foglia che viene generata come \textbf{sostituto all'insieme degli individui rimanenti al livello corrente dell'analisi}. È quindi la \textbf{foglia che viene generata ad un certo livello dell'analisi del dataset}
+    \end{itemize}
+    \item Poiché l'algoritmo è ricorsivo, \textbf{esso conterrà una serie di casi base}:
+    \begin{itemize}
+        \item Il primo caso base è il caso in cui $D$ contiene solo casi in cui la classe è sempre la stessa. $D$ sarà quindi un "sottoinsieme puro", quindi $T$ sarà una foglia etichettata con la classe che caratterizza tutti gli elementi di $D$
+        \item Il secondo caso base è quando \textbf{non vi sono più attributi da considerare}, quindi quando $A = \emptyset$. In questo caso, quindi, $T$ sarà una foglia etichettata con la classe che \textbf{occorre con più frequenza in $D$ a questo livello dell'analisi}
+    \end{itemize}
+    \item Se non si è in un caso base, allora significa che ci sono ancora attributi da analizzare e che vi è ancora \textbf{impurità nelle classi}, quindi vi è ancora \textbf{incertezza}. Devo quindi scegliere \textbf{rispetto a quale attributi, tra quelli rimasti, creare un nuovo sottoramo dell'albero}:
+    \begin{itemize}
+        \item Quale attributo scelgo?
+        \item \textbf{Eccezione}: l'algoritmo sopra considera anche il caso nel quale l'attributo scelto porta ad una riduzione di impurità nel dataset rimanente minore rispetto ad una certa soglia. In questo caso, \textbf{l'algoritmo si comporta come nel secondo caso base}
+    \end{itemize}
+\end{itemize}
+La chiave nella scelta dell'attributo rispetto al quale costruire un sottoramo dell'albero è la \textbf{riduzione dell'impurità nella parte del dataset considerata}, cioè \textbf{cioè la riduzione dell'incertezza}.
+Nell'algoritmo sopra, la scelta si basa sul \textbf{guadagno informativo che si ottiene scegliendo un certo attributo}, concetto derivato dalla \textbf{teoria dell'informazione}. Facciamo un esempio: consideriamo i seguenti alberi decisionali equivalenti:
+\begin{center}
+    \includegraphics[width =1\linewidth]{Images/74.PNG}
+\end{center}
+l'albero (B) sembra essere \textbf{migliore} rispetto all'albero (A), poiché \textbf{ha un tasso minore di incertezza in ogni suo sotto-caso} ed, essendo più piccolo, è anche \textbf{computazionalmente migliore}.
+% 46:51
+
+
+
+
 
 \end{document}
