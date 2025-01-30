@@ -1104,11 +1104,128 @@ La procedura di raggiungibilità è definita come segue:
 \end{Nota}
 L'euristica viene quindi impostata a $|\pi(s)|$, cioè il numero di azioni del piano rilassato.
 Quest'euristica viene chiamata \textbf{piano rilassato} $h$ o $h_{FF}$; tuttavia, seppur sia \textbf{informativa} (è piuttosto accurata), essa \textbf{non è ammissibile}.
-
-
-
-
-
-
+\subsection{Probabilistic Planning}
+WIP
+\section{Approcci simbolici: basi di conoscenza e ragionamento automatico}
+WIP
+\section{Approcci sub-simbolici: Machine Learning}
+Due fattori importanti che hanno portato a importanti risultati nel campo dell'intelligenza artificiale sono:
+\begin{itemize}
+    \item \textbf{La crescita della potenza computazionale} dei dispositivi (specialmente le GPU e addirittura la nascita di dispositivi dedicati, es. TPUs)
+    \item \textbf{La crescente disponibilità di dati} (specialmente foto, video ma anche testo in lingue differenti). In particolare, questo tipo di dati sono \textbf{annotati}, quindi contengono metadati che ne descrivono il contenuto.
+\end{itemize} 
+Le reti neurali non erano implementabili fino alla metà degli anni'80. Grazie al presentarsi delle condizioni sopra riportare, divenne quindi plausibile
+\textbf{creare delle reti neurali profonde}. Un'esempio è \textbf{ImageNet}, un database di immagini annotate secondo la \textbf{gerarchia WorldNet}, la quale non è un'ontologia assiomatica, ma è un tesauro con relazioni sia \textbf{tassonomiche} che
+\textbf{mereologiche} ("parte di"). ImageNet fu strumentale alla creazione delle prime reti neurali profonde.
+\subsection{Introduzione al Machine Learning}
+\begin{center}
+    \includegraphics[width =0.95\linewidth]{Images/58.PNG}
+\end{center}
+\textbf{Machine Learning} è in realta un termine ombrello che racchiude sotto di se diversi tipi di apprendimento automatico.
+Diamo una breve descrizione delle tecniche illustrate sopra:
+\begin{itemize}
+    \item \textbf{Apprendimento supervisionato}: Si sviluppa un modello predittivo basato sia sui dati in input che sui dati in output. Per andare ad analizzare dati non noti bisogna quindi avere una base esperienziale di dati noti; così che il modello possa associare un output plausibile al dato.
+    \begin{itemize}
+        \item \textbf{Classificazione}: Il modello riconosce l'appartenenza del dato ad una certa classe
+        \item \textbf{Regressione}: Dati in input dei dati numerici, il modello darà in output un dato numerico che "si avvicina" al valore effettivo dato da quelle condizioni
+    \end{itemize}
+    \item \textbf{Apprendimento non supervisionato}: In questo tipo di apprendimento, il modello ha solamente il \textbf{dato in input}; esso quindi deve interpretare l'input e svolgere una mansione.
+    \begin{itemize}
+        \item \textbf{Clustering}: Il modello, analizzando i dati in input, trova dei raggruppamenti a cui le diverse parti dell'input appartengono
+    \end{itemize} 
+\end{itemize}
+Tuttavia, come si può notare dallo schema, la situazione è ben più complessa rispetto all'elenco puntato sopra.
+Inoltre, che relazione ha tutto questo con la statistica? Il deep learning dove si colloca in questo schema?
+Facciamo quindi un passo indietro e chiediamoci la seguente domanda: qual'è la differenza tra la \textbf{programmazione tradizionale} e la \textbf{programmazione di modelli di apprendimento automatico}?
+\begin{center}
+    \includegraphics[width =0.65\linewidth]{Images/59.PNG}
+\end{center}
+\begin{itemize}
+    \item \textbf{Programmare} è essenzialmente scrivere le operazioni che un esecutore automatico deve seguire per risolvere un qualche problema. Ciò significa che un programma tradizionale ha \textbf{come input dei dati} e darà in \textbf{output dei dati}.
+    Tradizionalmente, un programmatore deve esplicitamente definire le operazioni che la macchina dovrà eseguire, cioè deve definire \textbf{le regole che l'esecutore dovrà seguire}.
+    \item All'interno di alcune tecniche di apprendimento automatico, il programmatore \textbf{studia il problema} e seleziona un \textbf{algoritmo automatico} che, analizzando i dati, automaticamente produce un programma che risolverà il problema. Un \textbf{algoritmo di Machine Learning} quindi avrà in \textbf{input dei dati} e ritornerà in \textbf{output un programma}.
+\end{itemize}
+Ovviamente, entrambi i processi sono \textbf{iterativi}; ciò permette la gestione di errori e di risultati che non considerati "abbastanza buoni".
+\subsubsection{Apprendimento supervisionato}
+Nell'\textbf{apprendimento supervisionato}, i dati di addestramento che vengono dati in pasto all'algoritmo includono le \textbf{soluzioni desiderate}, chiamate \textbf{labels} (etichette).
+\begin{itemize}
+    \item Esse possono essere \textbf{categorie} (es. SPAM / NOT SPAM) nei \textbf{modelli di classificazione}. La supervisione, quindi, \textbf{è l'avere degli esempi con un'etichettatura}. Ovviamente, gli esempi devono essere in \textbf{numero sufficiente} e devono avere una \textbf{buona rappresentanza delle varia classi}.
+    \item Oppure, possono essere \textbf{valori numerici}, dove si cerca di \textbf{apprendere una funzione non nota}, nei \textbf{modelli regressivi} 
+\end{itemize}
+\begin{center}
+    \includegraphics[width =0.65\linewidth]{Images/60.PNG}
+\end{center}
+\subsubsection{Apprendimento non supervisionato}
+Nell'\textbf{apprendimento non supervisionato}, i dati \textbf{non sono etichettati!}
+Alcune tipiche mansioni in quest'area sono:
+\begin{itemize}
+    \item \textbf{Clustering}: Algoritmi che provano a individuare modi di \textbf{raggruppare istanze} all'interno del dataset secondo sia le loro \textbf{caratteristiche} sia le \textbf{caratteristiche dell'intero dataset}.
+    \item \textbf{Dimensionality Reduction}: I dati possono essere caratterizzati da un numero molto elevato di caratteristiche; ciò li rende quindi molto difficili da gestire e visualizzare. Quindi, ha, a volte, senso ridurre il \textbf{numero di dimensioni} (cioè il numero di caratteristiche) \textbf{limitando la perdita di informazione}. Questo approccio è molto spesso \textbf{ancillare} ad altre tecniche.
+    \item \textbf{Anomaly Detection}: I dati rappresentano un \textbf{singolo insieme di individui "regolari"} e il sistema deve imparare a discriminare i dati che appartengono a questo insieme da quelli non contenuti in esso, cioè dai dati che \textbf{non sono conformi ad una certa struttura dell'insieme}, essa stessa implicata dai dati.
+\end{itemize}
+\begin{center}
+    \includegraphics[width =0.65\linewidth]{Images/61.PNG}
+\end{center}
+\begin{center}
+    \includegraphics[width =0.50\linewidth]{Images/62.PNG}
+\end{center}
+\subsubsection{Altre classi di apprendimento automatico}
+Altre classi di apprendimento automatico sono:
+\begin{itemize}
+    \item \textbf{Apprendimento semi-supervisionato}: Questo approccio gestisce \textbf{dati di addestramento parzialmente etichettati}. Solitamente, i dataset in cui viene impiegato questo approccio hanno \textbf{una mole molto elevata di dati non etichettati} e una \textbf{piccola quantità di dati etichettati}.
+    Questo approccio tipicamente combina algoritmi supervisionati e non supervisionati.
+    \item \textbf{Apprendimento per rinforzo}: Questo approccio è molto differente da quelli visti fino ad ora. In questo caso, l'agente viene posto all'interno di un ambiente, del quale conosce \textbf{quali azioni sono disponibili}, ed esso apprende \textbf{essenzialmente tramite un processo di "trial-and-error"}, visto che l'ambiente
+    mette a sua disposizione delle \textbf{percezioni} e un \textbf{valore di ricompensa} associato alla precedente azione scelta dall'agente.
+\end{itemize}
+\subsubsection{Batch Learning vs Online Learning}
+Un approccio di ML \textbf{non necessariamente migliora costantemente le proprie performance}.
+Per esempio, la figura 1.2 di questa sezione \textbf{non descrive un caso in cui la soluzione "lanciata" viene revisionata}.
+La revisione della soluzione dopo il lancio è \textbf{un approccio possibile}:
+\begin{center}
+    \includegraphics[width =0.65\linewidth]{Images/63.PNG}
+\end{center}
+tuttavia, l'aggiungere dati \textbf{non necessariamente porterà ad un aumento delle prestazioni del modello}.
+Più precisamente, l'addestramento può avvenire secondo le seguenti modalità:
+\begin{itemize}
+    \item \textbf{Batch learning}: In questo approccio, il modello è addestrato su \textbf{tutti i dati al momento disponibili}
+    \begin{itemize}
+        \item Ciò, generalmente, richiede molto tempo e molte risorse computazionali, quindi è \textbf{tipicamente svolto offline}
+    \end{itemize}
+    \item \textbf{Online learning}: In questo approccio, il sistema viene addestrato dandogli in pasto \textbf{delle istanze di dati in maniera sequenziale}, o individualmente o in \textbf{piccoli gruppi}, detti "\textbf{mini-batches}". Gli algoritmi
+    di online learning possono anche essere utilizzati per \textbf{addestrare modelli su dataset numerosi} che non riescono a rientrare all'interno della memoria principale di una singola macchina.
+    \begin{itemize}
+        \item È necessario inoltre definire \textbf{quanto velocemente il modello debba adattarsi alle modifiche nei dati} (\textbf{learning rate}) e quanto il dato nuovo sia rilevante.
+    \end{itemize}
+\end{itemize}
+\begin{center}
+    \includegraphics[width =0.70\linewidth]{Images/64.PNG}
+\end{center}
+\subsubsection{Necessità dell'addestramento di un modello}
+Nel machine learning, \textbf{è sempre necessario che vi sia una complessa fase di addestramento del modello?}
+La risposta è \textbf{no}. Nelle tecniche non supervisionate, è piuttosto frequente che \textbf{non vi sia una fase di addestramento}, ma semplicemente una fase di \textbf{analisi del dataset}.
+Un approccio che non necessita di addestramento è quello del \textbf{instance-based learning}, il quale rappresenta un modo di \textbf{classificare dati basandosi sulla distanza dai dati vicini o sulla similarità}.
+\begin{center}
+    \includegraphics[width =0.75\linewidth]{Images/65.PNG}
+\end{center}
+\subsubsection{Criticità della valutazione dei modelli}
+Nelle sezioni precedenti, abbiamo parlato di poter \textbf{dimostrare} delle affermazioni oppure di poter \textbf{trovare un valore ottimo}.
+Negli approcci di ML, \textbf{è molto difficile che si sia in grado di dimostrare certe affermazioni}; diventa quindi \textbf{imperativo valutare i risultati di un modello},
+quindi di discutere quanto essi siano "buoni" e quando e come falliscono. Tutti gli approcci visti fino ad ora hanno una base statistica e richiedono una valutazione dei risultati, le quali
+non hanno necessariamente il \textbf{grado di forza che ha una dimostrazione} e quindi sono soggette sempre ad una costante verifica.
+La valutazione dei risultati ci permette inoltre di \textbf{accorgerci di eventuali bias del modello}, dati anche da una possibile \textbf{sotto-rappresentazione di certe categorie}.
+Le sfide quindi nell'ambito del ML sono:
+\begin{itemize}
+    \item Quantità di dati di addestramento insufficienti
+    \item Dati di addestramento non rappresentativi
+    \item Dati di scarsa qualità
+    \item Presenza di caratteristiche irrilevanti
+    \item Overfitting/Underfitting dei dati di addestramento
+\end{itemize}
+\begin{center}
+    \includegraphics[width =0.80\linewidth]{Images/66.PNG}
+\end{center}
+\begin{center}
+    \includegraphics[width =0.80\linewidth]{Images/67.PNG}
+\end{center}
 
 \end{document}
