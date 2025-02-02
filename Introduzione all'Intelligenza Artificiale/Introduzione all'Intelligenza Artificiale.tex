@@ -1342,10 +1342,463 @@ Nell'algoritmo sopra, la scelta si basa sul \textbf{guadagno informativo che si 
     \includegraphics[width =1\linewidth]{Images/74.PNG}
 \end{center}
 l'albero (B) sembra essere \textbf{migliore} rispetto all'albero (A), poiché \textbf{ha un tasso minore di incertezza in ogni suo sotto-caso} ed, essendo più piccolo, è anche \textbf{computazionalmente migliore}.
-% 46:51
-
-
-
+La \textbf{teoria dell'informazione} mette a disposizione una base matematica per misurare il contenuto dell'informazione.
+Per capire la nozione di informazione, possiamo pensare ad essa come ciò che \textbf{da una risposta ad una domanda}, per esempio se una moneta lanciata risulterà "Testa":
+\begin{itemize}
+    \item Se si ha già una buona ipotesi riguardo la risposta, allora la risposta effettiva sarà \textbf{meno informativa}
+    \item Se si conosce a priori che la moneta è truccata, in modo tale che risulterà "Testa" con una probabilità di 0.99, allora un messaggio (informazione avanzata) sul risultato di un lancio vale meno di quanto varrebbe per una moneta non truccata (50-50)
+\end{itemize}
+Per una moneta onesta, \textbf{non si hanno informazioni}, quindi si è disposti a "pagare di più" (diciamo, in termini di €) per dell'informazione avanzata: \textbf{meno si sa, più l'informazione aumenta di valore}.
+La teoria dell'informazione utilizza la stessa idea, ma invece di misurare il valore dell'informazioni in euro, misura invece \textbf{il contenuto dell'informazione in bit}.
+Un bit di informazione è abbastanza per rispondere "si/no" ad una domanda su cui non si ha nessuna ipotesi sulla risposta; come nel caso di un lancio di una moneta non truccata.
+In teoria dell'informazione, esiste il concetto di \textbf{entropia}, il quale \textbf{misura l'impurità all'interno di un dataset}:
+$$entropy(D) = - \sum_{j=1}^{|C|} Pr(c_j) \log_2 Pr(c_j)$$
+$$\sum_{j=1}^{|C|} Pr(c_j) = 1 \; \textrm{(la somma delle probabilità di appartenere ad una certa classe deve fare 1)}$$
+dove:
+\begin{itemize}
+    \item $Pr(c_j)$ è la probabilità che la classe $c_j$ sia nel dataset $D$
+    \item Usiamo l'entropia come \textbf{misura dell'impurità (o del disordine) di un dataset} (O, come misura dell'informazione in un albero)
+\end{itemize}
+Più il dataset diventa puro, il valore di entropia diventa sempre più piccolo.
+Dato un dataset di esempi $D$, computiamo prima la sua entropia:
+$$entropy(D) = - \sum_{j=1}^{|C|} Pr(c_j) \log_2 Pr(c_j)$$
+Se poniamo l'attributo $A_i$, con $v$ valori possibili, come radice dell'albero corrente, ciò partizionerà $D$ in $v$ sottoinsiemi $D_1, \dots, D_v$.
+L'entropia attesa se $A_i$ viene usato come radice corrente è:
+$$entropy_{A_i}(D) = \sum_{j=1}^{v} \frac{|D_j|}{|D|} \cdot entropy(D_j)$$
+\textbf{Il guadagno informativo} che si ottiene selezionando $A_i$ per effettuare una partizione del dataset è:
+$$gain(D, A_i) = entropy(D) - entropy_{A_i}(D)$$
+Scegliamo quindi di partizionare l'albero corrente rispetto all'attributo con il guadagno informativo più alto.
+Come possiamo invece gestire degli attributi che \textbf{non hanno valori categoriali ma solo numerici?}
+Possiamo gestire un attributo continuo \textbf{dividendolo in due o più intervalli ad ogni nodo}.
+Come facciamo però a trovare la \textbf{migliore soglia rispetto a cui dividere?}
+\begin{itemize}
+    \item Possiamo usare nuovamente il guadagno informativo
+    \item Ordiniamo tutti i valori dell'attributo continuo in ordine crescente $\{v_1, \dots, v_r\}$
+    \item Un possibile taglio tra due valori adiacenti $v_i$ e $v_{i+1}$ è il \textbf{provare tutti i possibili tagli e trovare quello che massimizza il guadagno informativo}
+\end{itemize}
+\begin{center}
+    \includegraphics[width =0.80\linewidth]{Images/75.PNG}
+\end{center}
+Tuttavia, possiamo notare dall'esempio sopra che il caso in cui $X \leq 2$ e $Y \leq 2.6$ è supportato da un solo caso all'interno del dataset e quindi
+ha poco supporto numerico-statistico (1 caso). Un algoritmo di apprendimento automatico dovrebbe \textbf{generalizzare partendo dal dato}. Il caso in cui $X \leq 2$ e $Y \leq 2.6$ potrebbe essere, per esempio,
+un'errore di misura, quindi costruire un sotto-ramo solamente per questo caso specifico risulta \textbf{inutile}.
+Quando il modello di apprendimento automatico \textbf{non generalizza, ma memorizza il dataset}, si dice che sta andando in \textbf{overfitting}.
+\begin{itemize}
+    \item \textbf{Overfitting}: Un albero potrebbe essere andato in overfitting se:
+    \begin{itemize}
+        \item Ha una buona accuratezza sui dati di addestramento ma una scarsa accuratezza sui dati di test
+        \item \textbf{Sintomi}: L'albero è troppo profondo e ha troppi rami; alcuni di questi potrebbero riflettere delle \textbf{anomalie o del "rumore" all'interno del dataset}
+    \end{itemize}
+    \item Negli alberi di decisione, vi sono due approcci per evitare l'overfitting:
+    \begin{itemize}
+        \item \textbf{Pre-pruning}: Arrestare precocemente la costruzione dell'albero. È però difficile decidere quando arrestare la generazione, visto che non \textbf{sappiamo ciò che potrebbe accadere se continuiamo a far crescere l'albero} (es. l'eccezione dell'algoritmo sopra)
+        \item \textbf{Post-pruning}: Rimuovere rami o sotto-alberi da un albero pienamente espanso. Questo metodo è quello più comunemente usato e utilizza, per la potatura dell'albero, un \textbf{metodo statistico} per stimare l'errore ad ogni nodo. Per la potatura, potrebbe essere anche impiegato un insieme di validazione 
+    \end{itemize}
+\end{itemize}
+\begin{center}
+    \includegraphics[width =0.70\linewidth]{Images/76.PNG}
+\end{center}
+Altri problemi legati agli alberi di decisione sono:
+\begin{itemize}
+    \item Dall'albero alle regole e \textbf{pruning delle regole}
+    \item Gestione di valori mancanti
+    \item Gestione di distribuzioni "distorte" (molto piatte, distribuite "male" ecc...)
+    \item Gestione di attributi e classi con costi differenti
+    \item Costruzione di attributi
+    \item Ecc...
+\end{itemize}
+\subsubsection{Valutazione di classificatori}
+Valutare un classificatore richiede una \textbf{definizione quantitativa} di alcune metriche:
+\begin{itemize}
+    \item \textbf{Accuratezza predittiva}:
+    $$Accuracy = \frac{\textrm{Number of correct classifications}}{\textrm{Total number of test cases}}$$
+    \item \textbf{Efficienza}:
+    \begin{itemize}
+        \item Tempo per costruire il modello
+        \item Tempo per usare il modello
+    \end{itemize}
+    \item \textbf{Robustezza}: Capacità di gestire valori mancanti e il rumore nei dati
+    \item \textbf{Scalabilità}: Efficienza quando il dataset ha dimensioni consistenti
+    \item \textbf{Interpretabilità}: Capacità di comprendere come funziona un certo modello, il perché produce certi risultati o come realizza il rapporto tra input e output
+    \item \textbf{Compattezza del modello}: Dimensione dell'albero di decisione o del numero di regole
+\end{itemize}
+Per poter valutare in maniera propria il funzionamento un modello, è \textbf{necessario andare a definire un processo complessivo di valutazione}, che non sarà solamente
+un \textbf{metodo di valutazione} ma sarà anche un \textbf{flusso di lavoro complessivo per l'addestramento del modello}.
+Vediamo diversi metodi di valutazione: \newline
+\textbf{Holdout set}: \newline
+Il dataset $D$ viene diviso in due insiemi disgiunti:
+\begin{itemize}
+    \item L'insieme di addestramento $D_{train}$ (per l'addestramento del modello)
+    \item L'insieme di test $D_{test}$ (per testare il modello)
+\end{itemize}
+\textbf{Importante}: L'insieme di addestramento non dovrebbe essere utilizzato durante la valutazione e l'insieme di test non dovrebbe essere utilizzato durante l'addestramento. I casi di test mai osservati dal modello, infatti,
+forniscono una \textbf{stima imparziale dell'accuratezza del modello}. \newline
+L'insieme di addestramento è anche chiamato \textbf{holdout set} (gli esempi nel dataset originale $D$ sono tutti etichettati con delle classi).
+Questo metodo è utilizzato quando il dataset $D$ è ampio.
+\begin{center}
+    \includegraphics[width =0.80\linewidth]{Images/77.PNG}
+\end{center}
+\textbf{n-fold cross-validation}: \newline
+Il dataset viene partizionato in $n$ sottoinsiemi disgiunti con stessa cardinalità.
+Viene quindi usato ogni sottoinsieme come insieme di test e si va a combinare i restanti $n-1$ insiemi per formare l'insieme di addestramento.
+La procedura viene quindi eseguita $n$ volte, il che produce $n$ accuratezze.
+La stima finale dell'accuratezza del modello è data dalla media delle $n$ accuratezze.
+10-fold e 5-fold sono quelle più comunemente utilizzate.
+Questo processo di validazione è molto costoso per $n$ grandi, visto che si effettuano $n$ validazioni e $n+1$ processi di addestramento, quindi questo approccio non è molto pratico se $D$ è grande.
+\begin{center}
+    \includegraphics[width =0.70\linewidth]{Images/78.PNG}
+\end{center}
+\textbf{Leave-one-out cross-validation}: \newline
+Questo metodo di valutazione viene utilizzato quando il dataset è molto piccolo.
+Esso è un caso speciale di n-fold cross-validation, in cui ogni cross-validation ha \textbf{solamente un singolo caso d'esempio} e tutto il resto del dataset viene utilizzato come set d'addestramento.
+Se il dato originale ha $m$ esempi, questo è un caso di m-fold cross-validation \newline
+\textbf{Validation set}: \newline
+Abbiamo visto che, negli algoritmi di costruzione di un classificatore, è possibile che \textbf{siano previsti dei parametri}.
+Siccome sono parametri \textbf{del processo di apprendimento e non del modello appresso}, vengono chiamati \textbf{iperparametri}.
+Gli iperparametri sono significativi per il processo di apprendimento, quindi quando andiamo a definire un processo complessivo di apprendimento e valutazione, vale la pena
+conservare un sottoinsieme di dati da utilizzare per \textbf{scegliere il valore degli iperparametri}.
+Il dataset viene quindi diviso in 3 sottoinsiemi:
+\begin{itemize}
+    \item Un insieme di addestramento
+    \item Un insieme di validazione
+    \item Un insieme di test
+\end{itemize}
+L'insieme di validazione viene frequentemente usato, negli algoritmi di apprendimento, per \textbf{stimare i valori degli iperparametri}.
+Possiamo quindi pensare di effettuare diversi addestramenti con valore degli iperparametri diversi. I valori degli iperparametri che danno la migliore accuratezza sul set di validazione saranno usati come valori finali degli iperparametri.
+Si può utilizzare anche cross-validation per stimare il valore degli iperparametri. \newline
+Ricapitolando:
+\begin{itemize}
+    \item La cosa più importante da ricordare è \textbf{che bisogna valutare un modello su dati che non sono stati utilizzati per il suo addestramento}
+    \item "L'accordatura" degli iperparametri implica \textbf{eseguire più volte l'addestramento del modello la valutazione dei suoi risultati}; indipendentemente dal metodo di valutazione scelto 
+\end{itemize}
+L'accuratezza, nonostante essendo una metrica molto semplice e comoda, \textbf{è un indicatore estremamente aggregato} e non distingue tra casistiche differenti ($Error = 1 - Accuracy$).
+Considerando diverse classi, ve ne possono essere alcune che \textbf{sono più sensibili di altre all'errore}.
+La classe di interesse è comunemente chiamata \textbf{classe positiva}, e il resto \textbf{classi negative}.
+In caso di una classificazione binaria, possiamo usare una matrice con la seguente struttura:
+\begin{center}
+    \includegraphics[width =0.80\linewidth]{Images/79.PNG}
+\end{center}
+questa matrice viene detta \textbf{matrice di confusione}, dove:
+\begin{itemize}
+    \item $TP$ è il numero di classificazioni corrette degli esempi positivi (\textbf{true positive})
+    \item $FN$ è il numero di classificazioni incorrette degli esempi positivi (\textbf{false negative})
+    \item $FP$ è il numero di classificazioni incorrette degli esempi negativi (\textbf{false positive})
+    \item $TN$ è il numero di classificazioni corrette degli esempi negativi (\textbf{true negative})
+\end{itemize}
+Quindi, due metriche più granulari della semplice accuratezza sono le seguenti:
+\begin{itemize}
+    \item \textbf{Precision} è il numero di esempi correttamente classificati come positivi diviso il numero totale di esempi che sono stati classificati come positivi
+    $$p = \frac{TP}{TP + FP}$$
+    esso stima l'accuratezza del classificatore stante una classificazione positiva
+    \item \textbf{Recall} è il numero di esempi correttamente classificati come positivo diviso il numero totali di esempi effettivamente positivi nel dataset
+    $$r = \frac{TP}{TP + FN}$$
+    esso stima quanto il classificatore copra bene l'insieme degli esempi realmente positivi
+\end{itemize}
+esse sono misure di frequenza relativa ed effettuano una misura solamente sulla classe positiva.
+Una matrice di confusione è \textbf{sempre quadrata}, poiché un classificatore deve poter prevedere tutte le classi presenti all'interno della realtà che si sta analizzando.
+Si può quindi andare a misurare una precisione e una recall per ogni classe, in cui ogni classificazione scorretta, rispetto a quella classe, viene considerata come negativa.
+È però difficile comparare due classificatori usando due misure. La metrica \textbf{$F_1$-score} combina \textbf{precision e recall in un'unica misura}:
+$$F_1 = \frac{2pr}{p + r}$$
+Il $F_1$-score è la media armonica della precision e della recall:
+$$F_1 = \frac{2}{\frac{1}{p} + \frac{1}{r}}$$
+La media armonica di due numeri \textbf{tende ad essere più vicina al più piccolo tra i due}, quindi, per fare in modo che il $F_1$-score sia grande, allora $r$ e $p$ devono essere grandi a loro volta.
+Un'altra metrica di valutazione è quella della \textbf{Receiver Operating Characteristics curve} (ROC curve), la quale è un grafico del \textbf{tasso dei veri positivi (TPR)} rispetto al \textbf{tasso dei falsi positivi}, i quali si calcolano nel seguente modo:
+$$TPR = \frac{TP}{TP + FN} = r$$
+$$FPR = \frac{FP}{TN + FP}$$
+\newpage \noindent
+In statistica, esistono altre due metriche di valutazione:
+\begin{itemize}
+    \item \textbf{Sensitività}: Uguale a recall
+    \item \textbf{Specificità}: Anche chiamato \textbf{Tasso dei veri negativi (TNR)} (negative recall)
+\end{itemize}
+Poiché:
+$$TNR = \frac{TN}{TN + FP}$$
+allora abbiamo che:
+$$FPR = 1 - specificity = 1 - TNR$$
+In molte applicazioni, quando il dataset ha una distribuzione distorta o sbilanciata, è molto difficile effettuare una classificazione binaria.
+Ha quindi più senso creare un \textbf{regressore} della probabilità di appartenenza ad una data classe.
+Computiamo quindi $Pr(+|X)$ (probabilità di appartenere alla classe positiva) per ogni istanza di test; questo valore è anche detto \textbf{scoring}
+\begin{itemize}
+    \item Dopodiché, possiamo fissare una \textbf{soglia} per decidere la classificazione in base ai bisogni dell'applicazione
+    \item A volte, non fissiamo nessuna soglia e invece lavoriamo direttamente con il ranking
+\end{itemize}
+sulla base della soglia, possiamo trovare tutta una serie di \textbf{coppie delle metriche che abbiamo introdotto} e, quindi, possiamo disegnarle su un grafico
+\begin{center}
+    \includegraphics[width =0.80\linewidth]{Images/80.PNG}
+\end{center}
+Nell'esempio sopra, qual è il classificatore migliore, $C_1$ o $C_2$?
+\textbf{Dipende dalla regione che consideriamo}. Possiamo però avere una misura della bontà di un classificatore in questo caso?
+Si, possiamo computare \textbf{l'area sotto la curva} (AUC).
+Se l'AUC di $C_i$ è maggiore dell'AUC di $C_j$, si dice che $C_i$ è migliore di $C_j$
+\begin{itemize}
+    \item Se un classificatore è perfetto, la sua AUC vale 1
+    \item Se un classificatore effettua classificazioni casuali, la sua AUC è 0.5
+\end{itemize}
+Il grafico di una ROC può anche non essere continuo o può anche non essere una funzione:
+\begin{center}
+    \includegraphics[width =1\linewidth]{Images/81.PNG}
+\end{center}
+\subsubsection{K-nearest neighbour (kNN)}
+A differenza della tecnica degli alberi di decisione, kNN \textbf{non costruisce un modello a partire dai dati di addestramento}.
+Per classificare un'istanza $d$, definisce e calcola il \textbf{vicinato k} $P$ come i $k$ elementi più vicini al nuovo elemento $d$.
+Conta quindi il numero $n$ di istanze d'addestramento in $P$ che appartengono alla classe $c_j$.
+Per funzionare, l'algoritmo ha quindi bisogno di una \textbf{metrica di valutazione delle distanze tra gli elementi del dataset}, data da:
+$$Pr(c_j|d) = \frac{n}{k}$$
+stima quindi la probabilità che il nuovo elemento $d$ faccia parte della stessa classe degli $n$ vicini appartenenti alla classe $c_j$.
+La classe di maggioranza relativa quindi verrà usata per classificare l'elemento $d$.
+Tendenzialmente, si utilizza $k$ dispari.
+Per questa tecnica di apprendimento, quindi, non c'è bisogno di \textbf{alcuna fase di addestramento}. Il tempo di classificazione è lineare
+nella dimensione dell'insieme di test per ogni caso di test.
+Il costo complessivo risulta quindi risulta "più che lineare".
+L'algoritmo è quindi il seguente:
+\begin{center}
+    \includegraphics[width =0.80\linewidth]{Images/82.PNG}
+\end{center}
+$k$ è solitamente scelto empiricamente tramite un validation set oppure tramite cross-validation su un intervallo di valori.
+La \textbf{funzione di distanza} è quindi cruciale, ma dipende dall'applicazione.
+Facciamo un esempio con $k = 6$:
+\begin{center}
+    \includegraphics[width =0.80\linewidth]{Images/83.PNG}
+\end{center}
+kNN può funzionare bene anche con confini di decisione, nello spazio n-dimensionale, anche molto complessi e arbitrari.
+Nonostante la sua semplicità, i ricercatori hanno mostrato che l'accuratezza di classificazione di kNN può essere piuttosto elevata e, in molti casi, accurata tanto quanto quella di altri metodi
+più complessi. kNN tuttavia è \textbf{molto costoso al tempo della classificazione}; inoltre kNN non produce un modello spiegabile.
+\subsubsection{Metodi ensemble}
+Fino ad ora, abbiamo solamente presentato individualmente dei classificatori, cioè abbiamo discusso come costruirli e come usarli.
+Possiamo però \textbf{combinare molteplici classificatori per ottenerne uno migliore?}
+La risposta a questa domanda è si, in certi casi.
+Un algoritmo per effettuare questa combinazione è \textbf{Bootstrap AGGregatING} (Bagging):
+\begin{itemize}
+    \item È un'applicazione del Bootstrap sampling:
+    \begin{itemize}
+        \item SDato un insieme $D$ contenente $m$ esempi d'addestramento
+        \item Crea un campione $S[i]$ di $D$ pescando $m$ esempi casualmente \textbf{con reinserimento} (lo stesso esempio, quindi, può capitare più volte)
+        \item $S[i]$ hanno dimensione $m$: ci si aspetta che non comprendano lo $0.37 (100(1-1/e)) \approx 63.2\%$ degli esempi di $D$
+    \end{itemize}
+\end{itemize}
+L'idea è quindi la seguente:
+\begin{itemize}
+    \item \textbf{Addestramento}
+    \begin{itemize}
+        \item Crea $k$ campioni $S[1], \dots, S[k]$
+        \item Costruisci un classificatore su ogni $S[i]$ per produrre $k$ classificatori, utilizzando lo stesso algoritmo di apprendimento 
+    \end{itemize}
+    \item \textbf{Testing}
+    \begin{itemize}
+        \item Classifica ogni nuova istanza tramite un "voto" dei $k$ classificatori (ogni voto ha peso eguale)
+    \end{itemize}
+\end{itemize}
+\begin{center}
+    \includegraphics[width =0.80\linewidth]{Images/84.PNG}
+\end{center}
+Quando Bagging aiuta?
+\begin{itemize}
+    \item Quando i processi di addestramento sono \textbf{molto sensibili a piccoli cambiamenti nel dataset}
+    \item Sperimentalmente, Bagging può aiutare sostanzialmente i processi di apprendimento instabili, ma può, a volte, \textbf{degradare i risultati dati da processi di apprendimento stabili}
+\end{itemize}
+Una famiglia di metodi ensemble è quella del \textbf{Boosting} (es. AdaBoost).
+L'idea dietro questo tipo di metodi è la seguente:
+\begin{itemize}
+    \item \textbf{Addestramento}:
+    \begin{itemize}
+        \item Produci una sequenza di classificatori (con lo stesso algoritmo di apprendimento)
+        \item Ogni classificatore sarà dipendente dal precedente e verrà addestrato concentrandosi sugli errori fatti dal classificatore precedente
+        \item Agli esempi classificati erroneamente dal classificatore precedente viene dato un peso più alto
+    \end{itemize}
+    \item \textbf{Testing}:
+    \begin{itemize}
+        \item Per ogni caso di test, i risultati dell'intera serie di classificatori vengono combinati per determinare la classe di appartenenza finale dell'esempio
+    \end{itemize}
+\end{itemize}
+\subsection{Percettroni}
+L'idea del percettrone è un modello \textbf{vagamente ispirata alla biologia}:
+\begin{center}
+    \includegraphics[width =0.80\linewidth]{Images/85.PNG}
+\end{center}
+in un singolo percettrone, a differenza di un neurone biologico, non vi è un'altro strato di percettroni che
+pronti a ricevere il suo output. La struttura dei percettroni, tuttavia, non gli consente di imparare, per esempio,
+la funzione XOR. Come viene utilizzato un percettrone? Fondamentalmente, a partire dall'input $x$ viene calcolato un
+\textbf{vettore di feature} (formato da valori numerici). Lo scopo del percettrone è quindi quella di \textbf{predire una funzione dell'input che assegni un valore ad esso}
+(es. Per una mail, se è spam oppure no)
+\begin{center}
+    \includegraphics[width =0.80\linewidth]{Images/86.PNG}
+\end{center}
+In un percettrone, quindi:
+\begin{itemize}
+    \item Gli input sono i \textbf{valori delle feature} (ottenuti dall'input iniziale tramite un pre-processing)
+    \item Ogni feature ha un \textbf{peso associato}, il quale viene utilizzato per definire che ruolo ha ogni feature
+    \item Il peso di ogni feature viene utilizzato per calcolare il \textbf{valore di attivazione}, cioè il valore per il quale il percettrone si attiva:
+    $$activation_w(x) = \sum_{i} w_i \cdot f_i(x) = \boldsymbol{w} \cdot \boldsymbol{f(x)}$$
+    il calcolo dell'attivazione è quindi un prodotto scalare.
+\end{itemize}
+\newpage \noindent
+Se l'attivazione è:
+\begin{itemize}
+    \item Positiva, l'output verrà normalizzato a $+1$
+    \item Negativa, l'output verrà normalizzato a $-1$
+\end{itemize}
+\begin{center}
+    \includegraphics[width =0.50\linewidth]{Images/87.PNG}
+\end{center}
+\subsubsection{Classificatori lineari}
+Come possiamo, però, effettivamente riconoscere, partendo dalle feature, il valore dell'output?
+Assumiamo di avere i pesi del nostro classificatore; i quali sono rappresentati da un \textbf{vettore nello spazio} $\boldsymbol{w}$.
+Supponiamo di ricevere una nuova istanza, la quale ha associata una \textbf{serie di feature, anch'essa rappresentata da un vettore nello spazio} $\boldsymbol{f}$.
+Il fatto che abbiano delle caratteristiche in comune può essere quindi semplicemente osservato andando l'angolo tra i due vettori:
+\begin{center}
+    \includegraphics[width =0.80\linewidth]{Images/88.PNG}
+\end{center}
+Nell'esempio sopra, una mail che probabilmente non è spam avrà un angolo rispetto al vettore dei pesi maggiore di 90°.
+Questo perché la maggior parte delle feature della mail non corrispondono a quelle usate per riconoscere una mail spam.
+Viceversa, una mail che probabilmente è spam avrà un angolo compreso con il vettore dei pesi minore di 90°.
+Il problema è quindi è \textbf{determinare dei pesi corretti per le diverse feature}.
+Per costruire un classificatore di questo tipo, detto \textbf{classificatore lineare}, bisogna introdurre un \textbf{iperpiano} che divide
+lo spazio delle feature \textbf{appartenenti alla classe positiva} dallo spazio delle feature \textbf{appartenenti alla classe negativa}.
+\begin{center}
+    \includegraphics[width = 1\linewidth]{Images/90.PNG}
+\end{center}
+Una volta definito il vettore dei pesi, quindi, \textbf{definiamo anche l'iperpiano che dividerà gli elementi appartenenti alla classe positiva da quelli appartenenti alla classe negativa}.
+La stessa cosa è, ovviamente, visualizzabile in 3D:
+\begin{center}
+    \includegraphics[width =0.80\linewidth]{Images/91.PNG}
+\end{center}
+Ciò che si può evincere dall'immagine sopra è che \textbf{ci può essere più di un iperpiano che divide i membri delle due classi}.
+Oltre alle feature estratte dalle caratteristiche dell'elemento, vi è anche un elemento chiamato \textbf{bias}, necessario affinché i percettroni possano apprendere.
+Se non ci fosse il valore bias, \textbf{l'iperpiano passerebbe sempre per 0}.
+Se, per esempio, abbiamo la seguente situazione:
+\begin{center}
+    \includegraphics[width =1\linewidth]{Images/92.PNG}
+\end{center}
+per effettuare la classificazione, andremmo solamente ad osservare il segno del prodotto $w \cdot f(x)$, cioè se sono concordi o discordi.
+Se ci interessasse, per esempio, il numero di typo all'interno della mail, \textbf{in questo modo, non potremmo riconoscerlo}.
+Per poterci quindi spostare sull'asse delle feature e non essere solamente sensibili ai segni dei valori associati alle feature, introduciamo il bias per \textbf{selezionare il punto in cui dividere} (infatti, nell'esempio sopra, senza il bias non potremmo mai andare a dividere tra punti rossi e punti blu, visto che l'iperpiano passa sempre per 0).
+\begin{center}
+    \includegraphics[width =1\linewidth]{Images/93.PNG}
+\end{center}
+quindi, l'introduzione del bias serve per fare in modo che l'attivazione del percettrone \textbf{dipenda anche dal valore delle feature}.
+Il bias è un \textbf{elemento costante all'interno delle feature dell'input} che serve per spostare il "punto di partenza dell'iperpiano".
+\subsubsection{Aggiornamento dei pesi}
+Il percettrone è in grado di \textbf{imparare i propri pesi a partire dagli esempi}.
+Partiamo da un percettrone \textbf{binario}, che è in grado di riconoscere solamente due classi.
+Il percettrone segue il seguente algoritmo, il quale gli permette di aggiornare i pesi in modo tale che il suo output \textbf{corrisponda a quello desiderato}:
+\begin{center}
+    \includegraphics[width =1\linewidth]{Images/94.PNG}
+\end{center}
+se quindi, per esempio, abbiamo delle mail le quali feature le classificano come spam, possiamo utilizzare queste informazioni per creare il vettore dei pesi.
+L'algoritmo quindi è un algoritmo di \textbf{apprendimento supervisionato}.
+Nel momento in cui vi è una classificazione errata, ciò che vogliamo fare è quindi \textbf{ruotare l'iperpiano di separazione per fare in modo che l'esempio corretto rientri nella divisione dello spazio corretta}.
+Quindi, definiamo l'algoritmo in maniera più formale:
+\begin{center}
+    \includegraphics[width =1\linewidth]{Images/95.PNG}
+\end{center}
+In caso di classificazione errata, se il valore desiderato era $y^* = +1$, la somma $w + y^* \cdot f$ porterà il vettore dei pesi ad avvicinarsi al vettore
+delle feature rispetto alle quali stiamo cercando di effettuare la correzione; quindi, l'angolo tra i due diminuirà.
+Se invece il valore desiderato era $y^* = -1$, il vettore dei pesi, sottraendo il vettore delle feature, si \textbf{allontanerà rispetto a quest'ultimo}; quindi l'angolo tra i due aumenterà.
+Se gli esempi di addestramento sono \textbf{separabili}, cioè se esiste un iperpiano che divide gli esempi positivi da quelli negativi, allora, iterando il processo sopra più volte, potremmo trovarci
+a \textbf{non cambiare il vettore dei pesi per un'intera iterazione}; in questo caso, quindi, possiamo affermare di \textbf{aver trovato un separatore che divide, in maniera corretta in positivi e negativi, gli esempi all'interno dell'insieme di addestramento}, possiamo quindi terminare il processo di addestramento.
+Questa condizione viene chiamata di \textbf{separabilità lineare}.
+Se esiste un iperpiano che separa gli esempi delle due classi, \textbf{l'algoritmo si fermerà su un iperpiano che effettua la divisione in maniera corretta}.
+Un percettrone può andare a riconoscere anche \textbf{più classi}. In questo caso, si ha un \textbf{vettore dei pesi per ogni classe}, i quali verranno 
+\textbf{appresi dal percettrone con un approccio simile al caso binario}:
+\begin{center}
+    \includegraphics[width =0.90\linewidth]{Images/96.PNG}
+\end{center}
+il percettrone effettua quindi il \textbf{prodotto del vettore delle feature per ognuno dei vettori dei pesi} e va a classificare l'esempio con
+la classe \textbf{corrispondente al prodotto massimo}. Come avviene quindi l'apprendimento in questo caso? L'idea sottostante è uguale al caso binario:
+\begin{center}
+    \includegraphics[width =1\linewidth]{Images/97.PNG}
+\end{center}
+Sia $y$ la classe che il percettrone sceglie per etichettare l'esempio.
+Se $y$ è errata e la classe desiderata è invece $y^*$, allora si va sia a \textbf{sottrarre il vettore delle feature al vettore dei pesi di $y$} (se è stata scelta $y$, allora vuol dire che i suoi pesi sono troppo elevati) sia a
+\textbf{sommare il vettore delle feature al vettore dei pesi di $y^*$} (si avvicina il vettore dei pesi di $y^*$ al vettore delle feature dell'input).
+\begin{Nota}
+    Nelle feature, il valore di bias non è mai uguale a 0!
+\end{Nota}
+\subsubsection{Proprietà dei percettroni}
+Le proprietà dei percettroni sono le seguenti:
+\begin{itemize}
+    \item \textbf{Separabilità}: Vera se alcuni parametri classificano perfettamente l'insieme di addestramento 
+    \item \textbf{Convergenza}: Se l'insieme di addestramento è \textbf{separabile}, allora il percettrone eventualmente convergerà ad un iperpiano corretto (case binario)
+    \item \textbf{Mistake bound}: massimo numero di errori (nel caso binario) legati al \textit{margine} o al \textbf{grado di separabilità}
+    $$mistakes < \frac{k}{\delta^2}$$
+    con $k$ la radice quadrata del raggio della sfera che contiene i dati e $\delta$ il margine che separa le classi di dati.
+    Questo limite ci permette di avere un'indicazione sulla \textbf{convergenza del percettrone}, cioè se \textbf{il dataset contiene esempi non separabili o meno}.
+    Tuttavia, questa metrica è \textbf{calcolabile solamente una volta estratto il modello corretto}, quindi non è particolarmente utilizzabile.
+    $k$ è, essenzialmente, la massima distanza tra elementi nel settore di esempio; mentre $\delta$ è la \textbf{distanza minima tra gli esempi delle due classi}.
+\end{itemize}
+Se l'insieme di esempi \textbf{non è separabile, l'algoritmo non convergerà mai}.
+\begin{center}
+    \includegraphics[width =0.60\linewidth]{Images/98.PNG}
+\end{center}
+\subsubsection{Problemi del percettrone}
+I percettroni soffrono delle seguenti problematiche:
+\begin{itemize}
+    \item \textbf{Gestione del rumore}: Se i dati non sono separabili, i pesi potrebbero alterarsi e il \textbf{valore dei pesi per certe feature diventa molto elevato, creando un separatore molto sbilanciato}.
+    Effettuare una media dei vettori di peso nel tempo \textbf{può aiutare ad alleviare questo problema} (averaged perceptron)
+    \begin{center}
+        \includegraphics[width =0.60\linewidth]{Images/99.PNG}
+    \end{center}
+    \item \textbf{Generalizzazione mediocre}: il percettrone converge ad una soluzione che \textbf{separa gli esempi a malapena}
+    \begin{center}
+        \includegraphics[width =0.60\linewidth]{Images/100.PNG}
+    \end{center}
+    \item \textbf{Overtraining}: L'accuratezza sull'insieme di test/held-out di solito \textbf{sale, per poi scendere}.
+    L'overtraining è quindi un tipo di overfitting.
+    \begin{center}
+        \includegraphics[width =0.60\linewidth]{Images/101.PNG}
+    \end{center}
+\end{itemize}
+Per mitigare gli effetti di questi problemi si può cercare di \textbf{regolare l'aggiornamento dei pesi}.
+Uno degli algoritmi per la regolazione dell'aggiornamento dei pesi prende il nome di $MIRA^*$ (Margin Infused Relaxed Algorithm): esso sceglie una dimensione dell'aggiornamento che sia risolva lo sbaglio corrente sia \textbf{minimizzi i cambi al vettore dei pesi}.
+Più formalmente, siano $w_y$ i nuovi pesi e $w'_y$ i vecchi pesi; allora il problema che $MIRA^*$ risolve è il seguente:
+$$\min_w \frac{1}{2} \sum_{y} ||w_y - w'_y||^2$$
+$$w_{y^*} \cdot f(x) \geq w_y \cdot f(x) + 1 \; (\textrm{Il +1 aiuta a generalizzare})$$
+Il calcolo dei nuovi pesi rimane uguale all'algoritmo visto sopra
+\begin{center}
+    \includegraphics[width =0.40\linewidth]{Images/102.PNG}
+\end{center}
+quindi, ciò che andiamo effettivamente a fare è \textbf{scalare il vettore delle feature di un certo parametro $\tau$ durante il calcolo dei nuovi pesi}.
+Questa tecnica viene chiamata \textbf{Minimum Correcting Update}. Considerando che ci stiamo muovendo su un aggiornamento dei pesi che va \textbf{nella direzione di $f$},
+allora lo spostamento minimo va a corrispondere a:
+$$\min_w \frac{1}{2} \sum_{y} ||w_y - w'_y||^2$$
+$$w_{y^*} \cdot f \geq w_y \cdot f + 1$$
+$$\downarrow$$
+$$\min_{\tau} ||\tau f||^2$$
+$$w_{y^*} \cdot f \geq w_y \cdot f + 1$$
+$$\downarrow$$
+$$(w'_{y^*} + \tau f) \cdot f = (w'_y - \tau f) \cdot f + 1$$
+$$\tau = \frac{(w'_y - w'_{y^*}) \cdot f + 1}{2f \cdot f}$$
+\begin{center}
+    \includegraphics[width =0.40\linewidth]{Images/103.PNG}
+\end{center}
+Dalla formula sopra, notiamo che $\tau$ può crescere molto se $f$ è piccolo, quindi lo spostamento del vettore dei pesi può risultare molto grande e ciò può portare
+ad ulteriori problemi; poiché potrebbe andare a cambiare tutte le classificazioni effettuate fino ad ora. Si va quindi a definire come \textbf{effettivo valore di $\tau$} il valore $\tau^*$ definito come segue:
+$$\tau^* = \min \left (\frac{(w'_y - w'_{y^*}) \cdot f + 1}{2f \cdot f}, C \right )$$
+con $C$ un \textbf{valore massimo di cambiamento} chiamato \textbf{Maximum Step Size}.
+Si va quindi a trovare un compromesso tra  mantenere una buona distanza tra le classificazioni, quindi avere una buona robustezza a minime variazioni del vettore dei pesi, ed evitare che tutte le classificazioni fatte fino ad un certo momento vengano invalidate da un esempio.
+Questo approccio solitamente \textbf{converge più velocemente di un percettrone} ed è, di solito, migliore, soprattutto con dati rumorosi.
+\begin{center}
+    \includegraphics[width =0.35\linewidth]{Images/104.PNG}
+\end{center}
+Tuttavia, non è detto che il separatore dato da questo approccio \textbf{sia il miglior separatore possibile!}
+Poiché l'algoritmo lavora \textbf{iterativamente su ogni campione del dataset}, allora, per esempio, \textbf{l'ordine in cui sono posizionati gli elementi all'interno del dataset determina significativamente il separatore calcolato dall'algoritmo}.
+Infatti, l'ultimo aggiornamento che va a fare l'algoritmo va a cambiare, in un certo modo specifico, solamente due vettori di peso.
+Il margine creato quindi rispetto all'ultimo aggiornamento può \textbf{creare problemi sugli esempi precedenti}.
+\subsubsection{Support Vector Machines (SVM)}
+Una Support Vector Machine è un modello di \textbf{apprendimento supervisionato}. Una SVM va ad imporre la condizione
+$$w_{y^*} \cdot f(x) \geq w_y \cdot f(x) + 1$$
+\textbf{su tutte le classi e su tutti gli esempi del dataset}; cioè la condizione diventa:
+$$\forall i, y \; w_{y^*} \cdot f(x) \geq w_y \cdot f(x) + 1$$
+Una SVM quindi:
+\begin{itemize}
+    \item \textbf{Massimizza il margine}: Le SVM trovano il separatore con il massimo margine rispetto ai vettori di supporto (i vettori sul margine). In questo modo, una SVM riesce a trovare un separatore con una distanza \textbf{ottima rispetto ad elementi di classi diverse}
+    \item Nel calcolo, \textbf{vengono presi in considerazione solo i vettori di supporto}; gli altri esempi sono ignorabili
+\end{itemize}
+In pratica, le SVM sono degli algoritmi MIRA ih cui si \textbf{effettua l'ottimizzazione dei pesi su tutti gli esempi contemporaneamente}
+\begin{center}
+    \includegraphics[width =0.90\linewidth]{Images/105.PNG}
+\end{center}
+\subsection{Deep learning}
 
 
 \end{document}
