@@ -1799,6 +1799,113 @@ In pratica, le SVM sono degli algoritmi MIRA ih cui si \textbf{effettua l'ottimi
     \includegraphics[width =0.90\linewidth]{Images/105.PNG}
 \end{center}
 \subsection{Deep learning}
+Il percettrone è la forma più semplice di \textbf{rete neurale} ed è un tipo di classificatore lineare.
+Il percettrone, tuttavia, non è quindi in grado di effettuare classificazioni su un dataset \textbf{non linearmente separabile};
+per farlo, possiamo \textbf{mappare i dati su uno spazio di dimensione più elevata}, cioè \textbf{aggiungere delle funzioni non lineari}, le quali, applicate all'insieme di partenza,
+permettano di creare un separatore lineare tra le due classi. A partire da delle feature iniziale, esistono delle metodologie che puntano ad \textbf{arricchire l'insieme delle feature} per
+ottenere un insieme \textbf{linearmente separabile}. 
+Facciamo un esempio: aggiungiamo al dataset a sinistra \textbf{l'angolo $\theta$ rispetto al centro e la distanza dal centro $r$} (trasformazione in coordinate polari)
+\begin{center}
+    \includegraphics[width =0.90\linewidth]{Images/106.PNG}
+\end{center}
+il problema è \textbf{trovare una trasformazione adeguata}, poiché l'insieme di funzioni non lineari applicabili per effettuare questo processo è \textbf{infinito}.
+Vi sono delle funzioni non lineari, dette \textbf{kernels}, che servono ad \textbf{espandere la rappresentazione degli esempi}.
+Cosa può accadere, però, se espandiamo troppo l'insieme delle feature? Sicuramente andremmo ad espandere la \textbf{potenza e la flessibilità del nostro modello}, tuttavia, ciò potrebbe anche andare ad
+introdurre nuove problematiche: supponiamo di avere un dataset di addestramento, rappresentato da pallini azzurri, e un dataset di test, rappresentato da pallini grigi; vogliamo predire il valore di $y$ dato il valore di $x$
+\begin{center}
+    \includegraphics[width =0.50\linewidth]{Images/107.PNG}
+\end{center}
+se utilizziamo un approccio lineare, ciò che otteniamo è il separatore $f_2$, il quale divide adeguatamente il dataset.
+Se utilizziamo invece un'interpolazione più complessa (es. un polinomio, Taylor, Fourier, ecc...), ciò che potremmo ottenere è la curva $f_1$, la quale ha sicuramente un errore minore sull'insieme di addestramento rispetto a $f_2$, tuttavia, se l'insieme di addestramento conteneva dati influenzati da del rumore,
+la curva si ritroverà ad effettuare delle \textbf{predizioni errate sull'insieme di test} (in questo caso andrà a sottostimare/sovrastimare il valore di $y$).
+Quindi, più feature si hanno, più funzioni si possono andare a rappresentare e quindi si avranno \textbf{meno garanzie su come si comporta la funzione lontano dagli esempi di addestramento}.
+Aumentare la flessibilità del modello senza avere abbastanza dati può portare \textbf{all'overfitting del modello}.
+In vari ambienti, quindi, il lavoro è stato proprio quello di definire delle feature che \textbf{fossero indicative delle caratteristiche del dominio} e che quindi permettessero si di \textbf{effettuare una buona generalizzazione} sia di evitare
+comportamenti anomali. Tuttavia, la costruzione manuale delle feature richiede
+\begin{itemize}
+    \item \textbf{Conoscenza} specifica del dominio
+    \item \textbf{Approccio} specifico al dominio
+\end{itemize}
+L'idea del \textbf{deep learning} è quindi quella di spostare l'apprendimento al di sotto del livello dei pesi iniziali e quindi di \textbf{costruire le feature} a partire dai dati.
+L'esempio più semplice di deep-learning è il \textbf{percettrone a due strati}:
+\begin{center}
+    \includegraphics[width =1\linewidth]{Images/108.PNG}
+\end{center}
+ciò che si fa è quindi \textbf{agganciare alla base del percettrone altri percettroni}, i quali andranno a \textbf{costruire il segnale di input (il vettore dei pesi) per il percettrone "finale"}. A differenza quindi del singolo percettrone, per il quale il vettore delle feature era costruito a priori, i percettroni del primo strato andranno
+ad \textbf{estrarre le feature partendo dai dati e andranno ad imparare dei pesi per esse}. Si può espandere questa idea fino ad arrivare a reti con profondità $N$ (N-Layer perceptron)
+\begin{center}
+    \includegraphics[width =1\linewidth]{Images/109.PNG}
+\end{center}
+Il primo strato viene detto \textbf{strato di input}, mentre tutti gli strati successivi, escluso l'ultimo, vengono detti \textbf{strati nascosti}.
+Tuttavia, perché dovremmo avere bisogno di molteplici strati nascosti?
+L'attivazione negli strati nascosti può essere vista come \textbf{l'estrazione di feature come funzioni dell'input}.
+Ogni layer nascosto può essere quindi visto come \textbf{un livello di astrazione delle feature}: le feature complesse sono \textbf{composizioni delle feature più semplici}.
+Facciamo un esempio:
+\begin{center}
+    \includegraphics[width =1\linewidth]{Images/110.PNG}
+\end{center}
+i primi percettroni rispondo a delle \textbf{proprietà locali}, come angoli, linee ecc... mentre nei livelli successivi della rete vengono costruite \textbf{feature molto più complesse}. L'output finale è quindi un \textbf{template delle facce}, che vengono comunque
+attivate dalla \textbf{presenza di attivazione dei percettroni ai livelli più bassi della rete}. Quindi, i vari strati della rete neurale vanno ad imparare delle \textbf{astrazioni dello stimolo più basso}. Ricostruire però a quale neurone di uno strato nascosto corrisponde una certa
+feature è un lavoro complesso. Tuttavia, osservando l'immagine della rete neurale sopra riportata, notiamo che in ogni layer è ancora presente \textbf{l'operatore di massimo} (il blocco "maggiore di 0?"). Perché è importante?
+Prima, la funzione di score lineare (la funzione che indica a quale classe appartiene l'input) per un singolo percettrone era:
+$$f = Wx$$
+con $W$ il vettore dei pesi e $x$ il vettore delle feature. Per una rete neurale a due strati, la funzione di score diventa
+$$f = W_2 \max(0, W_1x)$$
+La funzione $\max(0, z)$ viene detta \textbf{funzione di attivazione}. Cosa succederebbe se cercassimo di costruire una rete neurale senza funzione di attivazione?
+$$f = W_2W_1x \rightarrow W_3 = W_2W_1 \in \mathbb{R}^{C \times H}, f = W_3x$$
+ci ritroveremmo quindi a riavere un \textbf{classificatore lineare}. La funzione di attivazione è \textbf{quindi necessaria per permettere alla rete neurale di classificare dataset non linearmente separabili}.
+\subsubsection{Local search}
+Fino ad ora, abbiamo addestrato il percettrone \textbf{solamente quando esso sbagliava}, cioè andavamo a cambiare i pesi solamente quando la classificazione era errata; l'accurattezza del tuttavia questo approccio ci da un \textbf{segnale povero}, poiché non ci indica in che direzione andare (a parte i pesi del vettore) e il segnale
+viene "emesso" solamente quando l'esempio è sbagliato. Infatti, in questo approccio, se l'esempio è \textbf{corretto con un margine molto basso}, non andremmo a cambiare i pesi del vettore.
+Nelle reti neurali, tuttavia, \textbf{abbiamo molti pesi}, quindi ciò che si va a fare è \textbf{cambiare i pesi intorno al valore attuale, cercando di aggiustarli per fare in modo di risolvere il problema attuale}; cioè cerchiamo di \textbf{effettuare il minor spostamento possibile dei pesi per fare in modo che l'esempio attuale sia corretto}.
+Questo tipo di approccio è una forma di \textbf{local search} dove la prossima versione del classificatore \textbf{dipenderà dalla versione precedente} e in cui il vettore dei pesi subirà la minima variazione possibile.
+L'idea dietro questo approccio è quindi la seguente:
+\begin{itemize}
+    \item Inizia con dei pesi qualsiasi
+    \item \textbf{Ripeti}: Muoviti verso lo stato limitrofo migliore
+    \item Se non esistono stati vicini migliore dello stato corrente, \textbf{termina}
+    \item Vicini = piccoli cambiamenti di $w$
+\end{itemize}
+L'obbiettivo è quindi quello di \textbf{massimizzare la precisione nella classificazione minimizzando il numero di errori}.
+Questo è spesso formulato utilizzando una \textbf{funzione di perdita} come la "Zero-One loss function", che misura la differenza tra predizioni corrette e errate:
+$$i^{acc}(w) = \frac{1}{m} \sum_{i}^{m}(sign(w^T f(x^{(i)})) == y^{(i)})$$
+Tuttavia, questo approccio può soffrire delle seguenti problematiche:
+\begin{itemize}
+    \item Esiste un numero di vicini infinito
+    \item Plateau (le performance del modello rimangono pressoché uguali in ogni direzione di spostamento) e ottimi locali (le performance del modello peggiorano in ogni direzione di spostamento)
+\end{itemize}
+\begin{center}
+    \includegraphics[width =0.70\linewidth]{Images/111.PNG}
+\end{center}
+Per esempio, usando la funzione sopra, se venissero dati alla rete 100 esempi \textbf{tutti corretti (anche con un margine molto basso)}, allora \textbf{i pesi della rete rimarrebbero stabili}, poiché ci si trova in un
+plateau. Per evitare questo tipo di problemi esiste un approccio chiamato \textbf{percettrone probabilistico}.
+\subsubsection{Percettrone probabilistico}
+In un percettrone probabilistico, invece di considerare di avere un errore nella classificazione di un elemento, cerchiamo invece di \textbf{considerare quanto è "buona" la classificazione di quell'elemento}, quindi \textbf{quanto è distante l'elemento dal separatore lineare}.
+\begin{center}
+    \includegraphics[width =0.50\linewidth]{Images/112.PNG}
+\end{center}
+Più riusciamo ad aumentare la distanza tra il separatore e gli elementi delle varie classi, più \textbf{il classificatore migliora la sua accuratezza};
+per farlo, piuttosto che andare a calcolare direttamente la classe di un elemento, andiamo invece a calcolare la \textbf{probabilità che l'elemento sia di una certa classe} tramite una
+funzione chiamata \textbf{Soft-max}: questa funzione permette di \textbf{mappare un vettore in un valore compreso tra $-1$ e $1$}. La funzione è sempre \textbf{derivabile} (poiché esponenziale) e poiché la sua derivata è \textbf{sempre diversa da 0}, ciò permette , ad ogni passo,
+di avere sempre una \textbf{direzione verso il quale andare a migliorare i pesi della rete}. La funzione soft-max prende in input una \textbf{serie di punteggi}, detti \textbf{logit}, e li trasforma in un modello di probabilità che sommato da 1, cioè:
+$$logit = w^T f(x) = w_1 \cdot f_1(x) + w_2 \cdot f_2(x) + \dots + w_n \cdot f_n(x) = 1 rightarrow (\textrm{somma pesata})$$ 
+Soft-max quindi così definita per il caso binario: sia $w^T f(x)$ il logit della classe positiva $y = 1$, allora:
+\begin{itemize}
+    \item \textbf{Punteggio per $y = 1$}: $w^T f(x)$
+    \item \textbf{Punteggio per $y = -1$}: $-w^T f(x)$
+    \item \textbf{Probabilità di appartenenza ad una classe}: 
+    $$p(y = 1|f(x); w) = \frac{e^{w^T f(x^{(i)})}}{e^{w^T f(x)} + e^{-w^T f(x)}}$$
+    $$p(y = -1|f(x); w) = \frac{e^{-w^T f(x^{(i)})}}{e^{w^T f(x)} + e^{-w^T f(x)}}$$
+\end{itemize}
+\begin{Nota}
+    Nel caso generale, invece, la funzione è definita come segue: sia $z_i$ il logit per la classe $i$, allora
+    $$p(y = i) = \frac{exp(z_i)}{\sum_j exp(z_j)}$$
+\end{Nota}
+Soft-max, quindi, da la \textbf{distanza dal separatore}. Facciamo un esempio in una dimensione:
+\begin{center}
+    \includegraphics[width =1\linewidth]{Images/113.PNG}
+\end{center}
+%37:53%
 
 
 \end{document}
