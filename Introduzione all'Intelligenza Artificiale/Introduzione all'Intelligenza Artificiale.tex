@@ -1888,8 +1888,8 @@ Più riusciamo ad aumentare la distanza tra il separatore e gli elementi delle v
 per farlo, piuttosto che andare a calcolare direttamente la classe di un elemento, andiamo invece a calcolare la \textbf{probabilità che l'elemento sia di una certa classe} tramite una
 funzione chiamata \textbf{Soft-max}: questa funzione permette di \textbf{mappare un vettore in un valore compreso tra $-1$ e $1$}. La funzione è sempre \textbf{derivabile} (poiché esponenziale) e poiché la sua derivata è \textbf{sempre diversa da 0}, ciò permette , ad ogni passo,
 di avere sempre una \textbf{direzione verso il quale andare a migliorare i pesi della rete}. La funzione soft-max prende in input una \textbf{serie di punteggi}, detti \textbf{logit}, e li trasforma in un modello di probabilità che sommato da 1, cioè:
-$$logit = w^T f(x) = w_1 \cdot f_1(x) + w_2 \cdot f_2(x) + \dots + w_n \cdot f_n(x) = 1 rightarrow (\textrm{somma pesata})$$ 
-Soft-max quindi così definita per il caso binario: sia $w^T f(x)$ il logit della classe positiva $y = 1$, allora:
+$$logit = w^T f(x) = w_1 \cdot f_1(x) + w_2 \cdot f_2(x) + \dots + w_n \cdot f_n(x) = 1 \rightarrow (\textrm{somma pesata})$$ 
+Soft-max è quindi così definita per il caso binario: sia $w^T f(x)$ il logit della classe positiva $y = 1$, allora:
 \begin{itemize}
     \item \textbf{Punteggio per $y = 1$}: $w^T f(x)$
     \item \textbf{Punteggio per $y = -1$}: $-w^T f(x)$
@@ -1905,7 +1905,189 @@ Soft-max, quindi, da la \textbf{distanza dal separatore}. Facciamo un esempio in
 \begin{center}
     \includegraphics[width =1\linewidth]{Images/113.PNG}
 \end{center}
-%37:53%
+Un problema di Soft-max è che più si tende verso $\pm \infty$, più la sua derivata tende a 0 e quindi la funzione \textbf{tende ad appiattirsi e a formare un plateau}.
+Invece quindi di andare a cambiare i pesi solamente quando vi è un errore nella predizione del percettrone, andiamo a cambiare i pesi cercando di \textbf{ottimizzare la probabilità che gli elementi vengano classificati con la classe corretta}; la probabilità viene calcolata usando la funzione Soft-max.
+Ovviamente
+$$p(y = 1|f(x); w) + p(y = -1|f(x); w) = 1$$
+Vogliamo quindi \textbf{massimizzare la probabilità di aver dato la classe corretta per tutti gli esempi}, quindi vogliamo massimizzare la seguente funzione obbiettivo:
+$$l(w) = \prod_{i = 1}^m p(y = y^{(i)}|f(x^{(i)}); w)$$
+poiché i prodotti sono particolarmente ostici da gestire, solitamente si utilizza la sua \textbf{trasformazione in formula logaritmica}
+$$ll(w) = \sum_{i=1}^m \log p(y = y^{(i)}|f(x^{(i)}); w)$$
+Quindi come questo percettrone ad apprendere?
+Vogliamo massimizzare la \textbf{probabilità del dataset ottenuto cambiando i parametri (i pesi del percettrone)}.
+Se assumiamo che le probabilità degli esempi siano indipendenti l'una dall'altra, allora possiamo utilizzare il metodo della \textbf{Maximum Likelihood Estimation} (Metodo della stima della massima verosimiglianza) per trovare i parametri del modello (quindi i pesi $w$) che massimizzano la probabilità di osservare correttamente i dati, cioè \textbf{i parametri trovati da questo metodo massimizzeranno la probabilità che il processo descritto dal modello produrrà i dati che abbiamo osservato}:
+$$\theta_{ML} = \underset{\theta}{\arg \max} P(\boldsymbol{X}|\theta) = \underset{\theta}{\arg \max} \prod_i P_{\theta}(X_i)$$
+con $\arg \max$ la funzione che \textbf{ritorna l'insieme di valori che massimizzano la funzione}. Caso specifico del MLE è il \textbf{Maximum Condition Likelihood Estimation} (MCLE), in cui si concentra sulle probabilità condizionate, cioè sulle probabilità di una classe $y$, dato un input $x$ e i pesi $w$.
+L'idea di questo metodo è quella di trovare i \textbf{parametri che massimizzano la probabilità condizionata del risultato corretto rispetto all'input}, cioè si vuole massimizzare la probabilità di prevedere correttamente:
+$$\theta^* = \underset \arg \max_{\theta} P(\boldsymbol{Y}| \boldsymbol{X}, \theta) = \arg \max_{\theta} \prod_i P_{\theta}(y_i|x_i)$$
+$$l(W) = \prod_i \frac{e^{w_{y_i} \cdot x_i}}{\sum_y e^{w_y \cdot x_i}}$$
+possiamo semplificare la formula sopra passando al logaritmo:
+$$ll(w) = \sum_i \log P_w(y_i|x_i; w) = \sum_i \log e^{w_{y_i} \cdot  x_i} - \log \sum_i e^{w_y \cdot x_i} = \sum_i w_{y_i} \cdot x_i - \log \sum_i e^{w_y \cdot x_i}$$
+quindi
+$$P(\boldsymbol{X}|\theta) = l(w) = \log l(w)$$
+Come facciamo quindi a massimizzare questa formula? \textbf{Seguiamo la direzione in cui il gradiente cresce di più e andiamo ad aggiornare i pesi di conseguenza}: avendo una funzione obbiettivo continua, a differenza della funzione segno, ci permette
+di avere un gradiente, ottenuto derivando la funzione lungo su tutti i pesi, possiamo decidere \textbf{come cambiare ogni singolo peso per aumentare o diminuire la funzione} (Taylor).
+Una volta quindi che abbiamo una funzione continua che indica quanto è "buono" il sistema di apprendimento, possiamo usare Taylor per migliore passo passo il nostro sistema.
+Una proprietà interessante della funzione Soft-max è la seguente: in base alla \textbf{dimensione dei pesi, la ripidità della funzione cambia}; quindi, se per esempio il dataset è linearmente separabile e poco rumoroso, la funzione potrebbe avere una ripidità molto pronunciata.
+Vediamo alcuni esempi:
+\begin{center}
+    \includegraphics[width =1\linewidth]{Images/114.PNG}
+\end{center}
+Riassumendo, il percettrone probabilistico ha una struttura che risulta come un \textbf{ammorbidimento della struttura del percettrone classico} per fare in modo che possa dare dei valori \textbf{non troppo netti} su dataset non perfettamente linearmente separabili oppure in cui vi è un certo
+grado di incertezza o rumore. Cambiamo quindi la rete neurale nel seguente modo:
+\begin{center}
+    \includegraphics[width =1\linewidth]{Images/115.PNG}
+\end{center}
+ciò ci permette di \textbf{non perdete tutto il segnale}, visto che abbiamo una funzione continua, e di conservare la \textbf{derivabilità e la non linearità} nei vari layer della rete.
+La sfida è quindi di \textbf{trovare un buon vettore dei pesi $w$}; quindi vorremmo
+$$\max_w ll(w)$$
+o, equivalentemente
+$$\min_w -ll(w)$$
+In particolare, $-ll(w)$ viene chiamata \textbf{funzione di loss}. La funzione di loss viene introdotta perché \textbf{il logaritmo di una probabilità è negativa, quindi si cerca di portalo a 0 il più possibile}.
+Una volta ottenuta una formula continua, ciò che cerchiamo di fare è \textbf{cambiare i pesi in modo tale che la loss sia minima e la probabilità sia massima}; rispettivamente:
+\begin{itemize}
+    \item Nel caso della minimizzazione della loss, \textbf{seguiamo la direzione opposta al gradiente}
+    \item Nel caso della massimizzazione della probabilità, \textbf{seguiamo la direzione del gradiente}
+\end{itemize}
+Vediamo un esempio in una dimensione:
+\begin{center}
+    \includegraphics[width =0.80\linewidth]{Images/116.PNG}
+\end{center}
+ovviamente, la stessa cosa si può fare in più dimensioni. Il gradiente viene calcolato \textbf{rispetto ai pesi}, quindi abbiamo una funzione che, al variare dei pesi, \textbf{darebbe diverse probabilità e diversi valore della funzione di loss}.
+\subsubsection{Steepest Descent}
+L'approccio classico per alla massimizzazione delle probabilità e alla minimizzazione della funzione di loss è quello di \textbf{muoversi lungo la direzione del gradiente}.
+Questo approccio è chiamato \textbf{steepest descent}
+\begin{center}
+    \includegraphics[width =0.60\linewidth]{Images/117.PNG}
+\end{center}
+dove il gradiente è la \textbf{derivata direzionale rispetto ai pesi}:
+$$\nabla g = \begin{bmatrix}
+    \frac{\partial g}{\partial w_1} \\
+    \frac{\partial g}{\partial w_2} \\
+    \dots \\
+    \frac{\partial g}{\partial w_n} \\
+\end{bmatrix}$$
+quando si ha una solo strato, \textbf{i componenti del gradiente sono direttamente i pesi della funzione Soft-max}, tuttavia, quando si hanno più strati, il gradiente viene calcolato \textbf{anche rispetto ai pesi degli strati precedenti}.
+Ciò che rende vantaggioso questo metodo è che la \textbf{computazione del gradiente è computazionalmente semplice}: Sia $\varepsilon$ il tasso di apprendimento del modello; per determinare la direzione da seguire, dobbiamo risolvere il seguente problema
+$$\min_{\Delta: \Delta_1^2 + \Delta_2^2 \leq \varepsilon} g(w+ \Delta)$$
+espandiamo la funzione con un espansione di taylor al primo ordine:
+$$g(w + \Delta) \approx g(w) + \frac{\partial g}{ \partial w_1} \Delta_1 + \frac{\partial g}{\partial w_2} \Delta_2$$
+ora, la direzione del gradiente è quindi data dal problema
+$$\min_{\Delta: \Delta_1^2 + \Delta_2^2 \leq \varepsilon} \frac{\partial g}{ \partial w_1} \Delta_1 + \frac{\partial g}{\partial w_2} \Delta_2$$
+ora, poiché
+$$\min_{a: ||a|| \leq \varepsilon} a^T b \rightarrow a = -b \frac{\varepsilon}{||b||}$$
+allora la soluzione è data da
+$$-\nabla g \frac{\varepsilon}{||\nabla g||}$$
+dove $-\nabla g$ è il gradiente della funzione di loss; quindi la formula sopra da un \textbf{vettore di grandezza 1 che punta in direzione opposta al gradiente}.
+Perché però non seguiamo direttamente il gradiente invece che introdurre questa serie di calcoli complessi? Poiché le curve hanno forme abbastanza complesse,
+ad un certo passo potremmo avere grossi cambiamenti nei pesi; si cerca quindi di fare dei \textbf{piccoli cambiamenti ai pesi ad ogni passo}. Quindi, per regolare il tasso di cambiamento ad ogni passo,
+si utilizza la formulazione riportata sopra, dove ci spostiamo nella direzione opposta al gradiente \textbf{di una quantità $\varepsilon$}.
+Questo procedimento viene effettuato per ogni esempio.
+Un implementazione algoritmica di questo metodo è la seguente:
+\begin{center}
+    \includegraphics[width =1\linewidth]{Images/118.PNG}
+\end{center}
+È importante notare che, in questo algoritmo, non avviene la normalizzazione del gradiente; essa permette di evitare valori troppo elevati, tuttavia non è strettamente necessaria.
+\subsubsection{Applicazione del percettrone probabilisto a reti con più strati}
+Come facciamo effettivamente ad applicare l'idea del percettrone probabilistico a reti con più strati?
+Ciò che abbiamo cercato di fare fino ad ora è migliorare, cambiando i pesi e quindi andando a variare i valori di input del percettrone, l'output della seguente funzione 
+$f(x) = g(h(x))$
+\begin{center}
+    \includegraphics[width =0.80\linewidth]{Images/119.PNG}
+\end{center}
+tuttavia, i percettroni di un certo strato \textbf{dipendono dall'output dei percettroni degli stati precedenti}, quindi ciò che dobbiamo fare è non solo cambiare i pesi ma anche \textbf{migliorare gli input}.
+Vogliamo quindi migliorare il valore della funzione di loss $f(x)$, il cui gradiente rispetto ai layer precedenti si può calcolare usando la \textbf{chain rule}:
+$$f'(x) = g'(h(x))h'(x)$$
+tuttavia, effettuare questo processo su reti neurali piuttosto profonde è \textbf{un processo estremamente lungo}.
+L'approccio adottato attualmente è quello della \textbf{differenziazione automatica}:
+\begin{itemize}
+    \item Necessita solamente di programmare la funzione $g(x,y,w)$
+    \item Può automaticamente computare tutte le derivate rispetto a tutti i pesi di $w$
+    \item Questo è tipicamente svolto \textbf{prima salvando delle informazioni in cache durante i passi di computazione di $f$} per poi \textbf{effettuare un passaggio indietro} = "back-propagation"
+\end{itemize}
+questo tipo di sistemi utilizzano spesso ciò che viene chiamato un \textbf{grafo computazionale}, il quale tiene conto \textbf{sia delle variabili, quindi dell'input, sia dei pesi coinvolti nel calcolo di una funzione}.
+Se, per esempio, la funzione è lineare, allora il grafo computazionale sarà:
+\begin{center}
+    \includegraphics[width =0.80\linewidth]{Images/120.PNG}
+\end{center}
+dove:
+\begin{itemize}
+    \item \textbf{Hinge loss} è una \textbf{non linearità}
+    \item \textbf{R} è un segnale rappresentante il \textbf{valore desiderato} (o il suo opposto)
+    \item L'output del grafo è \textbf{il valore della funzione di Loss}
+\end{itemize}
+se volessimo calcolare la derivata di $L$, se deriviamo rispetto a $R$, la derivata sarebbe $1$, mentre se derivassimo rispetto alla hinge loss, la derivata sarebbe comunque $1$.
+Ci interessa però derivare  $f = Wx$; la quale avrà valore $x$ rispetto a $W$ e avrà valore $W$ rispetto a $x$. Avendo questo tipo di grafo computazionale ci permette di calcolare \textbf{in avanti il valore della funzione di loss} e all'indietro \textbf{il suo gradiente}.
+Quando calcoliamo il gradiente "all'indietro", ciò viene chiamato "\textbf{back-propagation}", visto che propaghiamo all'indietro \textbf{informazioni rispetto al valore della funzione di loss e sulla direzione del gradiente da seguire per migliorarla}.
+Facciamo un esempio: 
+\begin{center}
+    \includegraphics[width =1\linewidth]{Images/121.PNG}
+\end{center}
+\begin{center}
+    \includegraphics[width =1\linewidth]{Images/122.PNG}
+\end{center}
+\begin{center}
+    \includegraphics[width =1\linewidth]{Images/123.PNG}
+\end{center}
+\begin{center}
+    \includegraphics[width =1\linewidth]{Images/124.PNG}
+\end{center}
+\begin{center}
+    \includegraphics[width =1\linewidth]{Images/125.PNG}
+\end{center}
+nell'esempio, quindi, abbiamo utilizzato la chain rule per \textbf{propagare all'indietro il valore del gradiente}.
+Ad ogni nodo del grafo computazionale viene associato un \textbf{valore forward}, dato dalle attivazioni, e un \textbf{valore backward} che invece corrispondono ai gradienti.
+La struttura dati è quindi così formata:
+\begin{center}
+    \includegraphics[width =0.70\linewidth]{Images/126.PNG}
+\end{center}
+dove:
+\begin{itemize}
+    \item Poiché da $x, y$ e $f$ possiamo calcolare $z$, allora possiamo calcolare $\frac{\partial z}{\partial x}$ e $\frac{\partial z}{\partial y}$, i quali vengono chiamati \textbf{gradienti locali}
+    \item Se invece abbiamo un gradiente "proveniente da fuori", vuol dire che non stiamo cercando di ottimizzare $z$ ma stiamo cercando di ottimizzare $L$ in funzione di $z$; allora, per calcolare come dobbiamo cambiare $x, y$ calcoliamo rispettivamente
+     $$\frac{\partial L}{\partial x} = \frac{\partial L}{\partial z} \cdot \frac{\partial z}{\partial x}$$
+     $$\frac{\partial L}{\partial y} = \frac{\partial L}{\partial z} \cdot \frac{\partial z}{\partial y}$$
+\end{itemize}
+Quindi, nel momento in cui salviamo i gradienti locali e poi mandiamo indietro il gradiente globale, possiamo andare a calcolare i vari gradienti per i vari elementi e portarli indietro.
+Notiamo quindi che andiamo a calcolare \textbf{i gradienti rispetto ad ogni feature} e che, anche in questo caso, è necessaria la \textbf{presenza di un bias} per poter spostare l'iperpiano di separazione dall'origine.
+\textbf{I pattern per il calcolo dei gradienti in una funzione di deep-learning}, che ogni implementazione software dovrà seguire, sono le seguenti:
+\begin{center}
+    \includegraphics[width =0.70\linewidth]{Images/127.PNG}
+\end{center}
+Cosa succede però se abbiamo \textbf{output multipli}? La funzione di loss effettua un'aggregazione sia sugli esempi che sugli output, quindi il risultato \textbf{sarà sempre un'unica funzione di loss}, il cui gradiente seguire le stesse regole viste sopra.
+Facciamo quindi un riassunto del funzionamento:
+\begin{enumerate}
+    \item Si ha una propagazione in avanti per calcolare le attivazioni e si calcolano i gradienti locali, i quali non dipendono dai passi successivi o dall'informazione non disponibile localmente
+    \item Quando viene calcolata l'attivazione finale e viene quindi fornito il valore di riferimento e l'errore, quest'ultimo, nella forma del gradiente globale, viene propagato all'indietro su tutta la rete tramite la chain rule
+\end{enumerate}
+Un implementazione di una rete è quindi la seguente (feed-forward neural network):
+\begin{center}
+    \includegraphics[width =0.90\linewidth]{Images/128.PNG}
+\end{center}
+tuttavia, il problema di questa implementazione è che essa \textbf{non calcola i gradienti}. Per farlo, bisogna utilizzare una \textbf{funzione adeguata}:
+\begin{center}
+    \includegraphics[width =1\linewidth]{Images/129.PNG}
+\end{center}
+Fino ad ora abbiamo parlato esclusivamente di classificazione; tuttavia \textbf{nell'approccio con percettrone probabilistico}, del concetto originale di classe \textbf{rimane davvero poco} (solamente il segnale rispetto all'output desiderato) poiché si è passati
+a calcolare, nella funzione di loss, la \textbf{probabilità del valore desiderato}. Durante il processo di addestramento, inoltre, andiamo sempre a calcolare il gradiente di una funzione continua.
+Ciò permette che l'approccio visto fino ad ora sia compatibile anche quando l'obbiettivo, invece di essere un insieme di classi, è una \textbf{regressione}, in cui il valore desiderato è continuo.
+In questo caso, al posto di usare la funzione Soft-max, si può utilizzare la \textbf{distanza euclidea} tra il valore predetto e quello effettivo come nuova funzione di loss.
+Possiamo quindi mantenere lo stesso approccio cambiando solamente la funzione di loss, la quale deve comunque essere derivabile.
+Il codice a cui arriviamo è quindi il seguente:
+\begin{center}
+    \includegraphics[width =1\linewidth]{Images/130.PNG}
+\end{center}
+Le reti neurali godono della seguente proprietà:
+\begin{Teorema}[Universal Function Approximators]
+    Una rete neurale a due strati con un sufficiente numero di neuroni può approssimare ogni funzione continua fino ad un qualsiasi grado di accuratezza
+\end{Teorema}
+rispetto a questo teorema, possiamo effettuare le seguenti considerazioni pratiche:
+\begin{itemize}
+    \item Può essere visto come "impara le feature"
+    \item Un grande numero di neuroni, e quindi di parametri, può portare all'overfitting; non è quindi banale capire quanti neuroni, e quindi feature, ci dovrebbero essere per layer
+\end{itemize}
+
+%41:15%
 
 
 \end{document}
