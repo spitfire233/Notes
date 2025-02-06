@@ -2086,8 +2086,474 @@ rispetto a questo teorema, possiamo effettuare le seguenti considerazioni pratic
     \item Può essere visto come "impara le feature"
     \item Un grande numero di neuroni, e quindi di parametri, può portare all'overfitting; non è quindi banale capire quanti neuroni, e quindi feature, ci dovrebbero essere per layer
 \end{itemize}
-
-%41:15%
+\subsubsection{Funzioni di attivazione}
+Le principali funzioni di attivazione sono: \newline
+\textbf{Funzioni sigmoide}: \newline 
+La funzione sigmoide è \textbf{molto simile alla funzione Soft-max} ed è definita come segue:
+$$g(z) = \frac{1}{1 + e^{-z}}$$
+$$g'(z) = g(z)(1-g(z))$$
+\begin{center}
+    \includegraphics[width =0.40\linewidth]{Images/131.PNG}
+\end{center}
+La funzioine quindi "schiaccia" i valori nell'intervallo $[0,1]$. Tuttavia, quando abbiamo più strati e non abbiamo le effettive probabilità che una certa classe possa occorrere in un esempio, allora possiamo utilizzare \textbf{funzioni di attivazione migliori del sigmoide}. 
+Il sigmoide soffre anche dei seguenti problemi:
+\begin{enumerate}
+    \item Quando il valore dell'input è molto alto/basso, il valore del gradiente del sigmoide tende a 0 e quindi il neurone "muore"
+    \begin{center}
+        \includegraphics[width =0.80\linewidth]{Images/134.PNG}
+    \end{center}
+    \item Gli output del sigmoide non sono centrati in 0
+    \item Calcolare gli esponenziali è piuttosto oneroso
+\end{enumerate}
+\textbf{Tangente iperbolica}: \newline
+Il sigmoide \textbf{non ha valori negativi} e quindi non permette di dare un input negativo ai percettroni successivi; per diverse ragioni quindi si preferirebbe avere \textbf{una struttura più simmetrica di output sia positivi che negativi}.
+In questi casi, si utilizza la funzione \textbf{tangente iperbolica} così definita:
+$$g(z) = \frac{e^z - e^{-z}}{e^z + e^{-z}}$$
+$$g'(z) = 1 - g(z)^2$$
+\begin{center}
+    \includegraphics[width = 0.40\linewidth]{Images/132.PNG}
+\end{center}
+Seppur essa sia centrata in 0, soffre ancora dell'\textbf{annullamento del gradiente quando l'input è molto alto/basso} \newline
+\textbf{Rectified Linear Unit (ReLU)}: \newline
+La funzione di attivazione più utilizzata al momento è la ReLU, così definita:
+$$g(z) = \max(0, z)$$
+\begin{equation*}
+    g'(z) = \begin{cases}
+        1 & z > 0 \\
+        0 & \textrm{otherwise}
+    \end{cases}
+\end{equation*}
+\begin{center}
+    \includegraphics[width =0.40\linewidth]{Images/133.PNG}
+\end{center}
+ReLU gode delle seguenti caratteristiche:
+\begin{itemize}
+    \item Nella regione positiva del piano cartesiano, \textbf{la funzione non si satura}, cioè il suo gradiente non tende mai a 0
+    \item È computazionalmente efficiente
+    \item Converge molto più velocemente rispetto a sigmoide e tangente iperbolica
+\end{itemize}
+Tuttavia, soffre delle seguenti problematiche:
+\begin{itemize}
+    \item Il suo output non è centrato in 0
+    \item \textbf{Cosa succede al gradiente quando $x < 0$?} Abbiamo lo stesso problema della funzione sigmoide
+    \begin{center}
+        \includegraphics[width =0.80\linewidth]{Images/135.PNG}
+    \end{center}
+    quando parliamo di "attivazione negativa" dobbiamo pensare a \textbf{tutti i punti del dataset per il quale la funzione di attivazione risulta negativa} e quindi per i quali \textbf{il sistema calcola i pesi di un neurone per il quale, effettivamente, non potrà mai andare a cambiare i pesi} e quindi i quali valori di output risulteranno \textbf{completamente inutili}.
+    \begin{center}
+        \includegraphics[width =0.70\linewidth]{Images/136.PNG}
+    \end{center}
+\end{itemize}
+\textbf{Leaky ReLU e Parametric Rectifier Lineare Unit}: \newline
+Per risolvere le problematiche di ReLU, viene introdotta della \textbf{non linearità} nella forma di un \textbf{parametro $\alpha$}, il quale può essere \textbf{imparato dalla rete} e su cui si può applicare la tecnica del gradient descent. La funzione quindi diventa:
+$$f(x) = \max(\alpha x, x)$$
+e prende il nome di \textbf{Parametric Rectifier Linear Unit} (PReLU). Se $\alpha = 0.01$, allora la funzione prende il nome di \textbf{Leaky Relu} e ha il seguente grafico:
+\begin{center}
+    \includegraphics[width =0.50\linewidth]{Images/137.PNG}
+\end{center}
+la funzione è quindi \textbf{discontinua nell'origine} e avrà valore del gradiente per valori positivi e negativi dell'input rispettivamente pari a $1$ e $0.01$.
+Questo tipo di funzioni godono delle seguenti proprietà:
+\begin{itemize}
+    \item Non si satura, cioè il gradiente avrà sempre un valore diverso da 0
+    \item È computazionalmente efficiente
+    \item Converge molto più velocemente rispetto alla sigmoide e alla tangente iperbolica
+    \item La funzione permette ai neuroni della rete di \textbf{rimanere sempre attivi}
+\end{itemize}
+Tuttavia, se si ha un gradiente con valore positivo e che ha un valore minimo di $1$, se abbiamo valori di input molto grandi oppure effettuiamo una somma ripetuta del gradiente, allora esso \textbf{può crescere molto} e quindi può portare
+a problematiche di rappresentazione del valore o a \textbf{cambiamenti troppo grandi nel resto della rete}. C'è quindi un problema di "esplosione" del gradiente che questo tipo di funzione non gestisce. \newline
+\textbf{Exponential Linear Unit (ELU)} \newline
+Un approccio simile a PReLU, che tuttavia risulta più robusto alla non linearità e la rumore nel dataset, sopratutto vicino all'origine, considera una risposta \textbf{esponenziale} se il valore di input è minore di 0.
+Questo tipo di funzioni prendono il nome di \textbf{Exponential Linear Unit (ELU)} e sono così definite:
+\begin{equation*}
+    f(x) = \begin{cases}
+        x & \textrm{Se } x > 0 \\
+        \alpha (exp(x) - 1) & \textrm{Se } x \leq 0
+    \end{cases}
+\end{equation*}
+\begin{center}
+    \includegraphics[width =0.40\linewidth]{Images/138.PNG}
+\end{center}
+Questo tipo di funzioni gode delle stesse proprietà di PReLU; tuttavia, richiedendo il calcolo di un esponenziale, sono più computazionalmente onerose. \newline
+\textbf{MaxOut}: \newline
+Ultima funzione di attivazione che illustriamo, ma non approfondiamo, è la funzione \textbf{MaxOut}, così definita:
+$$\max(w_1^T x + b_1, w_2^T x + b_2)$$
+\subsubsection{Batch normalization}
+Consideriamo una rete neurale a singolo layer con $y = Wx$.
+Le seguenti problematiche potrebbero portare a difficoltà nell'ottimizzazione:
+\begin{itemize}
+    \item Gli input $x$ non sono centrati in zero (necessitano di un bias elevato)
+    \item Gli input $x$ hanno tassi di crescita diverse rispetto ad ogni elemento (i valori di $W$ dovranno variare molto)
+\end{itemize}
+L'idea è quindi di forzare gli input a "scalare bene" ad ogni layer.
+La \textbf{batch normalization} è descritta come una tecnica utilizzata per migliorare il processo di addestramento delle reti neurali.
+Si concentra sul \textbf{normalizzare le attivazioni di ogni layer durante il training}. Questo aiuta ad affrontare problemi comuni, come:
+\begin{enumerate}
+    \item \textbf{Instabilità durante il training} dovuta a variazioni nella distribuzione delle attivazioni
+    \item \textbf{Plateau durante l'ottimizzazione}, rendendo difficile raggiungere una convergenza rapida e stabile
+\end{enumerate}
+la batch normalization accelera quindi il processo di training e rende il modello più robusto agli iperparametri, come il learning rate.
+Questa tecnica, inoltre, affronta problematiche associate alla ricerca locale di ottimi, come il rischio di stagnare su plateau.
+Vogliamo quindi \textbf{normalizzare le attivazioni in modo tale che abbiano media 0 e deviazione standard (varianza) 1}; per farlo, consideriamo un insieme di attivazioni in un certo layer.
+Per trasformare ogni dimensione in modo tale che abbia media 0 e deviazione standard 1, applichiamo la seguente formula:
+$$\hat{x}^{(k)} = \frac{x^{(k)} - E[x^{(k)}]}{\sqrt{Var[x^{(k)}]}}$$
+questa funzione è \textbf{differenziabile}.
+\begin{center}
+    \includegraphics[width =0.90\linewidth]{Images/139.PNG}
+\end{center}
+tuttavia, cosa succede se \textbf{il vincolo di avere media 0 e varianza 1 è troppo difficile da soddisfare?} In questo caso, possiamo procedere nel seguente modo:
+\begin{center}
+    \includegraphics[width =0.90\linewidth]{Images/140.PNG}
+\end{center}
+Tuttavia, \textbf{le stime di media e varianza dipendono dal batch di dati (minibatch), quindi non posso effettuarle durante la fase di test}.
+Per risolvere questo problema-, procediamo nel seguente modo:
+\begin{center}
+    \includegraphics[width =0.90\linewidth]{Images/141.PNG}
+\end{center}
+Di solito, la batch normalization viene inserita \textbf{dopo layer completamente connessi o layer convolutivi} e \textbf{prima dell'introduzione della non linearità}:
+\begin{center}
+    \includegraphics[width =0.90\linewidth]{Images/142.PNG}
+\end{center}
+La batch normalization quindi:
+\begin{itemize}
+    \item Rende addestrate reti neurali profonde molto più semplice
+    \item Migliora il flusso del gradiente
+    \item Permette tassi di apprendimento che portano a tempi di convergenza della rete più bassi
+    \item Effettua una "regolarizzazione" durante l'addestramento
+    \item Zero overhead durante la fase di testing: può essere utilizzato in reti convolutive
+    \item \textbf{Il suo comportamento durante la fase di testing è diverso rispetto alla fase di addestramento}: questo è una sorgente comune di bug
+\end{itemize}
+\subsubsection{Weight initialization}
+L'inizializzazione dei pesi è essenziale per evitare problemi durante l'addestramento delle reti neurali profonde.
+Errori nell'inizializzazione dei pesi posso causare:
+\begin{itemize}
+    \item \textbf{Saturazione dei gradienti}: Quando i valori si avvicinano agli estremi della funzione di attivazione
+    \item \textbf{Esplosione o scomparsa dei gradienti}: I pesi mal inizializzati causano gradienti troppo grandi o troppo piccoli, impedendo l'apprendimento
+\end{itemize}
+Come possiamo quindi inizializzare i pesi in maniera corretta?
+Per farlo, possiamo seguire diverse strategie:
+\begin{itemize}
+    \item \textbf{inizializzare casuale (Gaussiana)}: I pesi vengono inizializzati con valori piccoli e casuali con media $\mu = 0$ e deviazione standard $\sigma = 0.01$ .
+    Questo metodo funziona per reti poco profonde, \textbf{ma causa problemi in reti molto profonde}.
+    \item \textbf{Xavier Initialization}: Questo tipo di inizializzazione estrae i pesi iniziali da una \textbf{distribuzione uniforme casuale} compresa in un certo intervallo, il quale è determinato dalla seguente formula:
+    $$x = \sqrt{\frac{6}{n_{inputs} + n_{output}}}$$
+    con $n_{input}$ il numero di input dell'input layer (primo layer) e $n_{output}$ il numero di output dell'output layer (ultimo layer). Per ogni peso nella rete, estraiamo un valore casuale $w$ da una \textbf{distribuzione uniforme} compresa
+    nell'intervallo $[-x; x]$, cioè:
+    $$W \sim U(-x, x)$$
+    Si può anche utilizzare una \textbf{distribuzione normale}; in questo caso allora, si avrà che
+    $$W \sim N \left (0, \frac{2}{n_{input} + n_{output}} \right )$$
+    questo tipo di inizializzazione è ottimo per alcune funzioni di attivazione, come la tangente iperbolica, poiché assume una funzione di attivazione centrata in 0, \textbf{tuttavia porta al collasso a 0 delle attivazioni se si utilizza ReLU}
+    \item \textbf{Kaiming/MSRA Initialization}: Questo metodo prende in considerazione la non linearità di certe funzioni di attivazione, come ReLU.
+    L'inizializzazione dei pesi viene fatta utilizzando una distribuzione normale del tipo
+    $$W \sim N(0, \frac{2}{n_{input}})$$
+    quindi con $\mu = 0$ e deviazione standard $\sigma = \sqrt{\frac{2}{n_{input}}}$.
+    Questa metodologia evita la scompara dei gradienti per funzioni non lineari, come ReLU e simili.
+\end{itemize}
+\subsubsection{Reti neurali convolutive}
+La differenza sostanziale tra il deep learning e altri approcci di machine learning è che \textbf{le feature estratte dai dati} sono informate \textbf{sia del tipo di input del dato sia del tipo di output che ci aspettiamo dalla rete}.
+Supponiamo di voler costruire una rete neurale a più layer per riconoscere un'immagine:
+\begin{center}
+    \includegraphics[width =0.90\linewidth]{Images/143.PNG}
+\end{center}
+Poiché ogni percettrone ha almeno \textbf{quanti pesi quanti sono gli input, più un bias}, il secondo strato si troverà a dover calcolare \textbf{più o meno 300000 pesi}; mentre l'ultimo layer dovrà calcolare più o meno 1000 valori.
+\begin{center}
+    \includegraphics[width =0.90\linewidth]{Images/144.PNG}
+\end{center}
+Questo tipo di reti, tuttavia, \textbf{non tiene conto dell'organizzazione spaziale degli input}: un percettrone non è capace di comprendere e sfruttare la \textbf{correlazione spaziale tra diverse parti dell'input} come, per esempio, il fatto che un pixel in posizione $(1,1)$ sia vicino e in qualche modo correlato al pixel in posizione $(1,2)$.
+L'approccio classico di effettuare l'addestramento di percettroni per il riconoscimento delle immagini soffre dei seguenti problemi:
+\begin{enumerate}
+    \item \textbf{I pesi da imparare sono troppi}
+    \item Il percettrone \textbf{non utilizza la struttura spaziale del dataset che si sta studiando}
+\end{enumerate}
+Uno dei grossi lavori che viene fatto quando si cerca di creare sistemi di deep-learning, oltre a cercare gli iperparametri adeguati, è quello di riuscire a fare in modo che le caratteristiche note (o visibili) del dataset siano sfruttate.
+Molto lavoro quindi viene effettuato nel \textbf{cercare di creare strutture di deep-learning che si adattino alla struttura dei dati che si sta cercando di riconoscere}.
+Le \textbf{reti neurali convolutive} cercano di risolvere i due problemi descritti sopra, cioè:
+\begin{enumerate}
+    \item Cercano di \textbf{minimizzare il numero di pesi da apprendere}
+    \item Cercano di \textbf{utilizzare le caratteristiche spaziali del dataset che si sta analizzando}
+\end{enumerate}
+Supponiamo di voler costruire una rete neurale convolutiva che riconosca immagini. Come procediamo nel costruirla?
+Fondamentalmente, i diversi layer della rete vengono costruiti \textbf{andando solamente ad osservare solamente una sottoparte dell'immagine}; ciò permette di \textbf{considerare meno pesi} e, sopratutto, di \textbf{mantenere informazione riguardo alla struttura spaziale del dataset}, poiché se si va a calcolare
+l'output solamente in base ad una sottoparte di un immagine, questo permetterà di avere una risposta che \textbf{sarà dipendente dai punti vicini}.
+\begin{center}
+    \includegraphics[width =0.90\linewidth]{Images/145.PNG}
+\end{center}
+Per costruire un \textbf{layer convolutivo} si definisce \textbf{un filtro} che viene applicato ad una sottoparte dell'immagine.
+Il \textbf{filtro altro non è che una matrice dei pesi che viene moltiplicata per una sottomatrice della matrice di input}; il risultato andrà quindi a \textbf{riassumere le proprietà locali in quella parte dell'immagine}. I pesi del filtro verranno appresi dalla rete attraverso il \textbf{gradient descent}.
+Il filtro viene quindi \textbf{fatto scorrere su tutta la matrice di input} (due applicazioni del filtro si possono sovrapporre), andando quindi a moltiplicare \textbf{i pesi per diverse parti dell'immagine}:
+\begin{center}
+    \includegraphics[width =0.90\linewidth]{Images/146.PNG}
+\end{center}
+\begin{center}
+    \includegraphics[width =0.40\linewidth]{Images/147.PNG}
+\end{center}
+Il risultato è una \textbf{matrice di attivazione} più piccola rispetto alla matrice iniziale
+\begin{center}
+    \includegraphics[width =0.80\linewidth]{Images/148.PNG}
+\end{center}
+Si può considerare anche \textbf{un numero maggiore di filtri}, per esempio, corrispondenti al tipo di feature che vogliamo estrarre;
+ciò che otterremmo in questo caso è \textbf{un numero di matrici di attivazione uguale al numero di filtri applicati}, i quali saranno combinati per formare la matrice in output.
+\begin{center}
+    \includegraphics[width =0.80\linewidth]{Images/149.PNG}
+\end{center}
+I vantaggi di questo processo sono:
+\begin{itemize}
+    \item La \textbf{riduzione del numero di pesi per layer}: se prima avevamo un numero di pesi pari a quasi 300000, ora se assumiamo di avere 6 filtri, ognuno di dimensione $5 \times 5 \times 3$, allora sono $75$ pesi per filtro, quindi  abbiamo un risparmio molto elevato in termini di \textbf{memoria}.
+    \item Il \textbf{mantenimento della struttura spaziale del dataset}: l'output del layer successivo è calcolato \textbf{solamente rispetto ai punti vicini dell'immagine di origine}, quindi si mantiene la struttura spaziale.
+\end{itemize}
+Immaginiamo ora di voler andare a calcolare l'output per più immagini contemporaneamente. Quanto spazio andremmo ad occupare nel sistema?
+L'unica cosa che effettivamente cambia è la \textbf{necessita di rappresentare sia gli input che gli output}, i pesi, invece, \textbf{rimangono gli stessi}:
+\begin{center}
+    \includegraphics[width =0.80\linewidth]{Images/150.PNG}
+\end{center}
+\newpage \noindent
+Le reti attualmente utilizzate hanno \textbf{diversi strati convolutivi}:
+\begin{center}
+    \includegraphics[width =0.80\linewidth]{Images/151.PNG}
+\end{center}
+Una cosa importante nelle reti convolutive, come nelle reti multilayer viste in precedenza,
+è quella di \textbf{avere una funzione di attivazione non lineare tra ogni stato lineare}: le reti convolutive effettuano un \textbf{prodotto matrice per matrice} (quindi un prodotto vettore per vettore), il quale è un'operazione lineare.
+Se si concatenano operazioni lineari, si ottiene comunque un'altra \textbf{operazione lineare}, il che potrebbe portare problemi.
+Il blocco base di una rete convolutiva è quindi strutturato come segue (la funzione di attivazione può essere anche diversa da ReLU):
+\begin{center}
+    \includegraphics[width =0.80\linewidth]{Images/152.PNG}
+\end{center}
+Quando andiamo a definire una rete convolutiva, ciò che interessa è perlopiù \textbf{il numero di canali di input (e quindi il numero di pesi) e il numero di canali di output}.
+Possiamo quindi considerare un filtro come una sorta di "percettrone" che lavora su una sezione dell'input totale. Nel caso delle rete convolutive per il riconoscimento delle immagini, l'addestramento può avvenire nel seguente modo:
+\begin{center}
+    \includegraphics[width =0.80\linewidth]{Images/153.PNG}
+\end{center}
+Tuttavia, quando si passa da uno strato convolutivo a quello successivo, \textbf{la dimensione dell'immagine iniziale cresce}; per risparmiare potenza computazionale si è quindi introdotta una tecnica
+che prende il nome di \textbf{pooling}: un layer di pooling \textbf{rende la rappresentazione dell'input più piccola e quindi più gestibile}, operando indipendentemente su \textbf{tutte le mappe di attivazione}.
+\begin{center}
+    \includegraphics[width =0.50\linewidth]{Images/154.PNG}
+\end{center}
+Il processo di pooling può essere implementato in molti modi diversi; per esempio, delle metodologie di pooling possono essere:
+\begin{itemize}
+    \item \textbf{Max Pooling}: Si prende il valore massimo in una regione
+    \begin{center}
+        \includegraphics[width =0.80\linewidth]{Images/155.PNG}
+    \end{center}
+    \item \textbf{Average Pooling}: Si calcola la media in una regione 
+\end{itemize}
+Altro parametro importante per le reti convolutive è quello dello \textbf{stride}, che indica, ad ogni passo, \textbf{di quanti pixel spostare il filtro sull'immagine}.
+Facciamo un'esempio, assumiamo di avere un immagine $7 \times 7$ e un filtro $3\times 3$, se impostiamo il valore di stride a $2$, allora avremo la seguente situazione:
+\begin{center}
+    \includegraphics[width =0.25\linewidth]{Images/156.PNG}
+\end{center}
+\begin{center}
+    \includegraphics[width =0.25\linewidth]{Images/157.PNG}
+\end{center}
+\begin{center}
+    \includegraphics[width =0.25\linewidth]{Images/158.PNG}
+\end{center}
+avremo quindi un immagine di output di grandezza $3 \times 3$
+In immagini molto grandi, con un filtro molto ampio, per esempio $7 \times 7$, viste le regolarità delle immagini (se facciamo uno zoom su un immagine fino a vedere una griglia di $7 \times 7$ pixel, le differenze tra un pixel e l'altro saranno trascurabili), si può inserire uno stride iniziale abbastanza ampio; andando quindi
+a ridurre il \textbf{numero di pesi e quindi i calcoli che la rete dovrà fare}.
+Se tuttavia provassimo a impostare un valore di stride uguale a $3$ nell'esempio precedente, \textbf{il filtro uscirebbe fuori dall'immagine quando si avvicina al suo bordo destro}.
+Non possiamo quindi applicare uno stride di 3 ad un'immagine $7 \times 7$.
+Se volessimo quindi mantenere le \textbf{dimensioni originali dell'immagine nel prossimo layer convolutivo} oppure volessimo \textbf{applicare uno stride più ampio}, possiamo utilizzare una tecnica chiamata \textbf{padding}, la quale consiste
+nell'\textbf{introduzione di bordi di valore 0} così da evitare che essi vadano a modificare il risultato della computazione.
+\begin{center}
+    \includegraphics[width =0.85\linewidth]{Images/159.PNG}
+\end{center}
+Avendo la dimensione dell'immagine $N$, la dimensione del filtro $F$, la dimensione del padding $P$ e il valore di stride, possiamo calcolare la dimensione dell'immagine di output usando al seguente formula:
+$$\frac{N + 2P - F}{Stride} + 1$$
+Utilizzando i filtri convolutivi, \textbf{l'elemento del layer successivo dipenderà da pochi elementi dell'input}, per esempio, se il filtro è di grandezza $5 \times 5$, ogni pixel di output dipenderà solamente dai 25 pixel in cui è stato applicato il filtro.
+Abbiamo appena visto quindi che calcolando ogni nuovo output e ogni nuova attivazione in ogni layer, usando i filtri convolutivi, l'input che verrà utilizzato nel nuovo layer \textbf{dipenderà da pochi elementi dell'input}.
+\begin{center}
+    \includegraphics[width =0.45\linewidth]{Images/160.PNG}
+\end{center}
+Ora, mettiamo caso di voler riconoscere le immagini che raffigurano un dromedario da quelle che raffigurano un cammello; entrambi hanno la gobba, quindi dobbiamo riuscire a contarle per effettuare la classificazione; tuttavia se l'output di un layer dipende solamente da una zona locale dell'immagine,
+\textbf{allora sarà impossibile contare il numero complessivo di gobbe}, poiché dovremmo vederle entrambe. Quello che viene fatto è \textbf{combinare parti delle immagini distanti nell'output finale}. Quindi, se le due gobbe vengono viste \textbf{in due sottoparti diverse dell'immagine e quindi vanno in aree diverse della rete neurale nel layer successivo}, allora sarà necessario, per riuscire ad integrare l'informazione su quante gobbe ci sono nell'immagine, 
+che un layer più avanti \textbf{riesca a coprire entrambi}.
+\begin{center}
+    \includegraphics[width =0.75\linewidth]{Images/161.PNG}
+\end{center}
+Nelle reti convolutive, la regione dell'input che un certo percettrone prende in considerazione (sia per estrarre le feature che per effettuare i calcoli per la predizione) viene detta \textbf{receptive field}.
+In una rete convolutiva con filtro di grandezza $K$, ogni elemento dell'output dipende da un \textbf{receptive field} di dimensioni $K \times K$ nell'input.
+Ogni successiva convoluzione aggiunge $K - 1$ alla grandezza del \textbf{receptive field}; quindi, se assumiamo di avere $L$ layer, allora la dimensione del receptive field è
+$$1 + L(K - 1)$$
+La crescita del receptive size dopo ogni convoluzione porta, nelle reti neurali convolutive, al seguente meccanismo:
+\begin{itemize}
+    \item \textbf{Livello iniziale}: All'inizio, ogni neurone in un layer convolutivo è connesso solo a una piccola parte dell'immagine di input, chiamata \textbf{local receptive field}.
+    \item \textbf{Stratificazione}: Man mano che le feature passano attraverso i diversi layer convolutivi, i campi recettivi del neurone nei layer più profondi aumentano. Questo è perché ogni neurone nei layer successivi riceve input da neuroni nei layer precedenti che, a loro volta, hanno i propri campi recettivi locali. Vanno quindi a crescere il \textbf{numero di canali per estrarre le feature delle immagini} mentre va a \textbf{diminuire la dimensione spaziale}
+    Di conseguenza, i neuroni nei layer più profondi sono influenzati da aree più ampie dell'immagine originale 
+\end{itemize}
+inoltre, essa è importante per le seguenti questioni:
+\begin{itemize}
+    \item \textbf{Riconoscimento delle caratteristiche}: Nei layer iniziali, i campi recettivi più piccoli consentono di rilevare caratteristiche semplici, come bordi e angoli. Nei layer più profondi, i campi recettivi più grandi permettono di rilevare caratteristiche più complesse, come parti di oggetti e texture
+    \item \textbf{Hierarchical Feature Learning}: La struttura gerarchica dei campi recettivi permette alle reti neurali convolutive di costruire una rappresenta più astratta dell'immagine, passando dalle caratteristiche di basso livello a quelle di alto livello
+\end{itemize}
+Tuttavia, per immagini molto grandi, avremmo bisogno di un grande numero di Layer. Per ridurli, possiamo adottare un approccio che prende il nome di \textbf{strided convolution}, dove il filtro convolutivo si sposta sull'immagine di input con stride maggiore di 1. Questo processo riduce la dimensione spaziale dell'output, rendendo la convoluzione più computazionalmente
+efficiente, introducendo però della \textbf{perdita di informazione}.
+Riassumiamo i concetti visti fino ad ora con un esempio: assumiamo di avere un input di dimensioni $W_1 \times H_1 \times C$.
+Un layer della rete convolutiva avrà quindi bisogno di \textbf{4 iperparametri} per analizzare l'input:
+\begin{itemize}
+    \item Il numero di filtri $K$
+    \item La grandezza dei filtri $F$
+    \item Lo stride $S$
+    \item La grandezza dello zero-padding $P$
+\end{itemize}
+essi porteranno il layer a dare un output di dimensioni $W_2 \times H_2 \times K$ dove:
+$$W_2 = \frac{W_1 - F + 2P}{S} + 1$$
+$$H_2 = \frac{H_1 - F + 2P}{S} + 1$$
+il numero di parametri sarà quindi $F^2 CK$ con $K$ bias.
+Le reti convolutive, però, \textbf{richiedono comunque parecchi dati di addestramento} e quindi richiedono un ulteriore sforzo di costruzione del dataset per poterle addestrare.
+Per poter ridurre le dimensioni dei dataset, si può adottare un approccio chiamato \textbf{transfer learning}: i percettroni dei livelli più bassi sono abbastanza dipendenti dalle immagini di input ed estraggono delle feature
+di tipo \textbf{estremamente locale}; la stessa cosa vale per i livelli successivi. I livelli più alti vanno invece a \textbf{rispondere in maniera molto più simile all'output desiderato}, quindi le loro attivazioni sono molto più dipendenti \textbf{dalla classe o dal compito che si sta cercando di svolgere}.
+Quindi, se per esempio abbiamo 150 layer, allora i primi 60-70 \textbf{sono molto più influenzati dall'input} e ciò permette di \textbf{evitare di dover riaddestrare l'intera rete nel momento in cui si cambia il compito che la rete deve svolgere}.
+Se per esempio, volessimo passare dalla classificazione di immagini gatti e cani alla classificazione di immagini di mucche e zebre; poiché sono più o meno quadrupedi, allora ci saranno delle caratteristiche comuni le quali \textbf{saranno comuni anche per la prima parte della rete neurale} e quindi estrarrà delle feature che saranno comunque probabilmente utili1.
+Ciò che viene fatto è quindi \textbf{utilizzare una rete già addestrata su un dataset molto ampio}; bloccare i pesi della rete fino ad un certo livello e \textbf{addestrare solamente i livelli più vicini alla mansione che vogliamo che la rete svolga}.
+\begin{center}
+    \includegraphics[width =1\linewidth]{Images/162.PNG}
+\end{center}
+\begin{center}
+    \includegraphics[width =1\linewidth]{Images/163.PNG}
+\end{center}
+il dataset deve comunque \textbf{essere simile al dataset su cui la rete originale è stata addestrata}.
+\subsubsection{Minibatch e Stochastic Gradient Descent}
+Fino ad ora, abbiamo assunto di calcolare il gradiente sulla funzione di loss.
+Tuttavia, la funzione di loss è \textbf{calcolata sull'intero dataset}, il quale potrebbe contenere un numero enorme di esempi.
+Quindi, se per esempio avessimo un miliardo di esempi, con questo approccio, propaghiamo la rete in avanti per un miliardo di volte, calcoliamo la derivata, la quale è \textbf{lineare sul numero di esempi che abbiamo dato alla rete}, quindi calcoliamo un miliardo di derivate e dopodiché, dopo questi due miliardi di passi, i quali andrebbero moltiplicati per il numero di layer, andiamo finalmente ad aggiornare i pesi.
+Cosa si può fare per migliorare questo procedimento? Ciò che viene fatto è \textbf{considerare che il valore della funzione di loss è fondamentalmente approssimabile da sottoinsiemi (minibatch) del dataset di training}.
+Dividiamo quindi il dataset di training in sottoinsiemi, possibilmente bilanciati e ben distribuiti, e, invece di addestrare dopo aver calcolato la loss su tutto il dataset, lo facciamo dopo aver calcolato la funzione di loss e il suo gradiente solo per un sottoinsieme di esempi.
+Questo approccio è detto \textbf{Minibatch Gradient Descent} ed esso è \textbf{parallelizzabile}, cioè ogni processore della GPU può computare il gradiente per un singolo esempio (i quali formano il minibatch), per poi aggiornare i pesi solamente una volta finiti i calcoli, invece che farlo per ogni esempio.
+\begin{center}
+    \includegraphics[width =1\linewidth]{Images/164.PNG}
+\end{center}
+Quando il batch ha dimensione $k = 1$, allora si parla di \textbf{stochastic gradient descent} (SGD).
+Quali sono i problemi di ottimizzazione legati a questi algoritmi? La seguente trattazione viene fatta in riferimento a SGD ma è compatibile anche con mini-batch:
+\begin{enumerate}
+    \item Cosa succede quando la funzione di loss \textbf{ha valori che variano velocemente in una direzione e lentamente nell'altra?} Se seguiamo la direzione del gradiente, ci ritroviamo ad \textbf{ad oscillare molto in una direzione poco rilevante e poco nella direzione che ci porta all'ottimizzazione dei pesi}
+    \begin{center}
+        \includegraphics[width =0.80\linewidth]{Images/165.PNG}
+    \end{center}
+    \item Cosa succede se abbiamo \textbf{minimi locali} o punti di sella?
+     Quando il gradiente è 0, \textbf{SGD si blocca}
+    \begin{center}
+     \includegraphics[width =0.80\linewidth]{Images/166.PNG}
+    \end{center}
+    i punti di sella sono molto più comuni in dimensioni più elevate.
+    \item Poiché la stima che abbiamo dato del gradiente \textbf{non è esatta}, il cambiamento che abbiamo effettuato in un passo potrebbe essere sbagliato per l'esempio successivo.
+    \begin{center}
+        \includegraphics[width =0.80\linewidth]{Images/167.PNG}
+    \end{center}
+\end{enumerate}
+Il modo in cui vengono affrontati questi problemi è tramite \textbf{l'aggiunta di un "momento" (momentum)}, simile al concetto fisico omonimo: ogni spostamento comporterà runa diminuzione e un accrescimento nella direzione opposta e nella direzione verso cui ci stiamo muovendo.
+\begin{center}
+    \includegraphics[width =0.80\linewidth]{Images/168.PNG}
+\end{center}
+Possiamo quindi modificare il modo in cui andiamo a calcolare il gradiente durante l'SGD nel seguente modo: andiamo a mantenere in memoria il \textbf{valore dei gradienti passati} e calcoliamo la "velocità" come la loro media pesata (quindi i gradienti passati perdono di "peso" con il passare del tempo).
+\begin{center}
+    \includegraphics[width =0.80\linewidth]{Images/169.PNG}
+\end{center}
+\subsubsection{AdaGrad, RMSProp e Adam}
+Potrebbe succedere che il momento accumulato durante il calcolo del gradiente lo porti ad \textbf{avanzare troppo velocemente in una certa direzione}.
+\textbf{AdaGrad} è un algoritmo che \textbf{risolve questa problematiche introducendo un ridimensionamento del gradiente elemento per elemento, basandosi sulla somma dei quadrati dei gradienti precedenti in ogni dimensione}.
+Questo algoritmo ha quindi \textbf{dei tassi di apprendimento per ogni parametro della rete} (tassi di apprendimento "adattivi")
+\begin{center}
+    \includegraphics[width =0.80\linewidth]{Images/170.PNG}
+\end{center}
+Questo approccio permette di mantenere la dimensione del cambiamento limitata.
+Tuttavia, poiché stiamo continuando ad aumentare con valori positivi il denominatore della divisione, essa nel tempo \textbf{convergerà a 0} e quindi rallenterà molto il processo di apprendimento.
+Per ovviare a questa problematica, si è introdotta una variante di AdaGrad che prende il nome di \textbf{Root Mean Square Propagation} (RMSProp).
+La variazione introdotta è che, al posto di effettuare una somma dei quadrati del gradiente in ogni direzione, si effettua una \textbf{media geometrica del gradiente}, moltiplicata per un valore di "decadimento" (decay rate)
+\begin{center}
+    \includegraphics[width =0.65\linewidth]{Images/171.PNG}
+\end{center}
+L'algoritmo \textbf{Adam} invece va a \textbf{mischiare gli approcci del momentum e di AdaGrad/RSMProp}, andando prima a calcolare il momento e poi a normalizzare i valori nello stesso modo di AdaGrad/RMSProp
+\begin{center}
+    \includegraphics[width =1\linewidth]{Images/172.PNG}
+\end{center}
+Il problema principale di questi algoritmi è il \textbf{numero di parametri che bisogna impostare}, quindi molto tempo viene speso per \textbf{trovare la configurazione migliore}.
+\begin{center}
+    \includegraphics[width =0.80\linewidth]{Images/173.PNG}
+\end{center}
+In particolare, il \textbf{tasso di apprendimento} è un parametro molto utile per \textbf{limitare la dimensione del cambiamento} dettata dal gradiente; possiamo quindi \textbf{all'inizio impostare un tasso di apprendimento grande} in modo da trovare un minimo, a quel punto, \textbf{diminuiamo la grandezza del learning rate} in modo da poter ridurre ulteriormente
+il valore della funzione di loss. L'approccio quindi è quello rispecchiato nel seguente grafico:
+\begin{center}
+    \includegraphics[width =1\linewidth]{Images/174.PNG}
+\end{center}
+\begin{center}
+    \includegraphics[width =1\linewidth]{Images/175.PNG}
+\end{center}
+\subsubsection{Regolarizzazione}
+Abbiamo detto che un problema con le feature è che se ne aggiungiamo troppe rischiamo che il modello vada in overfitting, cioè andiamo ad imparare caratteristiche che non veramente rilevanti.
+Dobbiamo inoltre notare che vi sono più assegnazioni dei pesi che soddisfano lo stesso valore della funzione di loss.
+Quindi, da una parte vogliamo evitare di apprendere feature inutili dall'altro vogliamo evitare di provare configurazioni di pesi che danno lo stesso risultato.
+Un modo per farlo è \textbf{limitare la dimensione dello spazio di ricerca}, facendo in modo di dare un limite alla \textbf{dimensione dello spazio dei pesi}.
+Questo viene fatto aggiungendo un \textbf{fattore alla funzione di loss che è funzione della dimensione dei pesi}:
+\begin{center}
+    \includegraphics[width =0.90\linewidth]{Images/176.PNG}
+\end{center}
+prima quindi di andare a scegliere un peso con un valore molto alto, e che quindi ci porterebbe a spostarci molto dall'origine, proveremo a trovare una configurazione dei pesi che \textbf{abbia una buona loss} e che sia vicina all'origine.
+Questo permette di evitare di trovare soluzioni ridondanti e forza il sistema a mantenere pesi piccoli; in particolare quest'ultima conseguenza è particolarmente importante per la classificazione: per riuscire a coprire esempi contrastanti, è necessario
+dare \textbf{valori elevati a feature che hanno effetti opposti in condizioni diverse}, tuttavia questo rischia di introdurre rumore, il quale non viene introdotto se lo si mantiene un valore dei pesi piccolo.
+Quindi, perché regolarizzare?
+\begin{itemize}
+    \item Per esprimere preferenze sul valore dei pesi
+    \item Per rendere il modello "più semplice" così che possa funzionare sui dati di Test
+    \item Per migliorare l'ottimizzazione aggiungendo della "curvatura"
+\end{itemize}
+\subsubsection{Errore nel training vs Errore nel testing}
+Una cosa che è necessario fare quando si lavora con questi sistemi è \textbf{capire come essi si stanno comportando}.
+Bisogna quindi sempre osservare \textbf{l'andamento dei valori della funzione di loss e dell'accuratezza}: se si è arrivati ad un punto in cui il gradiente o il learning rate sono troppo alti,
+allora il sistema potrebbe cominciare ad "oscillare" invece che muoversi verso un minimo locale.
+Un'altra cosa importante da osservare è come la rete \textbf{si comporta su dati mai visti durante la fase di addestramento}, si deve quindi valutare la sua accuratezza sul \textbf{dataset di valutazione}.
+\begin{center}
+    \includegraphics[width =0.90\linewidth]{Images/177.PNG}
+\end{center}
+Un modo per evitare di produrre un sistema che impara feature inutili e quindi che avrà un accuratezza bassa sul set di validazione è quello \textbf{fermare l'addestramento del modello quando l'accuratezza sull'insieme di valutazione decresce} (Early Stopping).
+Oppure, un'altro modo è quello di \textbf{addestrare la rete per molto tempo, tenendo sempre da conto la versione del modello che ha dato la migliore accuratezza sull'insieme di validazione}.
+\subsubsection{Dropout}
+Un altra metodologia di regolarizzazione prende il nome di \textbf{dropout}: in ogni batch, vengono casualmente "uccisi" (impostati a 0) dei neuroni (dropping). La probabilità di un neurone di essere impostato a 0
+\textbf{è un iperparametro} per il quale 0.5 è un valore comune.
+\begin{center}
+    \includegraphics[width =0.90\linewidth]{Images/178.PNG}
+\end{center}
+Per ogni batch passata nella rete, alcuni neuroni non saranno attivi, quindi ogni volta si va ad \textbf{addestrare una sottorete diversa}. 
+Il codice di questo approccio quindi può essere il seguente:
+Poiché gli input di ogni neurone dipendono da quelli dello strato precedente, a runtime ci basta non uccidere nessun neurone per \textbf{ottenere la media dei risultati di tutte le sotto-reti addestrate}.
+Tuttavia, così facendo, ogni neurone si ritrova a runtime con un numero di input maggiore rispetto alla fase di addestramento e siccome i neuroni sono non lineari, questo potrebbe portare molto velocemente alla saturazione.
+Un modo per evitarlo è quindi \textbf{scalare gli input di ogni neurone del fattore di dropout}:
+\begin{center}
+    \includegraphics[width =1\linewidth]{Images/179.PNG}
+\end{center}
+Questo approccio quindi previene la \textbf{co-adattazione} dei neuroni e migliora la generalizzazione.
+\newpage
+\subsubsection{Mixup}
+Altro metodo di regolarizzazione è quello del \textbf{Mixup}: la rete viene addestrata su un \textbf{miscuglio} di immagini (es. 40\% gatto, 60\% cane), mentre il testing viene effettuato sulle immagini originali.
+\begin{center}
+    \includegraphics[width =1\linewidth]{Images/180.PNG}
+\end{center}
+\subsubsection{Scelta degli iperparametri}
+Per poter scegliere gli iperparametri per addestrare una rete o un modello, possiamo seguire una procedura sistematica:
+\begin{enumerate}
+    \item \textbf{Controllo della loss iniziale}: La loss deve essere coerente con il compito che la rete deve svolgere (es. $\log(C)$ per una rete con attivazione softmax con $C$ classi)
+    \item \textbf{Effettuare overfitting su una piccola parte dell'input}: Testare il modello su pochi minibatch. Se ha problemi ad apprendere, diagnosticarne i problemi (es. learning rate sbagliato)
+    \item \textbf{Ricerca del learning rate ottimale}: Ricercare il learning rate che diminuisce il valore della funzione di loss. Si può usare un'architettura proveniente dai passi precedenti, usare tutti i valori di training, far decadere il valore dei pesi ecc... 
+    L'obbiettivo è quello di trovare un learning rate che \textbf{faccia diminuire significativamente il valore di loss entro 100 iterazioni}. Buoni valori da provare per il learning rate sono $10^-1, 10^-2, 10^-3, 10^-4$
+    \item \textbf{Griglia approssimativa}: Scegliere alcuni valori per il learning rate e per il tasso di decadimento dei pesi intorno ai valori migliori trovati durante il passo 3; addestrare quindi alcuni modelli su 1-5 iterazioni dove si usa tutto il training set (epoch).
+    Dei buoni valori da provare per il tasso di decadimento dei pesi sono $10^-4, 10^-5, 0$
+    \item \textbf{Affinamento}: Si prendano i migliori modelli ottenuti dal passo 4 e li si addestri per più tempo (10 - 20 epoch) senza tasso di decadimento del learning rate
+    \item \textbf{Controllare i valori di accuratezza e di loss sul validation set rispetto al training set}:
+    \begin{itemize}
+        \item Se l'accuratezza sta continuando a salire, è necessario un addestramento più lungo
+        \item Un gap molto ampio tra l'accuratezza sul validation set e l'accuratezza sul training set significa che il modello è andato in overfitting. Bisogna quindi incrementare la regolarizzazione o ottenere più dati per l'addestramento
+        \item Un gap quasi nullo tra l'accuratezza sul validation set e l'accuratezza sul training set significa che il modello è andato in underfitting. Bisogna quindi addestrare per più tempo o \textbf{usare un modello più grande}
+    \end{itemize}
+    \item \textbf{RITORNA AL PASSO 5}
+\end{enumerate}
+Per trovare il valore degli iperparametri, possiamo quindi procedere in due modi: 
+\begin{itemize}
+    \item \textbf{Grid search}: scandire tutte le possibili combinazioni di valori; può essere inefficiente
+    \item \textbf{Random search}: esplorare casualmente le possibili configurazioni; questo metodo può risultare più efficace per trovare i valori per gli iperparametri rilevanti
+\end{itemize}
+All'inizio è quindi meglio seguire un approccio random, per poi passare a grid search una volta che si ha un'idea dell'intorno in cui potrebbero essere contenuti i valori ottimali degli iperparametri.
+\begin{center}
+    \includegraphics[width =1\linewidth]{Images/181.PNG}
+\end{center}
+\subsection{Apprendimento non supervisionato}
 
 
 \end{document}
