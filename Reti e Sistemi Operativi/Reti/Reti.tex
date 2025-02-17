@@ -983,6 +983,111 @@ Il trasmettitore TCP quindi andrà a limitare la propria trasmissione, quindi de
 $$LastByteSent - LastByteAcked \leq min\{cwnd, rwnd\}$$
 $cwnd$ è \textbf{dinamicamente aggiustata} in base alle condizioni di rete osservate (implementando il controllo di congestione TCP).
 $rwnd$ è invece aggiustato basandosi \textbf{sul valore ricevuto dal ricevente} (implementando il controllo di flusso TCP).
+\section{Livello di rete: Piano dati}
+\begin{center}
+    \includegraphics[width = 0.75\linewidth]{Images/73.png}
+\end{center}
+L'obbiettivo del livello di rete è trasportare i segmenti provenienti dal livello di trasporto dal \textbf{mittente} al \textbf{ricevente}.
+\begin{itemize}
+    \item \textbf{Mittente}: incapsula i segmenti in \textbf{datagrammi} che passerà al livello di collegamento
+    \item \textbf{Ricevente}: Decapsula i segmenti dai datagrammi e li consegna al livello di trasporto
+\end{itemize}
+I protocolli del livello di rete sono presenti in \textbf{tutti i dispositivi capaci di connettersi ad internet}, cioè sono presenti sia negli host che nei router.
+In particolare, i \textbf{router}:
+\begin{itemize}
+    \item Esaminano campi dell'intestazione dei datagrammi che passano attraverso di loro
+    \item Muovono i datagrammi dalle porte di input alle porte di output corretta, in modo da trasferire i datagrammi lungo un cammino punto a punto (end-to-end) corretto tra il mittente e il destinatario
+\end{itemize}
+Due funzionalità chiave del livello di rete sono:
+\begin{itemize}
+    \item \textbf{Inoltro (forwarding)}: Muove i pacchetti dal collegamento in input del router all'appropriato collegamento in uscita dello stesso
+    \item \textbf{Instradamento (routing)}: Determina la strada che un pacchetto deve intraprendere per raggiungere, dalla sorgente, la propria destinazione. Questo processo viene effettuato attraverso \textbf{algoritmi e protocolli di routing}
+\end{itemize}
+Il livello di rete è suddiviso in \textbf{due diversi "piani"}:
+\begin{itemize}
+    \item \textbf{Piano dati (Data plane)}: Ha valenza \textbf{locale} e riguarda le funzioni che vengono eseguite dai singoli router della rete per determinare l'interfaccia corretta verso quale inviare il pacchetto. Determina quindi COME un datagramma che arriva alle porte di input di un router debba essere inoltrato alle sue porte in uscita. Il piano dei dati, quindi, implementa \textbf{l'inoltro}.
+    \item \textbf{Piano di controllo (Control plane)}: Ha valenza \textbf{su tutta la rete} (network-wide). Determina come un datagramma debba essere instradato tra i router, lungo un percorso end-to-end, dall'host sorgente all'host destinazione. Il piano di controllo, quindi, \textbf{implementa l'instradamento}.
+    In realtà, il piano di controllo, nella sua accezione più generale possibile, non implementa solamente l'instradamento ma anche tutti i protocolli e tutti gli algoritmi \textbf{necessari a far funzionare la rete}. Esistono due differenti approcci di implementazione del piano di controllo:
+    \begin{itemize}
+        \item \textbf{Algoritmi di instradamento tradizionali}: Approccio distribuito, in cui il piano di controllo della rete (o una sua parte) viene implementato su ogni singolo dispositivo di rete. Ogni singolo router quindi \textbf{implementa il piano di controllo} 
+        \item \textbf{Software Defined Networking (SDN)}: Il piano di controllo viene \textbf{centralizzato e implementato su server remoti} (anche in cloud). Si ha quindi un \textbf{controllore centralizzato} che ha una \textbf{visione globale} della rete e che prenderà le decisioni riguardanti l'instradamento dei pacchetti.
+    \end{itemize}
+    Questi appunti tratteranno solamente il primo approccio.
+\end{itemize}
+Nell'approccio tradizionale, ogni singolo router \textbf{ha un piano di controllo in cui vengono eseguiti gli algoritmi di routing}; si ha quindi uno \textbf{scambio di messaggi tra i vari router} per fare in modo di \textbf{popolare correttamente le proprie tabelle di inoltro}.
+\begin{center}
+    \includegraphics[width = 0.80\linewidth]{Images/74.png}
+\end{center}
+Nell'approccio SDN, il piano di controllo viene \textbf{centralizzato in dei server}, i quali eseguono il controllore remoto; il quale si
+interfaccerà con i dati provenienti da ogni singolo router per \textbf{ottenere informazioni sulla rete} (es. informazioni topologiche), ottenendo
+così una \textbf{visione del piano dei dati}. Conoscendo quindi tutte le informazioni necessarie su tutti i router della rete, il controller può prendere
+decisioni riguardanti l'instradamento dei pacchetti, cioè \textbf{genererà le tabelle di inoltro}, le quali verranno inviate ai singoli router per poter effettuare le operazioni di inoltro.
+\begin{center}
+    \includegraphics[width = 0.80\linewidth]{Images/75.png}
+\end{center}
+\subsection{Modello di servizio dello strato di rete}
+Qual è il modello di servizio che viene adottato per trasportare, a livello di rete, i datagrammi dalla sorgente al destinatario?
+Per esempio, ci potrebbero essere varie tipologie di servizi che potrebbero essere offerti a... 
+\begin{itemize}
+    \item \textbf{Singoli datagrammi}: garanzia di consegna, garanzia di consegna con un ritardo massimo di 40ms ecc...
+    \item \textbf{Flussi di datagrammi}: Garanzia di consegna in ordine, larghezza di banda minima ecc...
+\end{itemize}
+Tuttavia, a livello di rete, il modello di servizio adottato è di tipo \textbf{"best effort"}, quindi \textbf{non vi sono}:
+\begin{itemize}
+    \item Garanzie sulla consegna dei datagrammi al ricevente
+    \item Garanzie sull'ordine di consegna
+    \item Garanzie sulla larghezza di banda disponibile per il flusso lungo il percorso end-to-end
+\end{itemize}
+\begin{center}
+    \includegraphics[width = 0.80\linewidth]{Images/76.png}
+\end{center}
+\subsection{Architettura di un router}
+L'architettura generica di un router può essere visualizzata nel seguente modo:
+essa prevede l'esistenza \textbf{di un certo numero di porte (o interfacce) in ingresso} e di un certo numero di \textbf{porte (o interfacce) in uscita}.
+In realtà, ogni singola porta di un router può agire \textbf{sia come porta di ingresso, sia come porta di uscita}, tuttavia, a livello funzionale, è necessario
+mantenere una distinzione fra le due. Tra le porte di ingresso e le porte in uscita si trova una \textbf{maglia di commutazione ad alta velocità} (high-speed switching fabric), il quale è una
+\textbf{rete fisica}, solitamente implementata con circuiti integrati, che mette in comunicazione \textbf{ogni singola interfaccia di ingresso con ogni singola interfaccia in uscita}.
+La switching fabric, tuttavia, \textbf{non ha un collegamento da ogni singola porta in ingresso ad ogni singola porta in uscita} (full mesh), poiché ciò risulterebbe in una complessità \textbf{molto elevata};
+invece, l'implementazione di questa rete segue delle teorie che \textbf{permettono di andare a definire delle "reti di commutazione" all'interno della maglia}, le quali permettono di mettere in comunicazione le porte di ingresso con le porte di uscita
+\textbf{mantenendo limitato il numero di collegamenti complessivi}.
+Le reti di commutazione devono garantire \textbf{la possibilità di inviare pacchetti da un'interfaccia in ingresso ad un'interfaccia in uscita indipendentemente da ciò che sta accadendo sulle altre interfacce}.
+Se una rete ha questa proprietà si dice che essa è \textbf{non bloccante}.
+Il componente che permette l'esecuzione di tutte le operazioni di routing è il \textbf{processo di routing} (routing processor), il quale si trova nel \textbf{piano di controllo} del livello di rete.
+\begin{center}
+    \includegraphics[width = 0.80\linewidth]{Images/77.png}
+\end{center}
+Dall'immagine sopra, possiamo notare che \textbf{il piano dei dati e il piano di controllo operano su ordini di tempo molto diversi tra di loro}:
+\begin{itemize}
+    \item A livello di piano dati, viene effettuato lo \textbf{spostamento dei pacchetti dalle interfacce di ingresso a quelle di uscita}. Questa operazione deve essere effettuata \textbf{il più velocemente possibile}, vista anche la grande mole di pacchetti
+    che si possono avere in un singolo router. L'ordine di tempo quindi, in questo contesto, è nell'ordine dei \textbf{nanosecondi}
+    \item Le decisioni prese a livello di controllo, invece, possono anche essere applicate alla rete in un tempo nell'ordine dei \textbf{millisecondi}
+\end{itemize}
+Le porte in ingresso di un router hanno la seguente architettura:
+\begin{center}
+    \includegraphics[width = 1\linewidth]{Images/78.png}
+\end{center}
+analizziamola nel dettaglio
+\begin{itemize}
+    \item \textbf{Terminazione di linea} (line termination): È l'interfaccia verso il mondo esterno (es. porta Ethernet); si occupa di \textbf{ricevere i bit in ingresso}. Le funzionalità della terminazione di linea sono quindi
+    relative al \textbf{livello fisico}
+    \item \textbf{Protocollo del livello di collegamento}: Una volta ricevuti i bit del pacchetto, essi vengono passati al \textbf{livello di collegamento}, dove viene effettuato un protocollo a livello di collegamento per organizzare i bit in una \textbf{trama} (frame) e decapsulare il pacchetto in un \textbf{datagramma}
+    \item \textbf{Lookup e inoltro}: Si utilizzano le informazioni contenute nei campi dell'intestazione del datagramma (ricevuto dallo strato precedente) per \textbf{interrogare la tabella di inoltro memorizzata nella memoria dell'interfaccia di input} (lookup) allo scopo di \textbf{trovare una corrispondenza} (match). 
+    L'inoltro del pacchetto verso una porta di output avviene quindi in base alla corrispondenza trovata. Questa serie di azioni vengono dette \textbf{"match plus action"}.
+    Quali sono però i campi dell'intestazione del datagramma che vengono utilizzati per prendere decisioni a livello di inoltro?
+    Nel caso specifico di internet, viene utilizzato un approccio \textbf{basato sull'indirizzo IP di destinazione} (destination-based forwarding) contenuto nell'intestazione del datagramma;
+    tuttavia, esistono anche altri tipi di meccanismi (es. \textbf{source-based forwarding}, dove viene preso in considerazione anche l'indirizzo IP sorgente).
+\end{itemize}
+Ogni singola porta in ingresso presenta \textbf{una coda}; ciò significa che si può avere una \textbf{situazione di accodamento nelle porte di ingresso di un router} quando il tasso di arrivo dei pacchetti è maggiore rispetto alla velocità con la quale lo switching fabric è in grado di smaltirli verso le porte in uscita.
+La velocità di inoltro della switching fabric dei pacchetti sulle porte di ingresso verso le interfacce di output prende il nome di \textbf{switching rate}:
+\begin{itemize}
+    \item Viene spesso misurato come \textbf{multiplo del tasso di linea (line rate) $R$ della porta di input/output}, cioè della \textbf{velocità della porta}
+    \item Se si hanno $N$ porte di ingresso/uscita (il numero coincide poiché ogni porta di input può diventare una porta di output e viceversa), allora è desiderabile uno switching rate di almeno $N \cdot R$, poiché esso garantisce un accodamento nelle porte di ingresso \textbf{trascurabile}.
+\end{itemize}
+\begin{center}
+    \includegraphics[width = 0.70\linewidth]{Images/79.png}
+\end{center}
+Se 
+
 
 
 \end{document}
