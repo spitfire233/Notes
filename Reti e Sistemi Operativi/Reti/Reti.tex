@@ -1062,7 +1062,7 @@ Dall'immagine sopra, possiamo notare che \textbf{il piano dei dati e il piano di
     che si possono avere in un singolo router. L'ordine di tempo quindi, in questo contesto, è nell'ordine dei \textbf{nanosecondi}
     \item Le decisioni prese a livello di controllo, invece, possono anche essere applicate alla rete in un tempo nell'ordine dei \textbf{millisecondi}
 \end{itemize}
-Le porte in ingresso di un router hanno la seguente architettura:
+Le \textbf{porte in ingresso} di un router hanno la seguente architettura:
 \begin{center}
     \includegraphics[width = 1\linewidth]{Images/78.png}
 \end{center}
@@ -1086,7 +1086,62 @@ La velocità di inoltro della switching fabric dei pacchetti sulle porte di ingr
 \begin{center}
     \includegraphics[width = 0.70\linewidth]{Images/79.png}
 \end{center}
-Se 
+Perché questo è fondamentale? Se si è nella condizione in cui lo switching rate è più basso di $N \cdot R$ (tasso di linea di tutte le porte di ingresso), allora si potrebbe avere 
+\textbf{un accodamento molto elevato nelle porte di ingresso} e quindi avere delle perdite dovute ad un buffer overflow. In più, un ulteriore problema generato da un accodamento significativo nelle porte
+di ingresso è il problema del \textbf{Head-of-the-line (HOL) blocking}: i datagrammi che si sono accodati nelle porte di ingresso del router \textbf{vengono bloccati dai datagrammi che si trovano davanti a loro nella coda}, i quali, al momento, non possono essere trasmessi verso la porta di output corretta.
+Perché si può verificare questo fenomeno?Se si hanno due pacchetti, \textbf{provenienti da interfacce in ingresso differenti}, che devono essere inoltrati \textbf{verso la stessa porta in uscita}, allora questo
+trasferimento non può avvenire in contemporanea per entrambi i pacchetti. Infatti, se provassi a trasmettere i due pacchetti insieme, essi finirebbero per \textbf{mischiarsi} (si avrebbe quindi una \textbf{collisione}) e quindi diventerebbero entrambi \textbf{inintelligibili}.
+Quindi, uno dei due pacchetti dovrà \textbf{aspettare che la trasmissione dell'altro pacchetto si concluda} prima di essere trasmesso. 
+\begin{center}
+    \includegraphics[width = 0.901\linewidth]{Images/80.png}
+\end{center}
+Il problema dell'HOL-Blocking può \textbf{provocare la crescita indefinita del tempo di accodamento}; ragione per il quale è assolutamente necessario dimensionare lo switching fabric in maniera opportuna. \newline
+Una \textbf{porta di output} di un router è invece strutturata come segue:
+\begin{center}
+    \includegraphics[width = 0.901\linewidth]{Images/81.png}
+\end{center}
+La struttura è pressoché identica a quella di una porta di ingresso; ovviamente, le operazioni effettuate all'interno della porta di uscita sono quelle di \textbf{incapsulamento del datagramma in una trama del livello di collegamento} e la
+trasmissione in uscita del pacchetto. Anche in questo caso, le porta di output presentano un \textbf{buffer}, nei quali i pacchetti si accoderanno ogni qual volta il tasso di arrivo dei pacchetti dello switching fabric è più elevato del tasso di trasmissione
+delle porte. Si potrebbero quindi avere, anche in questo caso, ritardi di accodamento e buffer overflow. \textbf{L'accodamento nelle porte di output è un problema fisiologico dei router} ed è quindi non eliminabile; tutta la trattazione dei ritardi di accodamento
+vista fino ad ora era quindi riferita \textbf{ad un accodamento nelle porte di output, assumendo un accodamento in input trascurabile}.
+Poiché l'accodamento nelle porte di output non è eliminabile, si rende necessario \textbf{capire come gestire e trasmettere in uscita i pacchetti si accodano nel buffer}.
+In generale, \textbf{non è vero che, in generale, il primo pacchetto che arriva è il primo pacchetto che viene trasmesso} (politica FIFO); in realtà, i pacchetti possono avere \textbf{priorità di tipo differente}, quindi 
+si rendono necessaire delle politiche che \textbf{regolino sia lo scarto preventivo dei pacchetti} sia \textbf{quali pacchetti verranno scelti per essere trasmessi in uscita}:
+\begin{itemize}
+    \item \textbf{Drop policy}: Al posto di far riempire la coda fino al punto di riempirla, quindi arrivare ad una situazione in cui ogni pacchetto successivo viene scartato per buffer overflow, tendenzialmente si tende a \textbf{scartare preventivamente dei pacchetti} quando il livello di occupazione della coda raggiunge una certa soglia.
+    Tendenzialmente vengono scartati i pacchetti a più bassa priorità.
+    \item \textbf{Discipline di scheduling}: Una volta che si hanno dei pacchetti accodati, quali sono quelli che \textbf{verranno trasmessi per primi?} Esistono delle politiche diverse (es. \textbf{Priority scheduling}: chi ha la più alta priorità).  
+\end{itemize}
+\subsection{Internet Protocol (IP)}
+Il \textbf{protocollo IP} è un protocollo dello strato di rete che si occupa dell'indirizzamento dell'instradamento dei pacchetto; esso è \textbf{fondamentale per il funzionamento della rete internet}.
+Il datagramma del protocollo IP ha la seguente struttura:
+\begin{center}
+    \includegraphics[width = 1\linewidth]{Images/82.png}
+\end{center}
+Vediamoli più in dettaglio:
+\begin{itemize}
+    \item \textbf{Version}: Ha lunghezza di 4 bit e riguarda la versione del protocollo utilizzata (es. IPv4, IPv6 [quest'ultimo, non oggetto del corso])
+    \item \textbf{Header length}: Ha lunghezza di 4 bit e riporta la \textbf{lunghezza dell'header in byte}. Questo campo si rende necessario poiché il protocollo IP \textbf{prevede la presenza di eventuali opzioni}, le quali possono allungare la dimensione dell'intestazione.
+    \item \textbf{Length}: Ha lunghezza di 16 bit e riporta la \textbf{lunghezza totale del datagramma in byte}. Ovviamente $\textrm{Length} - \textrm{Header length} = \textrm{Payload length}$. Poiché si hanno 16 bit per codificare la lunghezza del datagramma, allora la sua massima dimensione possibile
+    sarà $2^{16} - 1 \approx 65.000$ byte; solitamente, però, la lunghezza di un datagramma IP è di $1500$ byte perché si tende a dimensionare un pacchetto in modo tale che sia \textbf{al più grande quanto la massima lunghezza supportata da una trama a livello di collegamento}.
+    \item \textbf{Type of service}: Ha lunghezza 8 bit ed indica la \textbf{priorità del pacchetto}
+    \item \textbf{Time to live (TTL)}: Ha lunghezza 8 bit e non è altro che un \textbf{contatore} che viene decrementato da ogni router che il pacchetto attraversa. Il massimo del TTL è $2^8 - 1 = 255$.
+    Questo campo è necessario per evitare che un pacchetto mal indirizzato o finito in un loop della rete \textbf{rimanga per sempre presente al suo interno}.
+    \item \textbf{Upper layer}: Ha lunghezza 8 bit e indicano quale \textbf{protocollo di trasporto sta venendo utilizzato per il payload di questo pacchetto}; questo campo serve per \textbf{effettuare le operazioni di multiplazione e demultiplazione a livello di rete}.
+    \item \textbf{Fragmentation reassembly}: Questi 3 campi, rispettivamente di 16, 4 e 12 bit, venivano utilizzati per la \textbf{frammentazione}. IP prevede che, nel caso il datagramma sia di dimensioni maggiori rispetto alla massima dimensione gestita dal protocollo di collegamento, esso possa essere \textbf{frammentato in pacchetti di dimensioni più piccole}, che poi alla destinazione verranno \textbf{ricombinati nel datagramma originario}.
+    Di fatto, la frammentazione non avviene quasi mai nelle reti moderne. La frammentazione di un datagramma introduce diversi problemi, come \textbf{la necessità di dover avere un buffer al destinatario} o il \textbf{dover ricostruire un datagramma da dei pacchetti arrivati fuori sequenza}.
+    \item \textbf{Header checksum}: Ha lunghezza 16 bit e viene usato per \textbf{effettuare un controllo su eventuali errori sul solo header IP (NON SUL PAYLOAD)}.
+    \item \textbf{Source IP address}: Ha lunghezza 32 bit e indica l'indirizzo IP di chi ha generato il datagramma
+    \item \textbf{Destination IP address}: Ha lunghezza 32 bit e indica l'indirizzo IP di destinazione del datagramma
+    \item \textbf{Options}: Questo campo ha lunghezza 32 bit e indica diverse opzioni del protocollo IP che possono essere attivate per la trasmissione (es. Registrare il percorso effettuato)
+\end{itemize}
+
+\subsubsection{Indirizzamento IP}
+%52:56
+
+
+
+
 
 
 
