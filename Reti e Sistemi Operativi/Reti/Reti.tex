@@ -1137,7 +1137,126 @@ Vediamoli più in dettaglio:
 \end{itemize}
 
 \subsubsection{Indirizzamento IP}
-%52:56
+Come vengono \textbf{assegnati gli indirizzi IP?}
+L'indirizzo IP è un identificatore di 32 bit (come visto nell'intestazione dell'header IP) associato \textbf{ad ogni interfaccia di un host/router}.
+L'indirizzo IP non è quindi \textbf{proprio dell'host/router ma delle sue interfacce}. Un host, tuttavia, potrebbe avere diverse interfacce (es. WiFi ed Ethernet);
+quindi ad ognuna di esse si \textbf{assegna un indirizzo IP differente}. Questa situazione "peggiora" nei router (ogni router ha almeno 3 interfacce, altrimenti non avrebbe senso avere un router), in quanto \textbf{ad ogni loro interfaccia viene assegnato un indirizzo IP differente}.
+Ricordiamo che, in questo contesto, \textbf{i termini "porta" ed "interfaccia" sono sinonimi}. 
+\begin{center}
+    \includegraphics[width = 0.60\linewidth]{Images/83.png}
+\end{center}
+\begin{center}
+    \includegraphics[width =1\linewidth]{Images/84.png}
+\end{center}
+L'indirizzo IP è solitamente rappresentato in \textbf{notazione decimale puntata}; cioè si raggruppano i 32 bit in 4 gruppi da 8 bit, si converte ogni gruppo in
+in decimale e si separano i 4 numeri ottenuti con un punto.
+Arrivati a questo punto, dobbiamo quindi chiederci \textbf{come le varie interfacce sono effettivamente collegate fra di loro}.
+Tuttavia, questo argomento appartiene al \textbf{livello di collegamento}; per il momento, l'unica cosa che dobbiamo sapere è che gli host (o le interfacce dei router) che
+\textbf{che non hanno, a loro volta, nel mezzo un router possono essere tutte raggiungibili l'una dall'altra}. Tutte le interfacce che sono raggiungibili direttamente tra di loro \textbf{senza passare da un router}
+fanno parte della stessa \textbf{sottorete}; il termine sottorete è di fatto \textbf{equivalente al termine "rete" fino ad ora presentato}.
+Gli indirizzi IP sono strutturati in modo tale che \textbf{tutte le interfacce (router o host) che appartengono alla stessa sottorete avranno i bit più significativi identici}.
+Quindi, l'indirizzo IP è strutturato in una parte, relativa ai bit più significativi dell'indirizzo, \textbf{chiamata "parte di sottorete" (o prefisso)} e una parte, relativa ai bit restanti, prende il nome di \textbf{"parte di host"}.
+Tutte le interfacce appartenenti alla stessa sottorete avranno quindi la parte di sottorete del loro indirizzo IP identiche, mentre avranno parte di host diverse.
+Come facciamo però a \textbf{definire una sottorete?}
+Per farlo, "stacchiamo" ogni interfaccia dal suo host o router, creando quindi "isole" di reti isolate.
+Ogni rete isolata è quindi una \textbf{sottorete}; la quale ha \textbf{un suo indirizzo IP, che prende il nome di "indirizzo di sottorete"}, il quale \textbf{identifica univocamente la sottorete}.
+Facciamo un esempio: supponiamo di avere il seguente indirizzo di sottorete:
+\begin{center}
+    233.1.1.0/24
+\end{center}
+Cosa significa "/24"? L'indirizzo di sottorete è quell'indirizzo \textbf{ottenuto mettendo tutti i bit relativi alla parte di host a 0}; il "/24" indicano quanti bit appartenenti alla parte di sottorete
+appartengono, partendo dal bit più significativo, alla "parte di sottorete" dell'indirizzo.
+Per definire le sottoreti, vi sono due approcci:
+\begin{itemize}
+    \item \textbf{Classless InterDomain Routing}: In questo approccio, si ha piena flessibilità sul numero dei bit che si possono assegnare alla parte di sottorete e alla parte di host dell'indirizzo.
+    Il formato dell'indirizzo è quindi "a.b.c.d/x" dove $x$ è il numero di bit nella parte di sottorete dell'indirizzo. Una rappresentazione alternativa dello "/" è la \textbf{maschera di sottorete} (subnet mask),
+    la quale non è altro che un indirizzo dove si impostano \textbf{tutti a 1 i bit relativi alla parte di sottorete e tutti a 0 i bit relativi alla parte di host}. Nei router, di solito viene utilizzata, per ragioni implementative,
+    la rappresentazione con maschera di sottorete.
+    \begin{center}
+        \includegraphics[width =0.80\linewidth]{Images/85.png}
+    \end{center}
+    \item \textbf{Classfull IP Addressing}: Storicamente, l'approccio utilizzato per definire le sottoreti divide gli indirizzi in \textbf{3 classi diverse}:
+    \begin{itemize}
+        \item \textbf{Classe A}: Questi indirizzi hanno il primo bit più significativo impostato a 0; essi hanno \textbf{8 bit per la parte di sottorete e i restanti per la parte di host}
+        \item \textbf{Classe B}: Questi indirizzi hanno i primi due bit più significativi impostati rispettivamente a 1 e 0; essi hanno \textbf{16 bit per la parte di sottorete e i restanti per la parte di host}
+        \item \textbf{Classe C}: Questi indirizzi hanno i primi tre bit più significativi impostati rispettivamente a 1, 1, e 0; essi hanno \textbf{24 bit per la parte di sottorete e i restanti per la parte di host}
+    \end{itemize}
+    \begin{center}
+        \includegraphics[width =0.80\linewidth]{Images/86.png}
+    \end{center}
+    Questo tipo di indirizzamento \textbf{non richiede l'esistenza della maschera di sottorete}; infatti, si può identificare quanti bit sono dedicati alla parte di sottorete e alla parte di host semplicemente osservando il valore dei primi bit dell'indirizzo.
+    Tuttavia, questo tipo di indirizzamento \textbf{non viene più utilizzato}, poiché è troppo rigido
+\end{itemize}
+\subsubsection{Indirizzi IP speciali}
+\begin{center}
+    \includegraphics[width =0.50\linewidth]{Images/87.png}
+\end{center}
+Gli indirizzi IP speciali sono \textbf{indirizzi IP che non possono essere assegnati agli host}; essi sono i seguenti:
+\begin{itemize}
+    \item \textbf{Indirizzo di sottorete}: Indirizzo IP con la parte di host impostata con tutti i bit a 0.
+    \item \textbf{Direct Broadcast Address}: Indirizzo IP con la parte di host impostata con tutti i bit a 1. Questo tipi di indirizzo permette di inviare un pacchetto \textbf{dall'esterno verso tutti gli host di una sottorete}.
+    Di fatto, questo tipo di indirizzi non viene mai utilizzato, poiché viene scartato a priori dai router.
+    \item \textbf{Limited Broadcast Address}: Indirizzo IP con tutti i bit impostati a 1. Questo indirizzo permette di inviare un pacchetto a \textbf{tutti gli host all'interno della sottorete in cui viene generato}; tuttavia, questo pacchetto non potrà superare i router, poiché verrà scartato da essi.
+\end{itemize}
+\subsection{Destination-based forwarding}
+Una tabella di inoltro, in generale, ha la seguente struttura:
+\begin{center}
+    \includegraphics[width =0.90\linewidth]{Images/88.png}
+\end{center}
+quindi, per ognuna delle sue righe, non viene specificato un singolo indirizzo IP ma invece un \textbf{intervallo di indirizzi IP}; più nello specifico, in ogni riga della
+tabella di inoltro viene specificato \textbf{l'indirizzo IP di sottorete, accompagnato dalla sua subnet mask}. Viene inoltre specificata, per ogni riga, \textbf{l'interfaccia verso la quale inviare il pacchetto in caso si abbia un match}.
+Di fatto, questo è un modo compatto per rappresentare \textbf{l'indirizzo IP di sottorete più la sua subnet mask}.
+Solitamente, in una tabella di inoltro è presente anche una riga che prende il nome di \textbf{default route}, la quale sarà la riga con cui il pacchetto ha un match \textbf{se esso non ha avuto un match con nessuna delle altre righe della tabella}.
+Nel caso in cui l'indirizzo di destinazione di un pacchetto \textbf{abbia più di un solo match con gli indirizzi all'interno della tabella}, si segue il principio del \textbf{longest prefix match}: Quando si effettua la ricerca, per un dato indirizzo IP, di una
+voce all'interno della tabella di inoltro, \textbf{utilizza la voce che corrisponde all'indirizzo di destinazione che presenta il prefisso più lungo}; cioè che corrisponde all'indirizzo IP di destinazione per un numero maggiore di bit.
+\subsection{Dynamic Host Configuration Protocol (DHCP)}
+Fino ad ora, abbiamo parlato di come inoltrare un datagramma IP e come definire una sottorete tramite un indirizzo IP.
+Tuttavia, \textbf{come si fa ad ottenere un indirizzo IP?} In realtà, questa domanda ne contiene altre due:
+\begin{enumerate}
+    \item Come fa un host ad ottenere un indirizzo IP all'interno della sua rete? (Parte dell'host dell'indirizzo)
+    \item Come fa una rete ad ottenere un indirizzo IP per se stessa? (Parte di sottorete dell'indirizzo)
+\end{enumerate}
+Rispondiamo alla \textbf{prima domanda}: ci sono fondamentalmente due modi per un host di ottenere un indirizzo IP:
+\begin{itemize}
+    \item Specificandolo staticamente in un file di configurazione del sistema operativo (es. /etc/rc.config in UNIX)
+    \item \textbf{DHCP}: Ottiene dinamicamente un indirizzo da un server, chiamato \textbf{DHCP server}. Questa architettura è di tipi "client-server" ed è trasparente all'utente
+\end{itemize}
+L'obbiettivo di DHCP è quello di far ottenere agli host un indirizzo IP \textbf{quando essi si "uniscono" alla rete}
+\begin{itemize}
+    \item L'host ottiene \textbf{un indirizzo IP temporaneo per un determinato "lease time" (tempo di prestito)}; una volta che il lease time scade, l'indirizzo IP viene \textbf{deallocato per l'utente}.
+    Gli host possono rinnovare \textbf{il "prestito" dell'indirizzo IP}
+    \item \textbf{Permette il riuso di indirizzi} (un indirizzo IP viene mantenuto solamente quando un host che lo utilizza è connesso)
+\end{itemize}
+Il protocollo DHCP prevede lo scambio di quattro messaggi:
+\begin{itemize}
+    \item L'host manda il messaggio \textbf{DHCP discover} in broadcast (tramite l'indirizzo IP di broadcast limitato) (opzionale)
+    \item Il server DHCP risponde con un messaggio \textbf{DHCP offer} in broadcast (opzionale)
+    \begin{itemize}
+        \item I due step sopra possono essere evitati \textbf{se il client "ricorda" un indirizzo IP che gli è stato assegnato precedentemente dal server DHCP} (RFC 2131)
+    \end{itemize}
+    \item L'host richiede un indirizzo IP (messaggio \textbf{DHCP request})
+    \item Il server DHCP \textbf{invia l'indirizzo da utilizzare all'host} (messaggio \textbf{DHCP ack})
+\end{itemize} 
+Tipicamente, il DHCP server è \textbf{co-localizzato nel router}, in modo che possa servire le sottoreti a cui il router è collegato.
+DHCP si basa \textbf{sul protocollo UDP} sulle porte note \textbf{68 e 67}, rispettivamente la porta su cui si mettono in ascolto i \textbf{client DHCP} e \textbf{i server DHCP}.
+All'inizio della comunicazione, il client definisce un \textbf{transaction ID}, il quale verrà riportato nelle risposte del server DHCP. Il transaction ID è necessario per il client
+per \textbf{riconoscere i messaggi destinati a lui, visto che non gli è stato ancora assegnato un indirizzo IP}. Vediamo un esempio:
+\begin{center}
+    \includegraphics[width =0.90\linewidth]{Images/89.png}
+\end{center}
+Perché, tuttavia, il messaggio DHCP request \textbf{viene comunque inviato in broadcast nonostante si conosca, a questo punto della comunicazione, l'IP del server DHCP?}
+Il protocollo DHCP \textbf{permette l'esistenza di più server DHCP all'interno della stessa rete}, in modo tale che, nel caso il DHCP server che ha risposto originariamente sia andato giù, \textbf{un altro DHCP server potrà comunque servire il client}.
+DHCP può assegnare al client \textbf{anche più informazioni del solo indirizzo IP}:
+\begin{itemize}
+    \item Nome e indirizzo IP del \textbf{server DNS locale}
+    \item \textbf{Maschera di sottorete}
+\end{itemize}
+
+
+
+
+
+
 
 
 
