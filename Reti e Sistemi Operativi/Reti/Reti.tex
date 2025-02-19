@@ -1251,16 +1251,453 @@ DHCP può assegnare al client \textbf{anche più informazioni del solo indirizzo
     \item Nome e indirizzo IP del \textbf{server DNS locale}
     \item \textbf{Maschera di sottorete}
 \end{itemize}
-
-
-
-
-
-
-
-
-
-
+\subsection{Assegnamento di indirizzi IP alle reti}
+Come fanno invece le reti ad ottenere la "parte di sottorete" del proprio indirizzo IP?
+Ogni \textbf{Internet Service Provider (ISP)} ha assegnato a se stesso quello che prende il nome di \textbf{spazio di indirizzamento} (o blocco di indirizzo IP, oppure uno specifico indirizzo di rete).
+\begin{center}
+    \includegraphics[width =0.90\linewidth]{Images/90.png}
+\end{center}
+Quello però che si tende a fare in pratica è un operazione che prende il nome di \textbf{sub-netting} (o indirizzamento gerarchico): supponiamo che si siano 8 differenti organizzazioni che 
+necessitano di ottenere un indirizzo di sottorete. L'ISP allora può \textbf{dividere il proprio spazio di indirizzi in 8 blocchi}:  
+\begin{center}
+    \includegraphics[width =0.80\linewidth]{Images/91.png}
+\end{center}
+l'ISP quindi \textbf{alloca bit aggiuntivi alla maschera di sottorete, sottraendoli alla parte di host}.
+Tutti gli spazi di indirizzamento derivati da questa operazione saranno \textbf{disgiunti}, quindi ogni organizzazione avrà assegnato un suo indirizzo di sottorete
+diverso dalle altre. Ovviamente, queste nuove sottoreti potranno \textbf{indirizzare un numero minore di host}.
+Una proprietà interessante, derivante dall'operazione di subnetting, prende il nome di \textbf{route aggregation}:
+immaginiamo di essere nella seguente sitauzione:
+\begin{center}
+    \includegraphics[width =0.80\linewidth]{Images/92.png}
+\end{center}
+ovviamente, ogni ISP deve dichiarare \textbf{quali sono gli host raggiungibili attraverso la propria rete}; quindi invia dei messaggi, relativi ai protocolli di routing, del tipo "inviami tutto il traffico destinato ad un certo indirizzo di sottorete".
+I router, quindi, andranno a popolare le proprie tabelle di indirizzamento secondo i messaggi inviati dagli ISP, andando quindi ad \textbf{aggregare in una sola riga della tabella di indirizzamento tutte le sottoreti ottenute dall'operazione di subnetting}.
+Cosa succede, però, se l'organizzazione 1 passa dall'ISP 1 all'ISP 2 \textbf{mantenendo il proprio spazio di indirizzamento?} 
+Semplicemente, l'ISP 2 annuncerà di inviargli \textbf{tutti i pacchetti con lo spazio di indirizzamento specifico dell'organizzazione 1}; così che, per il principio del longest prefix match,  essi vengano mandati a lei piuttosto che all'ISP 1.
+\begin{center}
+    \includegraphics[width =0.80\linewidth]{Images/93.png}
+\end{center}
+\subsection{Network Address Translation (NAT)}
+Come fanno gli ISP ad ottenere dei blocchi di indirizzi?
+L'organizzazione addetta all'assegnamento dei blocchi di indirizzi IP agli ISP è la \textbf{Internet Corporation for Assigned Names and Numbers (ICANN)}.
+Tuttavia, esistono abbastanza indirizzi a 32-bit per indirizzare ogni host?
+L'ultimo blocco rimanente di indirizzi IPv4 fu assegnato dalla ICANN nel 2011; quindi gli indirizzi IPv4 da assegnare sono \textbf{terminati}.
+Come fare ora? Si potrebbe passare ad IPv6, il quale ha uno spazio di indirizzamento di 128 bit ($2^{128}$ indirizzi possibili); tuttavia la soluzione adottata al momento è il \textbf{Network Address Translation} (NAT), il quale
+aiuta a mitigare l'esaurimento degli indirizzi IPv4.
+La proprietà che NAT garantisce è che \textbf{tutti i dispositivi che si trovano all'interno di una rete locale condividono un solo indirizzo IPv4 per la comunicazione con il mondo esterno}. La situazione generale che abbiamo è quindi la seguente:
+\begin{center}
+    \includegraphics[width =1\linewidth]{Images/94.png}
+\end{center}
+vediamolo più nel dettaglio:
+\begin{itemize}
+    \item Tutti i dispositivi in una rete locale \textbf{hanno uno spazio di indirizzamento IP a 32-bit "privato"} (10.0.0/8, 172.16.0.0/12, 192.168.0.0/16 sono gli spazi di indirizzamento "speciali" che vengono utilizzati per assegnare un IP privato agli host di una rete locale) che può essere utilizzato solamente nella rete locale
+    \item I vantaggi di questo metodo sono molteplici:
+    \begin{itemize}
+        \item Un ISP necessita \textbf{un solo indirizzo IP "pubblico"} per tutti i dispositivi collegati alla sua rete
+        \item Si può cambiare l'indirizzo di un host in una rete locale senza dover notificare il mondo esterno
+        \item Si può cambiare ISP senza dover cambiare gli indirizzi dei dispositivi nella rete locale
+        \item \textbf{Sicurezza}: I dispositivi all'interno di una rete locale \textbf{non sono direttamente visibili e indirizzabili dal mondo esterno}
+    \end{itemize}
+\end{itemize}
+Come funziona però NAT? \textbf{L'implementazione} è la seguente: un router NAT deve (in maniera trasparente):
+\begin{itemize}
+    \item \textbf{Datagrammi in uscita}: \textbf{rimpiazzare} (source IP address, port \#) di ogni datagramma in uscita con (NAT IP address, new port \#)
+    \begin{itemize}
+        \item I client e i server remoti risponderanno usando (NAT IP address, new port \#) come indirizzo di destinazione
+        \item La nuova porta viene scelta dal NAT router (in modo arbitrario)
+    \end{itemize}
+    \item \textbf{Ricordare} (all'interno della \textbf{NAT translation table}) ogni associazione tra (source IP address, port \#) e (NAT IP address, new port \#)
+    \item \textbf{Datagrammi in entrata}: rimpiazza (NAT IP address, new port \#) nei campi relativi alla destinazione di ogni datagramma con il corrispondente (source IP address, port \#) immagazzinato nella NAT table
+\end{itemize}
+\begin{center}
+    \includegraphics[width =1\linewidth]{Images/95.png}
+\end{center}
+nel caso specifico delle reti domestiche, \textbf{il NAT è incorporato all'interno del router}.
+Chiaramente, il NAT deve stare attento a \textbf{non assegnare due volte il numero di porta traslato}, poiché ciò creerebbe problemi al momento della traduzione.
+L'utilizzo NAT è considerato piuttosto controverso:
+\begin{itemize}
+    \item Sulla base dell'architettura a strati, i router dovrebbero essere solamente in grado di \textbf{processare dati fino allo strato di rete (livello 3)}; il NAT tuttavia necessita di poter elaborare fino al livello 4 per poter gestire i numeri di porta.
+    \item La carenza di indirizzi dovrebbe essere risolta da IPv6; tuttavia migrare tutta la rete internet su IPv6 è un'operazione molto complessa
+\end{itemize}
+Tuttavia NAT è un realtà ormai consolidata, infatti è molto utilizzata nelle \textbf{reti mobili}.
+\section{Livello di rete: Piano di controllo}
+Il piano di controllo è relativo alle \textbf{operazioni di instradamento dei pacchetti}.
+Come abbiamo già detto, vi sono due approcci per strutturare il piano di controllo di una rete:
+\begin{itemize}
+    \item Piano di controllo implementato su ogni router (tradizionale)
+    \item Piano di controllo logicamente centralizzato su server remoti (software-defined networking, fuori dallo scopo del corso)
+\end{itemize}
+Quando si parla di piano di controllo, spesso si fa parecchia confusione con la \textbf{terminologia}; cioè si utilizzano, in maniera intercambiabile, i termini "\textbf{algoritmo di routing}" e "\textbf{protocolli di routing}".
+Nonostante queste due entità sono molto correlate fra di loro, esse sono due cose \textbf{distinte}:
+\begin{itemize}
+    \item \textbf{Algoritmi di Routing}: Determinano un cammino (equivalentemente, "rotta") "buono", attraverso la rete di router, dall'host mittente all'host ricevente
+    \begin{itemize}
+        \item \textbf{Cammino/Rotta}: sequenza di router e collegamenti che i pacchetti attraversano da un host sorgente iniziale ad un host di destinazione finale
+        \item \textbf{"Buono"}: "con costo minore", "più veloce", "meno congestionato"; è necessario quindi andare a definire una metrica di costo
+    \end{itemize}
+    \item \textbf{Protocolli di routing}: Determinano come e quale informazione debba essere condivisa tra i router per l'esecuzione degli algoritmi di routing
+\end{itemize}
+Le reti possono essere \textbf{astratte} come dei grafi:
+\begin{center}
+    \includegraphics[width =0.60\linewidth]{Images/96.png}
+\end{center}
+ciò che ci interessa è quindi la \textbf{topologia e il grafo che rappresenta la rete al livello 3}; quindi, per esempio, uno switch di livello
+2 \textbf{non dovrà essere considerato nell'astrazione a grafo della rete}; poiché ciò che esso fa è \textbf{garantire una comunicazione logica tra i nodi collegati ad esso}.
+Immaginiamo quindi di avere il seguente grafo:
+\begin{center}
+    \includegraphics[width =0.40\linewidth]{Images/97.png}
+\end{center}
+diamo delle definizioni:
+\begin{itemize}
+    \item \textbf{Grafo}: $G = (N, E)$ dove
+    \begin{itemize}
+        \item $N = \{u,v,w,x,y,z\}$ è \textbf{l'insieme dei router}
+        \item $E = \{(u,v), (u,x), (v,x), (v,w), (x,w), (x,y), (w,y), (w,z), (y,z)\}$ è \textbf{l'insieme dei collegamenti}
+    \end{itemize}
+    \item \textbf{Un cammino di costo minimo} tra due nodi è un cammino la cui \textbf{somma dei costi dei collegamenti} è il minimo rispetto alle somme dei costi di tutti gli altri possibili collegamenti
+    \item \textbf{Il costo} $c_{a,b}$ di un collegamento che connette due nodi $a$ e $b$ è il costo del collegamento. Il costo è definito \textbf{dall'operatore che gestisce la rete}: può essere sempre 1, essere inversamente proporzionale alla banda o alla congestione ecc...  
+    Se non vi è un collegamento diretto tra $a$ e $b$, allora $c_{a,b} = \infty$
+\end{itemize}
+Gli \textbf{algoritmi di routing} possono essere classificati in due modi, i quali sono \textbf{opposti fra loro}:
+\begin{itemize}
+    \item \textbf{Statici}: Questi algoritmi vengono adottati quando le rotte (o i cammini) \textbf{cambiano molto lentamente nel tempo}; quindi quando \textbf{i costi dei collegamenti rimangono stabili nel tempo}
+    \item \textbf{Dinamici}: Questi algoritmi vengono adottati quando le rotte (o i cammini) \textbf{cambiano molto frequentemente nel tempo}; quindi quando \textbf{i costi dei collegamenti cambiano periodicamente o a causa di un cambiamento nei costi dei collegamenti}
+\end{itemize}
+gli algoritmi di routing si distinguono inoltre in:
+\begin{itemize}
+    \item \textbf{Globali}: Concettualmente più semplici; in questi algoritmi, ogni singolo nodo, ha \textbf{una visione completa dell'intera topologia della rete}; quindi ogni nodo è in grado, basandosi sulle informazioni condivise dagli altri nodi, di \textbf{ricostruire l'intera topologia della rete}.
+    Per fare questo, ogni singolo nodo invia agli altri nodi lo \textbf{lo stato dei propri collegamenti}, cioè a quali nodi è collegato e con quali costi. Questi algoritmi prendono il nome di \textbf{algoritmi "link state"}
+    \item \textbf{Decentralizzati}: Utilizzano un processo iterativo per la computazione dei percorsi, in cui \textbf{avviene uno scambio di informazioni solamente con i nodi vicini}. L'informazione che viene condivisa con i vicini di un nodo prende il nome di \textbf{vettore di distanze}, il quale non è altro che il vettore contenente le distanze da un nodo verso tutti gli altri nodi,
+    ovvero \textbf{la lunghezza del cammino stimato di costo minimo}. Quindi, i vicini ricevono dell'informazione riguardante la \textbf{raggiungibilità di un nodo da ogni altro nodo della rete}.
+\end{itemize} 
+\begin{center}
+    \includegraphics[width =1\linewidth]{Images/98.png}
+\end{center}
+\subsection{Protocolli Distance Vector (DV)}
+Tutti i protocolli di tipo distance vector si basano su implementazione distribuita dell'\textbf{algoritmo di Bellman-Ford}, il quale è basato sull'\textbf{equazione di Bellman-Ford}:
+$$D_A(X) = \min_{V}\{c_{A,V} + D_V(X)\}$$
+cioè, "la distanza tra il nodo A e il nodo X è il costo stimato del cammino di costo minimo tra A e X".
+\begin{center}
+    \includegraphics[width =0.50\linewidth]{Images/99.png}
+\end{center}
+L'insieme di \textbf{tutte le distanze da un nodo verso tutti gli altri nodi è chiamato vettore di distanza} (cioè D). Si vuole quindi che il vettore \textbf{vada a convergere verso le distanze con cammini di costo minimo}.
+L'idea chiave di questi protocolli è quindi la seguente:
+\begin{itemize}
+    \item Al verificarsi di alcune condizioni, ogni nodo invia il proprio \textbf{vettore di distanza stimato} ai propri vicini
+    \item Quando un nodo $x$ riceve il nuovo DV da un suo vicino $v$ qualunque, aggiorna il suo il DV usando l'equazione di Bellman-Ford:
+    $$D_x(y) \gets min_v\{c_{x,v} + D_v(y)\} \; \forall y \in N$$
+    \item Dopo un certo numero di iterazioni, la stima $D_x{y}$ convergere verso \textbf{l'effettivo cammino di costo minimo} $d_x{y}$
+\end{itemize}
+Ogni nodo quindi esegue la seguente iterazione:
+\begin{center}
+    \includegraphics[width =0.45\linewidth]{Images/100.png}
+\end{center}
+l'algoritmo è quindi di tipo:
+\begin{itemize}
+    \item \textbf{Iterativo e asincrono}: ogni iterazione locale è causata da:
+    \begin{itemize}
+        \item Un cambiamento nei costi dei collegamenti locali
+        \item Messaggio di aggiornamento del DV da parte di un vicino
+    \end{itemize}
+    \item \textbf{Auto-arrestante} (self-stopping): ogni nodo notifica i vicini \textbf{solamente quando il proprio DV cambia}
+    \begin{itemize}
+        \item I nodi notificano i vicini solamente se necessario
+        \item Se non arriva una notifica, non si rende necessaria nessuna azione
+    \end{itemize} 
+\end{itemize}
+Come funziona quindi l'algoritmo? Vediamo un esempio di algoritmo distance vector:
+\begin{enumerate}
+    \item Al tempo 0, \textbf{l'algoritmo deve essere inizializzato}, cioè ogni nodo deve calcolare il suo DV senza aver ricevuto informazioni dai vicini.
+    Per farlo, ogni nodo calcola il proprio DV \textbf{andando a considerare solamente i suoi collegamenti diretti}. 
+    \item Una volta che ogni nodo ha stimato il proprio DV,
+    essi inviano il DV \textbf{ad ogni loro vicino}
+    \item Al tempo 1, i vicini \textbf{riceveranno i DV dagli altri nodi}; a questo punto, ogni singolo nodo va a \textbf{ricalcolare il proprio vettore di distanza} e, se esso è cambiato,
+    \textbf{i nodi lo inviano ai propri vicini}.
+    \item E cosi via fino a quando non si arriva ad una situazione di \textbf{convergenza} e quindi si raggiunge una situazione di quiete per tutti i nodi
+    \begin{center}
+        \includegraphics[width =0.90\linewidth]{Images/101.png}
+    \end{center}
+    \begin{center}
+        \includegraphics[width =0.90\linewidth]{Images/102.png}
+    \end{center}
+    \begin{center}
+        \includegraphics[width =0.90\linewidth]{Images/103.png}
+    \end{center}
+    \begin{center}
+        \includegraphics[width =0.90\linewidth]{Images/104.png}
+    \end{center}
+\end{enumerate}
+Vediamo quindi come \textbf{avviene il ricalcolo iterativo del DV, focalizzandoci sul nodo $b$ dell'esempio sopra}:
+\begin{enumerate}
+    \item Al tempo 1, $b$ riceve il vettore di distanza inizializzato da $a, c$ ed $e$ e ha già calcolato il proprio vettore di distanza
+    \item Per ognuna delle possibili destinazioni, si calcola \textbf{l'equazione di Bellman-Ford}
+    \item I valori ottenuti dal passo precedente formeranno il \textbf{nuovo DV per il nodo $b$}; il quale, se è diverso rispetto a quello precedentemente calcolato, sarà inviato ai vicini
+    \begin{center}
+        \includegraphics[width =1\linewidth]{Images/105.png}
+    \end{center}
+\end{enumerate}
+Ovviamente, il numero di "argomenti" all'interno dell'operazione di minimo dell'equazione di Bellman-Ford è uguale al numero di vicini di un nodo.
+Gli algoritmi di tipo Distance Vector presentano \textbf{una convergenza piuttosto lenta}: se, per esempio, ci focalizziamo sul nodo $c$ dell'esempio sopra,
+prima che il vettore di distanza calcolato in $c$ possa influenzare i vettori di distanza calcolati in tutti gli altri nodi, devono almeno passare \textbf{4 step dell'algoritmo}:
+\begin{center}
+    \includegraphics[width =1\linewidth]{Images/106.png}
+\end{center}
+in questo caso, si dice che la rete ha \textbf{diametro pari a 4}, cioè tutti i nodi sono raggiungibili dagli altri con \textbf{almeno 4 "salti"}.
+Questa caratteristica comporta che \textbf{per convergere, l'algoritmo necessita di svolgere un numero elevato di passi}; poiché la propagazione dell'informazione all'interno della rete è lenta.
+Questo tipo di problematica (insieme anche alla problematica del \textbf{count to infinity problem}, dove l'algoritmo, in certe condizioni, non raggiunge mai la convergenza), è il motivo per il quale
+gli algoritmi di questo tipo non vengono più utilizzati nelle reti.
+\subsection{Protocolli Link State (LS)}
+In un protocollo di tipo \textbf{Link State (LS)}, andiamo a distribuire, per mezzo di una tecnica che prende il nome di \textbf{selective flooding}, ovvero un "broadcast controllato", le informazioni relative
+allo stato dei collegamenti di un nodo verso tutti gli altri nodi. Ogni nodo della rete quindi deve \textbf{trasmettere in broadcast le informazioni relative ai suoi collegamenti ("a quali nodi sono collegato e con quale costo") a tutti gli altri router}, così che ogni
+nodo della rete possa \textbf{ricostruire l'intera topologia della rete}. L'informazione trasmessa, quindi, riguarderà solamente i collegamenti diretti di ogni nodo e verrà trasmessa tramite i \textbf{protocolli di routing}.
+Il calcolo dei cammini di costo minimo (cioè, dei "cammini più corti") si effettua utilizzando \textbf{l'algoritmo di Dijkstra}.
+Un algoritmo di routing link-state che utilizza l'algoritmo di Dijkstra è:
+\begin{itemize}
+    \item \textbf{Centralizzato}:Tutti i router sono in grado di ricostruire la topologia della rete; i costi di tutti i collegamenti sono noti a tutti i nodi
+    \begin{itemize}
+        \item Realizzato tramite un broadcast dello stato dei collegamenti
+        \item Tutti i nodi hanno le stesse informazioni sulla rete
+    \end{itemize}
+    \item Per un nodo della rete, computa i cammini di costo minimo \textbf{partendo da quel nodo}, detto \textbf{sorgente}, verso tutti gli altri nodi della rete
+    \begin{itemize}
+        \item Nonostante tutti i nodi condividano la stessa topologia della rete, ogni nodo calcolerà i cammini di costo minimo \textbf{considerando se stesso come sorgente}
+        \item Viene calcolato un \textbf{albero dei cammini minimi}; il quale è un \textbf{sottografo ad albero del grafo della rete}, che va ad indicare, seguendo le ramificazioni, il cammino di costo minimo verso uno qualsiasi dei nodi della rete  
+        \item L'albero viene utilizzato per \textbf{calcolare la tabella di inoltro del nodo}
+    \end{itemize}
+    \textbf{Iterativo}: Dopo $k$ iterazioni, si conoscono i cammini di costo minimo per $k$ destinazioni
+\end{itemize}
+introduciamo della notazione:
+\begin{itemize}
+    \item $c_{x,y}$: costo del collegamento diretto dal nodo $x$ al nodo $y$; se non esiste un cammino diretto, allora vale $\infty$
+    \item $D(v)$: stima corrente del cammino di costo minimo dalla sorgente verso la destinazione $v$
+    \item $p(v)$: nodo predecessore lungo il cammino dalla sorgente a $v$; cioè il nodo immediatamente a precedente a $v$ sul cammino di costo minimo tra la sorgente e $v$
+    \item $N'$: Insieme dei nodi per i quali si conosce \textbf{definitivamente} il cammino di costo minimo
+\end{itemize}
+Come funziona quindi l'algoritmo di Dijkstra? Vediamone un esempio di implementazione in pseudocodice:
+\begin{center}
+    \includegraphics[width =1\linewidth]{Images/107.png}
+\end{center}
+commentiamolo:
+\begin{enumerate}
+    \item Abbiamo inizialmente una fase di \textbf{inizializzazione}; in questo caso, inseriamo nell'insieme $N'$ il nodo $u$; considerandolo come sorgente
+    \item Per tutti i nodi $v$ rimanenti:
+    \begin{itemize}
+        \item Se $v$ è adiacente a $u$ allora $D(v) = c_{u,v}$
+        \item Altrimenti $D(v) = \infty$
+    \end{itemize}
+    \item Troviamo un nodo $w$ non in $N'$ tale che $D(w)$ sia minima
+    \item Aggiungo $w$ a $N'$
+    \item Aggiorno $D(v)$ con tutte le distanze dai nodi $v$ adiacenti a $w$ ma non in $N'$:
+    $$D(v) = \min\{D(v), D(w) + c_{w,v}\}$$
+    cioè, il nuovo cammino di costo minimo verso $v$ è o il vecchio cammino di costo minimo verso $v$ oppure il cammino di costo minimo verso $w$ più il costo del collegamento da $w$ verso $v$
+    \item Ripeto fino a quando tutti i nodi del grafo saranno contenuti in $N'$
+\end{enumerate}
+Vi sono diversi modi per simulare l'algoritmo; in questi appunti, proponiamo la seguente \textbf{forma tabellare}:
+\begin{center}
+    \includegraphics[width =1\linewidth]{Images/108.png}
+\end{center}
+\begin{center}
+    \includegraphics[width =1\linewidth]{Images/109.png}
+\end{center}
+vediamo quindi un riassunto delle \textbf{differenze tra i due tipi di algoritmi} e alcuni esempi:
+\begin{center}
+    \includegraphics[width =1\linewidth]{Images/110.png}
+\end{center}
+\subsection{Rendere l'instradamento scalabile}
+Fino ad ora, abbiamo assunto che la rete su cui abbiamo applicato gli algoritmi di instradamento fosse una \textbf{rete ideale}:
+\begin{itemize}
+    \item Tutti i router sono identici
+    \item La rete è "piatta", cioè vi è sempre un percorso da ogni router verso ogni altro router
+\end{itemize}
+Ovviamente, nel mondo reale, le cose non stanno così:
+\begin{itemize}
+    \item \textbf{Il numero di destinazioni in una rete reale è nell'ordine dei miliardi}
+    \begin{itemize}
+        \item Non è quindi possibile immagazzinare tutte le possibili destinazioni nelle tabelle di routing
+        \item Lo scambio di messaggi relativi al routing \textbf{congestionerebbe la rete}
+    \end{itemize}
+    \item In una rete reale, si hanno diverse \textbf{entità amministrative}, tutte autonome fra loro:
+    \begin{itemize}
+        \item \textbf{Internet è una rete di reti}
+        \item Ogni amministratore di rete potrebbe (anzi, \textbf{vuole}) voler controllare il routing all'interno della propria rete
+    \end{itemize}
+\end{itemize}
+Si ha quindi una \textbf{struttura di tipo gerarchico}: i router, in generale nelle reti, sono \textbf{aggregati in regioni} chiamate \textbf{sistemi autonomi} (autonomous systems, (AS)), anche detti \textbf{domini}, i quali sono soggetti
+alla autorità amministrativa di un'organizzazione, differente per ogni dominio.
+È necessario quindi fare la seguente distinzione:
+\begin{itemize}
+    \item \textbf{Intra-AS} (cioè, intra-dominio): il routing \textbf{all'interno dello stesso AS}:
+    \begin{itemize}
+        \item Tutti i router in un AS devono \textbf{eseguire lo stesso protocollo di routing intra-dominio}
+        \item I router di differenti AS possono \textbf{eseguire protocolli di routing intra-dominio differenti}
+    \end{itemize}
+    \item \textbf{Inter-AS} (cioè, inter-dominio): il routing \textbf{tra AS}:
+    \begin{itemize}
+        \item Si ha la necessità di definire dei \textbf{router di bordo/gateway}: essi rappresentano il \textbf{confine} di un AS e hanno collegamenti verso i router di altri AS
+        \item I router gateway eseguono sia \textbf{protocolli di routing inter-dominio} sia \textbf{protocolli di routing intra-dominio}
+    \end{itemize}
+\end{itemize}
+\begin{center}
+    \includegraphics[width =0.60\linewidth]{Images/111.png}
+\end{center}
+\subsubsection{Routing intra-AS}
+I protocolli che permettono di effettuare il \textbf{routing intra-AS} prendono generalmente il nome di \textbf{Interior Gateway Protocols} (IGP).
+I principali sono:
+\begin{itemize}
+    \item \textbf{RIP: Routing Information Protocol}
+    \begin{itemize}
+        \item Classico protocollo basato su DV: i distance vector vengono scambiati ogni 30 secondi
+        \item Non più largamente utilizzato
+    \end{itemize}
+    \item \textbf{EIGRP: Enhanced Interior Gateway Routing Protocol}
+    \begin{itemize}
+        \item Basato su DV
+        \item Precedentemente, di proprietà di CISCO, divenne aperto nel 2013
+    \end{itemize}
+    \item \textbf{OSPF: Open Shortest Path Protocol}
+    \begin{itemize}
+        \item Instradamento Link State
+        \item Il protocollo IS-IS (standardizzato da ISO, non da RFC) è essenzialmente equivalente a OSPF
+    \end{itemize}
+\end{itemize}
+in questi appunti, approfondiremo solamente \textbf{OSPF}:
+\begin{itemize}
+    \item "Aperto", cioè la sua documentazione è disponibile pubblicamente
+    \item Protocollo basato su un algoritmo link state classico:
+    \begin{itemize}
+        \item Ogni router effettua un \textbf{selective flooding} di messaggi \textbf{OSPF link-state advertisements} agli altri router nell'AS
+        \begin{itemize}
+            \item Il protocollo è \textbf{incapsulato direttamente in IP}, invece che usare TCP/UDP
+        \end{itemize}
+        \item Può supportare \textbf{diverse metriche di costo per ogni collegamento}: larghezza di banda, ritardo
+        \item Ogni router è \textbf{capace di ricostruire l'intera topologia della rete} e utilizza \textbf{l'algoritmo di Dijkstra} per computare la propria tabella di inoltro
+        \item \textbf{Sicurezza}: tutti i messaggi di OSPF sono \textbf{autenticati} (per evitare intrusioni malevole)
+    \end{itemize}
+\end{itemize}
+OSPF, in realtà, può essere utilizzato anche in situazioni in cui \textbf{l'AS ha dimensioni considerevoli}; in questi casi, solitamente si
+adotta una \textbf{gerarchia a due livelli}:
+\begin{itemize}
+    \item Il sistema autonomo viene partizionato in diverse parti, chiamate \textbf{aree}
+    \item Tendenzialmente, questa gerarchia a due livelli prevede l'esistenza di un certo numero di aree e di un'area speciale, chiamata solitamente \textbf{area 0 o backbone}, che mette in comunicazione tutte le altre aree
+    \item I link-state advertisements vengono inviati \textbf{solo all'interno di una certa aree} oppure nella \textbf{backbone}
+    \item I router ai confini delle aree vengono detti \textbf{area-border routers}
+    \item Questo approccio viene utilizzato poiché \textbf{il selective flooding all'interno della rete è un'operazione onerosa}
+    \item Ogni nodo è in grado di \textbf{ricostruire la topologia della sua area di appartenenza} e conosce solamente \textbf{la direzione per raggiungere i router al di fuori dell'area}
+    \item Gli area-border routers "riassumono" le distanze per raggiungere i router della propria area e \textbf{possono inviare nella backbone un link-state advertisements contenente questo riassunto}
+\end{itemize}
+\begin{center}
+    \includegraphics[width =1\linewidth]{Images/112.png}
+\end{center}
+\newpage
+\subsubsection{Routing inter-AS}
+Supponiamo di avere la seguente topologia di rete:
+\begin{center}
+    \includegraphics[width =1\linewidth]{Images/113.png}
+\end{center}
+supponiamo che arrivi un pacchetto al router in AS1 la quale destinazione è \textbf{al di fuori di AS1} (ce ne si può accorgere leggendo l'indirizzo IP di destinazione).
+Il router dovrebbe inviarlo al router gateway, \textbf{ma a QUALE dovrebbe inviarlo? Al router a cui AS2 è collegato oppure al router acui AS3 è collegato?}
+Come fare quindi?
+\begin{enumerate}
+    \item Il sistema autonomo AS1 \textbf{deve apprendere, dagli altri AS, quali sistemi sono raggiungibili tramite AS2 e quali sono raggiungibili tramite AS3}
+    \item Questa informazione deve poi essere propagata all'interno del AS1, così che i router possano decidere come smistare i vari pacchetti
+\end{enumerate}
+Di fatto, esiste un solo protocollo per il routing inter-as, il quale prende il nome di \textbf{Border Gateway Protocol} (BGP):
+\begin{itemize}
+    \item Permette ad ogni sottorete esistente di \textbf{annunciare la propria esistenza}
+    \begin{itemize}
+        \item Dopodiché, propaga questa informazione verso internet
+    \end{itemize}
+    \item BGP, in realtà, si scompone in \textbf{due sotto-protocolli}:
+    \begin{itemize}
+        \item \textbf{exterior BGP (eBGP)} permette ad ogni AS di ottenere le informazioni di raggiungibilità di una sottorete dagli AS vicini; quindi capire quali sono le sottoreti raggiungibili passando dagli AS vicini
+        \item \textbf{interior BGP (iBGP)} propaga le informazioni di raggiungibilità a tutti i router all'interno di un AS
+        \item Il protocollo BGP quindi viene parlato \textbf{sia dai router gateway sia dai router interni agli AS}, con i primi che parlano anche eBGP, mentre i secondi che parlano solamente iBGP
+        \item Una volta ottenute le informazioni di raggiungibilità, il protocollo BGP \textbf{determina i percorsi ottimi da seguire verso le altre reti} basandosi sulle informazioni di raggiungibilità e su certe \textbf{policy}
+    \end{itemize}
+\end{itemize}
+I router gateway quindi stabiliscono una \textbf{connettività eBGP} con i router di bordo e una \textbf{connettività logica iBGP} con i router appartenenti al proprio AS.
+In particolare, la connettività iBGP stabilita è di tipo \textbf{full mesh}: ogni singolo router all'interno dell'AS ha una \textbf{connettività logica} con ogni altro router all'interno del sistema autonomo.
+\begin{center}
+    \includegraphics[width =0.80\linewidth]{Images/114.png}
+\end{center}
+è importante, inoltre, introdurre il concetto di \textbf{sessione BGP}: ogni qualsiasi router BGP scambia messaggi BGP (sia eBGP sia iBGP) con altri router BGP 
+su una \textbf{sessione TCP semi-permanente} (quindi al livello 4):
+\begin{itemize}
+    \item Annuncia e propaga i \textbf{percorsi} (in termini di AS attraversati) verso le varie reti di destinazione
+    \item BGP è un \textbf{protocollo "path vector"}; di fatto, i principi alla base di questo protocollo sono molto simili ai principi alla base dei protocollo Distance vector. La differenza è che BGP \textbf{considera la distanza tra AS e non tra router}
+\end{itemize}
+Facciamo un esempio:
+\begin{center}
+    \includegraphics[width =0.80\linewidth]{Images/115.png}
+\end{center}
+\begin{itemize}
+    \item Il router $3d$ si rende conto dell'esistenza di $X$ e propaga il fatto che esso è connesso a $X$ in tutto l'AS
+    \item Questa informazione raggiunge il router di bordo $3a$, il quale invia un messaggio \textbf{advertisement BGP}, indicando che la rete X è raggiungibile attraversando il AS3
+    \item Questo messaggio raggiunge router $2c$ del AS2, il quale propaga questa informazione nel suo AS insieme al fatto che esso è collegato direttamente a AS3
+    \item Il messaggio raggiungerà il router $2a$; il quale farà un ulteriore BGP advertisement, indicando che la rete $X$ è raggiungibile passando dal AS2 e dal AS3 
+    \item e così via...
+\end{itemize}
+Quando esistono molteplici cammini, BGP deve sceglierne uno \textbf{basandosi su delle regole}, cioè le \textbf{policies}.
+Quando parliamo, quindi, di routin inter-AS, ciò che domina sono di solito \textbf{aspetti di tipo politico-economico}; vediamo quindi le differenze nelle \textbf{policy} nei due casi:
+\begin{itemize}
+    \item \textbf{Inter-AS}: l'amministratore di rete vuole avere controllo di COME il traffico venga instradato e CHI viene instradato nella sua rete
+    \item \textbf{Intra-AS}: Vi è solo un amministratore di sistema, quindi le politiche rappresentano un problema minore
+\end{itemize}
+per quanto riguarda le \textbf{performance} invece, le differenze sono le seguenti:
+\begin{itemize}
+    \item \textbf{Inter-AS}: Le politiche tipicamente dominano sulle performance
+    \item \textbf{Intra-AS}: Perlopiù si basano su metriche di performance
+\end{itemize}
+\subsection{Internet Control Message Protocol (ICMP)}
+L'Internet Control Message Protocol viene utilizzato, dagli host e dai router, per comunicare \textbf{informazioni a livello di rete}:
+\begin{itemize}
+    \item Viene utilizzato per \textbf{riportare errori}, come host, reti o porte irraggiungibili 
+    \item Viene utilizzato per \textbf{per effettuare diagnostica sulla rete}; per esempio per effettuare l'eco di richieste/risposte (es. comando ping)
+\end{itemize}
+come OSPF, anche ICMP è un protocollo di livello 3 che si \textbf{trova "sopra" IP}, quindi è \textbf{incapsulato all'interno dei datagrammi IP}.
+ICMP ha un header molto semplice, essenzialmente formato da 3 campi, i quali sono:
+\begin{itemize}
+    \item \textbf{Checksum}
+    \item \textbf{Type}
+    \item \textbf{Code}
+\end{itemize}
+quando viene generato un messaggio ICMP, ciò che viene incluso all'interno del payload di questo messaggio sono \textbf{i primi 8 byte del datagramma che ha causato l'errore o la generazione del messaggio ICMP}.
+\begin{center}
+    \includegraphics[width =0.45\linewidth]{Images/116.png}
+\end{center}
+in particolare:
+\begin{itemize}
+    \item Il messaggio \textbf{"dest port unreachable"} indica che sull'host \textbf{non è stat create una socket con quella porta}, quindi si genera un messaggio ICMP come risposta
+    \item Il messaggio \textbf{"TTL expired"} viene generato quando in router il TTL arriva a 0, quindi viene scartato e viene generato un messaggio ICMP per notificare l'host dell'evento
+\end{itemize}
+ICMP viene utilizzato, per quanto riguarda la diagnostica di rete, per effettuare il \textbf{Traceroute}, cioè la ricostruzione
+del percorso seguito da un pacchetto dalla sorgente alla sua destinazione, al fine di capire \textbf{l'instradamento di un pacchetto}.
+Come funziona il traceroute?
+\begin{enumerate}
+    \item La sorgente invia insiemi di segmenti UDP (tipicamente tre) verso la destinazione
+    \begin{itemize}
+        \item Il primo insieme ha TTL impostato a 1, il secondo a 2 ecc...
+    \end{itemize}
+    \item Il datagramma nell'n-esimo insieme arriva all'n-esimo router:
+    \begin{itemize}
+        \item Il router scarta il datagramma e invia alla sorgente un messaggio ICMP (TTL expired; type 11 code 0)
+        \item Il messaggio ICMP può includere il nome del router e l'indirizzo IP dell'interfaccia
+    \end{itemize}
+    \item Quando il messaggio ICMP arriva alla sorgente, essa registra l'RTT
+    \item \textbf{Quando mi fermo?}
+    \begin{itemize}
+        \item I segmenti UDP che vengono inviati specificano un \textbf{numero di porta di destinazione improbabile}, che di fatto, quindi, non verrà mai utilizzato per aprire una socket al destinatario
+        \item Una volta che i segmenti UDP arrivano al destinatario, esso invia alla sorgente un messaggio ICMP di tipo \textbf{port unreachable}: tipo 3, codice 3
+        \item La sorgente si ferma
+    \end{itemize}
+\end{enumerate}
+\begin{center}
+    \includegraphics[width =0.75\linewidth]{Images/117.png}
+\end{center}
+\begin{center}
+    \includegraphics[width =0.75\linewidth]{Images/118.png}
+\end{center}
+\section{Livello di collegamento e reti locali}
 
 
 
