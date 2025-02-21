@@ -1698,6 +1698,269 @@ Come funziona il traceroute?
     \includegraphics[width =0.75\linewidth]{Images/118.png}
 \end{center}
 \section{Livello di collegamento e reti locali}
+Prima di parlare di livello di collegamento e di reti locali, introduciamo la terminologia necessaria:
+\begin{itemize}
+    \item \textbf{Nodi}: host e router
+    \item \textbf{Collegamenti (links)}: canali di comunicazione che connettono nodi adiacenti, cioè \textbf{raggiungibili l'uno dall'altro senza passare per un router}, lungo un cammino di comunicazione
+    \begin{itemize}
+        \item Cablati
+        \item Wireless
+        \item Local Arena Networks (LANs)
+    \end{itemize}
+    \item \textbf{Pacchetti del livello 2}: \textbf{frame}, incapsulano i datagrammi
+\end{itemize}
+Il livello di collegamento ha quindi la \textbf{responsabilità di trasferire i datagrammi da un nodo ad un altro fisicamente adiacente ad esso attraverso un collegamento}.
+A livello di collegamento, esiste \textbf{una quantità molto elevata di protocolli di collegamento}, i quali dipendono fortemente dal \textbf{mezzo fisico utilizzato per costruire il collegamento};
+quindi si possono avere protocolli di collegamento diversi all'interno di un cammino da una sorgente verso una destinazione.
+I vari protocolli di collegamento, quindi, \textbf{offrono una varietà di servizi diversi} in base al mezzo fisico utilizzato per costruire il collegamento.
+Alcuni dei possibili servizi che un protocollo a livello di collegamento può offrire sono:
+\begin{itemize}
+    \item \textbf{Servizio di framing e accesso al collegamento (link access)}:
+    \begin{itemize}
+        \item Incapsula il datagramma in una trama (frame), aggiungendo l'intestazione del protocollo di collegamento e, a volte, un \textbf{trailer}, cioè dei bit in coda
+        \item Se il canale utilizza un mezzo comune, allora alcuni protocolli possono occuparsi anche della \textbf{gestione dell'accesso degli utenti al canale di comunicazione}
+    \end{itemize}
+    \item \textbf{Consegna affidabile tra nodi adiacenti}:
+    \begin{itemize}
+        \item Solitamente non offerto su collegamenti con un basso tasso di errore (es. collegamenti in fibra ottica)
+        \item Spesso offerto su collegamenti wireless, dato il loro alto tasso di errore
+        \item Perché implementare questo tipo di servizi assieme ad un protocollo affidabile come TCP? Perché, in caso di perdita, \textbf{potrò recuperare la perdita localmente invece che effettuare una nuova trasmissione end-to-end}
+    \end{itemize}
+    \item \textbf{Controllo di flusso}:
+    \begin{itemize}
+        \item Gestisce il tasso di invio e ricezione tra nodi adiacenti
+    \end{itemize}
+    \item \textbf{Rilevamento degli errori}:
+    \begin{itemize}
+        \item Gli errori possono essere causati dal rumore sul canale o da una attenuazione eccessiva del segnale
+        \item Il ricevente rileva gli errori e o segnala di effettuare una ritrasmissione oppure scarta la trama
+    \end{itemize}
+    \item \textbf{Correzione degli errori}:
+    \begin{itemize}
+        \item Il ricevente rileva \textbf{e corregge} gli errori a livello di bit senza necessità di ritrasmettere
+    \end{itemize}
+    \item \textbf{Comunicazioni half-duplex e full-duplex}:
+    \begin{itemize}
+        \item Con una comunicazione half-duplex, entrambi i nodi possono trasmettere sul collegamento, ma non allo stesso tempo 
+    \end{itemize}
+\end{itemize}
+In particolare, per effettuare il rilevamento e la correzione degli errori (\textbf{Error Detection and Correction (EDC)}), devono essere aggiunti dei \textbf{bit di ridondanza} (redundancy bits) che servono per \textbf{proteggere il dato $D$ che viene trasmesso}.
+\begin{center}
+    \includegraphics[width =0.95\linewidth]{Images/119.png}
+\end{center}
+Vi sono \textbf{tre diverse tipologie di collegamento}:
+\begin{itemize}
+    \item Collegamenti \textbf{punto a punto}: si hanno un collegamento punto a punto tra i nodi, quindi un collegamento \textbf{esclusivo e dedicato tra le interfacce} 
+    \item \textbf{Local Area Network (LAN)}: Una LAN è un tipo di collegamento più complesso in cui \textbf{è prevista l'esistenza di commutatori di livello 2, detti switch}
+    \item Collegamenti \textbf{broadcast su mezzo condiviso (cablato o meno)}: Questo tipo di collegamento è utilizzato tradizionalmente da ethernet (con cavi coassiali), 4G/5G e dai satelliti. È necessario per \textbf{protocolli ad accesso multiplo}
+\end{itemize}
+\subsection{Protocolli ad accesso multiplo}
+I protocolli ad accesso multiplo vengono utilizzati quando si ha un \textbf{un singolo canale broadcast condiviso}.
+Su questo tipo di canale, due trasmissioni simultanee provenienti da nodi differenti possono \textbf{interferire tra di loro}; si ha quindi una \textbf{collisione} se un nodo riceve due o più segnali simultaneamente, rendendo la comunicazione \textbf{intelligibile} per entrambi gli utenti.
+Il rilevamento di una collisione può essere effettuata da ogni nodo \textbf{al livello fisico}, per esempio andando a misurare l'ampiezza del segnale in entrata.
+I protocolli ad accesso multiplo, quindi:
+\begin{itemize}
+    \item Sono \textbf{protocolli distribuiti}, con annesso algoritmo distribuito, che determinano come un nodo \textbf{condivide il canale con gli altri nodi}, cioè quando un nodo può trasmettere
+    \item Questi tipi di protocolli potrebbero richiede lo scambio di messaggi di controllo; i quali generano una complicazione aggiuntiva poiché anch'essi necessitano di viaggiare sul canale e quindi possono essere soggetti a collisioni
+\end{itemize}
+L'idea generale di protocollo ad accesso multiplo è la seguente: immaginiamo di avere un canale con larghezza di banda pari a $R$ bps.
+Allora, le caratteristiche che desideriamo in un protocollo ad accesso multiplo sono:
+\begin{enumerate}
+    \item Quando un nodo trasmette, \textbf{esso potrà inviare messaggi ad un tasso $R$}
+    \item Quando $M$ nodi vogliono trasmettere, ogni nodo può mandare messaggio, in media, ad un tasso $R/M$
+    \item \textbf{Il protocollo è completamente decentralizzato}: non vi è quindi nessun nodo speciale che coordina le trasmissioni; questo perché esso diventerebbe quello che viene chiamato \textbf{single node o failure}, cioè l'intera comunicazione potrebbe crollare se questo nodo fallisce 
+    \item Semplice da implementare
+\end{enumerate}
+Vi sono, in generale, tre \textbf{classi} di protocollo ad accesso multiplo:
+\begin{itemize}
+    \item \textbf{Channel partitioning (partizionamento del canale)}:
+    \begin{itemize}
+        \item Dividono il canale in "pezzi" più piccoli (es. time slots, frequenza, codice)
+        \item Allocano, \textbf{in maniera esclusiva}, un pezzo del canale ad un singolo nodo
+    \end{itemize}
+    \item \textbf{Random access (accesso casuale)}:
+    \begin{itemize}
+        \item Il canale non è partizionato, sono quindi possibili collisioni
+        \item Vi è un meccanismo di "recupero" dalle collisioni
+    \end{itemize}
+    \item \textbf{"Taking Turns" (a rotazione/a turno)}:
+    \begin{itemize}
+        \item I nodi comunicano \textbf{a turno}, ottenendo il diritto di trasmettere sul canale
+        \item I nodi con necessità di inviare più dati possono \textbf{avere turni più lunghi}
+    \end{itemize}
+\end{itemize}
+\subsubsection{Protocolli random access}
+In un protocollo random access, \textbf{non vi è nessuna coordinazione a priori tra i nodi}.
+Quando un nodo ha un pacchetto da inviare, esso semplicemente lo \textbf{trasmette con il tasso massimo $R$ del canale}; se vi sono quindi
+due nodi che trasmettono allo stesso tempo, si ha una \textbf{collisione}.
+Un protocollo ad accesso casuale specifica:
+\begin{itemize}
+    \item \textbf{Come} le collisioni vengono rilevate
+    \item \textbf{Come} si recupera dalle collisioni (es. ritrasmissione ritardata)
+\end{itemize}
+esempi di protocolli ad accesso causale sono:
+\begin{itemize}
+    \item ALOHA, slotted ALOHA
+    \item CSMA, CSMA/CD, CSMA/CA
+\end{itemize}
+\subsubsection{Slotted ALOHA}
+Le \textbf{assunzioni} che si fanno quando si utilizza questo protocollo sono:
+\begin{itemize}
+    \item Tutte le trame hanno la stessa dimensione
+    \item Il tempo viene diviso in \textbf{porzioni uguali}, dette \textbf{slot} (tempo per trasmettere 1 frame)
+    \item Il nodo inizia a trasmettere \textbf{solamente all'inizio di uno slot}; i nodi devono quindi \textbf{essere sincronizzati}; cioè devo
+    \item Se due o più nodi trasmettono in uno slot, \textbf{tutti i nodi possono rilevare le collisioni}
+\end{itemize}
+Come funziona?
+\begin{itemize}
+    \item Se un nodo deve trasmettere una trama, \textbf{lo trasmetterà nel prossimo slot disponibile}
+    \begin{itemize}
+        \item Se \textbf{non si verifica una collisione}: il nodo può mandare la prossima trama da trasmettere nel prossimo slot
+        \item Se \textbf{si verifica una collisione}: Il nodo \textbf{ritrasmettere} la trama in ogni susseguente slot con \textbf{probabilità $p$ di trasmettere} fino a quando ha succeso
+    \end{itemize}
+\end{itemize}
+La probabilità $p$ aggiunge casualità al protocollo, il che risulta \textbf{fondamentale}, poiché, se si continuasse a ritrasmettere in ogni slot successivo,
+due nodi che hanno colliso, \textbf{continueranno a collidere per sempre}. 
+\begin{center}
+    \includegraphics[width =0.95\linewidth]{Images/120.png}
+\end{center}
+vediamo i pro e i contro di questo protocollo:
+\begin{itemize}
+    \item \textbf{Pro}:
+    \begin{itemize}
+        \item Un singolo nodo attivo può continuamente trasmettere con un tasso di invio massimo disponibile sul canale
+        \item Altamente decentralizzato: l'unica cosa che bisogna avere è che i nodi abbiamo un clock sincronizzato 
+        \item Semplice
+    \end{itemize}
+    \item \textbf{Contro}:
+    \begin{itemize}
+        \item Si sprecano slot nel caso di collisione (collisions (C) ed idle (E))
+        \item Necessita di una sincronizzazione del clock
+        \item Inefficiente
+    \end{itemize}
+\end{itemize}
+In questo protocollo, cosa si intende per \textbf{efficienza?} Si intende la \textbf{frazione di slot in cui è avvenuta con successo una trasmissione sul lungo termine} (con molti nodi con molti frame da trasmettere).
+Può essere calcolata iniziando con $N$ nodi con molti frame da trasmettere, ognuno che può trasmettere in uno slot con probabilità $p$, e poi considerando il limite con $N \rightarrow +\infty$.
+La massima efficienza possibile che può essere derivata, considerando il valore $p^*$ che la massimizza, è:
+$$\textrm{max efficiency} = 1/e = 0.37$$
+Quindi, \textbf{al massimo, il canale viene utilizzato per trasmissioni utili solamente il 37\% del tempo}.
+\subsubsection{ALOHA}
+ALOHA puro, arrivato prima di slotted ALOHA, è una versione del protocollo nella quale \textbf{non vi è necessita di sincronizzazione tra i nodi}: quando una trama arriva, essa
+viene \textbf{subito trasmessa}. La probabilità di collisioni \textbf{incrementa, tuttavia, a causa della mancanza di sincronizzazione}. I frame inviati al tempo $t_0$ collideranno con i frame inviati
+ai tempi nell'intervallo ($t_0 - t_f, t_0 + t_f$) con $t_f$ il tempo di trasmissione di un qualsiasi frame.
+\begin{center}
+    \includegraphics[width =0.75\linewidth]{Images/121.png}
+\end{center}
+aloha puro ha \textbf{un'efficienza del 18\%} poiché raddoppia il tempo in cui si possono verificare collisioni.
+\subsubsection{Carrier Sense Multiple Access (CSMA)}
+Vi sono due tipi di protocolli CSMA:
+\begin{itemize}
+    \item \textbf{CSMA semplice}: si basa sul principio "ascolta prima di trasmettere"
+    \begin{itemize}
+        \item Se il canale \textbf{non è occupato}, trasmetti l'intera trama
+        \item Se il canale è \textbf{occupato}, ritarda la trasmissione
+    \end{itemize}
+    \item \textbf{CSMA/CD}: CSMA con \textbf{rilevazione delle collisioni}, si basa sul principio "ascolta mentre trasmetti"
+    \begin{itemize}
+        \item Le collisioni vengono rilevate in tempi rapidi
+        \item Le trasmissioni che collidono vengono annulate, riducendo il lo spreco di banda sul canale
+    \end{itemize}
+\end{itemize}
+Perché però si rende necessario CSMA/CD? Ogni trasmissione ha un \textbf{tempo di propagazione}, quindi prima di accorgermi che una
+trasmissione collide con un altra, deve passare il tempo necessario alla propagazione della trasmissione che collide.
+\begin{center}
+    \includegraphics[width =1\linewidth]{Images/122.png}
+\end{center}
+CSMA/CD riduce quindi l'ammontare di tempo perso a causa delle collisioni:
+\begin{itemize}
+    \item La trasmissione viene annullata in caso di rilevamento di una collisione
+    \item Segnale di \textbf{jam} (o jamming) inviato per notificare che è avvenuta una collisione
+    \begin{itemize}
+        \item Segnale di disturbo con \textbf{pattern binario predefinito}
+        \item Informa gli altri nodi che è avvenuta una collisione (se non la hanno ancora rilevata)
+    \end{itemize}
+\end{itemize}
+\begin{center}
+    \includegraphics[width =1\linewidth]{Images/123.png}
+\end{center}
+In particolare, vediamo come CSMA/CD funziona in una sua \textbf{implementazione tramite Ethernet}:
+\begin{enumerate}
+    \item Il livello di collegamento riceve un datagramma dal livello di rete e crea un frame
+    \item Si ascolta il canale:
+    \begin{itemize}
+        \item Se il canale è \textbf{libero}: inizia la trasmissione del frame
+        \item Se il canale è \textbf{occupato}: aspetta fino a quando non si libera; dopodiché trasmetti dopo un breve ritardo
+        \begin{itemize}
+            \item Il ritardo addizionale è chiamato \textbf{Inter-frame space} (IFS) o \textbf{Inter-frame gap} (IFG)
+            \item Si assicura che i nodi riceventi possa finire di processare lo scorso frame e che possano distinguere i vari frame che ricevono
+        \end{itemize}
+        \item Se la trama viene trasmessa senza collisione, termina
+        \item Se un'altra trasmissione viene rilevata durante la trasmissione; interrompi e invia il segnale di jam
+        \item Dopo aver interrotto la trasmissione, si entra nella fase di \textbf{binary (exponential) backoff}:
+        \begin{itemize}
+            \item Dopo la $m$-esima collisione, viene scelto un valore $K$ in maniera casuale tra i valori $\{0,1,2,\dots,2^{m}-1\}$
+            \item Viene aspettato un tempo pari a $K \cdot 512$ bit times (il tempo per trasmettere un singolo bit); dopodiché si ritorna al punto 2
+            \item Più alto il numero di collisione $\rightarrow$ intervallo di backoff più lungo
+        \end{itemize}
+    \end{itemize}
+\end{enumerate}
+Siano ora $t_{prop}$ il massimo ritardo di propagazione tra due nodi e $t_{trans}$ il tempo per trasmettere un frame di larghezza massima.
+Allora, l'efficienza di CSMA/CD è data da:
+$$efficiency = \frac{1}{1 + 5 \frac{t_{prop}}{t_{trans}}}$$
+L'efficienza raggiunge $1$ quando:
+\begin{itemize}
+    \item $t_{prop}$ tende verso 0
+    \item $t_{trans}$ tende verso infinito (caso infinito; un unico nodo trasmette sempre e occupa tutto il canale)
+\end{itemize}
+le performance sono quindi \textbf{migliori rispetto ad ALOHA} e il protocollo semplice, economico e decentralizzato.
+\subsection{Protocolli a rotazione ("taking turns")}
+In questa tipologia di protocolli, le collisioni vengono \textbf{evitate} poiché si ha un coordinamento della trasmissione tra i nodi.
+Un protocollo di questo tipo prende il nome di \textbf{polling} (utilizzato da Bluetooth):
+\begin{itemize}
+    \item Segue un tipo di architettura "Master-slave"
+    \item A turno, il master invita i nodi slave a \textbf{trasmettere} utilizzando un particolare messaggio chiamato \textbf{messaggio di polling}
+    \item Gli slave possono anche essere dispositivi semplici che effettuano una trasmissione solamente quando arriva il messaggio di polling
+    \item Il protocollo presenta diversi svantaggi:
+    \begin{itemize}
+        \item Overhead del messaggio di polling
+        \item Problemi di latenza
+        \item Single point of failure (master)
+    \end{itemize}
+\end{itemize}
+Un'altra famiglia di protocolli a rotazione prende il nome di \textbf{token passing}:
+\begin{itemize}
+    \item I nodi sono posti all'interno di un "anello" logico; un nodo può comunicare solamente con i propri vicini sull'anello
+    \item Viene passato sequenzialmente, tramite un messaggio, un \textbf{token di controllo} da un nodo all'altro
+    \begin{itemize}
+        \item In senso orario oppure antiorario
+    \end{itemize}
+    \item I nodi possono trasmettere \textbf{solamente quando essi sono in possesso del token}; vengono così evitate le collisioni
+    \item Questi protocolli presentano i seguenti svantaggi:
+    \begin{itemize}
+        \item Token overhead
+        \item Latenza
+        \item Single point of failure (token); il messaggio di token potrebbe andar perso o venir corrotto
+    \end{itemize}
+\end{itemize}
+\subsection{Local Area Networks (LAN)}
+Le reti locali, più precisamente dette \textbf{reti locali commutate}, sono un tipo di collegamento
+più complesso rispetto a quelli visti fino ad ora, cioè rispetto ai link broadcast. In una rete locale, \textbf{le trame possono venir commutati tra una sorgente e una destinazione che si trovano fisicamente adiacenti}.
+La commutazione e lo switching viene effettuato dagli \textbf{switch}, un commutatore di pacchetti che agisce al livello 2 della rete.
+\begin{center}
+    \includegraphics[width =1\linewidth]{Images/124.png}
+\end{center}
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
