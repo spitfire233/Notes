@@ -65,7 +65,7 @@
 
 \title{RSO: Sistemi Operativi}
 \author{spitfire}
-\date{A.A. 2023-2024}
+\date{A.A. 2024-2025}
 \begin{document}
 \begin{figure}
     \centering
@@ -73,7 +73,7 @@
 \end{figure}
 
 \vspace{10cm}
-\date{A.A. 2023-2024}
+\date{A.A. 2024-2025}
 
 
 \maketitle
@@ -1237,7 +1237,7 @@ Un'implementazione delle API attraverso chiamate di sistema segue il seguente sc
 ciò permette al sistema operativo di proteggere se stesso dai programmi in esecuzione.
 La CPU può funzionare in \textbf{modalità utente} (user mode) o in \textbf{modalità di sistema} (kernel mode) impostano un opportuno \textbf{bit di modalità}.
 Alcune istruzione del processore sono quindi \textbf{privilegiate}, ossia sono eseguibili solamente in kernel mode: in particolare, in user mode la CPU \textbf{non può accedere alla memoria del kernel}.
-Una chiamata di sistema non è quindi semplice da implementare come una normale chiamate a funzione, poiché occorre \textbf{effettuare una transizione da modalità utente a modalità di sistema} (context switching):
+Una chiamata di sistema non è quindi semplice da implementare come una normale chiamate a funzione, poiché occorre \textbf{effettuare una transizione da modalità utente a modalità di sistema}:
 \begin{enumerate}
     \item Vengono prima \textbf{preparati i parametri necessari}
     \begin{itemize}
@@ -1344,8 +1344,8 @@ Il kernel forniva un elevato numero di funzionalità:
     \item Device drivers
     \item ...
 \end{itemize}
-I \textbf{vantaggi} di questa strututa sono \textbf{le sue elevati prestazioni}.
-Tuttavia, essa soffre di numeroi \textbf{svantaggi}:
+I \textbf{vantaggi} di questa struttura sono \textbf{le sue elevati prestazioni}.
+Tuttavia, essa soffre di un numero di \textbf{svantaggi}:
 \begin{itemize}
     \item Complessità 
     \item Fragilità ai bug
@@ -1411,14 +1411,319 @@ Quando discutiamo come è realizzato il kernel, è importante distinguere tra \t
 Le politiche \textbf{impattano profondamente} sulle caratteristiche percepite dal sistema di elaborazione, i meccanismi no.
 I meccansimi sono quindi più \textbf{stabili} delle politiche, che spesso cambiano in funzione delle caratteristiche perceptie che vogliamo che il sistema di elaborazione abbia.
 Avere politiche configurabili è utile per combattere la \textbf{maledizione della generalità}.
-
-
-
-
-
-
-
-
+\section{Processi e Thread: la struttura}
+I sistemi operativi hanno due obiettivi:
+\begin{itemize}
+    \item \textbf{Efficienza}: mantenere impeganta la (o le) CPU il maggior tempo possibile nell'esecuzione dei programmi (se ci sono programmi da eseuire)
+    \item \textbf{Reattività}: Dare l'illusione che ogni processo progredisca continuamente nella propria esecuzione, come se avesse una CPU dedicata; questo è particolarmente importante per i \textbf{programmi interattivi}, che devono reagire in tempi accettabili quando ricevono un input utente.
+\end{itemize}
+Le due tecniche adottate nei sistemi operativi per ottenere questi due obbiettivi sono la \textbf{multiprogrammazione} e il \textbf{multitasking} (o \textbf{time-sharing}):
+\begin{itemize}
+    \item \textbf{Obbiettivo della multiprogrammazione}: impredire che un programma non è in condizione di proseguire l'esecuzione mantenga la CPU
+    \item \textbf{Obbiettivo del multitasking}: Far si che un programma interattivo possa reagire agli input utente in un tempo accettabile
+\end{itemize}
+Bisogna notare che la multiprogrammazione non è una tecnica rilevante per i sistemi \textbf{puramenti batch} (cioè che non richiedono un input utente).
+L'obbiettivo della multiprogrammazione è massimizzare l'utilizzo della CPU. Gli \textbf{algoritmi di scheduling} sfruttano il fatto che, di norma, l'esecuzione di un processo è una sequenza di:
+\begin{itemize}
+    \item \textbf{Burst della CPU}: seqeunza di operazioni di CPU
+    \item \textbf{Burst dell'I/O}: Attesa completamento di un'operazione di I/O
+\end{itemize}
+\begin{center}
+    \includegraphics[width = 0.28\linewidth]{Images/36.png}
+\end{center}
+Diventa quindi necessario \textbf{gaurdare alla distribuzione delle durate dei burst della CPU}.
+In un programma, quindi, si potrebbe avere
+\begin{itemize}
+    \item \textbf{Prevalenza di burst I/O} (I/O Bound)
+    \begin{itemize}
+        \item Elevato numero di burst CPU brevi
+        \item Ridotto numero di burst CPU lunghi
+        \item Tipico dei \textbf{programmi interattivi}
+    \end{itemize}
+    \item \textbf{Programma con prevalenza di CPU} (CPU Bound)
+    \begin{itemize}
+        \item Elevato numero di burst CPU lunghi
+        \item Ridotto numero di burst CPU brevi
+        \item Tipico dei programmi batch
+    \end{itemize}
+\end{itemize}
+In entrambi i casi, la curva della distribuzione ha la forma riportata sotto, ma:
+\begin{itemize}
+    \item \textbf{I/O Bound}: il massimo sta più a sinistra
+    \item \textbf{CPU Bound}: il massimo sta più a destra
+\end{itemize} 
+\begin{center}
+    \includegraphics[width = 0.58\linewidth]{Images/37.png}
+\end{center}
+\subsection{Multiprogrammazione}
+Il sistema operativo mantiene in memoria le immagini dei processi da eseguire.
+Quando una CPU non è impeganta ad eseguire un processo, il sistema operativo \textbf{seleziona un processo non in esecuzione e gli assegna la CPU}.
+Quando un processo non può proseguire l'esecuzione (ad es. perché deve attendere il termine dell'input di dati che gli servono per proseguire), la sua CPU
+\textbf{viene assegnata ad un altro processo non in esecuzione}.
+Come risultato, se i processo sono più delle CPU, queste saranno impegante nell'esecuzione di qualche processo per la maggior parte del tempo.
+\subsubsection{Multiprogrammazione e memoria}
+La multiprogrammazione richiede che tutte le immagini di tutti i processi siano in memoria perché questi possano essere eseguibili.
+Se i processi sono troppi e non possono essere contenuti tutti in memoria, si adotta una tecnica che prende il nome di \textbf{swapping}, la quale viene utilizzata
+per spostare le immagini dei processi dentro/fuori dalla memoria.
+Se l'immagine di un processo è \textbf{troppo grande}, la \textbf{memoria virtuale} è un'ulteriore tecnica che permette di eseguire un processo la cui immagine \textbf{non è completamente in memoria}.
+Queste tecniche aumentano il numero di processo che possono essere eseguiti in multiprogrammazione, ossia aumentano il \textbf{grado di multiprogrammazione}.
+Approfondiremo più avanti tutti questi aspetti.
+\subsection{Multitasking}
+Il multitasking è \textbf{un'estensione della multiprogrammazione} per i sistemi interattivi.
+La CPU viene "sottratta" periodicamente al programma in esecuzione ed assegnata ad un altro programma.
+In questo modo, tutti i programmio \textbf{progrediscono in maniera continuativa nella propria esecuzione}, anziché solo
+nei momenti in cui il programma che detiene la CPU si mette in attesa.
+Questo fa si che i programmi batch, che hanno burst CPU lunghi pochi burst I/O, non monopolizzino la CPU a discapito dei programmi interattivi.
+\subsection{Implementazione di un processo}
+L'implementazione di un processo avviene tramite una struttura dati che prende il nome di \textbf{Process Control Block} (PCB) (detto anche \textbf{Task Control Block}).
+Esso è la struttura dati del kernel che \textbf{contiene tutte le informazioni relative ad un processo}:
+\begin{center}
+    \includegraphics[width = 0.23\linewidth]{Images/38.png}
+\end{center}
+\begin{itemize}
+    \item \textbf{Process state}: lo stato del processo (ready, running, ...)
+    \item \textbf{Process number} (o PID): Identifica univocamente il processo
+    \item \textbf{Program Counter}: contenuto del registro \textbf{program counter} ("istruzione successiva")
+    \item \textbf{Registers}: Contenuto dei registri del processore
+    \item \textbf{Informazioni relative alla gestione della memoria}: memoria \textbf{allocata} al processo
+    \item \textbf{Informazioni sull'I/O}: dispositivi assegnati al processo, elenco di file aperti, ... 
+    \item \textbf{Informazioni di scheduling}: Priorità, puntatori a code di scheduling, ... 
+    \item \textbf{Informazioni di accounting}: CPU utilizzata, tempo trascorso, ... 
+\end{itemize}
+Durante l'esecuzione, un processo cambia più volte \textbf{stato}. Gli stati possibili di un processo sono:
+\begin{itemize}
+    \item \textbf{New}: il processo è creato, ma non ancora ammesso all'esecuzione
+    \item \textbf{Ready}: Il processo può essere eseguito (è in attesa che gli sia assegnata una CPU)
+    \item \textbf{Running}: Le sue istruzioni vengono eseguite da qualche CPU
+    \item \textbf{Waiting}: Il processo non può essere eseguito perché è in attesa che si verifichi qualche evento (ad es. il completamente di un'operazione di I/O)
+    \item \textbf{Terminated}: Il processo ha terminato l'esecuzione
+\end{itemize}
+\begin{center}
+    \includegraphics[width = 0.73\linewidth]{Images/39.png}
+\end{center}
+\subsection{CPU scheduling}
+Lo \textbf{scheduler della CPU}, o \textbf{scheduler a breve termine}, sceglie il prossimo processo da eseguire tra quelli \textbf{in stato ready} ed alloca un core libero ad esso.
+Mantiene quindi \textbf{diverse code di processi}:
+\begin{itemize}
+    \item \textbf{Ready queue}: processi residenti in memoria e in stato ready
+    \item \textbf{Wait queue}: code per i processi che sono residenti in memoria e in stato di wait; una coda diversa \textbf{per ciascun diverso tipo di evento di attesa}
+\end{itemize}
+Durante la loro vita, i processi (i loro PCB) \textbf{migrano da una coda all'altra a seconda dello stato del processo stesso}.
+\begin{center}
+    \includegraphics[width = 0.60\linewidth]{Images/40.png}
+\end{center}
+Lo scheduler della CPU ha il compito di \textbf{decidere a quale processo, tra quelli nella ready queue, assegnare un core libero}.
+Tali \textbf{decisioni di scheduling} possono essere effettuate in diversi momenti, corrispondenti a \textbf{cambi di stato dei processi}:
+\begin{enumerate}
+    \item Quando un processo passa da stato running a stato waiting
+    \item Quando un processo passa da stato running a stato ready
+    \item Quando un processo passa da stato waiting a stato ready
+    \item Quando un processo termina
+\end{enumerate}
+Se il riassegnamento viene fatto solo nelle situazioni 1 e 4, lo \textbf{schema di scheduling} è detto \textbf{senza prelazione} (\textbf{non-preemptive}) o \textbf{cooperativo}, dal momento che un core viene liberato
+solamente quando un processo \textbf{volontariamente rinuncia ad esso}.
+Altrimenti, è detto \textbf{con prelazione} (\textbf{preemptive}), dal momento che un core può essere liberato perché un core viene \textbf{forzatamente} sottrato dal kernel ad un processo che lo sta usando.
+Lo schema di scheduling preemptive \textbf{è più complicato da implementare}:
+\begin{itemize}
+    \item Che succede se due processi condividono i dati?
+    \item Che succede se un processo sta eseguendo in kernel mode? (System Call o Interrupt Request)
+\end{itemize}
+Quando il controllo della CPU deve passare da un processo ad un altro processo scelto dallo scheduler a breve termine, avviene una \textbf{commutazione di contesto} (\textbf{context switch}).
+La commutazione di contesto viene effettuata dal \textbf{dispatcher}, che:
+\begin{itemize}
+    \item \textbf{Salva il contesto} (stato, registri) del processo da interrompere nel suo PCB
+    \item \textbf{Carica il contesto} del processo da eseguire dal suo PCB
+    \item \textbf{Passa in user mode}
+    \item \textbf{Salta} nel punto corretto del programma del processo selezionato (ossia, dove era stato \textbf{precedentemente interrotto})
+\end{itemize}
+\begin{center}
+    \includegraphics[width = 0.60\linewidth]{Images/41.png}
+\end{center}
+Notare che il dispatcher implementa un \textbf{tipico meccanismo}, mentre lo scheduler \textbf{implementa una tipica politica}.
+La \textbf{latenza di dispatch} è il tempo impiegato dal dispatcher per fermare un processo ed avviarne un altro. La latenza di dispatch
+è \textbf{puro overhead}: non viene eseguito alcun lavoro utile (definito come l'esecuzione di un programma utente).
+Più è complesso il sistema operativo, più è complesso il PCB (il contesto), \textbf{maggiore è la latenza di dispatch}.
+Alcuni processori offrono supporto speciale per \textbf{minimizzare la latenza di dispatch} (es. banchi di registri multipli).
+\subsection{Implementazione dei thread}
+Vi sono due tipi di thread:
+\begin{itemize}
+    \item \textbf{Thread a livello utente}: i thread disponibili nello spazio utente dei processi; sono quelli offerti dalle librerie di thread ai processi
+    \item \textbf{Thread a livello kernel}: i thread implementati nativamente dal kernel; sono utilizzati per strutturare il kernel stesso \textbf{in maniera concorrente}
+\end{itemize}
+I thread a livello del kernel vengono utilizzati dalle librerie di thread per \textbf{implementare i thread a livello utente di un certo processo}.
+A tale scopo, possono essere adottate diverse strategie (modelli di \textbf{multithreading}):
+\begin{itemize}
+    \item \textbf{Molti-a-uno}: I thread a livello utente di un certo processo sono implementati su un solo thread a livello del kernel
+    \begin{itemize}
+        \item \textbf{Vantaggio}: usabile su ogni sistema operativo (unica soluzione possibile se il sitema operativo non è multithreaded)
+        \item \textbf{Svantaggio}: Se un thread utente fa una chiamata di sistema bloccante blocca tutti i thread utente dello stesso processo
+        \item \textbf{Altro svantaggio}: non sfrutta la presenza di più core
+        \item Poco usata in pratica
+        \item Esempi: Solaris Green Threads e GNU Portable Threads
+    \end{itemize}
+    \begin{center}
+        \includegraphics[width = 0.40\linewidth]{Images/42.png}
+    \end{center}
+    \item \textbf{Uno-a-uno}: Ogni thread a livello utente è implementato su un singolo, distinto thread a livello del kernel
+    \begin{itemize}
+        \item \textbf{Vantaggio}: permette un maggior grado di concorrenza
+        \item \textbf{Vantaggio}: permette di sfruttare il parallelismo nei sistemi multicore
+        \item \textbf{Svantaggio}: minore performance rispetto al modello molti-a-uno
+        \item \textbf{Svantaggio}: stress del kernel (particolarmente pesante sul kernel)
+        \item Esempio: Linux, Windows
+    \end{itemize}
+    \begin{center}
+        \includegraphics[width = 0.40\linewidth]{Images/43.png}
+    \end{center}
+    \item \textbf{Molti-a-molti}: I thread a livello utente di un certo processo sono implementati su un insieme di thread a livello del kernel, possibilmente inferiore di numero, e \textbf{l'associazione thread utente/thread kernel è dinamica}, stabilita da uno scheduler interno alla libreria di threading
+    \begin{itemize}
+        \item Cerca di combinare i vantaggi dei modelli molti-a-uno e  uno-a-uno
+        \item \textbf{Svantaggio}: complesso da implementare (la libreria di thread deve dinamicamente alternare l'esecuzione dei thread a livello utente sui thread a livello kernel disponibili)
+        \item \textbf{Modello a due livelli}: permette agli utenti di creare dei thread che hanno un mapping uno-a-uno con un thread a livello del kernel
+        \item Esempio: Solaris, AIX
+    \end{itemize}
+    \begin{center}
+        \includegraphics[width = 0.40\linewidth]{Images/44.png}
+    \end{center}
+\end{itemize}
+Nei kernel multithreaded, il kernel mantiene delle strutture dati analoghe ai PCB, i \textbf{thread control blocks} (TCB); un TCB memorizza il
+contesto di un thread e le sue informazioni di contabilizzazione.
+Il PCB contiene solo le informazioni di contesto e contabilizzazione \textbf{comuni} (ad esempio lo spazio di memoria).
+Il PCB è di norma collegato ai TCB dei thread kernel utilizzati dal processo, e viceversa i TCB dei thread kernel utilizzati da un processo sono collegati al PCB del processo.
+\subsection{Criteri di valutazione degli algoritmi di scheduling}
+In pratica, ogni sistema operativo ha i propri algoritmi di scheduling.
+Questo è indizio del fatto che non esiste una politica di scheduling "migliore" di tutte le altre.
+\textbf{Necessitiamo quindi di definire delle matriche per confrontare gli algoritmi di scheduling}.
+I principali criteri utilizzati sono:
+\begin{itemize}
+    \item \textbf{Utilizzo della CPU}: percentuale di tempo in cui la CPU è attiva nell'esecuzione dei processi utente (dovrebbe essere tra il 40\% e il 90\%, in funzione del carico)
+    \item \textbf{Throughput}: Numero di processi che completano l'esecuzione nell'unità di tempo (dipende dalla durata dei processi)
+    \item \textbf{Tempo di completamento}: tempo necessario per completare l'esecuzione di un certo processo (dipende da molti fattori: durata del processo, carico totale, durata dell'I/0...)
+    \item \textbf{Tempo di attesa}: tempo trascorso dal processo nella ready queue (meglio del tempo di completamento, meno dipendente dala durata del processo e dall'I/O)
+    \item \textbf{Tempo di risposta}: negli ambienti interattivi, tempo trascorso tra l'arrivo di una richiesta al processo e la produzione della prima risposta, sena l'emissione di questa nell'output
+\end{itemize}
+In questi appunti, terremo in considerazione prevalentemente \textbf{tempo di completamento e di attesa}.
+I criteri di valutazione di un algortimo di scheduling sono quindi:
+\begin{itemize}
+    \item \textbf{Massimo utilizzo della CPU}
+    \item \textbf{Massimo Throughput}
+    \item \textbf{Minimo tempo di completamento (medio)}
+    \item \textbf{Minimo tempo di attesa (medio)}
+    \item \textbf{Minimo tempo di risposta (medio)}
+\end{itemize}
+Naturalmente, nessun algoritmo di scheduling può ottimizzare tutti i criteri contemporaneamente.
+\subsection{Principali algoritmi di scheduling}
+Presentiamo in questa sezione i principali algoritmi di scheduling.
+\subsubsection{Scheduling in ordine di arrivo}
+Nello \textbf{scheduling in ordine di arrivo}, o \textbf{first-come-fist-served} (FCFS), la CPU \textbf{viene asseganta al primo processo che la richiede}
+\begin{itemize}
+    \item \textbf{Vantaggio}: implementazione molto semplice (coda FIFO, nessuna prelazione)
+    \item \textbf{Svantaggio}: tempo di attesa medio può essere lungo ("effetto convoglio")
+\end{itemize}
+\begin{center}
+    \includegraphics[width = 1\linewidth]{Images/45.png}
+\end{center}
+\subsubsection{Scheduling per brevità}
+Nello \textbf{scheduling per brevità}, o \textbf{shortest-job-first}, la CPU viene assegnata al processo che ha il \textbf{successivo CPU burst più breve}.
+\begin{itemize}
+    \item \textbf{Vantaggi}: implementazione quasi identica a FCFS, ma \textbf{minimizza il tempo di attesa (è ottimale)}
+    \item \textbf{Svantaggio}: di solito non si sa in anticipo qual è il processo che avrà il CPU burst più breve
+\end{itemize}
+\begin{center}
+    \includegraphics[width = 0.90\linewidth]{Images/46.png}
+\end{center}
+L'algoritmo \textbf{shortest-remaining-time-first} (SRTF) utiliza la \textbf{prelazione} per gestire il caso in cui i processi non arrivino tutti nello stesso istante:
+se nella ready queue arriva un processo con burst più corto di quello running, \textbf{quest'ultimo viene prelazionato dal nuovo processo}. Con preemption e tempo di arrivo:
+\begin{itemize}
+    \item Il \textbf{tempo di attesa di un processo} è dato da
+    $$\textrm{instante di terminazione processo} - \textrm{tempp di arrivo} + \textrm{durata burst}$$
+    \item Il \textbf{tempo di completamento} di un processo è invece dato da
+    $$\textrm{istante di terminazione processo} - \textrm{tempo di arrivo}$$
+\end{itemize}
+\subsubsection{Scheduling circolare}
+Nello \textbf{scheduling circolare}, o \textbf{round robin (RR)}, ogni processo ottiene una \textbf{piccola quantità fissata di tempo di CPU}, detta \textbf{quanto di tempo}, di solito 10-100 millisecondi, per il quale
+può essere in esecuzione. Trascorso tale tempo, il processo in esecuzione viene \textbf{interrotto e messo in fondo alla ready queue}, che è gestita in maniera FIFO.
+In tal modo, la ready queue funziona essenzialmente come un \textbf{buffer circolare}, e i processi vengono scanditi dal primo all'ultimo, per poi ripartire dal primo nello stesso ordine.
+Per effettuare la prelazione del processo corrente (passaggio del processo da stato running a ready), viene implementato un \textbf{timer} che genera un interrupt periodico con periodo $q$.
+Facciamo un esempio con tempo di arrivo $0$ per tutti i processi:
+\begin{center}
+    \includegraphics[width = 0.90\linewidth]{Images/47.png}
+\end{center}
+Lo scheduling circolare presenta le seguenti caratteristiche:
+\begin{itemize}
+    \item Se ci sono $n$ processi nella ready queue e il quanto temporale è $q$:
+    \begin{itemize}
+        \item Nessun processo \textbf{attende più di $q(n-1)$} unità di tempo nella ready queue prima di ridiventare running per un altro quanto di tempo (rispetto a SJF e SRTF non c'è bisogno di sapere la durata del burst)
+        \item Ogni processo ottiene $1/n$ del tempo totale di CPU, in maniera \textbf{perfettamente equa} (rispetto a SJF e SRTF vengono ottenute solo $q$ unità di tempo per volta)
+    \end{itemize}
+    \item Comportamento \textbf{in funzione di $q$}:
+    \begin{itemize}
+        \item $q$ \textbf{elevato}: se $q$ è di regola maggiore della durata di tutti i burst, RR tende al FCFS
+        \item $q$ \textbf{basso}: deve comunque \textbf{essere molto più lungo della latenza di dispatch}, altrimenti questa si "mangia" un tempo comparabile al tempo di esecuzione dei processi utente e l'utilizzo della CPU diventa \textbf{inaccetabilmente basso}
+    \end{itemize}
+    \item \textbf{Performance}:
+    \begin{itemize}
+        \item Rispetto a SJF, tipicamente RR ha un tempo di completamento medio più alto
+        \item Ma \textbf{un tempo di risposta medio più basso} (va bene per i processi interattivi)
+        \item Il tempo di completamento medio non necessariamente migliora con l'aumento di $q$
+    \end{itemize}
+\end{itemize}
+\begin{center}
+    \includegraphics[width = 0.90\linewidth]{Images/48.png}
+\end{center}
+\subsubsection{Scheduling con priorità}
+Nello scheduling con priorità, ad ogni processo è \textbf{associato un numero intero che indica la sua priorità}.
+Viene eseguito il processo con più altra priorità, gli altri aspettano (in sistemi UNIX-like, un numero più basso indica una maggiore priorità; in Windows il contrario).
+Questo tipo di algoritmi può essere \textbf{preemptive} oppure \textbf{non-preemptive}.
+Possono essere permessi più procesi con pari priorità oppure no; in caso positivo occorre stabilire un secondo algoritmo di scheduling per \textbf{abritrare tra i processi a pari priorità} (di solito si utilizza RR).
+SJF è un caso particolare di scheduling con priorità, dove quest'ultima l'\textbf{inverso della durata del CPU burst}.
+Questi algoritmi soffrono di un problema di \textbf{attesa indefinita} (\textbf{starvation}): un processo a priorità troppo bassa \textbf{potrebbe non venir mai schedulato}.
+La \textbf{soluzione} a questo tipo di problema prende il nome di \textbf{invecchiamento} (\textbf{aging}), ossia avviene un \textbf{aumento automatico della priorità di un processo al crescere del tempo di permanenza nella ready queue}.
+Facciamo un esempio di scheduling con priorità senza che vi siano processi con la stessa priorità:
+\begin{center}
+    \includegraphics[width = 0.90\linewidth]{Images/49.png}
+\end{center}
+vediamo invece un esempio con processi con priorità uguali:
+\begin{center}
+    \includegraphics[width = 0.90\linewidth]{Images/50.png}
+\end{center}
+\subsubsection{Code multilivello con retroazione}
+Lo scheduling con priorità usa \textbf{ready queue separate per ogni priorità}. Viene quindi schedulato il processo nella conda non vuota con priorità maggiore.
+\begin{center}
+    \includegraphics[width = 0.30\linewidth]{Images/51.png}
+\end{center}
+Nello scheduling con priorità, in base a quale criterio possiamo assegnare le priorità ai processi?
+Un criterio comunemente usato è quello di \textbf{basare la priorità di un processo sul suo tipo}:
+\begin{itemize}
+    \item \textbf{Priorità più alta ai processi interattivi o cyber-fisici} che devono reagire rapidamente all'I/O (tipicamente I/O bound)
+    \item \textbf{Priorità più bassa ai processi che effettuano lunghe computazioni, o processi batch} (tipicamente CPU bound)
+\end{itemize}
+La priorità di un processo \textbf{può variare dinamicamente}: è sufficiente spostarlo da una ready queue ad una certa priorità all'altra, l'invecchiamento
+è di solito implementato in questo modo (spostamento di un processo verso una coda a priorità più alta), ma \textbf{anche l'identificazione di un processo come I/O bound o CPU bound può essere effettuata dinamicamente} e quindi determinare un cambio di priorità, stavolta con uno spostamento verso il basso.
+Uno scheduler di questo tipo è detto con \textbf{code multilivello con retroazione}. Questo tipo di schedulero fu introdotto per la prima volta nel sistema operativo CTSS ed è oggi adottato da moltissimi sistemi operativi moderni (Windows, MacOS, FreeBSD, Solaris).
+Facciamo un esempio, supponiamo di avere le seguenti code:
+\begin{itemize}
+    \item $Q_0$: RR con $q_0 = 8$ msec
+    \item $Q_1$: RR con $q_1 = 16$ msec
+    \item $Q_2$: RR con $q_2 = \infty$ (ossia FCFS)
+\end{itemize}
+$Q_0$ ha priorità altra, $Q_1$ intermedia e $Q_2$ bassa.
+\begin{itemize}
+    \item Alla creazione, un processo entra in $Q_0$
+    \item Se quando un processo diventa running non termina il suo burst entro il suo quanto di tempo, \textbf{avviene preemption} e viene messo all'inizio della coda \textbf{immediatamente più bassa}, altrimenti rimane nella sua coda.
+    \item Per evitare il problema della starvation, \textbf{l'invecchiamento sposta i processi in direzione opposta}, verso le code più alte, se passano troppo tempo in una coda senza essere eseguiti
+    \item \textbf{Effetto ricercato}: mantenere i processi I/O bound (con burst della CPU più corti) nelle code a più altra priorità e quelli CPU bound (con burst della CPU lunghi) nelle code a bassa priorità
+\end{itemize}
+\begin{center}
+    \includegraphics[width = 0.50\linewidth]{Images/52.png}
+\end{center}
+\section{Gestione della memoria: la struttura}
+Le arre di memoria che i processori possono usare direttamente per l'esecuzione dei programmi sono solo \textbf{la memoria centrale ed i registri}.
+Pertanto, un programma deve essere portato dal disco in memoria centrale perche possa essere eseguito, e il programma deve avere anche \textbf{sufficiente memoria centrale per memorizzare i risultati della computazione}.
+La memoria centrale "vede" solo un \textbf{flusso di indirizzi} (richieste di lettura o scrittura) proveniente dal bus di sistema, e \textbf{non è consapevole di chi ha generato tale flusso}.
+Le operazioni sui registri richiedono \textbf{un ciclo di clock}, viceversa, le operazioni sulla memoria richiedono \textbf{molti cicli di clock}, anche diverse centinaia, causando uno stallo (stall) del processore, durante il quale
+un core multithread può eseguire un altro thread hardware.
+Per aumentare l'efficienza degli accessi in memoria, vengono utilizzati diversi livelli di memorie cache tra processore e memoria centrale.
 
 
 
