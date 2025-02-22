@@ -1357,20 +1357,20 @@ Lo strato più basso \textbf{interagisce con l'hardware}, lo strato n-esimo inte
 L'approccio offre \textbf{tre vantaggi}:
 \begin{itemize}
     \item Ogni strato può essere progettato e implementato \textbf{indipendentemente dagli altri strati}
-    \item È possibiel verifciare la \textbf{correttezza degli strati indipendentemente da quella degli altri strati}
-    \item Ogni strato \textbf{nscone le funzionalità degli strati sottostanti} e presenta allo strato soprastante \textbf{una macchina dalle caratteristiche più astratte}
+    \item È possibile verificare la \textbf{correttezza degli strati indipendentemente da quella degli altri strati}
+    \item Ogni strato \textbf{nasconde le funzionalità degli strati sottostanti} e presenta allo strato soprastante \textbf{una macchina dalle caratteristiche più astratte}
 \end{itemize}
-In realtà, pochi sistemti operativi usano questo approccio in maniera pura:
+In realtà, pochi sistemi operativi usano questo approccio in maniera pura:
 \begin{itemize}
     \item È difficile \textbf{definire esattamente quali funzionalità devono avere uno strato}
     \item Ogni strato introduce \textbf{un overhead} che peggiore le prestazioni
 \end{itemize}
 È comunque conveniente \textbf{strutturare alcune parti del sistema operativo a strati} (es. File System o stack di rete).
 \subsubsection{Struttura a microkernel}
-Il princiaple problema dei kernel monolitici è la loroc complessità e, di conseguenza, la loro fragilità e inaffidabilità.
-La struttua a microkernel sposta \textbf{quanti più servizi possibile fuori dal kernel in programmi di sistema}, mantenendo nel kernel l'insieme
-\textbf{minimo} di servizi indinspensabili per implementare gli altri.
-Il kernel è definito microkernel \textbf{dal moemnto che ha dimensioni molto ridotte}.
+Il principale problema dei kernel monolitici è la loro complessità e, di conseguenza, la loro fragilità e inaffidabilità.
+La struttura a microkernel sposta \textbf{quanti più servizi possibile fuori dal kernel in programmi di sistema}, mantenendo nel kernel l'insieme
+\textbf{minimo} di servizi indispensabili per implementare gli altri.
+Il kernel è definito microkernel \textbf{dal momento che ha dimensioni molto ridotte}.
 L'approccio è stato proposto negli anni '80 con il sistema operativo Mach.
 Un microkernel offre \textbf{pochi servizi}, di solito
 \begin{itemize}
@@ -1379,7 +1379,7 @@ Un microkernel offre \textbf{pochi servizi}, di solito
     \item La \textbf{comunicazione tra processi}
 \end{itemize}
 Gli altri servizi (es. filesystem e device drivers) vengono implementati \textbf{a livello utente}.
-Per chiedere un servizio, un programma \textbf{comunica con il programam di sistema che lo implementa attraverso le primitive di comunicazione offerte dal microkernel}.
+Per chiedere un servizio, un programma \textbf{comunica con il programma di sistema che lo implementa attraverso le primitive di comunicazione offerte dal microkernel}.
 \begin{center}
     \includegraphics[width = 0.80\linewidth]{Images/35.png}
 \end{center}
@@ -1388,11 +1388,11 @@ Vediamo i \textbf{vantaggi} di questa architettura:
     \item Facilità di \textbf{estensione del sistema operativo}: posso aggiungere un nuovo servizio senza dover modificare il kernel
     \item \textbf{Maggiore affidabilità}: se un servizio va in crash, mon manda in crash il kernel; un kernel piccolo può essere quindi reso più affidabile con meno sforzo
 \end{itemize}
-vediamome quindi gli svantaggi:
+vediamone quindi gli svantaggi:
 \begin{itemize}
     \item \textbf{Overhead}: una tipica richiesta di servizio deve \textbf{transitare dal processo richiedente al microkernel, al processo di sistema destinatario e viceversa}, con molti passaggi tra user e kernel mode, comunicazioni, context switching ecc...
 \end{itemize}
-I sistemi a microkernel puri vegnono usati nelle applicazioni che \textbf{richiedono elevata affidabilità} (QNX neutrino, L4se). Altri sistemi, inizalmente a microkernel, si sono evoluti in \textbf{sistemi ibridi} (es. Windows NT, Darwin - kernel di macOS e iOS).
+I sistemi a microkernel puri vengono usati nelle applicazioni che \textbf{richiedono elevata affidabilità} (QNX neutrino, L4se). Altri sistemi, inizialmente a microkernel, si sono evoluti in \textbf{sistemi ibridi} (es. Windows NT, Darwin - kernel di macOS e iOS).
 \subsubsection{Struttura a moduli}
 In questa struttura, il kernel è \textbf{strutturato in componenti dinamicamente caricabili} (moduli), che parlano tra di loro \textbf{attraverso interfacce}.
 Quando il kernel ha bisogno di offrire un certo servizio, carica \textbf{dinamicamente} il modulo che lo implementa; quando il servizio non è più necessario, il kernel può scaricare il modulo.
@@ -1400,38 +1400,38 @@ Questo approccio ha alcune \textbf{caratteristiche di quelli a strati e a microk
 \subsubsection{Sistemi ibridi}
 In pratica, pochi sistemi operativi adottano una struttura "pura": quasi tutti \textbf{combinano i diversi approcci allo scopo di sistemi operativi indirizzati alle prestazioni, sicurezza, usabilità, ...}
 Per esempio, Linux e Solaris sono \textbf{monolitici per avere prestazioni elevate}, ma supportano anche i \textbf{moduli del kernel} per poter caricare e scaricare dinamicamente funzionalità.
-Altro esempio è Windows, il quale kernel inzialmente aveva una \textbf{struttura a microkernel}, ma successivamente diversi servizi sono stati riportati nel kernel per migliorare le prestazioni.
+Altro esempio è Windows, il quale kernel inizialmente aveva una \textbf{struttura a microkernel}, ma successivamente diversi servizi sono stati riportati nel kernel per migliorare le prestazioni.
 Ora è essenzialmente \textbf{monolitico}, pur conservando alcune caratteristiche della precedente architettura a microkernel. Inoltre, supporta i \textbf{moduli del kernel}.
 \subsection{Politiche e meccanismi}
 Quando discutiamo come è realizzato il kernel, è importante distinguere tra \textbf{politiche} e \textbf{meccanismi}.
 \begin{itemize}
     \item Una \textbf{politica} dice \textbf{QUANDO} una certa operazione viene effettuata: ad esempio, sotto che condizioni il kernel decide che è il momento di sospendere l'esecuzione di un programma per far riprendere l'esecuzione di un altro? (Preemption)
-    \item Un \textbf{meccanismo} spiega \textbf{COME} una certa operazione è effettuata: ad esempio, come fa il kernel a sospsendere l'esecuzione di un programma in maniera che successivamente possa riprnedere? Come fa a ripristinare l'esecuzione di un prrogramma precedentemente sospeso?
+    \item Un \textbf{meccanismo} spiega \textbf{COME} una certa operazione è effettuata: ad esempio, come fa il kernel a sospendere l'esecuzione di un programma in maniera che successivamente possa riprendere? Come fa a ripristinare l'esecuzione di un programma precedentemente sospeso?
 \end{itemize}
 Le politiche \textbf{impattano profondamente} sulle caratteristiche percepite dal sistema di elaborazione, i meccanismi no.
-I meccansimi sono quindi più \textbf{stabili} delle politiche, che spesso cambiano in funzione delle caratteristiche perceptie che vogliamo che il sistema di elaborazione abbia.
+I meccanismi sono quindi più \textbf{stabili} delle politiche, che spesso cambiano in funzione delle caratteristiche percepite che vogliamo che il sistema di elaborazione abbia.
 Avere politiche configurabili è utile per combattere la \textbf{maledizione della generalità}.
 \section{Processi e Thread: la struttura}
 I sistemi operativi hanno due obiettivi:
 \begin{itemize}
-    \item \textbf{Efficienza}: mantenere impeganta la (o le) CPU il maggior tempo possibile nell'esecuzione dei programmi (se ci sono programmi da eseuire)
+    \item \textbf{Efficienza}: mantenere impegnata la (o le) CPU il maggior tempo possibile nell'esecuzione dei programmi (se ci sono programmi da eseguire)
     \item \textbf{Reattività}: Dare l'illusione che ogni processo progredisca continuamente nella propria esecuzione, come se avesse una CPU dedicata; questo è particolarmente importante per i \textbf{programmi interattivi}, che devono reagire in tempi accettabili quando ricevono un input utente.
 \end{itemize}
 Le due tecniche adottate nei sistemi operativi per ottenere questi due obbiettivi sono la \textbf{multiprogrammazione} e il \textbf{multitasking} (o \textbf{time-sharing}):
 \begin{itemize}
-    \item \textbf{Obbiettivo della multiprogrammazione}: impredire che un programma non è in condizione di proseguire l'esecuzione mantenga la CPU
+    \item \textbf{Obbiettivo della multiprogrammazione}: impedire che un programma non è in condizione di proseguire l'esecuzione mantenga la CPU
     \item \textbf{Obbiettivo del multitasking}: Far si che un programma interattivo possa reagire agli input utente in un tempo accettabile
 \end{itemize}
-Bisogna notare che la multiprogrammazione non è una tecnica rilevante per i sistemi \textbf{puramenti batch} (cioè che non richiedono un input utente).
+Bisogna notare che la multiprogrammazione non è una tecnica rilevante per i sistemi \textbf{puramente batch} (cioè che non richiedono un input utente).
 L'obbiettivo della multiprogrammazione è massimizzare l'utilizzo della CPU. Gli \textbf{algoritmi di scheduling} sfruttano il fatto che, di norma, l'esecuzione di un processo è una sequenza di:
 \begin{itemize}
-    \item \textbf{Burst della CPU}: seqeunza di operazioni di CPU
+    \item \textbf{Burst della CPU}: sequenza di operazioni di CPU
     \item \textbf{Burst dell'I/O}: Attesa completamento di un'operazione di I/O
 \end{itemize}
 \begin{center}
     \includegraphics[width = 0.28\linewidth]{Images/36.png}
 \end{center}
-Diventa quindi necessario \textbf{gaurdare alla distribuzione delle durate dei burst della CPU}.
+Diventa quindi necessario \textbf{guardare alla distribuzione delle durate dei burst della CPU}.
 In un programma, quindi, si potrebbe avere
 \begin{itemize}
     \item \textbf{Prevalenza di burst I/O} (I/O Bound)
@@ -1457,10 +1457,10 @@ In entrambi i casi, la curva della distribuzione ha la forma riportata sotto, ma
 \end{center}
 \subsection{Multiprogrammazione}
 Il sistema operativo mantiene in memoria le immagini dei processi da eseguire.
-Quando una CPU non è impeganta ad eseguire un processo, il sistema operativo \textbf{seleziona un processo non in esecuzione e gli assegna la CPU}.
+Quando una CPU non è impegnata ad eseguire un processo, il sistema operativo \textbf{seleziona un processo non in esecuzione e gli assegna la CPU}.
 Quando un processo non può proseguire l'esecuzione (ad es. perché deve attendere il termine dell'input di dati che gli servono per proseguire), la sua CPU
 \textbf{viene assegnata ad un altro processo non in esecuzione}.
-Come risultato, se i processo sono più delle CPU, queste saranno impegante nell'esecuzione di qualche processo per la maggior parte del tempo.
+Come risultato, se i processo sono più delle CPU, queste saranno impegnate nell'esecuzione di qualche processo per la maggior parte del tempo.
 \subsubsection{Multiprogrammazione e memoria}
 La multiprogrammazione richiede che tutte le immagini di tutti i processi siano in memoria perché questi possano essere eseguibili.
 Se i processi sono troppi e non possono essere contenuti tutti in memoria, si adotta una tecnica che prende il nome di \textbf{swapping}, la quale viene utilizzata
@@ -1471,7 +1471,7 @@ Approfondiremo più avanti tutti questi aspetti.
 \subsection{Multitasking}
 Il multitasking è \textbf{un'estensione della multiprogrammazione} per i sistemi interattivi.
 La CPU viene "sottratta" periodicamente al programma in esecuzione ed assegnata ad un altro programma.
-In questo modo, tutti i programmio \textbf{progrediscono in maniera continuativa nella propria esecuzione}, anziché solo
+In questo modo, tutti i programmi \textbf{progrediscono in maniera continuativa nella propria esecuzione}, anziché solo
 nei momenti in cui il programma che detiene la CPU si mette in attesa.
 Questo fa si che i programmi batch, che hanno burst CPU lunghi pochi burst I/O, non monopolizzino la CPU a discapito dei programmi interattivi.
 \subsection{Implementazione di un processo}
@@ -1522,7 +1522,7 @@ Tali \textbf{decisioni di scheduling} possono essere effettuate in diversi momen
 \end{enumerate}
 Se il riassegnamento viene fatto solo nelle situazioni 1 e 4, lo \textbf{schema di scheduling} è detto \textbf{senza prelazione} (\textbf{non-preemptive}) o \textbf{cooperativo}, dal momento che un core viene liberato
 solamente quando un processo \textbf{volontariamente rinuncia ad esso}.
-Altrimenti, è detto \textbf{con prelazione} (\textbf{preemptive}), dal momento che un core può essere liberato perché un core viene \textbf{forzatamente} sottrato dal kernel ad un processo che lo sta usando.
+Altrimenti, è detto \textbf{con prelazione} (\textbf{preemptive}), dal momento che un core può essere liberato perché un core viene \textbf{forzatamente} sottratto dal kernel ad un processo che lo sta usando.
 Lo schema di scheduling preemptive \textbf{è più complicato da implementare}:
 \begin{itemize}
     \item Che succede se due processi condividono i dati?
@@ -1555,7 +1555,7 @@ A tale scopo, possono essere adottate diverse strategie (modelli di \textbf{mult
 \begin{itemize}
     \item \textbf{Molti-a-uno}: I thread a livello utente di un certo processo sono implementati su un solo thread a livello del kernel
     \begin{itemize}
-        \item \textbf{Vantaggio}: usabile su ogni sistema operativo (unica soluzione possibile se il sitema operativo non è multithreaded)
+        \item \textbf{Vantaggio}: usabile su ogni sistema operativo (unica soluzione possibile se il sistema operativo non è multithreaded)
         \item \textbf{Svantaggio}: Se un thread utente fa una chiamata di sistema bloccante blocca tutti i thread utente dello stesso processo
         \item \textbf{Altro svantaggio}: non sfrutta la presenza di più core
         \item Poco usata in pratica
@@ -1593,17 +1593,17 @@ Il PCB è di norma collegato ai TCB dei thread kernel utilizzati dal processo, e
 \subsection{Criteri di valutazione degli algoritmi di scheduling}
 In pratica, ogni sistema operativo ha i propri algoritmi di scheduling.
 Questo è indizio del fatto che non esiste una politica di scheduling "migliore" di tutte le altre.
-\textbf{Necessitiamo quindi di definire delle matriche per confrontare gli algoritmi di scheduling}.
+\textbf{Necessitiamo quindi di definire delle metriche per confrontare gli algoritmi di scheduling}.
 I principali criteri utilizzati sono:
 \begin{itemize}
     \item \textbf{Utilizzo della CPU}: percentuale di tempo in cui la CPU è attiva nell'esecuzione dei processi utente (dovrebbe essere tra il 40\% e il 90\%, in funzione del carico)
     \item \textbf{Throughput}: Numero di processi che completano l'esecuzione nell'unità di tempo (dipende dalla durata dei processi)
     \item \textbf{Tempo di completamento}: tempo necessario per completare l'esecuzione di un certo processo (dipende da molti fattori: durata del processo, carico totale, durata dell'I/0...)
-    \item \textbf{Tempo di attesa}: tempo trascorso dal processo nella ready queue (meglio del tempo di completamento, meno dipendente dala durata del processo e dall'I/O)
+    \item \textbf{Tempo di attesa}: tempo trascorso dal processo nella ready queue (meglio del tempo di completamento, meno dipendente dalla durata del processo e dall'I/O)
     \item \textbf{Tempo di risposta}: negli ambienti interattivi, tempo trascorso tra l'arrivo di una richiesta al processo e la produzione della prima risposta, sena l'emissione di questa nell'output
 \end{itemize}
 In questi appunti, terremo in considerazione prevalentemente \textbf{tempo di completamento e di attesa}.
-I criteri di valutazione di un algortimo di scheduling sono quindi:
+I criteri di valutazione di un algoritmo di scheduling sono quindi:
 \begin{itemize}
     \item \textbf{Massimo utilizzo della CPU}
     \item \textbf{Massimo Throughput}
@@ -1615,7 +1615,7 @@ Naturalmente, nessun algoritmo di scheduling può ottimizzare tutti i criteri co
 \subsection{Principali algoritmi di scheduling}
 Presentiamo in questa sezione i principali algoritmi di scheduling.
 \subsubsection{Scheduling in ordine di arrivo}
-Nello \textbf{scheduling in ordine di arrivo}, o \textbf{first-come-fist-served} (FCFS), la CPU \textbf{viene asseganta al primo processo che la richiede}
+Nello \textbf{scheduling in ordine di arrivo}, o \textbf{first-come-fist-served} (FCFS), la CPU \textbf{viene assegnata al primo processo che la richiede}
 \begin{itemize}
     \item \textbf{Vantaggio}: implementazione molto semplice (coda FIFO, nessuna prelazione)
     \item \textbf{Svantaggio}: tempo di attesa medio può essere lungo ("effetto convoglio")
@@ -1632,11 +1632,11 @@ Nello \textbf{scheduling per brevità}, o \textbf{shortest-job-first}, la CPU vi
 \begin{center}
     \includegraphics[width = 0.90\linewidth]{Images/46.png}
 \end{center}
-L'algoritmo \textbf{shortest-remaining-time-first} (SRTF) utiliza la \textbf{prelazione} per gestire il caso in cui i processi non arrivino tutti nello stesso istante:
+L'algoritmo \textbf{shortest-remaining-time-first} (SRTF) utilizza la \textbf{prelazione} per gestire il caso in cui i processi non arrivino tutti nello stesso istante:
 se nella ready queue arriva un processo con burst più corto di quello running, \textbf{quest'ultimo viene prelazionato dal nuovo processo}. Con preemption e tempo di arrivo:
 \begin{itemize}
     \item Il \textbf{tempo di attesa di un processo} è dato da
-    $$\textrm{instante di terminazione processo} - \textrm{tempp di arrivo} + \textrm{durata burst}$$
+    $$\textrm{instante di terminazione processo} - \textrm{temp di arrivo} + \textrm{durata burst}$$
     \item Il \textbf{tempo di completamento} di un processo è invece dato da
     $$\textrm{istante di terminazione processo} - \textrm{tempo di arrivo}$$
 \end{itemize}
@@ -1659,7 +1659,7 @@ Lo scheduling circolare presenta le seguenti caratteristiche:
     \item Comportamento \textbf{in funzione di $q$}:
     \begin{itemize}
         \item $q$ \textbf{elevato}: se $q$ è di regola maggiore della durata di tutti i burst, RR tende al FCFS
-        \item $q$ \textbf{basso}: deve comunque \textbf{essere molto più lungo della latenza di dispatch}, altrimenti questa si "mangia" un tempo comparabile al tempo di esecuzione dei processi utente e l'utilizzo della CPU diventa \textbf{inaccetabilmente basso}
+        \item $q$ \textbf{basso}: deve comunque \textbf{essere molto più lungo della latenza di dispatch}, altrimenti questa si "mangia" un tempo comparabile al tempo di esecuzione dei processi utente e l'utilizzo della CPU diventa \textbf{inaccettabilmente basso}
     \end{itemize}
     \item \textbf{Performance}:
     \begin{itemize}
@@ -1675,7 +1675,7 @@ Lo scheduling circolare presenta le seguenti caratteristiche:
 Nello scheduling con priorità, ad ogni processo è \textbf{associato un numero intero che indica la sua priorità}.
 Viene eseguito il processo con più altra priorità, gli altri aspettano (in sistemi UNIX-like, un numero più basso indica una maggiore priorità; in Windows il contrario).
 Questo tipo di algoritmi può essere \textbf{preemptive} oppure \textbf{non-preemptive}.
-Possono essere permessi più procesi con pari priorità oppure no; in caso positivo occorre stabilire un secondo algoritmo di scheduling per \textbf{abritrare tra i processi a pari priorità} (di solito si utilizza RR).
+Possono essere permessi più processi con pari priorità oppure no; in caso positivo occorre stabilire un secondo algoritmo di scheduling per \textbf{arbitrare tra i processi a pari priorità} (di solito si utilizza RR).
 SJF è un caso particolare di scheduling con priorità, dove quest'ultima l'\textbf{inverso della durata del CPU burst}.
 Questi algoritmi soffrono di un problema di \textbf{attesa indefinita} (\textbf{starvation}): un processo a priorità troppo bassa \textbf{potrebbe non venir mai schedulato}.
 La \textbf{soluzione} a questo tipo di problema prende il nome di \textbf{invecchiamento} (\textbf{aging}), ossia avviene un \textbf{aumento automatico della priorità di un processo al crescere del tempo di permanenza nella ready queue}.
@@ -1724,6 +1724,378 @@ La memoria centrale "vede" solo un \textbf{flusso di indirizzi} (richieste di le
 Le operazioni sui registri richiedono \textbf{un ciclo di clock}, viceversa, le operazioni sulla memoria richiedono \textbf{molti cicli di clock}, anche diverse centinaia, causando uno stallo (stall) del processore, durante il quale
 un core multithread può eseguire un altro thread hardware.
 Per aumentare l'efficienza degli accessi in memoria, vengono utilizzati diversi livelli di memorie cache tra processore e memoria centrale.
+Perché un processo possa andare in esecuzione, la sua \textbf{immagine} (codice + dati statici + stack + heap) deve essere presente in memoria centrale.
+In un sistema multiprogrammato, più immagini di più processi sono contemporaneamente nella memoria centrale.
+Il sistema operativo deve, pertanto, \textbf{allocare porzioni di memoria centrale ai diversi processi in funzione in funzione della necessità di tali processi}.
+Questo pone diversi problemi:
+\begin{itemize}
+    \item Che \textbf{strategie di allocazione} possiamo adottare?
+    \item Come \textbf{proteggiamo} la memoria del sistema operativo dai processi? E quella di ogni processo da ogni altro processo?
+    \item Se un programma può essere caricato, in momenti diversi, in posizioni diverse della memoria, come possono le istruzioni del programma \textbf{referenziare} le locazioni di memoria usate dal programma?
+\end{itemize}
+\subsection{Strategia di allocazione continua}
+È la strategia più semplice di allocazione della memoria in un sistema multiprogrammato.
+La memoria centrale è \textbf{partizionato in due zone}: una per il sistema operativo e una per i processi utente.
+Ogni processo utente \textbf{occupa un'area contigua di memoria nella partizione dei processi utente}, e in quell'area viene caricata la sua immagine.
+\begin{center}
+    \includegraphics[width = 0.40\linewidth]{Images/53.png}
+\end{center}
+\subsubsection{Protezione con registro base e limite}
+È il più semplice metodo di protezione utilizzabile con l'allocazione continua.
+Il processore possiede \textbf{due registri}, un registro \textbf{base} ed un registro \textbf{limite}.
+Il registro base contiene \textbf{il più piccolo indirizzo della memoria fisica che il processo corrente ha il permesso di accedere}, mentre il registro limite \textbf{determina la dimensione dell'intervallo ammesso}.
+\begin{center}
+    \includegraphics[width = 0.40\linewidth]{Images/54.png}
+\end{center}
+I registri base e limite possono essere impostati \textbf{solamente in kernel mode}. In user mode, il processore \textbf{proibisce tutte le operazioni di lettura e scrittura al di fuori dell'intervallo individuato dai registri base e limite}.
+Nel caso in cui venga generato un indirizzo fuori dall'intervallo, \textbf{l'indirizzo non viene messo sul bus e viene generata un'eccezione}. In kernel mode, invece, il processore può accedere a tutta la memoria.
+\begin{center}
+    \includegraphics[width = 0.80\linewidth]{Images/55.png}
+\end{center}
+\subsubsection{MMU con registro di rilocazione}
+La soluzione con registro base e limite ha uno svantaggio: \textbf{non fornisce uno spazio di indirizzamento virtuale ai processi}.
+L'unico modo per implementare uno spazio di indirizzamento virtuale con tale soluzione sarebbe il \textbf{binding in fase di caricamento}, ma questo è molto lento!
+Pertanto si preferiscono soluzioni basate sul \textbf{binding in fase di esecuzione}.
+Gli indirizzi generati dalla CPU quando esegue un programma sono detti \textbf{indirizzi logici}, mentre gli indirizzi che arrivano alla memoria centrale sono detti \textbf{indirizzi fisici}.
+Il binding in fase di esecuzione \textbf{è l'unico metodo nel quale indirizzi logici e fisici differiscono}.
+La \textbf{Memory Management Unit (MMU)} è il dispositivo hardware che traduce indirizzi logici in indirizzi fisici.
+La MMU interviene solamente \textbf{in user mode}: in kernel mode, gli indirizzi generati dalla CPU \textbf{sono direttamente indirizzi fisici}, quindi, se il sistema operativo deve accedere alla memoria di un processo, deve tradurre "manualmente" gli indirizzi logici del processo in indirizzi fisici.
+\begin{center}
+    \includegraphics[width = 0.70\linewidth]{Images/56.png}
+\end{center}
+La MMU più semplice utilizzabile con lo schema di allocazione contigua è la MMU con \textbf{registro di rilocazione}.
+È una variazione dello schema con registri base e limite, dove il registro base è ora chiamato \textbf{registro di rilocazione}.
+L'indirizzo fisico è ottenuto \textbf{sommando all'indirizzo logico il valore del registro di rilocazione}.
+In tal modo, i programmi hanno l'illusione di avere uno spazio di indirizzamento virtuale che va dall'indirizzo 0 a un indirizzo massimo par al valore contenuto nel registro limite.
+Nel registro base (di rilocazione) viene caricato \textbf{l'indirizzo più basso dell'area contigua di memoria assegnata al processo}; nel registro limite viene invece caricata la \textbf{dimensione di tale area di memoria}.
+Se l'indirizzo logico supera tale valore, \textbf{viene generata un'interruzione} (intercettata dall'OS, che di solito interrompe il processo).
+\begin{center}
+    \includegraphics[width = 0.70\linewidth]{Images/57.png}
+\end{center}
+\subsubsection{Svantaggi dell'allocazione contigua}
+Nell'allocazione contigua, ogni processo ottiene una partizione di memoria distinta.
+Si ha quindi uno \textbf{schema a partizioni variabili}, cioè la partizione di memoria ottenuta dal processo è pari alla memoria necessaria ad esso.
+Un \textbf{buco} è una regione di memoria libera contigua, ed ogni processo riceve la sua partizione di memoria da un \textbf{buco abbastanza grande da contenerla}.
+Quando un processo termina, esso libera la sua partizione \textbf{creando un nuovo buco}, e buchi adiacenti sono \textbf{uniti}.
+\begin{center}
+    \includegraphics[width = 0.70\linewidth]{Images/58.png}
+\end{center}
+Il sistema operativo mantiene una \textbf{lista dei buchi disponibili} sparsi nella memoria centrale.
+Alla creazione di un nuovo processo, il sistema operativo sceglie un buco dal quale prendere la memoria necessaria ad esso secondo una strategia:
+\begin{itemize}
+    \item \textbf{First-fit}: sceglie il primo buco sufficientemente grande da contenere l'immagine del processo
+    \item \textbf{Best-fit}: sceglie il buco più piccolo
+    \item \textbf{Worst-fit}: sceglie il buco più grande
+\end{itemize}
+First-fit e Best-fit sono \textbf{sperimentalmente migliori} in quanto a tempo ed efficienza.
+L'approccio ad allocazione contigua soffre, quindi, di un problema di \textbf{frammentazione}:
+\begin{itemize}
+    \item \textbf{Frammentazione esterna}: la memoria libera è \textbf{sufficiente} per la creazione di un nuovo processo, ma è \textbf{sparsa tra buchi non contigui troppo piccoli}
+    \item \textbf{Frammentazione interna}: se la memoria allocata ad uin processo è \textbf{più grande della memoria necessaria}, una partizione può contenere \textbf{memoria inutilizzata}.
+    \item La memoria inutilizzata segue la \textbf{regola del 50\%}: lo spazio inutilizzabile tende ad essere circa il 50\% dello spazio utilizzato
+\end{itemize}
+Un possibile rimedio alla frammentazione è la \textbf{compattazione}:
+\begin{itemize}
+    \item Spostare le partizioni in maniera da poter unire buchi separati
+    \item Richiede un \textbf{binding in fase di esecuzione} (rilocazione dinamica)
+    \item È \textbf{molto onerosa in termini computazionali}
+    \item Inoltre se il processo effettua I/O allora non può essere rilocato; alternativamente, l'I/O va fatto solo in \textbf{buffer del sistema operativo}
+\end{itemize}
+La frammentazione è un \textbf{problema generale} che si verifica anche nelle memorie secondarie.
+\subsection{Paginazione}
+L'idea dietro alla \textbf{paginazione} è quella di permettere una allocazione di memoria ai processi \textbf{non contigua}.
+La memoria centrale viene divisa in \textbf{frames}, ossia blocchi di dimensione fissa (tra 512 bytes e 16 MBytes).
+Similmente, lo spazio di indirizzamento virtuale di ogni processo è diviso in \textbf{pagine}, ossia \textbf{blocchi delle stesse dimensioni dei frames}.
+Una \textbf{tabella delle pagine (paging table)} associa le pagine di un processo ai frames in memoria centrale, permettendo alla MMU di tradurre gli indirizzi logici in fisici.
+\begin{itemize}
+    \item \textbf{Vantaggi}:
+    \begin{itemize}
+        \item Non vi è più \textbf{frammentazione esterna}
+        \item Vi è \textbf{piena indipendenza tra indirizzi logici e fisici} (ad esempio, si possono avere indirizzi logici a 64 bit anche se la memoria fisica è più piccola)
+    \end{itemize}
+    \item \textbf{Svantaggi}: frammentazione interna
+\end{itemize}
+Un indirizzo logico è diviso in:
+\begin{itemize}
+    \item \textbf{Numero di pagina (p)}: usato come indice nella paging table
+    \item \textbf{Offset di pagina (d)}: offset all'interno della pagina (identico all'offset nel frame)
+\end{itemize}
+Se lo spazio di indirizzi logici ha dimensione $2^m$ e le pagine hanno dimensione $2^n$, allora il \textbf{numero totale di pagine è $2^{m-n}$}.
+\begin{center}
+    \includegraphics[width = 0.40\linewidth]{Images/59.png}
+\end{center}
+La MMU traduce un indirizzo logico in fisco in questo modo:
+\begin{enumerate}
+    \item Estrae il \textbf{numero di pagina} dall'indirizzo logico
+    \item Utilizza il numero di pagina per \textbf{ricavare dalla paging table il corrispondente numero di frame}
+    \item Concatena \textbf{il numero di frame all'offset della pagine e ottiene l'indirizzo fisico}
+\end{enumerate}
+\begin{center}
+    \includegraphics[width = 0.80\linewidth]{Images/60.png}
+\end{center}
+Nel caso medio, la \textbf{frammentazione interna} è di \textbf{mezzo frame per processo}.
+Questo suggerisce di fare pagine di \textbf{dimensione ridotte} per ridurre lo spreco di memoria; tuttavia, così facendo, \textbf{aumenta il numero totale di pagine} e, di conseguenza, \textbf{la dimensione della paging table}.
+Per tale motivo, nel tempo la tendenza è stata di avere pagine di \textbf{dimensioni maggiori}: ad esempio, Windows 10 supporta pagine di 4 KByte e pagine di 2 MByte.
+\subsubsection{Supporto hardware e dell'OS alla paginazione}
+Il sistema operativo deve mantenere la tabella delle pagine di ciascun processo.
+Inoltre, deve mantenere una \textbf{tabella dei frame}, che indica lo stato di ogni frame (libero o assegnato, e, in tal caso, a che processo/i).
+Se il kernel deve accedere alla memoria di un processo, deve effettuare "manualmente" la traduzione degli indirizzi logici del processo in indirizzi fisici (quando la CPU è in kernel mode, \textbf{la MMU non è attiva}).
+La tabella delle pagine è \textbf{mantenuta in memoria centrale} (è di regola troppo grande per avere dei registri ad hoc).
+La MMU utilizza due registri:
+\begin{itemize}
+    \item \textbf{Page table base register (PTBR)}: Indirizzo fisico dell'inizio della tabella delle pagine
+    \item \textbf{Page table length register (PTLR)}: Dimensione della tabella delle pagine
+\end{itemize}
+In tale schema, ogni accesso a dati/istruzioni \textbf{richiede due accessi in memoria}, uno alla tabella delle pagine ed uno per il recupero del dato.
+Esso ciò troppo oneroso, si fa ricorso ad una cache apposita per la tabella delle pagine chiamata \textbf{translation lookaside buffer (TLB)}.
+Il TLB è di solito di dimensioni molto ridotte (da 64 a 1024 voci massime).
+Il \textbf{principale problema del TLB} è che, ad \textbf{ad ogni cambio di contesto}, è necessario effettuare il flush del TLB, il che comporta una notevole riduzione di prestazioni.
+Per tale motivo, alcuni TLB memorizzano un \textbf{address space identifier (ASID)} nelle loro voci, i quali identificano \textbf{univocamente uno spazio di indirizzi}, così da poter mantenere le entry di più tabelle delle pagine.
+Gli ASI sono anche usati per implementare la \textbf{protezione della memoria}.
+\begin{center}
+    \includegraphics[width = 0.70\linewidth]{Images/61.png}
+\end{center}
+Ho un \textbf{TLB hit} se il numero di pagina di un indirizzo logico si trova nel TLB, altrimenti ho un \textbf{TLB miss}.
+Il \textbf{tasso di successi (hit ratio)} è dato dalla \textbf{percentuale di TLB hit sul totale degli accessi}.
+Supponendo che il tempo di accesso alla memoria sia $ma$ e lo hit ratio sia $hr$, \textbf{il tempo medio di accesso alla memoria}, o \textbf{effective access time (EAT)} è:
+$$EAT = ma \cdot hr + 2 ma(1-hr) = ma(2-hr)$$
+questo calcolo è effettuato senza tener conto delle maggiori o minori probabilità di cache hit o miss.
+Se capita un \textbf{TLB miss} ma \textbf{il TLB è pieno}, occorre sostituire una entry.
+Per farlo vi sono diverse strategie:
+\begin{itemize}
+    \item \textbf{Last Recently Used} (LRU)
+    \item \textbf{Round Robin}
+    \item \textbf{Casuale}
+\end{itemize}
+Alcuni processori generano un interrupt in maniera da permettere al sistema operativo di \textbf{partecipare alla decisione di quale entry sostituire}.
+Alcuni processori permettono invece al sistema operativo di \textbf{vincolare} (wire down) delle TLB entry che non vogliono mai sostituite.
+\subsubsection{Protezione della memoria}
+Il registro PTLR permette di "tagliare" la tabella delle pagine in maniera da \textbf{ridurre gli indirizzi logici disponibili al processo}.
+Il vantaggio quindi di avere il registro PTLR sta nel fatto di poter \textbf{ridurre la dimensione della tabella delle pagine}.
+In alternativa, si può mettere in ogni entry della tabella delle pagine un \textbf{bit di validità}, che indica se \textbf{l'entry è valida o no}, ossia se la pagine è \textbf{effettivamente mappata su un frame}.
+Il vantaggio di avere un \textbf{bit di validità} è dato dalla possibilità di \textbf{avere maggiore flessibilità}, in quanto posso creare \textbf{intervalli di indirizzi logici inaccessibili in qualsiasi punto dello spazio di indirizzi logici}.
+Altri bit contenuti nella tabella delle pagine permettono di indicare se il frame associato è:
+\begin{itemize}
+    \item Read-only o Read-Write (\textbf{bit di protezione})
+    \item Eseguibile o no (\textbf{bit di esecuzione})
+\end{itemize}
+\subsubsection{Pagine condivise}
+Con la paginazione, è facile \textbf{condividere memoria fisica tra più processi}: è sufficiente infatti che i frame siano \textbf{nelle tabelle delle pagine dei processi che li condividono}.
+Le applicazioni di questo sono molteplici:
+\begin{itemize}
+    \item Condividere il codice (in maniera read-only!) tra più processi, ad esempio il codice delle librerie di sistema, \textbf{risparmiando così spazio in memoria}
+    \item Realizzare la comunicazione interprocesso tramite memoria condivisa
+\end{itemize}
+\subsubsection{Struttura delle tabelle delle pagine per grandi spazi di indirizzamento virtuali}
+Con spazi di indirizzamento virtuali grandi (32 o 64 bit), le tabelle delle pagine \textbf{possono diventare a loro volta molto grandi}:
+\begin{itemize}
+    \item Abbiamo detto che, se le pagine sono grandi $2^n$ e lo spazio di indirizzamento virtuale è grande $2^m$, le pagine sono in tutto $2^{m-n}$
+    \item Supponendo che ogni entry occupa $e$ byte di dimensione, in totale la tabella delle pagine ha dimensione $e \cdot 2^{m-n}$
+    \item Esempio: in un processore a 32 bit con pagine di 4 KB (12 bit) ed entries di 4 Byte, la dimensione della tabella delle pagine è 4 MB
+    \item Esempio: in un processore a 64 bit, a parità degli altri parametri, la tabella delle pagine (di un solo processo) dovrebbe avere dimensione di 16 PB!
+\end{itemize}
+Per tale motivo, esistono varie soluzioni per strutturare le tabelle delle pagine \textbf{in maniera tale che siano sufficiente piccole ed efficienti}:
+\begin{itemize}
+    \item Tabelle delle pagine \textbf{gerarchiche}
+    \item Tabelle delle pagine \textbf{di tipo Hash}
+    \item Tabelle delle pagine \textbf{invertite}
+\end{itemize}
+\subsubsection{Tabelle delle pagine gerarchiche}
+Servono per evitare di \textbf{allocare una tabella delle pagine in una regione di memoria contigua}.
+L'idea è quella di \textbf{paginare la tabella delle pagine}; si ha quindi una \textbf{tabella a due livelli}:
+\begin{itemize}
+    \item Ogni numero di pagine è diviso a sua volta in \textbf{un numero di pagina e in un offset}
+    \item Questi sono utilizzati per recuperare da una \textbf{tabella esterna delle pagine l'indirizzo della pagina della tabella delle pagine}
+    \item Questa, infine, è utilizzata per costruire l'indirizzo fisico
+\end{itemize}
+Schemi a più di due livelli sono possibili.
+\begin{center}
+    \includegraphics[width = 0.70\linewidth]{Images/62.png}
+\end{center}
+Un \textbf{vantaggio} di questo metodo è che la tabella delle pagine gerarchica permette di \textbf{supportare contemporaneamente pagine di dimensioni diverse}:
+\begin{itemize}
+    \item Basta marcare un'entry nella tabella delle pagine esterne perché sia considerata un'entry di ultimo livello
+    \item Soluzione usata ad esempio nelle architetture IA-32 (sotto) e ARMv8
+    \begin{center}
+        \includegraphics[width = 0.70\linewidth]{Images/63.png}
+    \end{center}
+    \item Permette di ridurre il numero di livelli (e quindi accessi in memoria dopo una TLB miss) e la dimensione della tabella
+\end{itemize}
+Lo \textbf{svantaggio principale} è che \textbf{aumenta il numero di accessi in memoria per recuperare un dato/istruzione} nel caso pessimo.
+Per tale motivo, si tende a non utilizzare questo metodo con i processori a 64 bit.
+\subsubsection{Tabelle delle pagine di tipo hash}
+L'idea dietro questo metodo è la \textbf{strutturazione della tabella delle pagine come una tabella hash}.
+Si applica quindi una \textbf{funzione di hash} (semplice!) al numero di pagine.
+Ogni entry della tabella ha una \textbf{lista concatenata di elementi} per gestire le \textbf{eventuali collisioni} (liste di trabocco). 
+\begin{center}
+    \includegraphics[width = 0.70\linewidth]{Images/64.png}
+\end{center}
+\subsubsection{Tabelle delle pagine invertite}
+L'idea dietro a questo metodo è \textbf{tracciare i frame e non le pagine}. Nella tabella delle pagine, quindi, vi è \textbf{un entry per ogni frame, anziché per ogni pagina}.
+Ogni entry riporta il \textbf{numero di pagina del corrispondente frame}, più informazioni addizionali tra cui l'ASID, che in questo caso si rende \textbf{necessario}.
+\begin{center}
+    \includegraphics[width = 0.70\linewidth]{Images/65.png}
+\end{center}
+\begin{itemize}
+    \item \textbf{Vantaggi}:
+    \begin{itemize}
+        \item Una sola tabella per tutti i processi
+        \item Se lo spazio di indirizzi fisici è \textbf{più piccolo dello spazio di indirizzi virtuali}, c'è un ulteriore risparmio
+    \end{itemize}
+    \item \textbf{Svantaggi}:
+    \begin{itemize}
+        \item Maggiore tempo di accesso (occorre fare una ricerca per trovare l'entry); mitigabile con tabelle hash e TLB
+        \item Non è possibile condividere pagine tra processi diversi
+    \end{itemize}
+    \item Utilizzata nelle architetture Power e UltraSPARC 64
+\end{itemize}
+\subsection{Swapping}
+Se la memoria è poca rispetto al numero di processi, \textbf{pochi processi possono essere ammessi all'esecuzione}.
+Lo \textbf{swapping} è una tecnica che permette di eseguire più processi di quanti la memoria fisica ne possa contenere.
+L'idea alla sua base è di \textbf{spostare temporaneamente l'immagine di un processo pronto o in attesa dalla memoria centrale alla memoria secondaria} (backing store, di solito il disco);
+diciamo che tale processo viene \textbf{sospeso}.
+L'obbiettivo è permettere ad un altro processo di andare in memoria, e quindi, in prospettiva, di andare in esecuzione.
+Vi sono due possibili varianti:
+\begin{itemize}
+    \item \textbf{Swapping standard}: quello a cui di solito si riferisce il termine "swapping"
+    \item \textbf{Swapping con paginazione}: quello che di solito si intende con "paginazione"
+\end{itemize}
+\subsubsection{Swapping standard}
+Nello swapping standard, un intero processo viene \textbf{spostato dalla memoria centrale alla backing store}; questa operazione prende il nome di \textbf{swap out}.
+Occorre spostare anche tutte le strutture dati del sistema operativo relative al processo e ai thread.
+Lo \textbf{svantaggio} di questo metodo è che spostare un intero processo \textbf{è molto oneroso}, tanto che solo Solaris utilizza ancora lo swapping standard in circostanze estreme.
+\begin{center}
+    \includegraphics[width = 0.70\linewidth]{Images/66.png}
+\end{center}
+\subsubsection{Swapping con paginazione}
+Nello swapping con paginazione, solamente delle \textbf{pagine} di un processo vengono spostate sul backing storage; fino a quando non vi è sufficiente memoria per caricare l'immagine del nuovo processo.
+Questa tecnica è \textbf{molto meno onerosa dello swapping standard}.
+L'operazione di scaricamento di una pagina dalla memoria centrale è detta \textbf{page out}, mentre l'operazione inversa è detta \textbf{page in}.
+\begin{center}
+    \includegraphics[width = 0.70\linewidth]{Images/67.png}
+\end{center}
+\subsection{Grado di multiprogrammazione}
+Definiamo come \textbf{grado di multiprogrammazione} il numero massimo di processi che lo scheduler della CPU può mandare in esecuzione (ready + running + waiting).
+Il grado di multiprogrammazione determina l'occupazione totale di memoria fisica da parte dei processi:
+\begin{itemize}
+    \item In \textbf{assenza di memoria virtuale}, quando un processo può essere mandato in esecuzione solo se la sua immagine è internamente in memoria, il grado di multiprogrammazione è \textbf{uguale al numero di immagini in memoria}
+    \item In generale, chiamiamo \textbf{processi in memoria} l'insieme dei processi ready+running+waiting e \textbf{processi fuori memoria} tutti gli altri processi: il grado di multiprogrammazione è \textbf{il numero di processi in memoria}
+\end{itemize}
+Il grado di multiprogrammazione è correlato anche con \textbf{l'utilizzazione della CPU}:
+\begin{itemize}
+    \item Se è basso, anche l'utilizzazione \textbf{tende ad essere bassa}, perché quando i processi vanno in attesa, \textbf{non ci sono abbastanza processi ready per tenere occupati i processori}
+    \item Al crescere del grado di multiprogrammazione, aumenta \textbf{il numero di processi che, in media, sono ready} e quindi anche l'utilizzazione dei processori
+\end{itemize}
+Chi controlla però il grado di multiprogrammazione?
+\begin{itemize}
+    \item Lo \textbf{scheduler a lungo termine} (o admission scheduler) decide se \textbf{ammettere un nuovo processo dopo la sua creazione nella ready queue}: in questo modo influisce sul grado di multiprogrammazione \textbf{sul lungo periodo}
+    \item Lo \textbf{scheduler a medio termine} sospende un processo per farne \textbf{swapping e portarlo fuori memoria} e, viceversa, fa \textbf{riprendere dalla sospensione un processo riportandolo in memoria}: in questo modo influisce sul grado di multiprogrammazione sul medio periodo.
+    \item Lo \textbf{scheduler a breve termine} (scheduler della CPU) \textbf{non influisce sul grado di multiprogrammazione}
+\end{itemize}
+\begin{center}
+    \includegraphics[width = 1\linewidth]{Images/68.png}
+\end{center}
+\subsection{Memoria virtuale}
+Abbiamo detto che un processo deve avere la sua immagine \textbf{completamente in memoria per essere eseguito}.
+In realtà, nella pratica si verificano le seguenti cose:
+\begin{itemize}
+    \item Raramente la memoria di un processo \textbf{viene usata integralmente}
+    \item Raramente \textbf{viene usata tutta nello stesso istante}
+\end{itemize}
+Consideriamo quindi la possibilità di poter eseguire un programma \textbf{anche se la sua immagine è caricata in memoria solo in parte}; questo ha alcuni vantaggi:
+\begin{itemize}
+    \item Il processo potrebbe avere un'immagine più grande della memoria fisica disponibile
+    \item Se ogni processo ha bisogno di meno memoria fisica, si può aumentare il numero di processi in memoria, aumentando il grado di multiprogrammazione e quindi l'utilizzo del processore senza aumento nei tempi di risposta o turnaround
+    \item Più processi in memoria può significare meno I/O necessario per lo swapping
+\end{itemize}
+La \textbf{memoria virtuale} è la \textbf{completa separazione tra memoria logica e memoria fisica di un programma}.
+Un processo può essere eseguito \textbf{anche se solo una parte di esso è in memoria fisica}.
+Lo spazio di indirizzamento virtuale può essere molto più grande dello spazio di indirizzamento fisico.
+Vi sono \textbf{due possibili implementazioni}:
+\begin{itemize}
+    \item \textbf{Paginazione su richiesta}
+    \item \textbf{Segmentazione su richiesta} (non presente in questi appunti)
+\end{itemize}
+\subsubsection{Paginazione su richiesta}
+La \textbf{paginazione su richiesta} (demand paging) è basata sull'hardware di paginazione.
+L'idea alla base di questo processo è quella di \textbf{non portare l'intero processo in memoria alla creazione}, ma solo le \textbf{pagine che vengono volta per volta usate}:
+\begin{itemize}
+    \item Una pagina viene \textbf{caricata in memoria} quando viene utilizzata durante l'esecuzione di un programma
+    \item Il resto del processo \textbf{risiede nella backing store}
+\end{itemize}
+Questo processo è simile allo swapping con paginazione, ma questo individua le pagine da scaricare/caricare in maniera \textbf{predittiva}, mentre la paginazione su richiesta
+lo fa \textbf{in base all'uso}.
+L'hardware di paginazione deve fornire un \textbf{opportuno supporto alla paginazione su richiesta}. La tabella delle pagine deve possedere il \textbf{bit di validità} per indicare se una certa
+pagina è \textbf{non valida oppure assente dalla memoria}.
+Una volta che il programma tenta un accesso ad una pagina il cui bit di validità è impostato a zero, la MMU genera un'interruzione di \textbf{page fault}.
+Il sistema operativo, a questo punto, \textbf{gestisce il page fault}, e se questo è stato generato perché la pagine è \textbf{assente in memoria}, allora la porta in memoria.
+L'hardware, inoltre, deve permettere la riesecuzione dell'istruzione interrotta da un page fault in maniera \textbf{trasparente} al programma.
+Infine, occorre un'area opportuna, chiamata \textbf{swap space}, nella backing store dove memorizzare le pagine fuori memoria.
+Come però viene gestita, nel dettaglio, una page fault?
+Il sistema operativo \textbf{decide se la pagina che ha generato il fault è non valida o non in memoria}:
+\begin{itemize}
+    \item Nel primo caso: \textbf{terminazione del processo}
+    \item Nel secondo caso: \textbf{caricamento pagina dal backing store}
+\end{itemize}
+Come avviene questo processo?
+\begin{enumerate}
+    \item Il sistema operativo \textbf{trova un frame libero}
+    \item Quindi, schedula \textbf{l'operazione di caricamento dalla backing store}
+    \item Avviene un \textbf{possibile cambio di contesto nell'attesa}
+    \item Al ripristino, \textbf{aggiorna la tabella delle pagine con il frame caricato} (e setta il bit di validità)
+    \item Quindi \textbf{ritorna dall'interruzione di page fault} e il processore \textbf{riesegue l'istruzione che era stat interrotta}
+\end{enumerate}
+\begin{center}
+    \includegraphics[width = 0.80\linewidth]{Images/69.png}
+\end{center}
+Vi possono essere diverse \textbf{politiche di caricamento pagina}:
+\begin{itemize}
+    \item \textbf{Paginazione su richiesta pura}: le pagine vengono caricate solo quando servono (ad esempio, all'avvio di un processo non viene caricata alcuna pagina)
+    \item \textbf{Prefetching}: vengono caricate anche altre pagina in un "intorno" della pagina richiesta
+\end{itemize}
+La riesecuzione dell'istruzione interrotta da un page fault può essere \textbf{complessa} quando l'istruzione occupa/modifica \textbf{più parole di memoria su pagine diverse} (cosa particolarmente vera per i processori CISC):
+\begin{itemize}
+    \item Ad esempio, l'IBM 370 aveva un'istruzione macchina SS MOVE lunga 6 byte, che quindi poteva esistere a cavallo di due frame
+    \item Aveva due operandi a \textbf{doppia indirezione di memoria}, quindi nel caso pessimo effettuava 4 accessi in memoria per ottenere gli operandi
+    \item In totale, l'esecuzione di tale istruzione, nel caso pessimo, poteva generare 6 page fault
+    \item Altre architetture hanno istruzioni la cui esecuzione può generare ancora più page fault!
+\end{itemize}
+La paginazione su richiesta è \textbf{efficiente} se i page fault sono \textbf{pochi rispetto alle istruzioni eseguite}, cosa di regola garantita dal fenomeno della \textbf{località dei riferimenti}.
+Secondo il \textbf{modello di località}, in un cero momento, un processo opera su una certa \textbf{località}, ossia su un certo \textbf{sottoinsieme di pagine}.
+I processi nel tempo "migrano" da una località all'altra.
+Località diverse possono sovrapporsi. Se ogni processo riesce a tenere in memoria, in ogni istante, le sue località, i page fault sono \textbf{pochi e sono concentrati nei momenti in cui il processo migra di località}.
+Come vengono gestiti, invece, i frame liberi? Essi vengono gestiti attraverso una \textbf{lista dei frame liberi} mantenuta dall'OS.
+I frame vanno \textbf{azzerati} (zero-fill) prima di essere assegnati ad un processo per evitare dei \textbf{leak di informazioni}.
+Man mano che i processi richiedono frame, la lista si riduce: se si azzera, o scende sotto una certa dimensione, \textbf{occorre ripopolarla}
+Se definiamo le seguenti constanti:
+\begin{itemize}
+    \item $p =$ probabilità di un page fault (\% page fault per istruzioni eseguite)
+    \item $ma = $ tempo medio di accesso alla memoria
+    \item $pf = $ tempo medio di gestione del page fault
+\end{itemize}
+Allora il \textbf{tempo medio di accesso effettivo è}:
+$$EAT = (1-p)ma + p \cdot pf = ma + p(pf-ma) \approx ma + p \cdot pf$$
+Notare che $pf$ è composto dal \textbf{servizio eccezione + caricamento pagina da backing store + ripristino processo}, ma è dominato dal
+tempo di caricamento da backing store.
+Ad esempio, per $pf = 8$ msec e $ma = 200$ nsec, se vogliamo un rallentamento massimo del $10\%$, occorre che i page fault siano meno di uno ogni $400.000$ accessi a memoria.
+\subsection{Copy on Write (COW)}
+\begin{center}
+    \includegraphics[width = 0.60\linewidth]{Images/70.png}
+\end{center}
+\textbf{Copy on Write (COW)} permette ad un processo figlio di condividere tutte (non solo quelle read-only) le pagine con il processo padre.
+Se uno dei due processi modifica una pagine condivisa, \textbf{la pagina viene copiata}. Questo meccanismo è utile per la fork().
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
