@@ -1266,7 +1266,7 @@ l'ISP quindi \textbf{alloca bit aggiuntivi alla maschera di sottorete, sottraend
 Tutti gli spazi di indirizzamento derivati da questa operazione saranno \textbf{disgiunti}, quindi ogni organizzazione avrà assegnato un suo indirizzo di sottorete
 diverso dalle altre. Ovviamente, queste nuove sottoreti potranno \textbf{indirizzare un numero minore di host}.
 Una proprietà interessante, derivante dall'operazione di subnetting, prende il nome di \textbf{route aggregation}:
-immaginiamo di essere nella seguente sitauzione:
+immaginiamo di essere nella seguente situazione:
 \begin{center}
     \includegraphics[width =0.80\linewidth]{Images/92.png}
 \end{center}
@@ -1638,7 +1638,7 @@ Facciamo un esempio:
     \item e così via...
 \end{itemize}
 Quando esistono molteplici cammini, BGP deve sceglierne uno \textbf{basandosi su delle regole}, cioè le \textbf{policies}.
-Quando parliamo, quindi, di routin inter-AS, ciò che domina sono di solito \textbf{aspetti di tipo politico-economico}; vediamo quindi le differenze nelle \textbf{policy} nei due casi:
+Quando parliamo, quindi, di routing inter-AS, ciò che domina sono di solito \textbf{aspetti di tipo politico-economico}; vediamo quindi le differenze nelle \textbf{policy} nei due casi:
 \begin{itemize}
     \item \textbf{Inter-AS}: l'amministratore di rete vuole avere controllo di COME il traffico venga instradato e CHI viene instradato nella sua rete
     \item \textbf{Intra-AS}: Vi è solo un amministratore di sistema, quindi le politiche rappresentano un problema minore
@@ -1816,7 +1816,7 @@ Come funziona?
     \item Se un nodo deve trasmettere una trama, \textbf{lo trasmetterà nel prossimo slot disponibile}
     \begin{itemize}
         \item Se \textbf{non si verifica una collisione}: il nodo può mandare la prossima trama da trasmettere nel prossimo slot
-        \item Se \textbf{si verifica una collisione}: Il nodo \textbf{ritrasmettere} la trama in ogni susseguente slot con \textbf{probabilità $p$ di trasmettere} fino a quando ha succeso
+        \item Se \textbf{si verifica una collisione}: Il nodo \textbf{ritrasmettere} la trama in ogni susseguente slot con \textbf{probabilità $p$ di trasmettere} fino a quando ha successo
     \end{itemize}
 \end{itemize}
 La probabilità $p$ aggiunge casualità al protocollo, il che risulta \textbf{fondamentale}, poiché, se si continuasse a ritrasmettere in ogni slot successivo,
@@ -2093,7 +2093,7 @@ Ethernet è quindi un protocollo:
     \item \textbf{Connectionless}: non vi è handshaking tra le interfacce mittente e ricevente
     \item \textbf{Inaffidabile}: L'interfaccia ricevente non manda ACK o NAK all'interfaccia mittente. I dati nei frame scartati vengono recuperati
     solamente se il mittente utilizza un \textbf{protocollo affidabile a più alto livello} (es. TCP), altrimenti i dati scartati vengono \textbf{persi}
-    \item Ethernet ha ad esso associato il \textbf{protocollo per la condivisione del canale CMSA/CD con binary backoff} (per le versioni vecchie)
+    \item Ethernet ha ad esso associato il \textbf{protocollo per la condivisione del canale CSMA/CD con binary backoff} (per le versioni vecchie)
 \end{itemize}
 \subsection{Switch Ethernet}
 Uno switch è un \textbf{dispositivo del livello di collegamento}:
