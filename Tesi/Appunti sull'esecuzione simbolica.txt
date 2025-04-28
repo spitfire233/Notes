@@ -1,0 +1,88 @@
+Analisi del software:
+ - Analisi statica: deduce le proprietà legate alla qualità del software esaminando il codice sorgente del programma
+ - Analisi dinamica: deduce le proprietà legate alla qualità del software esaminando il programma in esecuzione
+
+- L'analisi è utile per controllare esaustivamente le proprietà che sono difficili da testare:
+    - Fault che possono causare failure:
+        - Raramente
+        - Sotto condizioni difficili da controllare
+    - Esempi:
+        - Race condition
+        - Accessi sbagliati alla memoria
+        - Mancati controlli per puntatori nulli
+        - ...
+    - È utile per estrarre e riassumere le informazioni per l'ispezione e il design di test
+
+- L'analisi può essere sia manuale che automatica
+    - Meglio automatizzarla; gli umani non sono bravi a svolgere mansioni ripetitive e tediose
+    - L'automatizzazione dell'analisi rimpiazza l'ispezione umana per alcune classi di fault
+      e supporta l'ispezione tramite:
+        - l'automazione dell'estrazione e il riassunto delle informazioni
+        - Navigando attraverso le informazioni rilevanti
+
+ANALISI STATICA:
+ - Controlla se esistono nel codice dei pattern riconoscibili che probabilmente porteranno ad un fault
+ - Diverse tecniche:
+    - Symbolic execution
+    - Data Flow Analysis
+    - Control flow analysis
+    - Program slicing
+    - Finite state verification / Model checking
+    - ...
+
+Symbolic execution:
+ - Crea un ponte fra la logica di un programma e il suo comportamento
+ - Costruisce vincoli (logici) che caratterizzano
+    - Gli input che eseguono i cammini del programma
+    - L'effetto dell'esecuzione sullo stato del programma
+ - Con il termine "program path" ci riferiamo a un cammino sul control-flow-graph interprocedurale del programma
+ - Un program path è "feasible" se:
+    - Esiste un valore di input concreto V tale che quando il programma è eseguito con V come suo input, esegue le istruzioni lungo il cammino
+ - Un program path è "infeasible" se:
+    - Non esiste un valore di input V tale che il cammino viene eseguito
+    - Un cammino infeasible non implica necessariamente del codice morto, tuttavia del codice morte implica un infeasible path
+ - Constraint e soddisfacibilità:
+    - Per esempio: X > Y AND X + Y <= 10
+    - X e Y sono dette VARIABILI LIBERE
+    - Una soluzione per i constraint è un insieme di assegnamenti, uno per ogni variabile libera, che rendono i constrain soddisfacibili
+    - ES. {X= 3, Y = 2} è una soluzione
+    - Un constraint è SODDISFACIBILE SSE esiste almeno una soluzione
+ - Constraint e procedure di decisione:
+    - Una DECISION PROCEDURE è uno strumento che può decidere se un constrain è soddisfacibile
+    - Un CONSTRAINT SOLVER è una DECISION PROCEDURE che trova assegnamenti che soddisfano un constraint, se esso è soddisfacibile
+    - In generale, controllare la soddisfacibilità di un constraint è un problema indecidibile
+    - Tuttavia può essere risolto in svariati casi pratici:
+        - I constraint lineari possono essere risolti molto spesso in maniera efficiente
+        - Esistono risolutori automatici:
+            - Z3
+            - Altri
+ - L'esecuzione simbolica riguarda l'esecuzione di un programma con "simboli" come suoi argomenti
+ - A differenza di un'esecuzione concreta, dove il cammino è determinato dall'input, nell'esecuzione simbolica il programma può INTRAPRENDERE (e quindi analizzare) OGNI FEASIBLE PATH
+ - Durante l'esecuzione simbolica, lo stato del programma consiste di
+    - Valori simbolici per alcune aree di memoria
+    - PATH CONDITIONS
+ - Valori simbolici:
+    - I valori simbolici sono espressioni riguardanti simboli
+    - Eseguire statements computa nuovi valori simbolici
+    es. abbiamo 3 variabili, low, high, mid
+    in esecuzione simbolica, sarebbe per esempio:
+        low = L
+        high = H
+        mid = (L + H)/2
+ - Gestione dei branch:
+    - L'esecuzione simbolica può percorrere OGNI CAMMINO FEASIBLE
+    - Per gestire un branch, aggiungiamo, come parte dello stato di esecuzione,
+      un espressione che registra la condizione per l'esecuzione di quel branch: una PATH CONDITION 
+    - Una PATH CONDITION è una condizione sui simboli di input tale che se un cammino è feasible allora la sua path condition è soddisfacibile
+    - La soluzione di una path condition è un input di test che copre il rispettivo cammino
+
+
+
+
+
+
+
+
+
+
+
