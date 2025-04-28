@@ -1266,7 +1266,7 @@ l'ISP quindi \textbf{alloca bit aggiuntivi alla maschera di sottorete, sottraend
 Tutti gli spazi di indirizzamento derivati da questa operazione saranno \textbf{disgiunti}, quindi ogni organizzazione avrà assegnato un suo indirizzo di sottorete
 diverso dalle altre. Ovviamente, queste nuove sottoreti potranno \textbf{indirizzare un numero minore di host}.
 Una proprietà interessante, derivante dall'operazione di subnetting, prende il nome di \textbf{route aggregation}:
-immaginiamo di essere nella seguente sitauzione:
+immaginiamo di essere nella seguente situazione:
 \begin{center}
     \includegraphics[width =0.80\linewidth]{Images/92.png}
 \end{center}
@@ -1638,7 +1638,7 @@ Facciamo un esempio:
     \item e così via...
 \end{itemize}
 Quando esistono molteplici cammini, BGP deve sceglierne uno \textbf{basandosi su delle regole}, cioè le \textbf{policies}.
-Quando parliamo, quindi, di routin inter-AS, ciò che domina sono di solito \textbf{aspetti di tipo politico-economico}; vediamo quindi le differenze nelle \textbf{policy} nei due casi:
+Quando parliamo, quindi, di routing inter-AS, ciò che domina sono di solito \textbf{aspetti di tipo politico-economico}; vediamo quindi le differenze nelle \textbf{policy} nei due casi:
 \begin{itemize}
     \item \textbf{Inter-AS}: l'amministratore di rete vuole avere controllo di COME il traffico venga instradato e CHI viene instradato nella sua rete
     \item \textbf{Intra-AS}: Vi è solo un amministratore di sistema, quindi le politiche rappresentano un problema minore
@@ -1816,7 +1816,7 @@ Come funziona?
     \item Se un nodo deve trasmettere una trama, \textbf{lo trasmetterà nel prossimo slot disponibile}
     \begin{itemize}
         \item Se \textbf{non si verifica una collisione}: il nodo può mandare la prossima trama da trasmettere nel prossimo slot
-        \item Se \textbf{si verifica una collisione}: Il nodo \textbf{ritrasmettere} la trama in ogni susseguente slot con \textbf{probabilità $p$ di trasmettere} fino a quando ha succeso
+        \item Se \textbf{si verifica una collisione}: Il nodo \textbf{ritrasmettere} la trama in ogni susseguente slot con \textbf{probabilità $p$ di trasmettere} fino a quando ha successo
     \end{itemize}
 \end{itemize}
 La probabilità $p$ aggiunge casualità al protocollo, il che risulta \textbf{fondamentale}, poiché, se si continuasse a ritrasmettere in ogni slot successivo,
@@ -1944,24 +1944,230 @@ Un'altra famiglia di protocolli a rotazione prende il nome di \textbf{token pass
 \end{itemize}
 \subsection{Local Area Networks (LAN)}
 Le reti locali, più precisamente dette \textbf{reti locali commutate}, sono un tipo di collegamento
-più complesso rispetto a quelli visti fino ad ora, cioè rispetto ai link broadcast. In una rete locale, \textbf{le trame possono venir commutati tra una sorgente e una destinazione che si trovano fisicamente adiacenti}.
+più complesso rispetto a quelli visti fino ad ora, cioè rispetto ai link broadcast. In una rete locale, \textbf{le trame possono venir commutati tra una sorgente e una destinazione che si trovano fisicamente adiacenti (cioè possono essere raggiunti senza passare da un router)}.
 La commutazione e lo switching viene effettuato dagli \textbf{switch}, un commutatore di pacchetti che agisce al livello 2 della rete.
 \begin{center}
-    \includegraphics[width =1\linewidth]{Images/124.png}
+    \includegraphics[width =0.60\linewidth]{Images/124.png}
 \end{center}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+Le reti locali commutate permettono quindi di commutare una trama da un nodo sorgente verso un nodo destinazione fisicamente adiacente ad esso; ovviamente, la trama viene trasmessa a livello 2 della rete, ed è quindi
+necessario utilizzare un \textbf{indirizzo per recapitarla}. L'indirizzo più utilizzato per effettuare l'operazione di commutazione in una LAN è il \textbf{Medium Access Control} (MAC), la quale funzione è \textbf{recapitare una trama da un interfaccia ad un altra nella stessa sottorete} (inoltro di livello 2).
+L'indirizzo MAC, nella maggior parte delle LAN, è formato da 48 bit \textbf{permanentemente associati all'interfaccia fisica degli host e dei router} (a volte è possibile impostarla tramite software).
+Le porte degli switch, invece, \textbf{non possiedono un indirizzo MAC}. 
+I 48 bit di un indirizzo MAC sono raggruppati in \textbf{gruppi da 4 bit}; ogni due cifre si ha un tratto ed esse vengono \textbf{annotate in notazione decimale} con un valore che va da $0$ a $F$.
+\begin{center}
+    \includegraphics[width =0.60\linewidth]{Images/125.png}
+\end{center}
+Quindi, \textbf{ogni interfaccia in una LAN} presenta:
+\begin{itemize}
+    \item Un \textbf{indirizzo MAC a 48-bit globalmente univoco}
+    \item Un \textbf{indirizzo IP a 32-bit localmente univoco}
+\end{itemize}
+\begin{center}
+    \includegraphics[width =0.60\linewidth]{Images/126.png}
+\end{center}
+Quindi, se si sposta un host in un'altra sottorete, il suo indirizzo IP cambierà, tuttavia \textbf{il suo indirizzo MAC rimarrà identico}.
+Facciamo ulteriori considerazioni:
+\begin{itemize}
+    \item L'allocazione degli indirizzi MAC è amministrata dalla IEEE
+    \item Un costruttore \textbf{compra uno spazio di indirizzamento MAC per i propri dispositivi} (per assicurare l'unicità)
+    \item L'indirizzamento MAC è quindi \textbf{piatto} e permette la portabilità:
+    \begin{itemize}
+        \item Si può muovere un'interfaccia da una LAN all'altra senza che l'indirizzo MAC cambi
+        \item Se si muove un'interfaccia da una LAN all'altra, cambierà tuttavia il suo indirizzo IP
+    \end{itemize}
+\end{itemize}
+\subsection{Address Resolution Protocol (ARP)}
+Ciò che sappiamo quando inviamo un pacchetto è \textbf{l'indirizzo IP di un'interfaccia}. Come facciamo però a determinare l'indirizzo IP di un'interfaccia, conoscendo il suo indirizzo IP, per permettere l'inoltro della trama all'interno di una LAN?
+Per farlo, si utilizza il protocollo \textbf{Address Resolution Protocol} (ARP), nel quale ogni router e host \textbf{possiede una tabella, denominata ARP table}:
+\begin{itemize}
+    \item Nella tabella sono \textbf{memorizzate le associazioni IP/MAC per alcuni dei nodi della LAN}. Il formato in cui vengono memorizzati è il seguente:
+    $$<\textrm{IP address}; \textrm{MAC address}; \textrm{TTL}>$$
+    \item Il \textbf{Time To Live} (TTL) rappresenta il tempo dopo il quale \textbf{l'associazione sarà dimenticata} (tipicamente ogni 20 minuti)
+\end{itemize}
+Come funziona però ARP?
+\begin{enumerate}
+    \item Supponiamo che $A$ voglia mandare un datagramma a $B$; tuttavia, l'indirizzo MAC di $B$ non si trova nella ARP table di $A$, quindi quest'ultimo usa ARP per trovare l'indirizzo MAC di $B$
+    \begin{center}
+        \includegraphics[width =1\linewidth]{Images/127.png}
+    \end{center}
+    \item $A$ invia una trama (ethernet) in broadcast, che prende il nome di \textbf{ARP query} (o \textbf{ARP request}), contenente:
+    \begin{itemize}
+        \item Gli indirizzi IP e MAC di $A$ e \textbf{l'indirizzo IP di B}
+        \item Il MAC address di destinazione \textbf{impostato a FF-FF-FF-FF-FF-FF} (indirizzo di broadcast per il livello 2)
+        \item Tutti i nodi della LAN ricevono la ARP query
+    \end{itemize}
+    \begin{center}
+        \includegraphics[width =1\linewidth]{Images/128.png}
+    \end{center}
+    \item $B$ risponde ad $A$ (in unicast, cioè direttamente) con un messaggio, che prende il nome di \textbf{ARP response} (o \textbf{ARP reply}), contenente il suo MAC address
+    \begin{center}
+        \includegraphics[width =0.90\linewidth]{Images/129.png}
+    \end{center}
+    \item $A$ riceve la risposta di $B$ e aggiunge la tripla $<\textrm{IP address}; \textrm{MAC address}; \textrm{TTL}>$ alla sua ARP table locale
+    \begin{center}
+        \includegraphics[width =1\linewidth]{Images/130.png}
+    \end{center}
+\end{enumerate}
+Il protocollo non lo forza, tuttavia, quando si riceve un ARP query, \textbf{si può già inserire la tripla relativa al nodo che ha inviato la trama in broadcast}; questo perché
+molto spesso la comunicazione è bidirezionale. ARP viene utilizzato anche quando \textbf{viene fatto l'indirizzamento verso altre sottoreti}.
+Facciamo une esempio; consideriamo la seguente situazione:
+\begin{center}
+    \includegraphics[width =1\linewidth]{Images/131.png}
+\end{center}
+assumiamo che $A$ conosca
+\begin{itemize}
+    \item \textbf{L'indirizzo IP} di $B$
+    \item \textbf{L'indirizzo IP} del primo router da attraversare, $R$; nello specifico l'indirizzo dell'interfaccia che \textbf{connette la sottorete di destinazione}.
+    Questo indirizzo IP viene ottenuto \textbf{durante il protocollo DHCP} e viene chiamato \textbf{default gateway address}; esso è l'indirizzo IP che bisogna utilizzare per comunicare con il mondo esterno
+\end{itemize}
+Vogliamo quindi inviare un datagramma da $A$ verso $B$; come facciamo?
+\begin{enumerate}
+    \item $A$ crea un datagramma IP contenente l'IP di A come sorgente e l'IP di $B$ come destinazione; dopodiché $A$ crea una trama, che incapsula il datagramma, con MAC address di destinazione \textbf{il MAC address dell'interfaccia del router}, il quale sarà a sua volta stato ottenuto con ARP.
+    \begin{center}
+        \includegraphics[width =1\linewidth]{Images/132.png}
+    \end{center}
+    \item Il frame viene inviato da $A$ ad $R$. $R$ decapsulerà la trama per \textbf{ottenere il datagramma}, il quale verrà passato al livello di rete.
+    \begin{center}
+        \includegraphics[width =0.901\linewidth]{Images/133.png}
+    \end{center}
+    \item $R$ determina l'interfaccia di uscita, passa il datagramma con IP di $A$ come sorgente e IP di $B$ come destinazione allo strato di collegamento, il quale lo incapsulerà in una trama. \textbf{l'indirizzo MAC di destinazione della trama dovrà essere ottenuto con ARP}
+    \begin{center}
+        \includegraphics[width =0.90\linewidth]{Images/134.png}
+    \end{center}
+    \item $R$ invia la trama a $B$; dove avverrà il decapsulamento per ottenere il datagramma
+\end{enumerate}
+\subsection{Ethernet}
+Ethernet risulta il \textbf{protocollo di collegamento dominante} al giorno d'oggi.
+\begin{itemize}
+    \item È stato il primo protocollo LAN utilizzato diffusamente 
+    \item Semplice ed economico
+    \item È rimasto al passo nella \textbf{corsa alla velocità di trasmissione}: può trasmettere dai 10 Mbps ai 400 Gbps
+    \item Un unico chip può \textbf{gestire più velocità} (es. Broadcom BCM5761); due interfacce quindi possono \textbf{adeguarsi se una delle due ha velocità di trasmissione massima più bassa dell'altra}
+\end{itemize}
+\begin{center}
+    \includegraphics[width =0.70\linewidth]{Images/135.png}
+\end{center}
+Ethernet utilizza un \textbf{topologia fisica}:
+\begin{itemize}
+    \item \textbf{Bus}: popolare durante la metà degli anni '90
+    \begin{itemize}
+        \item Ogni BUS era un singolo \textbf{dominio di collisione}; cioè un segmento di rete dove i nodi \textbf{possono collidere quando effettuano una comunicazione}
+    \end{itemize}
+    \item \textbf{Switched}: prevale al giorno d'oggi
+    \begin{itemize}
+        \item Al centro della topologia viene posto uno \textbf{switch di livello 2}
+        \item Ogni nodo \textbf{parla Ethernet con lo switch separatamente}; (i nodi, quindi, non collidono gli uni con gli altri)
+    \end{itemize}
+\end{itemize}
+\begin{center}
+    \includegraphics[width =0.90\linewidth]{Images/136.png}
+\end{center}
+L'interfaccia mittente incapsulerà il datagramma IP (o il datagramma di un altro protocollo di rete) in un \textbf{frame Ethernet}:
+\begin{center}
+    \includegraphics[width =0.90\linewidth]{Images/137.png}
+\end{center}
+vediamolo nel dettaglio:
+\begin{itemize}
+    \item \textbf{Preambolo}: Di lunghezza di 8 byte, di cui i primi 7 presentano la sequenza di bit $10101010$ mentre l'ultimo presenta la sequenza di bit $10101011$.
+    Il preambolo serve per \textbf{sincronizzare il mittente con il destinatario, per fare in modo che il segnale (a livello fisico) possa essere ricevuto correttamente}; il pattern illustrato sopra serve quindi proprio a questo scopo.
+    Il fatto di avere un pattern conosciuto nel preambolo \textbf{permette al ricevitore di stimare la velocità di trasmissione del mittente, così da poter adeguare il proprio tasso di ricevimento}.
+    \item \textbf{Indirizzi}: Entrambi di lunghezza di 6 byte; sono i MAC address di sorgente e destinazione
+    \begin{itemize}
+        \item Se l'interfaccia riceve un frame con un indirizzo di destinazione corrispondente al proprio, oppure con l'indirizzo MAC di broadcast (es. pacchetto ARP), allora passa il payload nel frame al protocollo di rete
+        \item Altrimenti, scarta il frame
+    \end{itemize}
+    \item \textbf{Tipo}: Di lunghezza di 2 byte; indica il protocollo di rete utilizzato
+    \begin{itemize}
+        \item Perlopiù IP, ma sono possibili anche altri protocolli (es. AppleTalk)
+        \item Usato per effettuare demultiplazione al ricevente
+    \end{itemize}
+    \item \textbf{Cyclic Redundancy Check (CRC)}: Di lunghezza 4 byte; è il checksum. Se viene rilevato un errore, il frame viene scartato
+    \item \textbf{Payload}: di lunghezza da 46 a 1500 byte.
+    \begin{itemize}
+        \item 1500 byte è \textbf{l'unita di trasporto massima (Maximum Transport Unit (MTU))}
+        \item Se il dato da trasportare è inferiore a 46 byte, allora il payload deve essere "riempito" con dei bit di "stuffing" che si ripetono con \textbf{un pattern predefinito}.
+    \end{itemize}
+\end{itemize}
+Ethernet è quindi un protocollo:
+\begin{itemize}
+    \item \textbf{Connectionless}: non vi è handshaking tra le interfacce mittente e ricevente
+    \item \textbf{Inaffidabile}: L'interfaccia ricevente non manda ACK o NAK all'interfaccia mittente. I dati nei frame scartati vengono recuperati
+    solamente se il mittente utilizza un \textbf{protocollo affidabile a più alto livello} (es. TCP), altrimenti i dati scartati vengono \textbf{persi}
+    \item Ethernet ha ad esso associato il \textbf{protocollo per la condivisione del canale CSMA/CD con binary backoff} (per le versioni vecchie)
+\end{itemize}
+\subsection{Switch Ethernet}
+Uno switch è un \textbf{dispositivo del livello di collegamento}:
+\begin{itemize}
+    \item Esso effettua lo \textbf{store-and-forward} dei frame ethernet
+    \item Esso \textbf{esamina il MAC address di destinazione delle trame in entrata} e le invia \textbf{selettivamente} su uno o più collegamenti in uscita
+    \item Lo switch è un dispositivo \textbf{trasparente}; cioè gli host e i router non sono a conoscenza della presenza di switch
+    \item Gli switch sono dispositivi \textbf{plug-and-play} e \textbf{apprendono in maniera automatica}; quindi non è necessario configurarli
+    \item Gli switch sono differenti dagli \textbf{Ethernet Hub (o repeater)}, i quali sono dispositivi di livello 1 (fisico) che effettuano un broadcast del segnale su una porta di input a tutte le porte di output
+\end{itemize}
+Gli host hanno una \textbf{connessione diretta e dedicata allo switch}; sul quale viene utilizzato il \textbf{protocollo Ethernet}, quindi non vi sono collisioni e la comunicazione su uno switch risulta \textbf{full-duplex}, cioè \textbf{più comunicazioni possono avvenire in contemporanea attraverso di esso senza che vi siano collisioni fra i pacchetti}.
+Gli switch sono inoltre in grado di effettuare \textbf{buffering dei pacchetti}, esattamente come i router.  
+\begin{center}
+    \includegraphics[width =0.40\linewidth]{Images/138.png}
+\end{center}
+Tuttavia, usando l'esempio sopra, \textbf{non possono avvenire in contemporanea le trasmissioni da $A$ ad $A'$ e da $C$ ad $A'$}; questo perché, a livello di \textbf{piano dei dati}, lo switch
+ha un'architettura \textbf{analoga a quella di un router}, quindi, sullo switching fabric, non posso avere due pacchetti sulla stessa interfaccia di uscita, poiché avrei una collisione.
+I pacchetti quindi necessitano di essere \textbf{bufferizzati}, e ciò può portare a tutti i problemi visti per i router (HOL-Blocking ecc...).
+\begin{center}
+    \includegraphics[width =0.40\linewidth]{Images/139.png}
+\end{center}
+Come fa quindi lo switch a sapere che, per esempio, $A'$ è raggiungibile tramite l'interfaccia $4$ e che $B'$ è raggiungibile attraverso l'interfaccia $5$?
+Ogni switch ha una \textbf{switch table}, di cui ogni voce:
+\begin{itemize}
+    \item presenta \textbf{l'indirizzo MAC dell'host di destinazione, l'interfaccia tramite cui raggiungere questo host e il TTL}
+    \item Assomiglia alla tabella di inoltro di un router
+\end{itemize}
+Come vengono create le voci di questa tabella? Lo switch effettua un'operazione che prende il nome di \textbf{self-learning}:
+\begin{itemize}
+    \item Lo switch \textbf{apprende in modo autonomo} quali host possono essere raggiunti attraverso una determinata interfaccia
+    \item Quando lo switch riceve un frame ethernet, lo switch \textbf{impara da quale collegamento è raggiungibile la sorgente della trama}
+    \begin{center}
+        \includegraphics[width =0.50\linewidth]{Images/140.png}
+    \end{center}
+\end{itemize}
+Tuttavia, questo permette solamente di imparare come raggiungere la sorgente. Come faccio a \textbf{inoltrare la trama alla destinazione corretta?} Come faccio ad \textbf{inoltrare la trama?}
+Quando una trama viene ricevuta dallo switch
+\begin{enumerate}
+    \item Registra (incoming link, source MAC address) dell'host mittente
+    \item Interroga la tabella di switching utilizzando il MAC address della destinazione
+    \item \textbf{Se viene trovata una voce per la destinazione} allora
+    \begin{enumerate}
+        \item \textbf{Se la destinazione è sul collegamento da cui è arrivato il frame}, allora scarta il frame
+        \item \textbf{Altrimenti} inoltra il frame sull'interfaccia indicata dalla voce della tabella
+    \end{enumerate}
+    \item \textbf{Altrimenti} effettua un flood; cioè \textbf{invia su tutte le interfacce eccetto quella da cui è arrivato il frame}
+\end{enumerate}
+Con gli switch, si possono creare anche delle \textbf{topologie molto complesse}, formate da \textbf{switch interconnessi}
+\begin{center}
+    \includegraphics[width =0.50\linewidth]{Images/141.png}
+\end{center}
+Come faccio quindi, in questo caso, a mandare una trama da $A$ a $G$; cioè come fa $S_1$ a sapere che deve inviare il frame prima ad $S_4$ e poi a $S_3$?
+\textbf{Viene sempre utilizzato l'algoritmo sopra!} Il problema di questo tipo di architettura è che \textbf{i messaggi di flooding comportano un onere di comunicazione abbastanza elevato},
+sopratutto su reti LAN abbastanza grandi. Quali sono quindi le differenze e le analogie tra switch e router?
+\begin{itemize}
+    \item \textbf{Entrambi sono dispositivi di tipo store-and-forward}:
+    \begin{itemize}
+        \item \textbf{Router}: Dispositivi del livello di rete (esaminano gli header del livello di rete)
+        \item \textbf{Switch}: Dispositivi del livello di collegamento (esaminano gli header del livello di collegamento)
+    \end{itemize}
+    \item \textbf{Entrambi hanno tabelle di inoltro}:
+    \begin{itemize}
+        \item \textbf{Router}: computano le tabelle di inoltro usando degli algoritmi di routing (lavorano sugli indirizzi IP)
+        \item \textbf{Switch}: computano le tabelle usando \textbf{flooding e reactive learning} (lavorano sugli indirizzi MAC)
+    \end{itemize}
+    \item \textbf{Hanno la stessa architettura rispetto al piano dei dati}:
+    \begin{itemize}
+        \item Porte di input, tabelle di inoltro, switching fabric, porte di output
+    \end{itemize}
+    \item \textbf{Sono profondamente differenti rispetto al piano di controllo}:
+    \begin{itemize}
+        \item \textbf{Router}: piano di controllo distribuito (algoritmi di routing)
+        \item \textbf{Switch}: piano di controllo locale (self-learning)
+    \end{itemize}
+\end{itemize}
 
 \end{document}
