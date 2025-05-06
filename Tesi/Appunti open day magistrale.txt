@@ -1,0 +1,50 @@
+UNIMI:
+ - Come tutte le lauree magistrali, i docenti che trattano un argomento offrono il corso riguardante
+   quell'argomento
+ - Forse il dipartimento di informatica più grande d'europa???? (il prof non era certo)
+ - Il dipartimento è strutturato in laboratori (come tutte le università)
+ - La maggior parte degli studenti si laureano in corso
+- INFORMATICA LM-18:
+    - 13 esami in due anni
+    - Completamente sostanzialmente a scelta:
+        - 9 caratterizzanti
+        - 2 affini
+        - 2 liberi (OGNI corso offerto da UNIMI)
+        - Esame di inglese
+        - 39 CFU di tesi (zio pera)
+        - Il "corso" è l'unità base dell'insegnamento
+        - Ogni corso sono 6 CFU
+        - Ci si aspetta una buona conoscenza dell'inglese (B2)
+    - 4 aree disciplinari (4 pillars):
+        - AI e Data Analytics
+            - Corsi legati all'area data driven
+            - Corsi legati all'area dell'IA e Machine Learning
+        - Computing systems in Industry, Business & Medicine
+        - Algoritmi, Software e Theory
+        - Interaction and Multimedia
+    - Il corso non è pensato per essere seguito a distanza; più dei 3/4 corsi vengono seguite in presenza
+    - Il grafico mostra il seguente indice di soddisfazione:
+        - YES!: più o meno 1/4
+        - yes: più o meno 2/4
+        - no/NO!: 1/4 insieme
+    - L'anno accademico è diviso in 4 quadrimestri
+        - Circa 6 ore alla settimana per insegnamento
+        - Circa 18 ore di lezione alla settimana (3 corsi al quadrimestre)
+
+- SICUREZZA INFORMATICA LM-66:
+    - Durata del corso: 2 anni
+    - Organizzazione didattica in quadrimestri:
+        - 1° quadrimestre: 15 settembre 2025 - 21 novembre 2025
+        - PAUSA ESAMI
+        - 2° quadrimestre: 12 gennaio 2026 - 20 marzo 2026
+        - PAUSA ESAMI
+        - 3° quadrimestre 13 aprile 2026 - 19 giugno 2026
+        - PAUSA ESAMI
+    - Insegnamenti: 6 CFU di 42 ore di didattica frontale
+    - Pool di insegnamenti a SCELTA GUIDATA
+    - Entra in vigore dall' A.A. 2025/26
+    - La maggior parte degli insegnamenti sono obbligatori
+    - 12 CFU di insegnamenti a scelta guidata (2 corsi)
+    - 12 CFU di insegnamenti a scelta libera (2 corsi se scelti da quelli di scelta guidata)
+    - 39 CFU di tesi
+    - Requisiti curriculari:

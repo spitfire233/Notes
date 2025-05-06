@@ -1,0 +1,98 @@
+- L'esecuzione simbolica è un metodo per scoprire
+  quali input causano l'esecuzione di differenti parti del programma
+- L'opposto di un'esecuzione concreta
+
+- Usi:
+    - Tracciare i possibili cammini che un binario può intraprendere
+    - Determinare quali input possono portare a certi cammini
+
+- Ogni valore di cui non si conoscere il valore a runtime viene sostituito da una variabile simbolica
+
+- Online symbolic execution: ogni cammino viene esplorato contemporaneamente
+- Offline symbolic execution: il contrario di online
+
+- Ad ogni branch è associata una PATH CONDITION
+
+DEFINIZIONI:
+ - Concrete execution: esecuzione concreta del programma con valori reali
+ - Symbolic execution: esecuzione emulata del programma; ogni volta che si incontra
+   qualcosa di cui non si conosce il valore lo si sostituisce con una variabile simbolica.
+   Si registra ogni operazione che avviene sulla variabile simbolica
+    - Si finisce ad avere una specie di equazione che si può risolvere ed ottenere gli input
+      con cui si può attraversare un determinato cammino
+ - SSE (Static Symbolic Execution): Esecuzione simbolica statica
+ - DSE (Dynamic Symbolic Execution o Concolic): Viene effettuata l'esecuzione simbolica del programma
+   nel frattempo che viene eseguito concretamente
+ - Bitvectors:  Quando si emula un programma, prendiamo le istruzioni assembly e le trasformiamo in una rappresentazione
+   intermedia; chiamata Bitvectors. Angr usa i bitvectors poiché Z3, l'SMT solver che usa angr, utilizza bitvectors
+ - Basic Block: un blocco di codice
+ - Constraint: vincoli sull'input per raggiungere un determinato cammino
+
+CONSTRAINT E CONSTRAINT SOLVERS:
+ - Un insieme di oggetti che deve soddisfare una certo insieme di constraint o limitazioni
+ - Vi sono differenti tipi di solvers -> SAT o SMT
+ - Angr usa Z3 e claripy per risolvere i constraint
+ - Un SMT solver lavora sul campo degli interi
+ - Un SAT lavora su valori booleani
+ - Più constraint -> Buono
+ - Meno constraint -> Path explosion
+
+PRO E CONTRO DELL'ESECUZIONE SIMBOLICA: 
+ - PRO:
+    - Semplifica certi problemi che prenderebbero troppo tempo manualmente
+    - Idealmente, non c'è bisogno di eseguire concretamente il programma
+    - Può essere usato per determinare la raggiungibilità del codice vulnerabile
+ - CONTRO:
+    - Richiede una buona comprensione del problema
+    - Path explosion
+    - Mancanza di supporto da parte dell'ambiente
+    - Non scalabile
+
+ANGR:
+ - Costruito su:
+    - CLE (Binary loader)
+    - Pyvex (Emulatore di istruzioni, usato da valgrind; trasforma le istruzioni in intermidiate representation (IR))
+    - Claripy (Prende la IR e la trasforma in bitvectors)
+    - Z3 (SMT solver; una volta trovato un cammino e dei costraint, Z3 lo risolverà e ridarà una soluzione)
+ - Molte feature:
+    - CFG generation
+    - Symbolic Execution
+    - ROP Gadget Finder
+    - GUI
+
+COME FUNZIONA ANGR:
+ 1) Il binario viene caricato da CLE
+ 2) Le istruzioni assembly vengono trasformate in IR (VexIR)
+ 3) SymEngine e Claripy effettuano l'emulazione dell'istruzione e le cambiano in bitvectors. SymOS simula le piattaforme (Linux, Windows, ECC...)
+
+- Si può utilizzare angr per trovare vulnerabilità
+- Se ad un punto qualsiasi l'IP (Instruction Pointer) diventa SIMBOLICO e quel buffer simbolico è SOTTO CONTROLLO DELL'UTENTE; si può rilevare con angr
+
+
+APPUNTI SULLA DOCUMENTAZIONE:
+
+- Concetti chiave:
+  - Per caricare un binario, è necessario creare un progetto:
+      proj = angr.Project("<binary>")
+  - Un progetto è la base di controllo per angr. Con esso, sarai in grado
+    di 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
