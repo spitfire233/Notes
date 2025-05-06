@@ -1105,7 +1105,93 @@ La procedura di raggiungibilità è definita come segue:
 L'euristica viene quindi impostata a $|\pi(s)|$, cioè il numero di azioni del piano rilassato.
 Quest'euristica viene chiamata \textbf{piano rilassato} $h$ o $h_{FF}$; tuttavia, seppur sia \textbf{informativa} (è piuttosto accurata), essa \textbf{non è ammissibile}.
 \subsection{Probabilistic Planning}
-WIP
+Gli agenti in ambienti reali sono inevitabilmente
+costretti a \textbf{prendere decisioni} basandosi su \textbf{informazioni incomplete}.
+Anche quando un agente \textbf{percepisce l'ambiente}, raramente riesce ad estrarne lo \textbf{stato esatto}.
+Possiamo quindi rappresentare queste situazioni di incertezza utilizzando il calcolo della teoria delle probabilità.
+In questo caso quindi:
+$$\textrm{Percezione} = \textrm{Stima dello stato}$$
+$$\textrm{Azione} = \textrm{Ottimizzazione dell'utilità (utility)}$$
+\subsubsection{Riassaunto di teoria della probabilità}
+La teoria delle probabilità è lo studio di come la conoscenza influenza le "credenze" (belief):
+\begin{itemize}
+    \item La "credenza" è una qualche proposizione $\alpha$; è misurato in termini di un numero tra $0$ e $1$
+    \item Se la probabilità di $\alpha$ è $0$, allora significa che $\alpha$ è una "credenza" che si crede essere \textbf{definitivamente falsa} (nessuna nuova prova cambiera questa "credenza");
+    se la probabilità di $\alpha$ è 1 allora ciò significa che $\alpha$ è una "credenza" che si crede \textbf{definitivamente vera}
+    \item Se la probabilità che un agente assegna ad $\alpha$ è compresa tra 0 e 1, ciò non significa che $\alpha$ è per un certo grado "vera", ma invece che l'agente
+    non sa per certo se $\alpha$ è vero o falsa. La probabilità riflette "l'ignoranza" dell'agente
+\end{itemize}
+Gli assiomi della probabilità sono i seguenti: $Pr(A)$ denota la probabilità che una proposizione $A$ sia vera; allora:
+\begin{itemize}
+    \item $0 \leq Pr(A) \leq 1$
+    \item $Pr(True) = 1$ e $Pr(False) = 0$
+    \item $Pr(A \vee B) = Pr(A) + Pr(B) - Pr(A \land B)$
+\end{itemize}
+Da questi assiomi si possono sviluppare diverse proposizioni:
+\begin{itemize}
+    \item $Pr(-A) = $ 
+    \begin{itemize}
+        \item $-A \land A == True \Rightarrow Pr(-A \land A) = 1 $
+        \item $-A \land A == False \Rightarrow Pr(-A \land A) = 0 $
+    \end{itemize}
+    \item $Pr(A \vee B) = Pr(A) + Pr(B) - Pr(A \land B)$
+    \begin{itemize}
+        \item $Pr(-A \vee A) = Pr(A) + Pr(-A) - Pr(-A \land A)$
+        \item $1 = Pr(A) + Pr(-A) - 0$
+        \item $Pr(-A) = 1- Pr(A)$
+    \end{itemize} 
+\end{itemize}
+Sia ora $X$ una \textbf{variabile aleatoria discreta}; essa quindi può
+assumere un insieme finito di valori $\{x_1, x_2, ..., x_n\}$.
+$P(X = x_i)$ (oppure $P(x_i)$) è la \textbf{probabilità} che una variabile aleatoria
+$X$ assuma un valore $x_i$. $P(.)$ viene invece detta \textbf{funzione di probabilità}. \newline
+Sia $X$ una \textbf{variabile aleatoria continua}; essa quindi può assumere
+tutti i valori presenti in un determinato intervallo. $p(X = x)$ (oppure $p(x)$) viene detta \textbf{funzione di densità}.
+$$Pr(x \in (a,b)) = \int_{a}^b p(x) dx$$
+Riprendiamo ora i seguenti concetti di \textbf{probabilità congiunta e condizionata}:
+$$P(X = x \land Y = y) = P(x,y)$$
+Se $X$ ed $Y$ sono \textbf{indipendenti} allora:
+$$P(x,y) = P(x)P(y)$$
+$P(x|y)$ è la probabilità di \textbf{x dato y}:
+$$P(x|y) = \frac{P(x,y)}{P(y)}$$
+$$P(x,y) = P(x|y)p(y)$$
+Se $X$ ed $Y$ sono \textbf{indipendenti} allora
+$$P(x|y) = P(x)$$
+ripassiamo adesso la \textbf{legge delle probabilità totale} e i \textbf{marginali}:
+\begin{itemize}
+    \item \textbf{Caso discreto}:
+    $$\sum_{x}P(x) = 1$$
+    $$P(x) = \sum_{y}P(x,y)$$
+    $$P(x) = \sum_{y}P(x|y)P(y)$$
+    \item \textbf{Caso continuo}:
+    $$\int p(x)dx = 1$$
+    $$p(x) = \int p(x,y) dy$$
+    $$p(x) = \int p(x|y)p(y)dy$$
+\end{itemize}
+Un risultato importante è quella che viene chiamata \textbf{formula di Bayes}: osserviamo che
+$$P(x,y) = P(x|y)P(y) = P(y|x)P(x)$$
+quindi
+$$P(x|y) = \frac{P(y|x)P(x)}{P(y)}$$
+$$P(y|x,z) =\frac{P(y|x,z)P(x|z)}{P(y|z)}$$
+terminiamo il ripasso con la \textbf{normalizzazione}:
+$$P(x|y) = \frac{P(y|x)P(x)}{P(y)} = \eta P(y|x)P(x)$$
+quindi
+$$\eta = P(y)^{-1} = \frac{1}{\sum_x P(y|x)P(x)}$$
+\textbf{Algoritmo}:
+\begin{enumerate}
+    \item $\forall x: aux_{x|y} = P(y|x)P(x)$
+    \item $\eta = \frac{1}{\sum_{x}aux_{x|y}}$
+    \item $\forall x: P(x|y) = \eta aux_{x|y}$
+\end{enumerate}
+\subsubsection{Localizzazione di Markov}
+
+
+
+
+
+
+
+
 \section{Approcci simbolici: basi di conoscenza e ragionamento automatico}
 WIP
 \section{Approcci sub-simbolici: Machine Learning}
